@@ -262,6 +262,373 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="jiezi19971225.cn/2020/03/21/计算机基础之异常控制流学习笔记-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/21/计算机基础之异常控制流学习笔记-1/" itemprop="url">计算机基础之异常控制流学习笔记</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-21T22:04:59+08:00">
+                2020-03-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机基础/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机基础</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="异常控制流"><a href="#异常控制流" class="headerlink" title="异常控制流"></a>异常控制流</h3><p>正常控制流包含两种顺序</p>
+<ul>
+<li>按照指令存放的顺序执行，新的 PC 数值为当前指令地址加上指令长度</li>
+<li>跳转到由于转移类指令指出的转移目标地址处执行，新的 PC 数值为转移目标地址</li>
+</ul>
+<h4 id="进程与进程上下文的切换"><a href="#进程与进程上下文的切换" class="headerlink" title="进程与进程上下文的切换"></a>进程与进程上下文的切换</h4><h5 id="进程的概念"><a href="#进程的概念" class="headerlink" title="进程的概念"></a>进程的概念</h5><p>进程是资源分配的最小单位，每个应用程序在运行时均有自己的存储空间，用来存储自己的程序代码和数据，包括只读区（代码和只读数据），可读可写数据区（初始化数据和未初始化数据），动态的堆区和栈区</p>
+<p>进程的引入为程序提供了以下两方面的抽象。一个独立的逻辑控制流和一个私有的虚拟内存地址。每个进程拥有一个独立的逻辑，使得程序员以为程序似在执行过程中独占处理器。一个私有的虚拟地址空间，使得程序员以为程序在执行过程中独占存储器。</p>
+<p>为了实现以上两方面的抽象，操作系统必须提供一整套管理机制，包括处理器调度、进程上下文切换、虚拟存储管理等。</p>
+<h5 id="逻辑控制流"><a href="#逻辑控制流" class="headerlink" title="逻辑控制流"></a>逻辑控制流</h5><p>一个可执行目标文件被加载并启动执行后，就成为一个进程。他们代码段中的每一条指令都有一个确定的地址，在这些指令的执行过程中，会形成一个指令执行的地址序列，对于确定的输入数据，其指令的地址序列也是确定的。这个确定的指令执行地址序列被称为进程的<strong>逻辑控制流</strong>。</p>
+<p>对于一个具有单核处理器的系统，如果有多个进程运行，这些进程会轮流使用处理器，处理器的<strong>物理控制流</strong>是由多个逻辑控制流组成。<br></p>
+<p>图中可以看出有些进程的逻辑控制流在时间上有交错，通常把这种不同进程的逻辑控制流在时间上交错或者重叠称为<strong>并发</strong>。而<strong>并行</strong>则是并发执行的一个特例，我们称两个进程是并行的，是指他们并发的运行在不同的处理器或者处理器核中。</p>
+<p>连续执行同一个进程的时间段称为时间片，每个时间片结束时，通过进程的上下文切换，换一个新的进程到处理器上执行，开始一个新的时间片，这个过程称为<strong>时间片轮转处理器调度</strong>。</p>
+<h5 id="进程的上下文切换"><a href="#进程的上下文切换" class="headerlink" title="进程的上下文切换"></a>进程的上下文切换</h5><p>实现不同进程中指令交替执行的机制称为<strong>进程的上下文切换</strong>。</p>
+<p>进程的物理实体（代码和数据）和支持进程运行的环境合称为<strong>进程的上下文</strong>，可以细分为</p>
+<ul>
+<li>由用户进程的程序块，数据块，运行时的堆和用户栈等组成的用户空间信息被称为<strong>用户级上下文</strong>。</li>
+<li>进程表示信息，进程现场信息，进程控制信息和系统内核堆栈组成的<strong>内核空间信息</strong>被称为<strong>系统级上下文</strong>。</li>
+<li>处理器中各个寄存器的内存被称为<strong>寄存器上下文</strong>。</li>
+</ul>
+<p>用户级上下文和系统级上下文地址空间一起构成了一个进程的整个存储器映像。进程控制信息包含各种内核数据结构，如有关进程信息的进程表，页表，文件表等。<br></p>
+<p>上下文切换发生在操作系统调度一个新进程到处理器上运行，他需要完成以下三件事</p>
+<ul>
+<li>将当前进程的寄存器上下文保存到当前进程的系统级上下文的现场信息中</li>
+<li>将新进程系统上下文中的现场信息作为新的寄存器上下文恢复到处理器的各个寄存器中</li>
+<li>将控制转移到新进程执行</li>
+</ul>
+<p>一个重要的上下文信息是 PC，当前进程被打断的断点处的 PC 作为寄存器上下文的一部分被保存在进程现场信息中。</p>
+<h5 id="进程的私有地址空间"><a href="#进程的私有地址空间" class="headerlink" title="进程的私有地址空间"></a>进程的私有地址空间</h5>
+<p>整个虚拟地址空间分为两大部分。<strong>内核虚拟存储空间</strong>（简称内核空间）和<strong>进程虚拟内存空间</strong>（简称用户空间）。在采用虚拟存储机制的系统中，每个程序的可执行目标文件在装入时都被映射到同样的虚拟地址空间上，即所有用户进程的虚拟地址空间是一致的，只是在相应的制度区域和可读写数据区域中映射的信息不同而已。</p>
+<p>linux 将用户空间对应的进程虚拟存储空间组织成若干“区域”的集合，<br>内核为每个进程维护了一个进程描述符，记录或者指向内核运行该进程所需要的所有信息，如进程 pid，指向用户栈的指针，可执行目标文件的文件名，程序技术值 PC 等。</p>
+<h5 id="程序的加载和运行"><a href="#程序的加载和运行" class="headerlink" title="程序的加载和运行"></a>程序的加载和运行</h5><p>当启动一个可以行目标文件执行时，首先会通过某种方式调出常驻内存的一个称为加载器的操作系统程序来处理。在 UNIX/Linux 系统中，可以通过 execve() 函数来启动加载器，其作用是在当前进程的上下文中加载并且运行一个新程序。</p>
+<h4 id="异常和中断"><a href="#异常和中断" class="headerlink" title="异常和中断"></a>异常和中断</h4><p>除了时间片到，当前进程的执行被新进程打断，还有用户按下 CTRL+C，当前执行执行中发生了不能使指令执行的意外事件，IO 设备完成了系统交给的任务需要进一步处理，这些特殊事件统称为<strong>异常</strong>或者<strong>中断</strong>。<br>当发生异常或者终端，正在执行进程的逻辑控制流被打断，CPU 转到具体的特殊处理事件的内核程序去执行。他与上下文切换有一个明显的不同：上下文切换后 CPU 执行另一个用户进程，但是，中断或异常处理程序执行的代码不是一个进程，而是一个<strong>内核控制路径</strong>，它代表异常或终端发生时正在运行的当前进程在内核态执行的一个独立的指令序列。作为一个内核控制路径，他比进程更轻，其上下文信息比一个进程的上下文信息少得多。</p>
+<h5 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h5><p>异常是在 CPU 内部执行时发生的，中断是 CPU 外部的 IO 设备向 CPU 发出的请求，特称异常为<strong>内部异常</strong>，而称中断为<strong>外部中断</strong>。</p>
+
+<p>大致处理流程如下：当 CPU 在执行当前程序或任务的第 i 条指令时检测到一个异常事件，或者在执行第 i 条指令后发现有一个中断请求信息，CPU 会打断当前用户进程，然后转到相应的异常或中断处理程序去执行。如果该处理程序能解决相应问题，则在该处理程序的最后，CPU 通过执行“异常/中断返回指令”回到被打断的用户进程的第 i 条指令或第 i+1 条指令继续执行。若异常或中断处理程序发现是不可恢复的知名错误，则中止用户进程。通常情况下，对于异常和中断事件的具体处理过程全部由操作系统（可能包括驱动程序）软件来完成。</p>
+<h5 id="异常的分类"><a href="#异常的分类" class="headerlink" title="异常的分类"></a>异常的分类</h5><p>intel 将内部异常分为三类</p>
+<p>故障</p>
+<p><strong>故障</strong>是在引起故障的指令被启动后但未结束执行时 CPU 检测到的一类与指令执行相关的意外事件。这种意外事件有些可以回复，有些不能回复。如指令译码出现的非法操作码；取指令或者取数据时发生页故障，执行触发操作时发现除数为 0.</p>
+<p>对于像溢出和非法操作码等这类故障，因为无法通过异常处理程序回复，会调用内核的 abort 例程，以中止发生故障的当前进程。</p>
+<p>对于页故障。cpu 在指令执行过程中需要访问存储器，首先进行地址转换，在查页表进行地址转换时，判断相应页表项中的有效位是否是 1，并且确定是否地址越界或访问越权，如果检测到有效位部位 1 或者地址月结或者访问越权，都会产生页故障异常。页故障异常包含多种不同情况：处理程序首先检测是否发生地址越界或访问越权，如果是的话，故障不可恢复，否则是缺陷故障，可通过从磁盘读入页面来恢复。Linux 中不可恢复的访存故障（地址越界和访问越权）都称为<strong>段故障</strong>。</p>
+<p>陷阱</p>
+<p><strong>陷阱</strong>也成为自陷或者陷入，与故障等其他异常事件不同，是预先安排的一种异常事件，就像预先设定的陷阱一样，当执行到陷阱指令，CPU 就调出特定的程序进行相应的处理，处理结束后返回到陷阱指令的下一条指令执行。</p>
+<p>陷阱的重要作之一是在用户程序和内核之间提供一个像过程调用一样的接口，这个接口称为<strong>系统调用</strong>。操作系统给每个服务编一个号，称为系统调用号，每个服务功能通过一个对应的<strong>系统调用服务例程</strong>提供。如在 linux 中就提供了创建子线程（fork），读文件（read），加载并且运行新程序（execve）等服务功能。</p>
+<p>用于程序调试的<strong>断点设置</strong>也是一种陷阱指令。</p>
+<p>在 IA-32 中，陷阱指令引擎的异常称为编程异常，这些指令包括 INT n，int 3，into（溢出检查），bound（地址越界检查）,通常将 INT n 称为软中断指令，该指令引起的异常通常也称为<strong>软中断</strong>。在 IA-32/Linux 中可以使用快速系统调用指令 sysenter 或者软中断指令 int $0x80 进行系统调用。</p>
+<p>终止</p>
+<p>如果在执行指令的过程中发生了严重错误，如控制器出现问题，访问 DRAM 或者 SRAM 时发生校验错误等，则程序无法继续执行，只好终止发生问题的进程。</p>
+<h5 id="中断的分类"><a href="#中断的分类" class="headerlink" title="中断的分类"></a>中断的分类</h5><p><strong>中断</strong> 是由外部 IO 设备请求处理器进行的一种信号。他不是由当前执行的指令引起的，外部 IO 设备通过特定的<strong>中断请求信号线</strong>向 CPU 提出中断申请。CPU 在执行指令过程中，每执行一条指令就查看中断请求引脚，如果中断请求引脚的信号有效，则进入中断响应周期。在<strong>中断响应周期</strong>中，CPU 先将当前 PC 值和当前机器状态保存到栈中，并设置成为<strong>关中断</strong>状态，然后从数据总线读取<strong>中断类型号</strong>，根据中断类型号跳转到对应的中断服务程序执行。中断响应过程由硬件完成，而中断服务程序执行具体的中断处理工作，中断处理完成后，再回到被打断程序的断点处继续执行。</p>
+
+<p>可屏蔽中断</p>
+<p>是指通过<strong>可屏蔽中断请求线</strong>INTR 向 CPU 进行请求的中断，主要来自 IO 设备的中断请求。CPU 可以通过在中断控制器中设置相应的屏蔽字来屏蔽他或者不屏蔽他。若一个 IO 设备的中断请求被屏蔽，他的中断请求信号不会被送到 CPU。</p>
+<p>不可屏蔽中断</p>
+<p>通常是非常紧急的硬件故障，通过专门的<strong>不可屏蔽中断请求线</strong>NMI 向 CPU 发出中断请求。</p>
+<h5 id="异常和中断的响应过程"><a href="#异常和中断的响应过程" class="headerlink" title="异常和中断的响应过程"></a>异常和中断的响应过程</h5><p>CPU 从检测到异常或中断事件，到调出响应的异常或中断处理程序开始执行，整个过程称为<strong>异常和中断的响应</strong>。主要分为以下三个步骤：</p>
+<ul>
+<li>保护断点和程序状态</li>
+<li>关中断</li>
+<li>识别异常和中断事件并转到响应处理程序执行</li>
+</ul>
+<p>保护断点和程序状态</p>
+<p>对于不同的异常事件，其返回地址不同。如却也故障异常的断点是发生页故障的当前指令的地址。陷阱的断点是陷阱指令后面一条指令的地址。</p>
+<p>为了能够支持异常或者中断的嵌套处理，大多数处理器将断点保存到栈中，如 IA-32 处理器的断点被保存到栈中，如果系统不支持桥套处理，则可以将断点保存到特定寄存器中。MIPS 处理器用 EPC 寄存器专门存放断点，其 CPU 用于中断的开销较小。</p>
+<p>被中断时源程序状态（如产生的各种标志信息，允许自陷标志等）都必须保存起来。每个正在运行程序的状态信息存放在一个专门的寄存器中，这些专门寄存器统称为<strong>程序状态字寄存器</strong>（PSWR），存放在 PSWR 中的信息称为<strong>程序状态字</strong>。</p>
+<p>关中断</p>
+<p>应有一种机制来禁止在处理异常或中断时再响应新的异常或中断，通常通过设置<strong>中断允许位</strong>来实现。</p>
+<p>识别异常和中断事件并转到响应处理程序执行</p>
+<p>在调出异常和中断你处理程序之前，必须指导发生了什么异常或者那个 IO 设备发出了中断请求。一般来说，内部异常事件和外部中断源的识别方式不同，大多数处理器会将二者分开来处理。</p>
+<p>内部异常事件的识别很简单，只要 CPU 在执行期间把检测到的世家你对应的异常类型好或者表示异常类型的信息记录到特定的内部寄存器中即可。</p>
+<p>外部中断源的识别比较复杂，只能通过在每条指令执行完成后，取下条指令之前去查询是否有中断请求。通常 CPU 通过采样对应的中断请求引脚来进行查询。但是到底是那个 IO 设备发出的请求，还需要进一步识别。</p>
+<p>异常中断的识别可以采用软件识别和硬件识别两种方式。</p>
+<p>软件识别是指，CPU 中设置一个原因寄存器，该寄存器中有一些标识异常原因或终端类型的标志信息。操作系统使用一个统一的异常或中断查询程序，按一定的优先级顺序查询原因寄存器，先查询到的先处理。MIPS 采用软件识别方式</p>
+<p>硬件识别方式称为<strong>向量中断方式</strong>，这种方式下，异常或中断处理程序的首地址称为<strong>中断向量</strong>，所有中断向量存放在一个表中，称为<strong>中断向量表</strong>。每个异常和中断都被设定一个<strong>中断类型号</strong>，中断向量存放的位置与对应的中断类型号相关。可以根据类型号快速找到对应的处理程序。IA-32 中的异常和中断识别就采用这种方式。</p>
+<h5 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h5><p>BIOS（Basic Input/Output System）是基本输入/输出系统的简称</p>
+<p>Intel 从奔二处理器开始，引入了指令 sysenter 和 sysexit，sysenter 被称为<strong>快速系统调用指令</strong>，他提供了从用户态到内核态的快速切换方式。</p>
+<p>页的大小是 4kb，当对于页起始地址的发起第一次访问时，会发生缺页异常。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="jiezi19971225.cn/2020/03/21/计算机基础之异常控制流学习笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/21/计算机基础之异常控制流学习笔记/" itemprop="url">计算机基础之异常控制流学习笔记</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-21T12:22:49+08:00">
+                2020-03-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机基础/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机基础</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="异常控制流"><a href="#异常控制流" class="headerlink" title="异常控制流"></a>异常控制流</h3><h4 id="正常控制流"><a href="#正常控制流" class="headerlink" title="正常控制流"></a>正常控制流</h4><p>包含两种顺序</p>
+<ul>
+<li>按照指令存放的顺序执行，新的 PC 数值为当前指令地址加上指令长度</li>
+<li>跳转到由于转移类指令指出的转移目标地址处执行，新的 PC 数值为转移目标地址</li>
+</ul>
+<h4 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h4><h5 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h5><p>进程是资源分配的最小单位，每个应用程序在运行时均有自己的存储空间，用来存储自己的程序代码和数据，包括只读区（代码和只读数据），可读可写数据区（初始化数据和未初始化数据），动态的堆区和栈区</p>
+<p>进程的引入为程序提供了以下两方面的抽象。一个独立的逻辑控制流和一个私有的虚拟内存地址。每个进程拥有一个独立的逻辑，使得程序员以为程序似在执行过程中独占处理器。一个私有的虚拟地址空间，使得程序员以为程序在执行过程中独占存储器。</p>
+<p>为了实现以上两方面的抽象，操作系统必须提供一整套管理机制，包括处理器调度、进程上下文切换、虚拟存储管理等。</p>
+<h5 id="逻辑控制流"><a href="#逻辑控制流" class="headerlink" title="逻辑控制流"></a>逻辑控制流</h5><p>一个可执行目标文件被加载并启动执行后，就成为一个进程。他们代码段中的每一条指令都有一个确定的地址，在这些指令的执行过程中，会形成一个指令执行的地址序列，对于确定的输入数据，其指令的地址序列也是确定的。这个确定的指令执行地址序列被称为进程的<strong>逻辑控制流</strong>。</p>
+<p>对于一个具有单核处理器的系统，如果有多个进程运行，这些进程会轮流使用处理器，处理器的<strong>物理控制流</strong>是由多个逻辑控制流组成。<br><img src="/2020/03/21/计算机基础之异常控制流学习笔记/多个逻辑控制流.png" title="多个逻辑控制流"></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="jiezi19971225.cn/2020/03/18/重学线性代数/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1713,300 +2080,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="jiezi19971225.cn/2019/09/02/树状数组/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="jiezi19971225">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Jiez19971225‘s Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/09/02/树状数组/" itemprop="url">树状数组</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-02T23:38:50+08:00">
-                2019-09-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>树状数组是一种用来解决区间单点更新，区间求和问题的简单数据结构。其核心思想在于二进制特殊性质。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">lowbit</span><span class="params">(<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x &amp; (-x);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>lowbit 函数的作用是取得 x 最右边一个 1 对应的数值。 如果 x 的二进制可以表示为 00010010，那么 lowbit 的结果为 2。怎么做到的呢？-x 的补码是 x 按位取反加 1，0010 变成 1101 +1 = 1110 ，-x 从右数第一个 1 的位置对应 x 从右数第一个 x 的位置，其他均取反。<br>如此便可以取得所要得到的数。<br>得到了这个数又有什么用呢。树状数组是这样存储数据的。普通数组在左边，右边是树状数组。懒得找图了，可以百度。<br>1 1<br>2 3<br>3 3<br>4 10<br>5 5<br>6 11<br>7 7<br>8 36<br>9 9<br>对于一个位置，看它的二进制，这个位置存储二进制最右边的 1 对应的十进制数值个元素，从这个位置减去最右边 1 的数值的位置开始存储。这里有点抽象。<br>对于区间求和，就很简单变成了不断找最右边 1 位置的过程。<br>对于区间更新，则是求和的逆过程。从最右边的 1 开始，不断找其父节点。</p>
-<p>树状数组多用于求逆序对，原理是将序列按顺序插入树状数组时，每次统计比当前数小的元素数量 sum，则与当前数构成逆序的对数有 i-sum<br>可以离散化数据，我们不关心具体元素的数值，只关心其对应关系。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> ll;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">double</span> PI = <span class="built_in">acos</span>(<span class="number">-1.0</span>);</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">double</span> eps = <span class="number">1e-6</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> INF = <span class="number">0x3f3f3f3f</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">1e5</span> + <span class="number">7</span>;</span><br><span class="line"><span class="keyword">int</span> n;</span><br><span class="line"><span class="keyword">int</span> c[maxn];</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">lowbit</span><span class="params">(<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x &amp; (-x);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">update</span><span class="params">(<span class="keyword">int</span> i, <span class="keyword">int</span> v)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (i &lt; n)</span><br><span class="line">    &#123;</span><br><span class="line">        c[i] += v;</span><br><span class="line">        i += lowbit(i);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getsum</span><span class="params">(<span class="keyword">int</span> i)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (i &gt; <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        sum += c[i];</span><br><span class="line">        i -= lowbit(i);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    freopen(<span class="string">"data.in"</span>, <span class="string">"r"</span>, <span class="built_in">stdin</span>);</span><br><span class="line">    n = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">int</span> tmp;</span><br><span class="line">        <span class="built_in">cin</span> &gt;&gt; tmp;</span><br><span class="line">        update(i, tmp);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">10</span>; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; c[i] &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="jiezi19971225.cn/2019/08/31/vue-cli学习和debug配置/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="jiezi19971225">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Jiez19971225‘s Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/08/31/vue-cli学习和debug配置/" itemprop="url">vue-cli学习和debug配置</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-31T16:15:21+08:00">
-                2019-08-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/前端/" itemprop="url" rel="index">
-                    <span itemprop="name">前端</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="开发"><a href="#开发" class="headerlink" title="开发"></a>开发</h3><h4 id="浏览器兼容性"><a href="#浏览器兼容性" class="headerlink" title="浏览器兼容性"></a>浏览器兼容性</h4><p>如果有依赖需要 polyfill，你有几种选择：</p>
-<ul>
-<li>如果该依赖基于一个目标环境不支持的 ES 版本撰写: 将其添加到 vue.config.js 中的 transpileDependencies 选项。这会为该依赖同时开启语法语法转换和根据使用情况检测 polyfill。</li>
-<li>如果该依赖交付了 ES5 代码并显式地列出了需要的 polyfill: 你可以使用 @vue/babel-preset-app 的 polyfills 选项预包含所需要的 polyfill。注意 es6.promise 将被默认包含，因为现在的库依赖 Promise 是非常普遍的。</li>
-<li>如果该依赖交付 ES5 代码，但使用了 ES6+ 特性且没有显式地列出需要的 polyfill (例如 Vuetify)：请使用 useBuiltIns: ‘entry’ 然后在入口文件添加 import ‘@babel/polyfill’。这会根据 browserslist 目标导入所有 polyfill，这样你就不用再担心依赖的 polyfill 问题了，但是因为包含了一些没有用到的 polyfill 所以最终的包大小可能会增加。</li>
-</ul>
-<h4 id="环境变量和模式"><a href="#环境变量和模式" class="headerlink" title="环境变量和模式"></a>环境变量和模式</h4><p>你可以替换你的项目根目录中的下列文件来指定环境变量：<br>.env # 在所有的环境中被载入<br>.env.local # 在所有的环境中被载入，但会被 git 忽略<br>.env.[mode] # 只在指定的模式中被载入<br>.env.[mode].local # 只在指定的模式中被载入，但会被 git 忽略</p>
-<p>模式是 Vue CLI 项目中一个重要的概念，默认情况下，一个 Vue CLI 项目有三个模式：</p>
-<ul>
-<li>development 模式用于 vue-cli-service serve</li>
-<li>production 模式用于 vue-cli-service build 和 vue-cli-service test:e2e</li>
-<li>test 模式用于 vue-cli-service test:unit<br>可以通过传递 —mode 选项参数为命令行覆写默认的模式</li>
-<li>“dev-build”: “vue-cli-service build —mode development”</li>
-</ul>
-<p>只有以 <em>VUEAPP</em> 开头的变量会被 webpack.DefinePlugin 静态嵌入到客户端侧的包中。你可以在应用的代码中这样访问它们：</p>
-<ul>
-<li>console.log(process.env.VUE<em>APP_SECRET)<br>除了 VUE_APP</em>* 变量之外，在你的应用代码中始终可用的还有两个特殊的变量：</li>
-<li>NODE_ENV - 会是 “development”、”production” 或 “test” 中的一个。具体的值取决于应用运行的模式。</li>
-<li>BASE_URL - 会和 vue.config.js 中的 publicPath 选项相符，即你的应用会部署到的基础路径。<br>所有解析出来的环境变量都可以在 public/index.html 中以 HTML 插值中介绍的方式使用。</li>
-</ul>
-<h4 id="静态资源处理"><a href="#静态资源处理" class="headerlink" title="静态资源处理"></a>静态资源处理</h4><h5 id="URL-转换规则"><a href="#URL-转换规则" class="headerlink" title="URL 转换规则"></a>URL 转换规则</h5><p>如果 URL 是一个绝对路径 (例如 /images/foo.png)，它将会被保留不变。<br>如果 URL 以 . 开头，它会作为一个相对模块请求被解释且基于你的文件系统中的目录结构进行解析。<br>如果 URL 以 ~ 开头，其后的任何内容都会作为一个模块请求被解析。这意味着你甚至可以引用 Node 模块中的资源：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">"~some-npm-package/foo.png"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
-<p>如果 URL 以 @ 开头，它也会作为一个模块请求被解析。它的用处在于 Vue CLI 默认会设置一个指向 \<projectroot\>/src 的别名 @。(仅作用于模版中)</projectroot\></p>
-<h3 id="Debug-配置"><a href="#Debug-配置" class="headerlink" title="Debug 配置"></a>Debug 配置</h3><p>效果：在 vscode 中的终端输出 Chrome 的控制台信息，可以在 vscode 中进行断点调试<br>首先需要安装插件 Debugger for Chrome<br>新增 Debug 配置项</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">        <span class="string">"name"</span>: <span class="string">"attach to chrome"</span>,</span><br><span class="line">        <span class="string">"type"</span>: <span class="string">"chrome"</span>,</span><br><span class="line">        <span class="string">"request"</span>: <span class="string">"attach"</span>,</span><br><span class="line">        <span class="string">"port"</span>: <span class="number">9222</span>,</span><br><span class="line">        <span class="string">"address"</span>: <span class="string">"localhost"</span>,</span><br><span class="line">        <span class="string">"url"</span>: <span class="string">"http://localhost:8080"</span>,</span><br><span class="line">        <span class="string">"webRoot"</span>: <span class="string">"$&#123;workspaceFolder&#125;/src"</span>,    <span class="comment">// 这个webRoot应该是指webpack打包js文件的目录</span></span><br><span class="line">        <span class="string">"sourceMaps"</span>: <span class="literal">true</span>,</span><br><span class="line">        <span class="string">"sourceMapPathOverrides"</span>: &#123;</span><br><span class="line">            <span class="string">"webpack:///src/*"</span>: <span class="string">"$&#123;webRoot&#125;/*"</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>启动 chrome，附加启动参数</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">google-chrome-stable  --remote-debugging-port=<span class="number">9222</span></span><br></pre></td></tr></table></figure>
-<p>如果使用的是 vue-cli，需要在 vue.config.js 中添加相应配置，如</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    configureWebpack: &#123;</span><br><span class="line">        devtool: <span class="string">'source-map'</span></span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2057,7 +2130,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-count">39</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2068,7 +2141,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-count">21</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -2079,7 +2152,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-count">38</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
