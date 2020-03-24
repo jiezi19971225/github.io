@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="git,">
+  <meta name="keywords" content="字符串匹配,">
 
 
 
@@ -79,18 +79,20 @@
 
 
 
-<meta name="description" content="跟着掘金小册学习如何在工作中使用 git 准备工作多人合作基本工作模型 2.0写完所有的 commit 后，不用考虑中央仓库是否有新的提交，直接 push 就好 如果 push 失败，就用 pull 把本地仓库的提交和中央仓库的提交进行合并，然后再 push 一次 head，masterHEAD 指向的 branch 不能删除，如果要删除，需要先用 checkout 把 HEAD 指向其他地方 没">
-<meta name="keywords" content="git">
+<meta name="description" content="推荐 B 站一个 UP 的视频，讲的非常容易理解 链接 暴力匹配思路设模式串为 sp，要匹配的目标字符串为 st 扫一遍 st，每次从 st 当前位置开始匹配 sp，这样做浪费了大量时间，之前匹配过程得到信息没有被有效利用。 KMP 算法最大公共前后缀KMP 中为了有效利用之前已获得的信息，使用了最大公共前后缀。前后缀的概念我们都知道，而公共前后缀是指该位置的前缀与后缀相同的部分。应当注意，前缀是">
+<meta name="keywords" content="字符串匹配">
 <meta property="og:type" content="article">
-<meta property="og:title" content="git学习">
-<meta property="og:url" content="jiezi19971225.cn/2019/09/16/git学习/index.html">
+<meta property="og:title" content="kmp算法">
+<meta property="og:url" content="jiezi19971225.cn/2020/03/24/kmp算法/index.html">
 <meta property="og:site_name" content="Jiez19971225‘s Blog">
-<meta property="og:description" content="跟着掘金小册学习如何在工作中使用 git 准备工作多人合作基本工作模型 2.0写完所有的 commit 后，不用考虑中央仓库是否有新的提交，直接 push 就好 如果 push 失败，就用 pull 把本地仓库的提交和中央仓库的提交进行合并，然后再 push 一次 head，masterHEAD 指向的 branch 不能删除，如果要删除，需要先用 checkout 把 HEAD 指向其他地方 没">
+<meta property="og:description" content="推荐 B 站一个 UP 的视频，讲的非常容易理解 链接 暴力匹配思路设模式串为 sp，要匹配的目标字符串为 st 扫一遍 st，每次从 st 当前位置开始匹配 sp，这样做浪费了大量时间，之前匹配过程得到信息没有被有效利用。 KMP 算法最大公共前后缀KMP 中为了有效利用之前已获得的信息，使用了最大公共前后缀。前后缀的概念我们都知道，而公共前后缀是指该位置的前缀与后缀相同的部分。应当注意，前缀是">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-03-23T15:24:54.396Z">
+<meta property="og:image" content="/2020/03/24/kmp算法/构造过程.png">
+<meta property="og:updated_time" content="2020-03-24T04:32:46.818Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="git学习">
-<meta name="twitter:description" content="跟着掘金小册学习如何在工作中使用 git 准备工作多人合作基本工作模型 2.0写完所有的 commit 后，不用考虑中央仓库是否有新的提交，直接 push 就好 如果 push 失败，就用 pull 把本地仓库的提交和中央仓库的提交进行合并，然后再 push 一次 head，masterHEAD 指向的 branch 不能删除，如果要删除，需要先用 checkout 把 HEAD 指向其他地方 没">
+<meta name="twitter:title" content="kmp算法">
+<meta name="twitter:description" content="推荐 B 站一个 UP 的视频，讲的非常容易理解 链接 暴力匹配思路设模式串为 sp，要匹配的目标字符串为 st 扫一遍 st，每次从 st 当前位置开始匹配 sp，这样做浪费了大量时间，之前匹配过程得到信息没有被有效利用。 KMP 算法最大公共前后缀KMP 中为了有效利用之前已获得的信息，使用了最大公共前后缀。前后缀的概念我们都知道，而公共前后缀是指该位置的前缀与后缀相同的部分。应当注意，前缀是">
+<meta name="twitter:image" content="/2020/03/24/kmp算法/构造过程.png">
 
 
 
@@ -120,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="jiezi19971225.cn/2019/09/16/git学习/">
+  <link rel="canonical" href="jiezi19971225.cn/2020/03/24/kmp算法/">
 
 
 
 
 
-  <title>git学习 | Jiez19971225‘s Blog</title>
+  <title>kmp算法 | Jiez19971225‘s Blog</title>
   
 
 
@@ -295,7 +297,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="jiezi19971225.cn/2019/09/16/git学习/">
+    <link itemprop="mainEntityOfPage" href="jiezi19971225.cn/2020/03/24/kmp算法/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="jiezi19971225">
@@ -312,7 +314,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">git学习</h1>
+          <h1 class="post-title" itemprop="name headline">kmp算法</h1>
         
 
         <div class="post-meta">
@@ -324,8 +326,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-16T14:44:18+08:00">
-                2019-09-16
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-24T11:01:11+08:00">
+                2020-03-24
               </time>
             
 
@@ -347,8 +349,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/开发工具/" itemprop="url" rel="index">
-                    <span itemprop="name">开发工具</span>
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
                   </a>
                 </span>
 
@@ -371,7 +373,7 @@
              <i class="fa fa-bar-chart"></i>
            </span>
            <span class="post-meta-item-text">字数统计:</span>
-           <span class="post-count">436(字)</span>
+           <span class="post-count">577(字)</span>
 
          </span>
 
@@ -381,7 +383,7 @@
              <i class="fa fa-clock-o"></i>
            </span>
            <span class="post-meta-item-text">阅读时长:</span>
-           <span class="post-count">1(分)</span>
+           <span class="post-count">2(分)</span>
 
          </span>
 
@@ -404,17 +406,17 @@
       
 
       
-        <p>跟着掘金小册学习如何在工作中使用 git</p>
-<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><h2 id="多人合作基本工作模型-2-0"><a href="#多人合作基本工作模型-2-0" class="headerlink" title="多人合作基本工作模型 2.0"></a>多人合作基本工作模型 2.0</h2><p>写完所有的 commit 后，不用考虑中央仓库是否有新的提交，直接 push 就好</p>
-<p>如果 push 失败，就用 pull 把本地仓库的提交和中央仓库的提交进行合并，然后再 push 一次</p>
-<h2 id="head，master"><a href="#head，master" class="headerlink" title="head，master"></a>head，master</h2><p>HEAD 指向的 branch 不能删除，如果要删除，需要先用 checkout 把 HEAD 指向其他地方</p>
-<p>没有被合并到 master 过的 branch 在删除时会失败 如果需要删除 使用 -D</p>
-<h2 id="push"><a href="#push" class="headerlink" title="push"></a>push</h2><p>push 是把当前的分支上传到远程仓库，并把这个 branch 的路径上的所有 commits 也一并上传。</p>
-<p>push 的时候，如果当前分支是一个本地创建的分支，需要指定远程仓库名和分支名，用 git push origin branch_name 的格式，而不能只用 git push；或者可以通过 git config 修改 push.default 来改变 push 时的行为逻辑。</p>
-<p>push 的时候之后上传当前分支，并不会上传 HEAD；远程仓库的 HEAD 是永远指向默认分支（即 master）的。</p>
-<h2 id="merge"><a href="#merge" class="headerlink" title="merge"></a>merge</h2><p>从目标 commit 和当前 commit （即 HEAD 所指向的 commit）分叉的位置起，把目标 commit 的路径上的所有 commit 的内容一并应用到当前 commit，然后自动生成一个新的 commit。</p>
-<h2 id="fast-forward"><a href="#fast-forward" class="headerlink" title="fast-forward"></a>fast-forward</h2><p>当你试图合并两个<br>分支时，如果顺着一个分支走下去能够到达另一个分支，那么 Git 在合并两者的时候，只会简单的将指针向前推进（指针右移），因为这种情况下的合并操作没有需要解决的分歧——这就叫做 “快进（fast-forward）</p>
-<p>待填坑中</p>
+        <p>推荐 B 站一个 UP 的视频，讲的非常容易理解 <a href="https://www.bilibili.com/video/BV1iJ411a7Kb?p=3" target="_blank" rel="noopener">链接</a></p>
+<h2 id="暴力匹配思路"><a href="#暴力匹配思路" class="headerlink" title="暴力匹配思路"></a>暴力匹配思路</h2><p>设模式串为 sp，要匹配的目标字符串为 st</p>
+<p>扫一遍 st，每次从 st 当前位置开始匹配 sp，这样做浪费了大量时间，之前匹配过程得到信息没有被有效利用。</p>
+<h2 id="KMP-算法"><a href="#KMP-算法" class="headerlink" title="KMP 算法"></a>KMP 算法</h2><h3 id="最大公共前后缀"><a href="#最大公共前后缀" class="headerlink" title="最大公共前后缀"></a>最大公共前后缀</h3><p>KMP 中为了有效利用之前已获得的信息，使用了最大公共前后缀。<br>前后缀的概念我们都知道，而公共前后缀是指该位置的前缀与后缀相同的部分。应当注意，前缀是不能包含当前位置的，而后缀不能包含第 1 个位置。<br>举个例子，ABCDABC 中，C 位置的最大公共前后缀是 ABC。<br>我们计算 AAAAB 的最大公共前后缀，使用 presuf 数组保存最大公共前后缀的长度<br>则 presuf = [0,1,2,3,0]</p>
+<h3 id="KMP-算法流程"><a href="#KMP-算法流程" class="headerlink" title="KMP 算法流程"></a>KMP 算法流程</h3><h4 id="构造最大前后缀数组"><a href="#构造最大前后缀数组" class="headerlink" title="构造最大前后缀数组"></a>构造最大前后缀数组</h4><p>首先构造 presuf 数组，构造的流程如下</p>
+<p>为了方便算法编写，令 presuf[0] = -1 作为边界，最大公共前后缀从 1 下标开始记录。<br>令 j 表示当前指针位置，可以理解为后缀指针，t 表示前缀指针位置。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">t = presuf[0] = -1</span><br><span class="line">m = sp.length()</span><br><span class="line">while j &lt; m-1</span><br><span class="line">    // 当前位置前后缀匹配，更新 presuf 数组</span><br><span class="line">    if t &lt; 0 || sp[j] == sp[t]</span><br><span class="line">        presuf[++j] = ++ t</span><br><span class="line">    // 当前不匹配，则应该缩小前缀的范围</span><br><span class="line">    else</span><br><span class="line">        t = presuf[t];</span><br></pre></td></tr></table></figure>
+<img src="/2020/03/24/kmp算法/构造过程.png" title="构造过程">
+<h4 id="匹配流程"><a href="#匹配流程" class="headerlink" title="匹配流程"></a>匹配流程</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">i = 0</span><br><span class="line">j = 0</span><br><span class="line">m = st.length()</span><br><span class="line">while j &lt; m</span><br><span class="line">    if i &lt; 0 || sp[i] == st[i]</span><br><span class="line">        ++i,++j</span><br><span class="line">        if i == sp.length()</span><br><span class="line">            // 得到结果</span><br><span class="line">    else</span><br><span class="line">        // 这一步也很好理解，和构造过程是一样</span><br><span class="line">        i = presuf[i]</span><br></pre></td></tr></table></figure>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>为了便于理解，变量名都是用了更具意义的缩写</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">10005</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">string</span> st = <span class="string">"AAAAAAAAB"</span>;</span><br><span class="line">    <span class="built_in">string</span> sp = <span class="string">"AAAAB"</span>;</span><br><span class="line">    <span class="keyword">int</span> presuf[maxn];</span><br><span class="line">    <span class="built_in">memset</span>(presuf, <span class="number">0</span>, <span class="keyword">sizeof</span>(presuf));</span><br><span class="line">    <span class="comment">// 构造过程</span></span><br><span class="line">    <span class="keyword">int</span> prep = presuf[<span class="number">0</span>] = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">int</span> sufp = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (sufp &lt; sp.size())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (prep &lt; <span class="number">0</span> || sp[prep] == sp[sufp])</span><br><span class="line">        &#123;</span><br><span class="line">            presuf[++sufp] = ++prep;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            prep = presuf[prep];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 匹配过程</span></span><br><span class="line">    <span class="keyword">int</span> stp = <span class="number">0</span>, spp = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> res = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">while</span> (stp &lt; st.size())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (spp &lt; <span class="number">0</span> || st[stp] == sp[spp])</span><br><span class="line">        &#123;</span><br><span class="line">            ++spp, ++stp;</span><br><span class="line">            <span class="keyword">if</span> (spp == sp.length())</span><br><span class="line">            &#123;</span><br><span class="line">                res = stp;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            spp = presuf[spp];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -432,7 +434,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/git/" rel="tag"># git</a>
+            <a href="/tags/字符串匹配/" rel="tag"># 字符串匹配</a>
           
         </div>
       
@@ -445,8 +447,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/09/13/配置archlinux计划任务/" rel="next" title="配置archlinux计划任务">
-                <i class="fa fa-chevron-left"></i> 配置archlinux计划任务
+              <a href="/2020/03/24/编译原理之有穷自动机/" rel="next" title="有穷自动机">
+                <i class="fa fa-chevron-left"></i> 有穷自动机
               </a>
             
           </div>
@@ -454,10 +456,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/09/16/Sass学习/" rel="prev" title="Sass学习">
-                Sass学习 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -588,7 +586,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#准备工作"><span class="nav-number">1.</span> <span class="nav-text">准备工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多人合作基本工作模型-2-0"><span class="nav-number">2.</span> <span class="nav-text">多人合作基本工作模型 2.0</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#head，master"><span class="nav-number">3.</span> <span class="nav-text">head，master</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#push"><span class="nav-number">4.</span> <span class="nav-text">push</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#merge"><span class="nav-number">5.</span> <span class="nav-text">merge</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fast-forward"><span class="nav-number">6.</span> <span class="nav-text">fast-forward</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#暴力匹配思路"><span class="nav-number">1.</span> <span class="nav-text">暴力匹配思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#KMP-算法"><span class="nav-number">2.</span> <span class="nav-text">KMP 算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#最大公共前后缀"><span class="nav-number">2.1.</span> <span class="nav-text">最大公共前后缀</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#KMP-算法流程"><span class="nav-number">2.2.</span> <span class="nav-text">KMP 算法流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#构造最大前后缀数组"><span class="nav-number">2.2.1.</span> <span class="nav-text">构造最大前后缀数组</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#匹配流程"><span class="nav-number">2.2.2.</span> <span class="nav-text">匹配流程</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码实现"><span class="nav-number">3.</span> <span class="nav-text">代码实现</span></a></li></ol></div>
             
 
           </div>

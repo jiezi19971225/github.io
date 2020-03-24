@@ -294,6 +294,180 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="jiezi19971225.cn/2019/03/24/leetcodeP10-RegularExpressionMatching/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/24/leetcodeP10-RegularExpressionMatching/" itemprop="url">leetcodeP10-RegularExpressionMatching</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-24T00:18:24+08:00">
+                2019-03-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+         <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-bar-chart"></i>
+           </span>
+           <span class="post-meta-item-text">字数统计:</span>
+           <span class="post-count">535(字)</span>
+
+         </span>
+
+      <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-clock-o"></i>
+           </span>
+           <span class="post-meta-item-text">阅读时长:</span>
+           <span class="post-count">2(分)</span>
+
+         </span>
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>这一题最开始想到模拟，也想到了匹配的贪婪问题，感觉题目可能不要求那么多，结果是 WA，看到讨论区 PO 出的一份代码，使用了动态规划，想了一下确实改用 DP，此题确有一定难度，在此记录一下解法。</p>
+<h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h3><p>给你一个字符串 s 和字符串 p，s 只包含英文小写字母，p 只包含英文小写字母和 ‘.’ 或 ‘*‘，实现一个支持元字符 ‘.’ 和 ‘*‘的正则匹配</p>
+<h3 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h3><p>设 dp[x][y]表示取字符串 s 前 x 个字符和模式串 p 前 y 个字符是否能够完全匹配，为一个 bool 值<br>初始状态 dp[0][0] = true，若 p 串以”a*b*c*“的形式开头，则 dp[0][2],dp[0][4],dp[0][6]也为 true，显示这种状态是匹配的<br>dp 的转移过程为<br>若 s[i-1] == p[j-1] || p[j-1] == ‘.’，dp[i][j] = dp[i][j] || dp[i-1][j-1]<br>若 p[j-1] == ‘*‘ ，方程至多可从一下三种状态转移</p>
+<ul>
+<li>dp[i][j] = dp[i][j] || dp[i][j-2]，*可以匹配 0 个多个，因此总可以从该状态转移</li>
+<li>若 s[i-1] == p[j-2] || int(p[j-2]) == ‘.’，即匹配 “?*“形式，可采用贪婪与非贪婪策略<ul>
+<li>dp[i][j] = dp[i][j] || dp[i-1][j] ，采用非贪婪策略，*不匹配字符</li>
+<li>dp[i][j] = dp[i][j] || dp[i][j-1]，采用贪婪策略，*匹配字符</li>
+</ul>
+</li>
+</ul>
+<p>以下是代码，参考了 leetcode 上的题解</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">isMatch</span><span class="params">(s <span class="keyword">string</span>, p <span class="keyword">string</span>)</span> <span class="title">bool</span></span> &#123;</span><br><span class="line">    lens := <span class="built_in">len</span>(s)</span><br><span class="line">    lenp := <span class="built_in">len</span>(p)</span><br><span class="line">    <span class="keyword">var</span> dp [][]<span class="keyword">bool</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt;= lens; i++ &#123;</span><br><span class="line">        d := <span class="built_in">make</span>([]<span class="keyword">bool</span>, lenp+<span class="number">1</span>)</span><br><span class="line">        dp = <span class="built_in">append</span>(dp, d)</span><br><span class="line">    &#125;</span><br><span class="line">    dp[<span class="number">0</span>][<span class="number">0</span>] = <span class="literal">true</span></span><br><span class="line">    <span class="keyword">for</span> j := <span class="number">1</span>; j &lt;= lenp; j++ &#123;</span><br><span class="line">        <span class="keyword">if</span> p[j<span class="number">-1</span>] == <span class="string">'*'</span> &#123;</span><br><span class="line">            dp[<span class="number">0</span>][j] = dp[<span class="number">0</span>][j<span class="number">-2</span>]</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= lens; i++ &#123;</span><br><span class="line">        <span class="keyword">for</span> j := <span class="number">1</span>; j &lt;= lenp; j++ &#123;</span><br><span class="line">            <span class="keyword">if</span> s[i<span class="number">-1</span>] == p[j<span class="number">-1</span>] || p[j<span class="number">-1</span>] == <span class="string">'.'</span> &#123;</span><br><span class="line">                dp[i][j] = dp[i][j] || dp[i<span class="number">-1</span>][j<span class="number">-1</span>]</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> p[j<span class="number">-1</span>] == <span class="string">'*'</span> &#123;</span><br><span class="line">                dp[i][j] = dp[i][j] || dp[i][j<span class="number">-2</span>]</span><br><span class="line">                <span class="keyword">if</span> s[i<span class="number">-1</span>] == p[j<span class="number">-2</span>] || <span class="keyword">int</span>(p[j<span class="number">-2</span>]) == <span class="string">'.'</span> &#123;</span><br><span class="line">                    dp[i][j] = dp[i][j] || dp[i<span class="number">-1</span>][j]</span><br><span class="line">                    dp[i][j] = dp[i][j] || dp[i][j<span class="number">-1</span>]</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> dp[lens][lenp]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="jiezi19971225.cn/2019/03/07/记使用docker-compose对OJ系统部署优化重构/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1991,7 +2165,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-count">39</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2013,7 +2187,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">40</span>
+                  <span class="site-state-item-count">41</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
