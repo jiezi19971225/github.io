@@ -231,9 +231,41 @@
       
 
       
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
     </ul>
   
 
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
   
 </nav>
 
@@ -262,7 +294,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="jiezi19971225.cn/2020/03/21/计算机基础之异常控制流学习笔记-1/">
+    <link itemprop="mainEntityOfPage" href="jiezi19971225.cn/2020/03/24/编译原理之有穷自动机/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="jiezi19971225">
@@ -281,7 +313,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/03/21/计算机基础之异常控制流学习笔记-1/" itemprop="url">计算机基础之异常控制流学习笔记</a></h1>
+                <a class="post-title-link" href="/2020/03/24/编译原理之有穷自动机/" itemprop="url">有穷自动机</a></h1>
         
 
         <div class="post-meta">
@@ -293,8 +325,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-21T22:04:59+08:00">
-                2020-03-21
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-24T10:53:25+08:00">
+                2020-03-24
               </time>
             
 
@@ -316,8 +348,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/计算机基础/" itemprop="url" rel="index">
-                    <span itemprop="name">计算机基础</span>
+                  <a href="/categories/编译原理/" itemprop="url" rel="index">
+                    <span itemprop="name">编译原理</span>
                   </a>
                 </span>
 
@@ -333,6 +365,26 @@
 
           
           
+
+         <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-bar-chart"></i>
+           </span>
+           <span class="post-meta-item-text">字数统计:</span>
+           <span class="post-count">1.5k(字)</span>
+
+         </span>
+
+      <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-clock-o"></i>
+           </span>
+           <span class="post-meta-item-text">阅读时长:</span>
+           <span class="post-count">6(分)</span>
+
+         </span>
 
           
 
@@ -355,81 +407,111 @@
       
         
           
-            <h3 id="异常控制流"><a href="#异常控制流" class="headerlink" title="异常控制流"></a>异常控制流</h3><p>正常控制流包含两种顺序</p>
+            <p>（以下内容摘自龙书）</p>
+<p>有穷自动机是一般化的状态转换图，它可以是确定的或不确定的，其中不确定的含义是，对于某个输入符号，在同一个状态上存在不止一种转换。</p>
+<p>下文以 DFA 指代确定的有穷自动机，NFA 指代不确定的有穷自动机。</p>
+<p>DFA 和 NFA 都能且仅能识别正规集，即它们能够识别正规表达式所表示的语言。DFA 导出的识别器比 NFA 导出的识别器快得多，但是 DFA 可能比与之等价的 NFA 大得多。</p>
+<h2 id="NFA"><a href="#NFA" class="headerlink" title="NFA"></a>NFA</h2><p>NFA 是由以下几个部分组成的数学模型：</p>
 <ul>
-<li>按照指令存放的顺序执行，新的 PC 数值为当前指令地址加上指令长度</li>
-<li>跳转到由于转移类指令指出的转移目标地址处执行，新的 PC 数值为转移目标地址</li>
+<li>一个状态的有穷集合 S</li>
+<li>一个输入符合集合$\Sigma$,即输入符号字母表</li>
+<li>一个转换函数 move，它把状态和符号组成的二元组映射到状态集合</li>
+<li>状态 $s_0$ 是唯一的开始或初始状态</li>
+<li>状态集合 F 是接受（或中止）状态集合</li>
 </ul>
-<h4 id="进程与进程上下文的切换"><a href="#进程与进程上下文的切换" class="headerlink" title="进程与进程上下文的切换"></a>进程与进程上下文的切换</h4><h5 id="进程的概念"><a href="#进程的概念" class="headerlink" title="进程的概念"></a>进程的概念</h5><p>进程是资源分配的最小单位，每个应用程序在运行时均有自己的存储空间，用来存储自己的程序代码和数据，包括只读区（代码和只读数据），可读可写数据区（初始化数据和未初始化数据），动态的堆区和栈区</p>
-<p>进程的引入为程序提供了以下两方面的抽象。一个独立的逻辑控制流和一个私有的虚拟内存地址。每个进程拥有一个独立的逻辑，使得程序员以为程序似在执行过程中独占处理器。一个私有的虚拟地址空间，使得程序员以为程序在执行过程中独占存储器。</p>
-<p>为了实现以上两方面的抽象，操作系统必须提供一整套管理机制，包括处理器调度、进程上下文切换、虚拟存储管理等。</p>
-<h5 id="逻辑控制流"><a href="#逻辑控制流" class="headerlink" title="逻辑控制流"></a>逻辑控制流</h5><p>一个可执行目标文件被加载并启动执行后，就成为一个进程。他们代码段中的每一条指令都有一个确定的地址，在这些指令的执行过程中，会形成一个指令执行的地址序列，对于确定的输入数据，其指令的地址序列也是确定的。这个确定的指令执行地址序列被称为进程的<strong>逻辑控制流</strong>。</p>
-<p>对于一个具有单核处理器的系统，如果有多个进程运行，这些进程会轮流使用处理器，处理器的<strong>物理控制流</strong>是由多个逻辑控制流组成。<br></p>
-<p>图中可以看出有些进程的逻辑控制流在时间上有交错，通常把这种不同进程的逻辑控制流在时间上交错或者重叠称为<strong>并发</strong>。而<strong>并行</strong>则是并发执行的一个特例，我们称两个进程是并行的，是指他们并发的运行在不同的处理器或者处理器核中。</p>
-<p>连续执行同一个进程的时间段称为时间片，每个时间片结束时，通过进程的上下文切换，换一个新的进程到处理器上执行，开始一个新的时间片，这个过程称为<strong>时间片轮转处理器调度</strong>。</p>
-<h5 id="进程的上下文切换"><a href="#进程的上下文切换" class="headerlink" title="进程的上下文切换"></a>进程的上下文切换</h5><p>实现不同进程中指令交替执行的机制称为<strong>进程的上下文切换</strong>。</p>
-<p>进程的物理实体（代码和数据）和支持进程运行的环境合称为<strong>进程的上下文</strong>，可以细分为</p>
+<p>NFA 可以用带标记的有向图表示，称为转换图，其节点是状态，有标记的边是转化函数。</p>
+<img src="/2020/03/24/编译原理之有穷自动机/NFA.png" title="NFA">
+<img src="/2020/03/24/编译原理之有穷自动机/NFA2.png" title="NFA2">
+<h2 id="DFA"><a href="#DFA" class="headerlink" title="DFA"></a>DFA</h2><p>DFA 是 NFA 的特例</p>
 <ul>
-<li>由用户进程的程序块，数据块，运行时的堆和用户栈等组成的用户空间信息被称为<strong>用户级上下文</strong>。</li>
-<li>进程表示信息，进程现场信息，进程控制信息和系统内核堆栈组成的<strong>内核空间信息</strong>被称为<strong>系统级上下文</strong>。</li>
-<li>处理器中各个寄存器的内存被称为<strong>寄存器上下文</strong>。</li>
+<li>没有一个状态具有$\epsilon$转换</li>
+<li>对每个状态 s 和输入符号 a，最多只有一条标记为 a 的边离开</li>
 </ul>
-<p>用户级上下文和系统级上下文地址空间一起构成了一个进程的整个存储器映像。进程控制信息包含各种内核数据结构，如有关进程信息的进程表，页表，文件表等。<br></p>
-<p>上下文切换发生在操作系统调度一个新进程到处理器上运行，他需要完成以下三件事</p>
+<p>确定的有穷自动机在任何状态下，对任一输入符号，最多只有一个转换。如果用转换表表示 DFA 的转换函数，那么表中的每个表项最多只有一个状态。因而，很容易确定 DFA 是否接受某输入字符串，因为从开始状态起，最多只有一条到达接受状态的路径可由这个符号串标记。</p>
+<h2 id="NFA-转为-DFA"><a href="#NFA-转为-DFA" class="headerlink" title="NFA 转为 DFA"></a>NFA 转为 DFA</h2><p>子集构造算法，在 NFA 的转换表中，每个表项是一个状态集，在 DFA 的转化表中，每个表项只有一个状态。从 NFA 变换到 DFA 的基本思想是让 DFA 的每个状态对应 NFA 的一个状态集。DFA 用它的状态去记住 NFA 在读输入符号后到达的所有状态。</p>
+<img src="/2020/03/24/编译原理之有穷自动机/NFA转DFA.png" title="NFA转DFA">
+<p>定义三种操作</p>
 <ul>
-<li>将当前进程的寄存器上下文保存到当前进程的系统级上下文的现场信息中</li>
-<li>将新进程系统上下文中的现场信息作为新的寄存器上下文恢复到处理器的各个寄存器中</li>
-<li>将控制转移到新进程执行</li>
+<li>$\epsilon-closure(s)$ 从 NFA 状态 s 只经过$\epsilon$转换可以到达的 NFA 状态集</li>
+<li>$\epsilon-closure(T)$ 从 T 中的状态只经过$\epsilon$转换可以到达的 NFA 状态集</li>
+<li>move(T,a) 从 T 中的状态 S 经过输入符号 a 上的转换可以到达的 NFA 状态集</li>
 </ul>
-<p>一个重要的上下文信息是 PC，当前进程被打断的断点处的 PC 作为寄存器上下文的一部分被保存在进程现场信息中。</p>
-<h5 id="进程的私有地址空间"><a href="#进程的私有地址空间" class="headerlink" title="进程的私有地址空间"></a>进程的私有地址空间</h5>
-<p>整个虚拟地址空间分为两大部分。<strong>内核虚拟存储空间</strong>（简称内核空间）和<strong>进程虚拟内存空间</strong>（简称用户空间）。在采用虚拟存储机制的系统中，每个程序的可执行目标文件在装入时都被映射到同样的虚拟地址空间上，即所有用户进程的虚拟地址空间是一致的，只是在相应的制度区域和可读写数据区域中映射的信息不同而已。</p>
-<p>linux 将用户空间对应的进程虚拟存储空间组织成若干“区域”的集合，<br>内核为每个进程维护了一个进程描述符，记录或者指向内核运行该进程所需要的所有信息，如进程 pid，指向用户栈的指针，可执行目标文件的文件名，程序技术值 PC 等。</p>
-<h5 id="程序的加载和运行"><a href="#程序的加载和运行" class="headerlink" title="程序的加载和运行"></a>程序的加载和运行</h5><p>当启动一个可以行目标文件执行时，首先会通过某种方式调出常驻内存的一个称为加载器的操作系统程序来处理。在 UNIX/Linux 系统中，可以通过 execve() 函数来启动加载器，其作用是在当前进程的上下文中加载并且运行一个新程序。</p>
-<h4 id="异常和中断"><a href="#异常和中断" class="headerlink" title="异常和中断"></a>异常和中断</h4><p>除了时间片到，当前进程的执行被新进程打断，还有用户按下 CTRL+C，当前执行执行中发生了不能使指令执行的意外事件，IO 设备完成了系统交给的任务需要进一步处理，这些特殊事件统称为<strong>异常</strong>或者<strong>中断</strong>。<br>当发生异常或者终端，正在执行进程的逻辑控制流被打断，CPU 转到具体的特殊处理事件的内核程序去执行。他与上下文切换有一个明显的不同：上下文切换后 CPU 执行另一个用户进程，但是，中断或异常处理程序执行的代码不是一个进程，而是一个<strong>内核控制路径</strong>，它代表异常或终端发生时正在运行的当前进程在内核态执行的一个独立的指令序列。作为一个内核控制路径，他比进程更轻，其上下文信息比一个进程的上下文信息少得多。</p>
-<h5 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h5><p>异常是在 CPU 内部执行时发生的，中断是 CPU 外部的 IO 设备向 CPU 发出的请求，特称异常为<strong>内部异常</strong>，而称中断为<strong>外部中断</strong>。</p>
-
-<p>大致处理流程如下：当 CPU 在执行当前程序或任务的第 i 条指令时检测到一个异常事件，或者在执行第 i 条指令后发现有一个中断请求信息，CPU 会打断当前用户进程，然后转到相应的异常或中断处理程序去执行。如果该处理程序能解决相应问题，则在该处理程序的最后，CPU 通过执行“异常/中断返回指令”回到被打断的用户进程的第 i 条指令或第 i+1 条指令继续执行。若异常或中断处理程序发现是不可恢复的知名错误，则中止用户进程。通常情况下，对于异常和中断事件的具体处理过程全部由操作系统（可能包括驱动程序）软件来完成。</p>
-<h5 id="异常的分类"><a href="#异常的分类" class="headerlink" title="异常的分类"></a>异常的分类</h5><p>intel 将内部异常分为三类</p>
-<p>故障</p>
-<p><strong>故障</strong>是在引起故障的指令被启动后但未结束执行时 CPU 检测到的一类与指令执行相关的意外事件。这种意外事件有些可以回复，有些不能回复。如指令译码出现的非法操作码；取指令或者取数据时发生页故障，执行触发操作时发现除数为 0.</p>
-<p>对于像溢出和非法操作码等这类故障，因为无法通过异常处理程序回复，会调用内核的 abort 例程，以中止发生故障的当前进程。</p>
-<p>对于页故障。cpu 在指令执行过程中需要访问存储器，首先进行地址转换，在查页表进行地址转换时，判断相应页表项中的有效位是否是 1，并且确定是否地址越界或访问越权，如果检测到有效位部位 1 或者地址月结或者访问越权，都会产生页故障异常。页故障异常包含多种不同情况：处理程序首先检测是否发生地址越界或访问越权，如果是的话，故障不可恢复，否则是缺陷故障，可通过从磁盘读入页面来恢复。Linux 中不可恢复的访存故障（地址越界和访问越权）都称为<strong>段故障</strong>。</p>
-<p>陷阱</p>
-<p><strong>陷阱</strong>也成为自陷或者陷入，与故障等其他异常事件不同，是预先安排的一种异常事件，就像预先设定的陷阱一样，当执行到陷阱指令，CPU 就调出特定的程序进行相应的处理，处理结束后返回到陷阱指令的下一条指令执行。</p>
-<p>陷阱的重要作之一是在用户程序和内核之间提供一个像过程调用一样的接口，这个接口称为<strong>系统调用</strong>。操作系统给每个服务编一个号，称为系统调用号，每个服务功能通过一个对应的<strong>系统调用服务例程</strong>提供。如在 linux 中就提供了创建子线程（fork），读文件（read），加载并且运行新程序（execve）等服务功能。</p>
-<p>用于程序调试的<strong>断点设置</strong>也是一种陷阱指令。</p>
-<p>在 IA-32 中，陷阱指令引擎的异常称为编程异常，这些指令包括 INT n，int 3，into（溢出检查），bound（地址越界检查）,通常将 INT n 称为软中断指令，该指令引起的异常通常也称为<strong>软中断</strong>。在 IA-32/Linux 中可以使用快速系统调用指令 sysenter 或者软中断指令 int $0x80 进行系统调用。</p>
-<p>终止</p>
-<p>如果在执行指令的过程中发生了严重错误，如控制器出现问题，访问 DRAM 或者 SRAM 时发生校验错误等，则程序无法继续执行，只好终止发生问题的进程。</p>
-<h5 id="中断的分类"><a href="#中断的分类" class="headerlink" title="中断的分类"></a>中断的分类</h5><p><strong>中断</strong> 是由外部 IO 设备请求处理器进行的一种信号。他不是由当前执行的指令引起的，外部 IO 设备通过特定的<strong>中断请求信号线</strong>向 CPU 提出中断申请。CPU 在执行指令过程中，每执行一条指令就查看中断请求引脚，如果中断请求引脚的信号有效，则进入中断响应周期。在<strong>中断响应周期</strong>中，CPU 先将当前 PC 值和当前机器状态保存到栈中，并设置成为<strong>关中断</strong>状态，然后从数据总线读取<strong>中断类型号</strong>，根据中断类型号跳转到对应的中断服务程序执行。中断响应过程由硬件完成，而中断服务程序执行具体的中断处理工作，中断处理完成后，再回到被打断程序的断点处继续执行。</p>
-
-<p>可屏蔽中断</p>
-<p>是指通过<strong>可屏蔽中断请求线</strong>INTR 向 CPU 进行请求的中断，主要来自 IO 设备的中断请求。CPU 可以通过在中断控制器中设置相应的屏蔽字来屏蔽他或者不屏蔽他。若一个 IO 设备的中断请求被屏蔽，他的中断请求信号不会被送到 CPU。</p>
-<p>不可屏蔽中断</p>
-<p>通常是非常紧急的硬件故障，通过专门的<strong>不可屏蔽中断请求线</strong>NMI 向 CPU 发出中断请求。</p>
-<h5 id="异常和中断的响应过程"><a href="#异常和中断的响应过程" class="headerlink" title="异常和中断的响应过程"></a>异常和中断的响应过程</h5><p>CPU 从检测到异常或中断事件，到调出响应的异常或中断处理程序开始执行，整个过程称为<strong>异常和中断的响应</strong>。主要分为以下三个步骤：</p>
+<p>子集构造的步骤伪码如下，其中 Dstates 是 D 的状态集合，Dtran 是 D 的转换表</p>
+<p>初始时，$\epsilon-closure(s)$是 Dstates 中唯一的状态且未被标记</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">while Dstates 中存在一个未标记的状态T</span><br><span class="line">    标记T</span><br><span class="line">    for 每个输入符号a</span><br><span class="line">        U = epsilon-closure(move(T,a))</span><br><span class="line">        if U 不在 Dstates中</span><br><span class="line">            将U作为一个未标记的状态添加到Dstates中</span><br><span class="line">        Dtran[T,a] = U</span><br></pre></td></tr></table></figure>
+<p>开始状态 A = $\epsilon-closure(s)$ = {0，1，2，4，7}，根据算法流程，先标记 A</p>
+<p>然后计算 $\epsilon-closure(move(A,a))$，在状态 A 上只有 2 和 7 有 a 上的转换，得到状态 B={1,2,3,4,6,7,8},Dtran[A,a] = B</p>
+<p>状态 A 中只有状态 4 对于输入 b 有一个转换，得到状态 C={1,2,4,5,6,7},Dtran[A,b]=C</p>
+<p>然后对没被标记的状态 B 和状态 C 继续这个过程</p>
+<p>状态 B 的 a 转换 得到的状态仍然是 B， Dtran[B,a] = B</p>
+<p>状态 B 中在 8 上的 b 的转换可以得到新的状态 D={1,2,4,5,6,7,9} Dtran[B,b] = D。这里的计算详细解释一下，{1,2,3,4,6,7,8} 经过 b 转换后的集合是 {5,9}，然后再计算 $\epsilon-closure({5,8})$ 得到 {1,2,4,5,6,7,9}</p>
+<p>状态 C 的 a 转换可以得到的状态 {1,2,3,4,6,7,8}，即状态 B，Dtran[C,a] = B</p>
+<p>状态 C 的 b 转换可以得到的状态 {1,2,4,5,6,7}，即状态 C 自身，Dtran[C,b] = C</p>
+<p>之后的过程省略，可以得到的五个状态集合是</p>
+<p>A = {0,1,2,4,7}<br>B = {1,2,3,4,6,7,8}<br>C = {1,2,4,5,6,7}<br>D = {1,2,4,5,6,7,9}<br>E = {1,2,4,5,6,7,10}</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>a</th>
+<th>b</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>B</td>
+<td>C</td>
+</tr>
+<tr>
+<td>B</td>
+<td>B</td>
+<td>D</td>
+</tr>
+<tr>
+<td>C</td>
+<td>B</td>
+<td>C</td>
+</tr>
+<tr>
+<td>D</td>
+<td>B</td>
+<td>E</td>
+</tr>
+<tr>
+<td>E</td>
+<td>B</td>
+<td>C</td>
+</tr>
+</tbody>
+</table>
+</div>
+<img src="/2020/03/24/编译原理之有穷自动机/子集构造法结果.png" title="子集构造法结果">
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>接下来用编程语言实现一个简单的 DFA</p>
+<img src="/2020/03/24/编译原理之有穷自动机/要实现的DFA.png" title="要实现的DFA">
+<p>功能要求：输入一个单行无空格的字符串（以“#”号结束），如果该字符串是一个合法的输入，则显示“接受”，否则显示“不接受”。</p>
+<p>分析该 DFA 的五元组信息如下</p>
 <ul>
-<li>保护断点和程序状态</li>
-<li>关中断</li>
-<li>识别异常和中断事件并转到响应处理程序执行</li>
+<li>一个状态的有穷集合 S = {0,1,2,3}</li>
+<li>一个输入符合集合$\Sigma$ = {a,b}</li>
+<li>一个转换函数 move，它把状态和符号组成的二元组映射到状态集合<ul>
+<li>move(0,a) = 1</li>
+<li>move(0,b) = 0</li>
+<li>move(1,a) = 1</li>
+<li>move(1,b) = 2</li>
+<li>move(2,a) = 1</li>
+<li>move(2,b) = 3</li>
+<li>move(3,a) = 1</li>
+<li>move(3,b) = 0</li>
 </ul>
-<p>保护断点和程序状态</p>
-<p>对于不同的异常事件，其返回地址不同。如却也故障异常的断点是发生页故障的当前指令的地址。陷阱的断点是陷阱指令后面一条指令的地址。</p>
-<p>为了能够支持异常或者中断的嵌套处理，大多数处理器将断点保存到栈中，如 IA-32 处理器的断点被保存到栈中，如果系统不支持桥套处理，则可以将断点保存到特定寄存器中。MIPS 处理器用 EPC 寄存器专门存放断点，其 CPU 用于中断的开销较小。</p>
-<p>被中断时源程序状态（如产生的各种标志信息，允许自陷标志等）都必须保存起来。每个正在运行程序的状态信息存放在一个专门的寄存器中，这些专门寄存器统称为<strong>程序状态字寄存器</strong>（PSWR），存放在 PSWR 中的信息称为<strong>程序状态字</strong>。</p>
-<p>关中断</p>
-<p>应有一种机制来禁止在处理异常或中断时再响应新的异常或中断，通常通过设置<strong>中断允许位</strong>来实现。</p>
-<p>识别异常和中断事件并转到响应处理程序执行</p>
-<p>在调出异常和中断你处理程序之前，必须指导发生了什么异常或者那个 IO 设备发出了中断请求。一般来说，内部异常事件和外部中断源的识别方式不同，大多数处理器会将二者分开来处理。</p>
-<p>内部异常事件的识别很简单，只要 CPU 在执行期间把检测到的世家你对应的异常类型好或者表示异常类型的信息记录到特定的内部寄存器中即可。</p>
-<p>外部中断源的识别比较复杂，只能通过在每条指令执行完成后，取下条指令之前去查询是否有中断请求。通常 CPU 通过采样对应的中断请求引脚来进行查询。但是到底是那个 IO 设备发出的请求，还需要进一步识别。</p>
-<p>异常中断的识别可以采用软件识别和硬件识别两种方式。</p>
-<p>软件识别是指，CPU 中设置一个原因寄存器，该寄存器中有一些标识异常原因或终端类型的标志信息。操作系统使用一个统一的异常或中断查询程序，按一定的优先级顺序查询原因寄存器，先查询到的先处理。MIPS 采用软件识别方式</p>
-<p>硬件识别方式称为<strong>向量中断方式</strong>，这种方式下，异常或中断处理程序的首地址称为<strong>中断向量</strong>，所有中断向量存放在一个表中，称为<strong>中断向量表</strong>。每个异常和中断都被设定一个<strong>中断类型号</strong>，中断向量存放的位置与对应的中断类型号相关。可以根据类型号快速找到对应的处理程序。IA-32 中的异常和中断识别就采用这种方式。</p>
-<h5 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h5><p>BIOS（Basic Input/Output System）是基本输入/输出系统的简称</p>
-<p>Intel 从奔二处理器开始，引入了指令 sysenter 和 sysexit，sysenter 被称为<strong>快速系统调用指令</strong>，他提供了从用户态到内核态的快速切换方式。</p>
-<p>页的大小是 4kb，当对于页起始地址的发起第一次访问时，会发生缺页异常。</p>
+</li>
+<li>状态 $s_0$ 是唯一的开始或初始状态 = 0</li>
+<li>状态集合 F 是接受（或中止）状态集合 = {3}</li>
+</ul>
+<p>根据如下信息就可以开始编码了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;bits/stdc++.h&gt;</span><br><span class="line">using namespace std;</span><br><span class="line">string str;</span><br><span class="line">void dfa()</span><br><span class="line">&#123;</span><br><span class="line">    bool ok = true; // 是否合法</span><br><span class="line">    int pos = 0;    // 当前扫描位置</span><br><span class="line">    int state = 0;  // 当前状态</span><br><span class="line">    while (str[pos] != &apos;#&apos;)</span><br><span class="line">    &#123;</span><br><span class="line">        char next = str[pos];</span><br><span class="line">        ++pos;</span><br><span class="line">        if (state == 0)</span><br><span class="line">        &#123;</span><br><span class="line">            if (next == &apos;a&apos;)</span><br><span class="line">            &#123;</span><br><span class="line">                state = 1;</span><br><span class="line">            &#125;</span><br><span class="line">            else if (next == &apos;b&apos;)</span><br><span class="line">            &#123;</span><br><span class="line">                state = 0;</span><br><span class="line">            &#125;</span><br><span class="line">            else</span><br><span class="line">            &#123;</span><br><span class="line">                ok = false;</span><br><span class="line">                break;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        else if (state == 1)</span><br><span class="line">        &#123;</span><br><span class="line">            if (next == &apos;a&apos;)</span><br><span class="line">            &#123;</span><br><span class="line">                state = 1;</span><br><span class="line">            &#125;</span><br><span class="line">            else if (next == &apos;b&apos;)</span><br><span class="line">            &#123;</span><br><span class="line">                state = 2;</span><br><span class="line">            &#125;</span><br><span class="line">            else</span><br><span class="line">            &#123;</span><br><span class="line">                ok = false;</span><br><span class="line">                break;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        else if (state == 2)</span><br><span class="line">        &#123;</span><br><span class="line">            if (next == &apos;a&apos;)</span><br><span class="line">            &#123;</span><br><span class="line">                state = 1;</span><br><span class="line">            &#125;</span><br><span class="line">            else if (next == &apos;b&apos;)</span><br><span class="line">            &#123;</span><br><span class="line">                state = 3;</span><br><span class="line">            &#125;</span><br><span class="line">            else</span><br><span class="line">            &#123;</span><br><span class="line">                ok = false;</span><br><span class="line">                break;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        else if (state == 3)</span><br><span class="line">        &#123;</span><br><span class="line">            if (next == &apos;a&apos;)</span><br><span class="line">            &#123;</span><br><span class="line">                state = 1;</span><br><span class="line">            &#125;</span><br><span class="line">            else if (next == &apos;b&apos;)</span><br><span class="line">            &#123;</span><br><span class="line">                state = 0;</span><br><span class="line">            &#125;</span><br><span class="line">            else</span><br><span class="line">            &#123;</span><br><span class="line">                ok = false;</span><br><span class="line">                break;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    if (state != 3)</span><br><span class="line">    &#123;</span><br><span class="line">        ok = false;</span><br><span class="line">    &#125;</span><br><span class="line">    if (ok)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;接受&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    else</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;不接受&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    while (cin &gt;&gt; str)</span><br><span class="line">    &#123;</span><br><span class="line">        dfa();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输入：<br>abbab#<br>abb#<br>输出：<br>不接受<br>接受</p>
 
           
         
@@ -509,7 +591,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-21T12:22:49+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-21T22:04:59+08:00">
                 2020-03-21
               </time>
             
@@ -532,8 +614,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/计算机基础/" itemprop="url" rel="index">
-                    <span itemprop="name">计算机基础</span>
+                  <a href="/categories/计算机系统基础/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机系统基础</span>
                   </a>
                 </span>
 
@@ -549,6 +631,26 @@
 
           
           
+
+         <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-bar-chart"></i>
+           </span>
+           <span class="post-meta-item-text">字数统计:</span>
+           <span class="post-count">4.1k(字)</span>
+
+         </span>
+
+      <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-clock-o"></i>
+           </span>
+           <span class="post-meta-item-text">阅读时长:</span>
+           <span class="post-count">13(分)</span>
+
+         </span>
 
           
 
@@ -571,161 +673,83 @@
       
         
           
-            <h3 id="异常控制流"><a href="#异常控制流" class="headerlink" title="异常控制流"></a>异常控制流</h3><h4 id="正常控制流"><a href="#正常控制流" class="headerlink" title="正常控制流"></a>正常控制流</h4><p>包含两种顺序</p>
+            <img src="/2020/03/21/计算机基础之异常控制流学习笔记/思维导图.png" title="思维导图">
+<h2 id="正常控制流"><a href="#正常控制流" class="headerlink" title="正常控制流"></a>正常控制流</h2><p>正常控制流包含两种顺序</p>
 <ul>
 <li>按照指令存放的顺序执行，新的 PC 数值为当前指令地址加上指令长度</li>
 <li>跳转到由于转移类指令指出的转移目标地址处执行，新的 PC 数值为转移目标地址</li>
 </ul>
-<h4 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h4><h5 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h5><p>进程是资源分配的最小单位，每个应用程序在运行时均有自己的存储空间，用来存储自己的程序代码和数据，包括只读区（代码和只读数据），可读可写数据区（初始化数据和未初始化数据），动态的堆区和栈区</p>
+<h2 id="进程与进程上下文的切换"><a href="#进程与进程上下文的切换" class="headerlink" title="进程与进程上下文的切换"></a>进程与进程上下文的切换</h2><h3 id="进程的概念"><a href="#进程的概念" class="headerlink" title="进程的概念"></a>进程的概念</h3><p>进程是资源分配的最小单位，每个应用程序在运行时均有自己的存储空间，用来存储自己的程序代码和数据，包括只读区（代码和只读数据），可读可写数据区（初始化数据和未初始化数据），动态的堆区和栈区</p>
 <p>进程的引入为程序提供了以下两方面的抽象。一个独立的逻辑控制流和一个私有的虚拟内存地址。每个进程拥有一个独立的逻辑，使得程序员以为程序似在执行过程中独占处理器。一个私有的虚拟地址空间，使得程序员以为程序在执行过程中独占存储器。</p>
 <p>为了实现以上两方面的抽象，操作系统必须提供一整套管理机制，包括处理器调度、进程上下文切换、虚拟存储管理等。</p>
-<h5 id="逻辑控制流"><a href="#逻辑控制流" class="headerlink" title="逻辑控制流"></a>逻辑控制流</h5><p>一个可执行目标文件被加载并启动执行后，就成为一个进程。他们代码段中的每一条指令都有一个确定的地址，在这些指令的执行过程中，会形成一个指令执行的地址序列，对于确定的输入数据，其指令的地址序列也是确定的。这个确定的指令执行地址序列被称为进程的<strong>逻辑控制流</strong>。</p>
+<h3 id="逻辑控制流"><a href="#逻辑控制流" class="headerlink" title="逻辑控制流"></a>逻辑控制流</h3><p>一个可执行目标文件被加载并启动执行后，就成为一个进程。他们代码段中的每一条指令都有一个确定的地址，在这些指令的执行过程中，会形成一个指令执行的地址序列，对于确定的输入数据，其指令的地址序列也是确定的。这个确定的指令执行地址序列被称为进程的<strong>逻辑控制流</strong>。</p>
 <p>对于一个具有单核处理器的系统，如果有多个进程运行，这些进程会轮流使用处理器，处理器的<strong>物理控制流</strong>是由多个逻辑控制流组成。<br><img src="/2020/03/21/计算机基础之异常控制流学习笔记/多个逻辑控制流.png" title="多个逻辑控制流"></p>
+<p>图中可以看出有些进程的逻辑控制流在时间上有交错，通常把这种不同进程的逻辑控制流在时间上交错或者重叠称为<strong>并发</strong>。而<strong>并行</strong>则是并发执行的一个特例，我们称两个进程是并行的，是指他们并发的运行在不同的处理器或者处理器核中。</p>
+<p>连续执行同一个进程的时间段称为时间片，每个时间片结束时，通过进程的上下文切换，换一个新的进程到处理器上执行，开始一个新的时间片，这个过程称为<strong>时间片轮转处理器调度</strong>。</p>
+<h3 id="进程的上下文切换"><a href="#进程的上下文切换" class="headerlink" title="进程的上下文切换"></a>进程的上下文切换</h3><p>实现不同进程中指令交替执行的机制称为<strong>进程的上下文切换</strong>。</p>
+<p>进程的物理实体（代码和数据）和支持进程运行的环境合称为<strong>进程的上下文</strong>，可以细分为</p>
+<ul>
+<li>由用户进程的程序块，数据块，运行时的堆和用户栈等组成的用户空间信息被称为<strong>用户级上下文</strong>。</li>
+<li>进程表示信息，进程现场信息，进程控制信息和系统内核堆栈组成的<strong>内核空间信息</strong>被称为<strong>系统级上下文</strong>。</li>
+<li>处理器中各个寄存器的内存被称为<strong>寄存器上下文</strong>。</li>
+</ul>
+<p>用户级上下文和系统级上下文地址空间一起构成了一个进程的整个存储器映像。进程控制信息包含各种内核数据结构，如有关进程信息的进程表，页表，文件表等。<br><img src="/2020/03/21/计算机基础之异常控制流学习笔记/进程的存储映像.png" title="进程的存储映像"></p>
+<p>上下文切换发生在操作系统调度一个新进程到处理器上运行，他需要完成以下三件事</p>
+<ul>
+<li>将当前进程的寄存器上下文保存到当前进程的系统级上下文的现场信息中</li>
+<li>将新进程系统上下文中的现场信息作为新的寄存器上下文恢复到处理器的各个寄存器中</li>
+<li>将控制转移到新进程执行</li>
+</ul>
+<p>一个重要的上下文信息是 PC，当前进程被打断的断点处的 PC 作为寄存器上下文的一部分被保存在进程现场信息中。</p>
+<h3 id="进程的私有地址空间"><a href="#进程的私有地址空间" class="headerlink" title="进程的私有地址空间"></a>进程的私有地址空间</h3><img src="/2020/03/21/计算机基础之异常控制流学习笔记/虚拟地址空间映像.png" title="虚拟地址空间映像">
+<p>整个虚拟地址空间分为两大部分。<strong>内核虚拟存储空间</strong>（简称内核空间）和<strong>进程虚拟内存空间</strong>（简称用户空间）。在采用虚拟存储机制的系统中，每个程序的可执行目标文件在装入时都被映射到同样的虚拟地址空间上，即所有用户进程的虚拟地址空间是一致的，只是在相应的制度区域和可读写数据区域中映射的信息不同而已。</p>
+<p>linux 将用户空间对应的进程虚拟存储空间组织成若干“区域”的集合，<br>内核为每个进程维护了一个进程描述符，记录或者指向内核运行该进程所需要的所有信息，如进程 pid，指向用户栈的指针，可执行目标文件的文件名，程序技术值 PC 等。</p>
+<h3 id="程序的加载和运行"><a href="#程序的加载和运行" class="headerlink" title="程序的加载和运行"></a>程序的加载和运行</h3><p>当启动一个可以行目标文件执行时，首先会通过某种方式调出常驻内存的一个称为加载器的操作系统程序来处理。在 UNIX/Linux 系统中，可以通过 execve() 函数来启动加载器，其作用是在当前进程的上下文中加载并且运行一个新程序。</p>
+<h2 id="异常和中断"><a href="#异常和中断" class="headerlink" title="异常和中断"></a>异常和中断</h2><p>除了时间片到，当前进程的执行被新进程打断，还有用户按下 CTRL+C，当前执行执行中发生了不能使指令执行的意外事件，IO 设备完成了系统交给的任务需要进一步处理，这些特殊事件统称为<strong>异常</strong>或者<strong>中断</strong>。<br>当发生异常或者终端，正在执行进程的逻辑控制流被打断，CPU 转到具体的特殊处理事件的内核程序去执行。他与上下文切换有一个明显的不同：上下文切换后 CPU 执行另一个用户进程，但是，中断或异常处理程序执行的代码不是一个进程，而是一个<strong>内核控制路径</strong>，它代表异常或终端发生时正在运行的当前进程在内核态执行的一个独立的指令序列。作为一个内核控制路径，他比进程更轻，其上下文信息比一个进程的上下文信息少得多。</p>
+<h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p>异常是在 CPU 内部执行时发生的，中断是 CPU 外部的 IO 设备向 CPU 发出的请求，通常称异常为<strong>内部异常</strong>，而称中断为<strong>外部中断</strong>。</p>
+<img src="/2020/03/21/计算机基础之异常控制流学习笔记/中断处理过程.png" title="中断处理过程">
+<p>大致处理流程如下：当 CPU 在执行当前程序或任务的第 i 条指令时检测到一个异常事件，或者在执行第 i 条指令后发现有一个中断请求信息，CPU 会打断当前用户进程，然后转到相应的异常或中断处理程序去执行。如果该处理程序能解决相应问题，则在该处理程序的最后，CPU 通过执行“异常/中断返回指令”回到被打断的用户进程的第 i 条指令或第 i+1 条指令继续执行。若异常或中断处理程序发现是不可恢复的知名错误，则中止用户进程。通常情况下，对于异常和中断事件的具体处理过程全部由操作系统（可能包括驱动程序）软件来完成。</p>
+<h3 id="异常的分类"><a href="#异常的分类" class="headerlink" title="异常的分类"></a>异常的分类</h3><p>intel 将内部异常分为三类</p>
+<p>故障</p>
+<p><strong>故障</strong>是在引起故障的指令被启动后但未结束执行时 CPU 检测到的一类与指令执行相关的意外事件。这种意外事件有些可以回复，有些不能回复。如指令译码出现的非法操作码；取指令或者取数据时发生页故障，执行触发操作时发现除数为 0.</p>
+<p>对于像溢出和非法操作码等这类故障，因为无法通过异常处理程序回复，会调用内核的 abort 例程，以中止发生故障的当前进程。</p>
+<p>对于页故障。cpu 在指令执行过程中需要访问存储器，首先进行地址转换，在查页表进行地址转换时，判断相应页表项中的有效位是否是 1，并且确定是否地址越界或访问越权，如果检测到有效位部位 1 或者地址月结或者访问越权，都会产生页故障异常。页故障异常包含多种不同情况：处理程序首先检测是否发生地址越界或访问越权，如果是的话，故障不可恢复，否则是缺陷故障，可通过从磁盘读入页面来恢复。Linux 中不可恢复的访存故障（地址越界和访问越权）都称为<strong>段故障</strong>。</p>
+<p>陷阱</p>
+<p><strong>陷阱</strong>也成为自陷或者陷入，与故障等其他异常事件不同，是预先安排的一种异常事件，就像预先设定的陷阱一样，当执行到陷阱指令，CPU 就调出特定的程序进行相应的处理，处理结束后返回到陷阱指令的下一条指令执行。</p>
+<p>陷阱的重要作之一是在用户程序和内核之间提供一个像过程调用一样的接口，这个接口称为<strong>系统调用</strong>。操作系统给每个服务编一个号，称为系统调用号，每个服务功能通过一个对应的<strong>系统调用服务例程</strong>提供。如在 linux 中就提供了创建子线程（fork），读文件（read），加载并且运行新程序（execve）等服务功能。</p>
+<p>用于程序调试的<strong>断点设置</strong>也是一种陷阱指令。</p>
+<p>在 IA-32 中，陷阱指令引擎的异常称为编程异常，这些指令包括 INT n，int 3，into（溢出检查），bound（地址越界检查）,通常将 INT n 称为软中断指令，该指令引起的异常通常也称为<strong>软中断</strong>。在 IA-32/Linux 中可以使用快速系统调用指令 sysenter 或者软中断指令 int $0x80 进行系统调用。</p>
+<p>终止</p>
+<p>如果在执行指令的过程中发生了严重错误，如控制器出现问题，访问 DRAM 或者 SRAM 时发生校验错误等，则程序无法继续执行，只好终止发生问题的进程。</p>
+<h3 id="中断的分类"><a href="#中断的分类" class="headerlink" title="中断的分类"></a>中断的分类</h3><p><strong>中断</strong> 是由外部 IO 设备请求处理器进行的一种信号。他不是由当前执行的指令引起的，外部 IO 设备通过特定的<strong>中断请求信号线</strong>向 CPU 提出中断申请。CPU 在执行指令过程中，每执行一条指令就查看中断请求引脚，如果中断请求引脚的信号有效，则进入中断响应周期。在<strong>中断响应周期</strong>中，CPU 先将当前 PC 值和当前机器状态保存到栈中，并设置成为<strong>关中断</strong>状态，然后从数据总线读取<strong>中断类型号</strong>，根据中断类型号跳转到对应的中断服务程序执行。中断响应过程由硬件完成，而中断服务程序执行具体的中断处理工作，中断处理完成后，再回到被打断程序的断点处继续执行。</p>
+<img src="/2020/03/21/计算机基础之异常控制流学习笔记/外部中断的处理过程.png" title="外部中断的处理过程">
+<p>可屏蔽中断</p>
+<p>是指通过<strong>可屏蔽中断请求线</strong>INTR 向 CPU 进行请求的中断，主要来自 IO 设备的中断请求。CPU 可以通过在中断控制器中设置相应的屏蔽字来屏蔽他或者不屏蔽他。若一个 IO 设备的中断请求被屏蔽，他的中断请求信号不会被送到 CPU。</p>
+<p>不可屏蔽中断</p>
+<p>通常是非常紧急的硬件故障，通过专门的<strong>不可屏蔽中断请求线</strong>NMI 向 CPU 发出中断请求。</p>
+<h3 id="异常和中断的响应过程"><a href="#异常和中断的响应过程" class="headerlink" title="异常和中断的响应过程"></a>异常和中断的响应过程</h3><p>CPU 从检测到异常或中断事件，到调出响应的异常或中断处理程序开始执行，整个过程称为<strong>异常和中断的响应</strong>。主要分为以下三个步骤：</p>
+<ul>
+<li>保护断点和程序状态</li>
+<li>关中断</li>
+<li>识别异常和中断事件并转到响应处理程序执行</li>
+</ul>
+<p>保护断点和程序状态</p>
+<p>对于不同的异常事件，其返回地址不同。如却也故障异常的断点是发生页故障的当前指令的地址。陷阱的断点是陷阱指令后面一条指令的地址。</p>
+<p>为了能够支持异常或者中断的嵌套处理，大多数处理器将断点保存到栈中，如 IA-32 处理器的断点被保存到栈中，如果系统不支持桥套处理，则可以将断点保存到特定寄存器中。MIPS 处理器用 EPC 寄存器专门存放断点，其 CPU 用于中断的开销较小。</p>
+<p>被中断时源程序状态（如产生的各种标志信息，允许自陷标志等）都必须保存起来。每个正在运行程序的状态信息存放在一个专门的寄存器中，这些专门寄存器统称为<strong>程序状态字寄存器</strong>（PSWR），存放在 PSWR 中的信息称为<strong>程序状态字</strong>。</p>
+<p>关中断</p>
+<p>应有一种机制来禁止在处理异常或中断时再响应新的异常或中断，通常通过设置<strong>中断允许位</strong>来实现。</p>
+<p>识别异常和中断事件并转到响应处理程序执行</p>
+<p>在调出异常和中断你处理程序之前，必须知道发生了什么异常或者那个 IO 设备发出了中断请求。一般来说，内部异常事件和外部中断源的识别方式不同，大多数处理器会将二者分开来处理。</p>
+<p>内部异常事件的识别很简单，只要 CPU 在执行期间把检测到的事件对应的异常类型或者表示异常类型的信息记录到特定的内部寄存器中即可。</p>
+<p>外部中断源的识别比较复杂，只能通过在每条指令执行完成后，取下条指令之前去查询是否有中断请求。通常 CPU 通过采样对应的中断请求引脚来进行查询。但是到底是那个 IO 设备发出的请求，还需要进一步识别。</p>
+<p>异常中断的识别可以采用软件识别和硬件识别两种方式。</p>
+<p>软件识别是指，CPU 中设置一个原因寄存器，该寄存器中有一些标识异常原因或终端类型的标志信息。操作系统使用一个统一的异常或中断查询程序，按一定的优先级顺序查询原因寄存器，先查询到的先处理。MIPS 采用软件识别方式</p>
+<p>硬件识别方式称为<strong>向量中断方式</strong>，这种方式下，异常或中断处理程序的首地址称为<strong>中断向量</strong>，所有中断向量存放在一个表中，称为<strong>中断向量表</strong>。每个异常和中断都被设定一个<strong>中断类型号</strong>，中断向量存放的位置与对应的中断类型号相关。可以根据类型号快速找到对应的处理程序。IA-32 中的异常和中断识别就采用这种方式。</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>BIOS（Basic Input/Output System）是基本输入/输出系统的简称</p>
+<p>Intel 从奔二处理器开始，引入了指令 sysenter 和 sysexit，sysenter 被称为<strong>快速系统调用指令</strong>，他提供了从用户态到内核态的快速切换方式。</p>
+<p>页的大小是 4kb，当对于页起始地址的发起第一次访问时，会发生缺页异常。</p>
 
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="jiezi19971225.cn/2020/03/18/重学线性代数/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="jiezi19971225">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Jiez19971225‘s Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/18/重学线性代数/" itemprop="url">draft</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-18T19:54:00+08:00">
-                2020-03-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/数学/" itemprop="url" rel="index">
-                    <span itemprop="name">数学</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>其实，线性代数是我大学时期算是学的比较认真的一门课了，这一次复习，好好做下笔记。</p>
-<h3 id="向量与空间"><a href="#向量与空间" class="headerlink" title="向量与空间"></a>向量与空间</h3><p>构成基底的条件</p>
-<p>当前空间的任何向量 $v$ 都可以唯一表示成</p>
-<script type="math/tex; mode=display">\hat{v} = x_1\hat{e_1} + ... + x_n\hat{e_n}</script>
           
         
       
@@ -845,6 +869,26 @@
           
           
 
+         <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-bar-chart"></i>
+           </span>
+           <span class="post-meta-item-text">字数统计:</span>
+           <span class="post-count">1.1k(字)</span>
+
+         </span>
+
+      <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-clock-o"></i>
+           </span>
+           <span class="post-meta-item-text">阅读时长:</span>
+           <span class="post-count">5(分)</span>
+
+         </span>
+
           
 
           
@@ -866,7 +910,7 @@
       
         
           
-            <p>二叉搜索树（Binary Search Tree）是一种可以在 O(logN) 复杂度做查找，插入和删除的操作。</p>
+            <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>二叉搜索树（Binary Search Tree）是一种可以在 O(logN) 复杂度做查找，插入和删除的操作。</p>
 <p>二叉搜索树是一种满足以下特殊性质的二叉树。</p>
 <ul>
 <li>若左子树不空，则左子树上所有结点的值均小于或等于它的根结点的值</li>
@@ -874,21 +918,18 @@
 <li>左右子树均为二叉搜索树</li>
 </ul>
 <p>二叉搜索树包含三种基本操作。其流程如下。</p>
-<p>查找操作</p>
-<ul>
+<h2 id="查找操作"><a href="#查找操作" class="headerlink" title="查找操作"></a>查找操作</h2><ul>
 <li>若当前节点为 NULL，返回 false</li>
 <li>若查找的值小于当前节点的值，则递归搜索左子树</li>
 <li>若查找的值大于当前节点的值，则递归搜索右子树</li>
 <li>若查找的值等于当前节点的值，则返回 true</li>
 </ul>
-<p>插入操作</p>
-<ul>
+<h2 id="插入操作"><a href="#插入操作" class="headerlink" title="插入操作"></a>插入操作</h2><ul>
 <li>若当前节点为 NULL，用插入的值构建新节点插入到当前位置</li>
 <li>若插入的值小于当前节点的值，则在左子树上执行插入操作</li>
 <li>若插入的值大于当前节点的值，则在右子树上执行插入操作</li>
 </ul>
-<p>删除操作</p>
-<ul>
+<h2 id="删除操作"><a href="#删除操作" class="headerlink" title="删除操作"></a>删除操作</h2><ul>
 <li>若当前节点为 NULL，返回 false</li>
 <li>若删除的值小于当前节点的值，则在左子树上执行删除操作</li>
 <li>若删除的值大于当前节点的值，则在右子树上执行删除操作</li>
@@ -900,7 +941,7 @@
 </li>
 </ul>
 <p>根据二叉搜索树的性质，中序遍历二叉搜索树，得到的一定是一个有序的数列。所以用二叉搜索树进行排序，时间复杂度为 O(NlogN)</p>
-<p>以下是 C++ 实现的代码:</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p>以下是 C++ 实现的代码:</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stack&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bitset&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdlib&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cmath&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;set&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;list&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;deque&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;map&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;queue&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sstream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> ll;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">double</span> PI = <span class="built_in">acos</span>(<span class="number">-1.0</span>);</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">double</span> eps = <span class="number">1e-6</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> INF = <span class="number">1000000000</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">100</span>;</span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">node</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    T val;</span><br><span class="line">    node *lch, *rch;</span><br><span class="line">    node(T val) : val(val), lch(<span class="literal">NULL</span>), rch(<span class="literal">NULL</span>) &#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">bst</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">typedef</span> node&lt;T&gt; node;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    node *root;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    bst() : root(<span class="literal">NULL</span>) &#123;&#125;</span><br><span class="line">    <span class="comment">// 插入操作</span></span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">insert</span><span class="params">(<span class="keyword">const</span> T &amp;val)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> _insert(root, val);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">bool</span> _insert(node *&amp;root, <span class="keyword">const</span> T &amp;val)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (root == <span class="literal">NULL</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            root = <span class="keyword">new</span> node(val);</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (val &lt; root-&gt;val)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> _insert(root-&gt;lch, val);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> _insert(root-&gt;rch, val);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 查找操作</span></span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">find</span><span class="params">(T val)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> _find(root, val);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">bool</span> _find(node *root, <span class="keyword">const</span> T &amp;val)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (root == <span class="literal">NULL</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (val &lt; root-&gt;val)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> _find(root-&gt;lch);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (val &gt; root-&gt;val)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> _find(root-&gt;rch);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> root;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">remove</span><span class="params">(T val)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> _remove(root, val);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">bool</span> _remove(node *&amp;root, T val)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (root == <span class="literal">NULL</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (val &lt; root-&gt;val)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> _remove(root-&gt;lch, val);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (val &gt; root-&gt;val)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> _remove(root-&gt;rch, val);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (root-&gt;lch == <span class="literal">NULL</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                node *del = root;</span><br><span class="line">                root = root-&gt;rch;</span><br><span class="line">                <span class="keyword">delete</span> del;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (root-&gt;rch == <span class="literal">NULL</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                node *del = root;</span><br><span class="line">                root = root-&gt;lch;</span><br><span class="line">                <span class="keyword">delete</span> del;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">// 找右子树中值最小的</span></span><br><span class="line">                node *rightMin = root-&gt;rch-&gt;lch;</span><br><span class="line">                <span class="keyword">while</span> (rightMin)</span><br><span class="line">                &#123;</span><br><span class="line">                    rightMin = rightMin-&gt;lch;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">// 交换之后，右子树仍然满足 bst 性质</span></span><br><span class="line">                swap(root-&gt;val, rightMin-&gt;val);</span><br><span class="line">                _remove(root-&gt;rch, rightMin-&gt;val);</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">output</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        _output(root);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">void</span> _output(node *root)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (root == <span class="literal">NULL</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        _output(root-&gt;lch);</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; root-&gt;val &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">        _output(root-&gt;rch);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    bst&lt;<span class="keyword">int</span>&gt; b;</span><br><span class="line">    b.insert(<span class="number">1</span>);</span><br><span class="line">    b.insert(<span class="number">3</span>);</span><br><span class="line">    b.insert(<span class="number">2</span>);</span><br><span class="line">    b.insert(<span class="number">10</span>);</span><br><span class="line">    b.insert(<span class="number">8</span>);</span><br><span class="line">    b.remove(<span class="number">2</span>);</span><br><span class="line">    b.insert(<span class="number">4</span>);</span><br><span class="line">    b.remove(<span class="number">3</span>);</span><br><span class="line">    b.output();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
           
@@ -1022,6 +1063,26 @@
           
           
 
+         <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-bar-chart"></i>
+           </span>
+           <span class="post-meta-item-text">字数统计:</span>
+           <span class="post-count">3k(字)</span>
+
+         </span>
+
+      <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-clock-o"></i>
+           </span>
+           <span class="post-meta-item-text">阅读时长:</span>
+           <span class="post-count">11(分)</span>
+
+         </span>
+
           
 
           
@@ -1043,58 +1104,59 @@
       
         
           
-            <h3 id="chapter3-流，元素与基本尺寸"><a href="#chapter3-流，元素与基本尺寸" class="headerlink" title="chapter3 流，元素与基本尺寸"></a>chapter3 流，元素与基本尺寸</h3><p>外在盒子与内在盒子-外在盒子负责元素是可以一行显示,还是只能换行显示;内在盒子负责宽高、内容呈现什么的。内在盒子专业的名称是“容器盒子”。y 属性值是 inline-block 的元素既能和图文一行显示,又能直接设置 width/height。</p>
+            <h2 id="chapter3-流，元素与基本尺寸"><a href="#chapter3-流，元素与基本尺寸" class="headerlink" title="chapter3 流，元素与基本尺寸"></a>chapter3 流，元素与基本尺寸</h2><p>外在盒子与内在盒子-外在盒子负责元素是可以一行显示,还是只能换行显示;内在盒子负责宽高、内容呈现什么的。内在盒子专业的名称是“容器盒子”。y 属性值是 inline-block 的元素既能和图文一行显示,又能直接设置 width/height。</p>
 <p>width:auto 的四种表现</p>
 <ul>
-<li>充分利用可用空间，即 fill-available， 4 。比方说,\<div\>、 \<p\>这些元素的宽度默认是 100% 于父级容器的。</p\></div\></li>
+<li>充分利用可用空间，即 fill-available， 4 。比方说,&lt;div&gt;、 &lt;p&gt;这些元素的宽度默认是 100% 于父级容器的。</li>
 <li>收缩与包裹。典型代表就是浮动、绝对定位、inline-block 元素或 table 元素,<br>英文称为 shrink-to-fit,可简单理解为“包裹性”。CSS3 中的 fit-content 指的就是这种宽度表现。</li>
 <li>收缩到最小。这个最容易出现在 table-layout 为 auto 的表格中,</li>
 <li>超出容器限制。除非有明确的 width 相关设置,否则上面 3 种情况尺寸都不会主动<br>超过父级容器宽度的,但是存在一些特殊情况。例如,内容很长的连续的英文和数字,或者内联<br>元素被设置了 white-space:nowarp。</li>
 </ul>
 <p>唯一的外部尺寸是 div 的宽，外部尺寸是指宽度由外部元素决定</p>
-<h4 id="外部尺寸与流体特性"><a href="#外部尺寸与流体特性" class="headerlink" title="外部尺寸与流体特性"></a>外部尺寸与流体特性</h4><p>正常流宽度</p>
+<h3 id="外部尺寸与流体特性"><a href="#外部尺寸与流体特性" class="headerlink" title="外部尺寸与流体特性"></a>外部尺寸与流体特性</h3><p>正常流宽度</p>
+<p>正常填充满盒子。</p>
 <p>格式化宽度</p>
 <p>格式化宽度仅出现在“绝对定位模型”中,也就是出现在 position 属性值为 absolute 或 fixed 的元素中。在默认情况下,绝对定位元素的宽度表现是“包裹性”,宽度由于内部尺寸决定。但有一种情况例外。对于非替换元素，,当 left/top 或 top/bottom 对立方位的属性值同时存在的时候,元素的宽度表现为“格式化宽度”,其宽度大小相对于最近的具有定位特性<br>(position 属性值不是 static)的祖先元素计算。</p>
-<h4 id="内部尺寸与流体特性"><a href="#内部尺寸与流体特性" class="headerlink" title="内部尺寸与流体特性"></a>内部尺寸与流体特性</h4><p>包裹性</p>
+<h3 id="内部尺寸与流体特性"><a href="#内部尺寸与流体特性" class="headerlink" title="内部尺寸与流体特性"></a>内部尺寸与流体特性</h3><p>包裹性</p>
 <p>自适应性 元素尺寸是元素尺寸由内部元素决定,但永远小于“包含块”容器的尺寸。因此,对于一个元素,如果其 display 属性值是 inline-block,那么即使其里面内容再多,只要是正常文本,宽度也不会超过容器。</p>
 <p>文字少的时候居中显示,文字超过一行的时候居左显示</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.box</span> &#123;</span><br><span class="line">  <span class="attribute">text-align</span>: center;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.content</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: inline-block;</span><br><span class="line">  <span class="attribute">text-align</span>: left;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>首选最小宽度 对于东亚文字，最小宽度为每个字的宽度，西方文字的最小宽度是由特定的连续的英文字符单元决定的，利用首选最小宽度可以实现</p>
-<h4 id="宽度分离原则"><a href="#宽度分离原则" class="headerlink" title="宽度分离原则"></a>宽度分离原则</h4><p>width 属性不与 padding/border 共存，更好的方式是使用 box-sizing:border-box</p>
+<h3 id="宽度分离原则"><a href="#宽度分离原则" class="headerlink" title="宽度分离原则"></a>宽度分离原则</h3><p>width 属性不与 padding/border 共存，更好的方式是使用 box-sizing:border-box</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.father</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">180px</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.son</span> &#123;</span><br><span class="line">  <span class="attribute">margin</span>: <span class="number">0</span> <span class="number">20px</span>;</span><br><span class="line">  <span class="attribute">padding</span>: <span class="number">20px</span>;</span><br><span class="line">  <span class="attribute">border</span>: <span class="number">1px</span> solid;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="height-auto"><a href="#height-auto" class="headerlink" title="height:auto"></a>height:auto</h4><p>对于 height 属性,如果父元素 height 为 auto,只要子元素在文档流中,其百分比值完全就被忽略了</p>
+<h3 id="height-auto"><a href="#height-auto" class="headerlink" title="height:auto"></a>height:auto</h3><p>对于 height 属性,如果父元素 height 为 auto,只要子元素在文档流中,其百分比值完全就被忽略了</p>
 <p>如果包含块的高度没有显式指定(即高度由内容决定),并且该元素不是绝对定位,则计算值为 auto，auto 无法进行百分比计算</p>
 <p>height:100% 的两种计算，绝对定位的宽高百分比计算是相对于 padding box ，,非绝对定位元素则是相对于 content box 计算的。</p>
-<h4 id="min-width-max-width"><a href="#min-width-max-width" class="headerlink" title="min-width/max-width"></a>min-width/max-width</h4><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">img</span> &#123;</span><br><span class="line">  <span class="attribute">max-width</span>: <span class="number">100%</span>;</span><br><span class="line">  <span class="attribute">height</span>: auto <span class="meta">!important</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="min-width-max-width"><a href="#min-width-max-width" class="headerlink" title="min-width/max-width"></a>min-width/max-width</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">img</span> &#123;</span><br><span class="line">  <span class="attribute">max-width</span>: <span class="number">100%</span>;</span><br><span class="line">  <span class="attribute">height</span>: auto <span class="meta">!important</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>height:auto 是必需的,否则,如果原始图片有设定 height, max-width 生效的时候,图片就会被水平压缩。</p>
 <p>max-*初始值是 none，min-*初始值是 auto</p>
 <p>数值变化无动画，需要设置初始值为 0</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.box</span> &#123;</span><br><span class="line">  <span class="attribute">min-height</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">transition</span>: min-height <span class="number">0.3s</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.box</span><span class="selector-pseudo">:hover</span> &#123;</span><br><span class="line">  <span class="attribute">min-height</span>: <span class="number">300px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>max-*会覆盖 !important 的 width/height</p>
 <p>::selection 选择器匹配被用户选取的选取是部分。即对选中文本的操作。<br>只能向 ::selection 选择器应用少量 CSS 属性：color、background、cursor 以及 outline。</p>
-<h3 id="chapter4-盒尺寸四大家族"><a href="#chapter4-盒尺寸四大家族" class="headerlink" title="chapter4 盒尺寸四大家族"></a>chapter4 盒尺寸四大家族</h3><h4 id="content-与替换元素"><a href="#content-与替换元素" class="headerlink" title="content 与替换元素"></a>content 与替换元素</h4><p><img\>、<object\>、<video\>、<iframe\>或者表单元素<textarea\>和<input\>都是典型的替换元素</input\></textarea\></iframe\></video\></object\></img\></p>
+<h2 id="chapter4-盒尺寸四大家族"><a href="#chapter4-盒尺寸四大家族" class="headerlink" title="chapter4 盒尺寸四大家族"></a>chapter4 盒尺寸四大家族</h2><h3 id="content-与替换元素"><a href="#content-与替换元素" class="headerlink" title="content 与替换元素"></a>content 与替换元素</h3><p>&lt;img&gt;、&lt;object&gt;、&lt;video&gt;、&lt;iframe&gt;或者表单元素&lt;textarea&gt;和&lt;input&gt;都是典型的替换元素</p>
 <p>vertical-align 在替换元素的基线定义为元素的下边缘</p>
-<p>\<select\> 也是替换元素</select\></p>
-<p>\<input\>和\<button\>按钮的区别在钮默认的 white-space 值不一样,前者是 pre,后者是 normal</button\></input\></p>
+<p>&lt;select&gt; 也是替换元素</p>
+<p>&lt;input&gt;和&lt;button&gt;按钮的区别在钮默认的 white-space 值不一样,前者是 pre,后者是 normal</p>
 <p>透明图片占位的替代方法</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">img</span> &#123;</span><br><span class="line">  <span class="attribute">visibility</span>: hidden;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-tag">img</span><span class="selector-attr">[src]</span> &#123;</span><br><span class="line">  <span class="attribute">visibility</span>: visible;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>对于 Firefox 浏览器,src 缺省的\<img\>不是替换元素,而是一个普通的内联元素,所以使用的就不是替换元素的尺寸规则,而是类似\<span\>的内联元素尺寸规则,宽高会无效。因此可以在 CSS 重置时加上下面一条</span\></img\></p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">img</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: inline-block;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ul>
 <li>:before,:after 伪元素是非替换元素，其 content 属性若显示图片则显示的是图片的固有尺寸，不会因 width 和 height 更改</li>
-<li>基于伪元素的图片内容生成技术 <a href="https://demo.cssworld.cn/4/1-2.php" target="_blank" rel="noopener">https://demo.cssworld.cn/4/1-2.php</a></li>
+<li>基于伪元素的图片内容生成技术 <a href="https://demo.cssworld.cn/4/1-2.php" target="_blank" rel="noopener">链接</a></li>
 <li>,使用 content 属性,我们还可以让普通标签元素变成替换元素。一般网站的标志使用的是 h1 标签，可以用 content 改变图片</li>
 <li>使用 content 属性生成的文本无法选中，无法复制，像设置了 user-select:none 一样</li>
 <li>:empty 伪元素依然会选取 有 content 属性的元素</li>
 <li>动态加载效果</li>
 </ul>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">dot</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: inline-block;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">1em</span>;</span><br><span class="line">  <span class="attribute">line-height</span>: <span class="number">1</span>;</span><br><span class="line">  <span class="attribute">text-align</span>: left;</span><br><span class="line">  <span class="attribute">vertical-align</span>: -<span class="number">0.25em</span>;</span><br><span class="line">  <span class="attribute">overflow</span>: hidden;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-tag">dot</span><span class="selector-pseudo">::before</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: block;</span><br><span class="line">  <span class="attribute">content</span>: <span class="string">"...\A..\A."</span>;</span><br><span class="line">  <span class="attribute">white-space</span>: pre-wrap;</span><br><span class="line">  <span class="attribute">animation</span>: dot <span class="number">3s</span> infinite step-start both;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@keyframes</span> dot &#123;</span><br><span class="line">  33% &#123;</span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">translateY</span>(-<span class="number">2em</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  66% &#123;</span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">translateY</span>(-<span class="number">1em</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="padding-属性"><a href="#padding-属性" class="headerlink" title="padding 属性"></a>padding 属性</h4><ul>
+<h3 id="padding-属性"><a href="#padding-属性" class="headerlink" title="padding 属性"></a>padding 属性</h3><ul>
 <li>内联的元素设置垂直 padding 依然有效果，如果父元素设置 overflow: auto，会显示滚动条。id 锚点元素可以设置为内联元素然后设置 padding-top 使得定位位置偏下</li>
 <li>实际上,对于非替换元素的内联元素,不仅 padding 不会加入行盒高度的计算,margin 和 border 也都是如此,都是不计算高度,但实际上在内联盒周围发生了渲染。</li>
 <li>padding 的百分比数值无论水平数值都是相对父元素宽度计算的</li>
 </ul>
-<h4 id="margin-与元素尺寸以及相关布局"><a href="#margin-与元素尺寸以及相关布局" class="headerlink" title="margin 与元素尺寸以及相关布局"></a>margin 与元素尺寸以及相关布局</h4><ul>
+<h3 id="margin-与元素尺寸以及相关布局"><a href="#margin-与元素尺寸以及相关布局" class="headerlink" title="margin 与元素尺寸以及相关布局"></a>margin 与元素尺寸以及相关布局</h3><ul>
 <li>只有元素是“充分利用可用空间”状态的时候,margin 才可以改变元素的可视尺寸。因为只要宽度设定,margin 就无法改变元素尺寸。对于水平排列的列表，采用 float 方案，可以在 ul 设置负的 margin 数值，来增加可用宽度。</li>
 <li>由于 Firefox 和 Chrome 浏览器对于子元素触发滚动条的方式不一样，滚动容器底部留白使用 padding 是不推荐的，可以接触 margin 的外部尺寸特性来实现底部留白</li>
 <li>两栏等高</li>
@@ -1124,25 +1186,23 @@
 </ul>
 </li>
 </ul>
-<h4 id="border-属性"><a href="#border-属性" class="headerlink" title="border 属性"></a>border 属性</h4><ul>
+<h3 id="border-属性"><a href="#border-属性" class="headerlink" title="border 属性"></a>border 属性</h3><ul>
 <li>border-width 不支持半分比</li>
 <li>透明边框技巧 使用透明 border 增加点击区域</li>
 <li>图形构建 三角形效果</li>
 <li>登高布局技术 <a href="http://demo.cssworld.cn/4/4-4.php" target="_blank" rel="noopener">http://demo.cssworld.cn/4/4-4.php</a></li>
 </ul>
-<h3 id="charpter5-内联元素与流"><a href="#charpter5-内联元素与流" class="headerlink" title="charpter5 内联元素与流"></a>charpter5 内联元素与流</h3><ul>
-<li>ex 单位 对应 x-height，可用于图标与文字的对齐</li>
-<li>line-height 的默认值是 normal,还支持数值、百分比值以及长度值。</li>
-<li>无论内联元素 line-height 如何设置,最终父级元素的高度都是由数值大的<br>那个 line-height 决定的,我称之为“内联元素 line-height 的大值特性”</li>
-<li>table-cell 元素设置 vertical-align 垂直对齐的是子元素,但是其作用的并不是子元素,而是 table-cell 元素自身</li>
-<li>消除 strut 的影响 图片块状化 设置 lineheight 为 0 fontsize 足够小 图片设置 vertical-align</li>
-<li>text-align:justify 文字向两侧对齐，对最后一行无效。</li>
-<li>一个 inline-block 元素,如果里面没有内联元素,或者 overflow 不是 visible,<br>则该元素的基线就是其 margin 底边缘;否则其基线就是元素里面最后一行内联元素的基线。</li>
-<li>vertical-align 的百分比数值是按照行高计算的</li>
-<li>改造“幽灵空白节点”的基线位置可以使用 font-size：0</li>
-<li>基于 vertical-align 属性的水平垂直居中弹框 <a href="http://demo.cssworld.cn/5/3-10.php" target="_blank" rel="noopener">http://demo.cssworld.cn/5/3-10.php</a></li>
-</ul>
-<h3 id="charpter6-流的破坏与保护"><a href="#charpter6-流的破坏与保护" class="headerlink" title="charpter6 流的破坏与保护"></a>charpter6 流的破坏与保护</h3><h4 id="float"><a href="#float" class="headerlink" title="float"></a>float</h4><ul>
+<h2 id="charpter5-内联元素与流"><a href="#charpter5-内联元素与流" class="headerlink" title="charpter5 内联元素与流"></a>charpter5 内联元素与流</h2><p>ex 单位 对应 x-height，可用于图标与文字的对齐</p>
+<p>line-height 的默认值是 normal,还支持数值、百分比值以及长度值。</p>
+<p>无论内联元素 line-height 如何设置,最终父级元素的高度都是由数值大的<br>那个 line-height 决定的,我称之为“内联元素 line-height 的大值特性”</p>
+<p>table-cell 元素设置 vertical-align 垂直对齐的是子元素,但是其作用的并不是子元素,而是 table-cell 元素自身</p>
+<p>消除 strut 的影响 图片块状化 设置 lineheight 为 0 fontsize 足够小 图片设置 vertical-align</p>
+<p>text-align:justify 文字向两侧对齐，对最后一行无效。</p>
+<p>一个 inline-block 元素,如果里面没有内联元素,或者 overflow 不是 visible,<br>则该元素的基线就是其 margin 底边缘;否则其基线就是元素里面最后一行内联元素的基线。</p>
+<p>vertical-align 的百分比数值是按照行高计算的</p>
+<p>改造“幽灵空白节点”的基线位置可以使用 font-size：0</p>
+<p>基于 vertical-align 属性的水平垂直居中弹框 <a href="http://demo.cssworld.cn/5/3-10.php" target="_blank" rel="noopener">链接</a></p>
+<h2 id="charpter6-流的破坏与保护"><a href="#charpter6-流的破坏与保护" class="headerlink" title="charpter6 流的破坏与保护"></a>charpter6 流的破坏与保护</h2><h3 id="float"><a href="#float" class="headerlink" title="float"></a>float</h3><ul>
 <li>float 导致的。float 都有哪些有意思的特性呢?具体如下:<ul>
 <li>包裹性;</li>
 <li>块状化并格式化上下文;</li>
@@ -1154,9 +1214,9 @@
 <li>clearfix</li>
 </ul>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.father</span><span class="selector-pseudo">:after</span> &#123;</span><br><span class="line">  <span class="attribute">content</span>: <span class="string">""</span>;</span><br><span class="line">  <span class="attribute">display</span>: table;</span><br><span class="line">  <span class="attribute">clear</span>: both;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="bfc"><a href="#bfc" class="headerlink" title="bfc"></a>bfc</h4><ul>
+<h3 id="bfc"><a href="#bfc" class="headerlink" title="bfc"></a>bfc</h3><ul>
 <li>那什么时候会触发 BFC 呢?常见的情况如下:<ul>
-<li>\<html\>根元素;</html\></li>
+<li>&lt;html&gt;根元素;</li>
 <li>float 的值不为 none;</li>
 <li>overflow 的值为 auto、scroll 或 hidden;</li>
 <li>display 的值为 table-cell、table-caption 和 inline-block 中的任何一个</li>
@@ -1166,15 +1226,15 @@
 <li>尽量避免滚动容器设置 padding-bottom 值</li>
 <li>永远不可能实现一个方向溢出剪裁或滚动,另一方向内容溢出显示的效果</li>
 </ul>
-<h4 id="overflow"><a href="#overflow" class="headerlink" title="overflow"></a>overflow</h4><ul>
+<h3 id="overflow"><a href="#overflow" class="headerlink" title="overflow"></a>overflow</h3><ul>
 <li>则当子元素内容超出容器宽度高度限制的时候, 剪裁的边界是 border box 的内边缘,而非 padding,box 的内边缘</li>
 </ul>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.ell</span> &#123;</span><br><span class="line">  <span class="attribute">text-overflow</span>: ellipsis;</span><br><span class="line">  <span class="attribute">white-space</span>: nowrap;</span><br><span class="line">  <span class="attribute">overflow</span>: hidden;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="scrollbar"><a href="#scrollbar" class="headerlink" title="scrollbar"></a>scrollbar</h4><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">我们平时开发中只用下面 3 个属性:</span><br><span class="line"><span class="selector-pseudo">::-webkit-scrollbar</span> &#123;</span><br><span class="line">  <span class="comment">/* 血槽宽度 */</span></span><br><span class="line">  <span class="attribute">width</span>: <span class="number">8px</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">8px</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-pseudo">::-webkit-scrollbar-thumb</span> &#123;</span><br><span class="line">  <span class="comment">/* 拖动条 */</span></span><br><span class="line">  <span class="attribute">background-color</span>: <span class="built_in">rgba</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0.3</span>);</span><br><span class="line">  <span class="attribute">border-radius</span>: <span class="number">6px</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-pseudo">::-webkit-scrollbar-track</span> &#123;</span><br><span class="line">  <span class="comment">/* 背景槽 */</span></span><br><span class="line">  <span class="attribute">background-color</span>: <span class="number">#ddd</span>;</span><br><span class="line">  <span class="attribute">border-radius</span>: <span class="number">6px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="chapter7-css-层叠规则"><a href="#chapter7-css-层叠规则" class="headerlink" title="chapter7 css 层叠规则"></a>chapter7 css 层叠规则</h3><ul>
+<h3 id="scrollbar"><a href="#scrollbar" class="headerlink" title="scrollbar"></a>scrollbar</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">我们平时开发中只用下面 3 个属性:</span><br><span class="line"><span class="selector-pseudo">::-webkit-scrollbar</span> &#123;</span><br><span class="line">  <span class="comment">/* 血槽宽度 */</span></span><br><span class="line">  <span class="attribute">width</span>: <span class="number">8px</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">8px</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-pseudo">::-webkit-scrollbar-thumb</span> &#123;</span><br><span class="line">  <span class="comment">/* 拖动条 */</span></span><br><span class="line">  <span class="attribute">background-color</span>: <span class="built_in">rgba</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0.3</span>);</span><br><span class="line">  <span class="attribute">border-radius</span>: <span class="number">6px</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-pseudo">::-webkit-scrollbar-track</span> &#123;</span><br><span class="line">  <span class="comment">/* 背景槽 */</span></span><br><span class="line">  <span class="attribute">background-color</span>: <span class="number">#ddd</span>;</span><br><span class="line">  <span class="attribute">border-radius</span>: <span class="number">6px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="chapter7-css-层叠规则"><a href="#chapter7-css-层叠规则" class="headerlink" title="chapter7 css 层叠规则"></a>chapter7 css 层叠规则</h2><ul>
 <li>background/border 是装饰属性，浮动和块用作布局，而内联元素作为内容，自然在上面显示</li>
 </ul>
-<h4 id="层叠上下文"><a href="#层叠上下文" class="headerlink" title="层叠上下文"></a>层叠上下文</h4><h5 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h5><ul>
+<h3 id="层叠上下文"><a href="#层叠上下文" class="headerlink" title="层叠上下文"></a>层叠上下文</h3><h4 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h4><ul>
 <li>页面根元素称为根层叠上下文</li>
 <li>z-index 为数值的定位元素是传统层叠上下文</li>
 <li><p>css3 属性</p>
@@ -1189,7 +1249,7 @@
 <li><p>opacity 动画问题，当 opacity 不为 1 的时候，其具有层叠上下文 z-index:auto，导致其显示于文字之上，解决方法是设置文字的 z-index 为正数值</p>
 </li>
 </ul>
-<h5 id="负-index-应用"><a href="#负-index-应用" class="headerlink" title="负 index 应用"></a>负 index 应用</h5><ul>
+<h4 id="负-index-应用"><a href="#负-index-应用" class="headerlink" title="负 index 应用"></a>负 index 应用</h4><ul>
 <li>可访问性隐藏，可以隐藏元素，只需要层叠上下文内某一个父元素加背景色</li>
 </ul>
 
@@ -1290,6 +1350,26 @@
           
           
 
+         <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-bar-chart"></i>
+           </span>
+           <span class="post-meta-item-text">字数统计:</span>
+           <span class="post-count">600(字)</span>
+
+         </span>
+
+      <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-clock-o"></i>
+           </span>
+           <span class="post-meta-item-text">阅读时长:</span>
+           <span class="post-count">2(分)</span>
+
+         </span>
+
           
 
           
@@ -1312,51 +1392,33 @@
         
           
             <p>记录一下从 Sass 官网学习到的 Sass 的一些高级应用。</p>
-<h3 id="属性嵌套"><a href="#属性嵌套" class="headerlink" title="属性嵌套"></a>属性嵌套</h3><ul>
-<li>有些 CSS 属性遵循相同的命名空间 (namespace)，比如 font-family, font-size, font-weight 都以 font 作为属性的命名空间。为了便于管理这样的属性，同时也为了避免了重复输入，Sass 允许将属性嵌套在命名空间中，例如：</li>
-</ul>
+<h2 id="属性嵌套"><a href="#属性嵌套" class="headerlink" title="属性嵌套"></a>属性嵌套</h2><p>有些 CSS 属性遵循相同的命名空间 (namespace)，比如 font-family, font-size, font-weight 都以 font 作为属性的命名空间。为了便于管理这样的属性，同时也为了避免了重复输入，Sass 允许将属性嵌套在命名空间中，例如：</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.funky</span> &#123;</span><br><span class="line">  <span class="attribute">font</span>: &#123;</span><br><span class="line">    family: fantasy;</span><br><span class="line">    <span class="attribute">size</span>: <span class="number">30em</span>;</span><br><span class="line">    <span class="attribute">weight</span>: bold;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h3><ul>
-<li>变量支持块级作用域，嵌套规则内定义的变量只能在嵌套规则内使用（局部变量），不在嵌套规则内定义的变量则可在任何地方使用（全局变量）。将局部变量转换为全局变量可以添加 !global 声明</li>
-</ul>
-<h3 id="extend"><a href="#extend" class="headerlink" title="@extend"></a>@extend</h3><ul>
-<li>用于扩展继承样式</li>
-<li>可以继承一个 html 元素的样式，你对于该元素添加的样式都会继承</li>
-</ul>
-<h3 id="变量默认值"><a href="#变量默认值" class="headerlink" title="变量默认值"></a>变量默认值</h3><ul>
-<li>使用 !default 用于变量</li>
-</ul>
-<h3 id="内置函数"><a href="#内置函数" class="headerlink" title="内置函数"></a>内置函数</h3><h4 id="普通-CSS-函数"><a href="#普通-CSS-函数" class="headerlink" title="普通 CSS 函数"></a>普通 CSS 函数</h4><p>任何不再内置和用户定义函数列表中的函数会被编译为 css 函数，除非它使用了 scss 的参数语法</p>
-<h4 id="数值函数"><a href="#数值函数" class="headerlink" title="数值函数"></a>数值函数</h4><ul>
-<li>abs, ceil, floor,max,min,percentage,round 顾名思义</li>
-<li>comparable($number1,$number2) //=&gt; boolean 返回数值单位是否具有可比较性</li>
-</ul>
+<h2 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h2><p>变量支持块级作用域，嵌套规则内定义的变量只能在嵌套规则内使用（局部变量），不在嵌套规则内定义的变量则可在任何地方使用（全局变量）。将局部变量转换为全局变量可以添加 !global 声明</p>
+<h2 id="extend"><a href="#extend" class="headerlink" title="@extend"></a>@extend</h2><p>用于扩展继承样式</p>
+<p>可以继承一个 html 元素的样式，你对于该元素添加的样式都会继承</p>
+<h2 id="变量默认值"><a href="#变量默认值" class="headerlink" title="变量默认值"></a>变量默认值</h2><p>使用 !default 用于变量</p>
+<h2 id="内置函数"><a href="#内置函数" class="headerlink" title="内置函数"></a>内置函数</h2><h3 id="普通-CSS-函数"><a href="#普通-CSS-函数" class="headerlink" title="普通 CSS 函数"></a>普通 CSS 函数</h3><p>任何不再内置和用户定义函数列表中的函数会被编译为 css 函数，除非它使用了 scss 的参数语法</p>
+<h3 id="数值函数"><a href="#数值函数" class="headerlink" title="数值函数"></a>数值函数</h3><p>abs, ceil, floor,max,min,percentage,round 顾名思义</p>
+<p>comparable($number1,$number2) //=&gt; boolean 返回数值单位是否具有可比较性</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@debug comparable(2px, 1px); // true</span><br><span class="line">@debug comparable(100px, 3em); // false</span><br><span class="line">@debug comparable(10cm, 3mm); // true</span><br></pre></td></tr></table></figure>
-<ul>
-<li>random($number) 生成随机数，如果 limit 是 null，返回一个 0-1 之间的随机数</li>
-<li>unitless($number) //=&gt; boolean 判断 $number 是否具有单位</li>
-</ul>
-<h4 id="字符串函数"><a href="#字符串函数" class="headerlink" title="字符串函数"></a>字符串函数</h4><ul>
-<li>quote($string) //=&gt; string 加上双引号, unquote 去掉双引号</li>
-<li>str-index,str-insert,str-length,str-slice,to-upper-case,to-lower-case 顾名思义</li>
-<li>unique-id() //=&gt; string 生成随机字符串</li>
-</ul>
-<h4 id="颜色函数"><a href="#颜色函数" class="headerlink" title="颜色函数"></a>颜色函数</h4><ul>
-<li>adjust-color($color,<br>$red: null, $green: null, $blue: null,<br>$hue: null, $saturation: null, $lightness: null,<br>$alpha: null) //=&gt; color 综合调整</li>
-<li>adjust-hue($color, $degrees) //=&gt; color 色调调整</li>
-<li>alpha($color)<br>opacity($color) //=&gt; number 返回 alpha 通道的数值</li>
-<li>blue,red,green,hue,saturation,lightness,aplha 用法类似</li>
-<li>change-color($color,<br>$red: null, $green: null, $blue: null,<br>$hue: null, $saturation: null, $lightness: null,<br>$alpha: null) //=&gt; color 调整颜色参数的某一项数值</li>
-<li>complement($color) 返回补色</li>
-<li>太多了 剩下的看官方文档<a href="https://sass-lang.com/documentation/functions/color" target="_blank" rel="noopener">sass 颜色函数]</a></li>
-</ul>
-<h3 id="列表函数"><a href="#列表函数" class="headerlink" title="列表函数"></a>列表函数</h3><ul>
-<li>append,index,length,nth,set-nth 顾名思义</li>
-<li>join($list1, $list2, $separator: auto, $bracketed: auto) //=&gt; list 合并两个列表</li>
-<li>list-separator($list) //=&gt; unquoted string 返回列表的分隔符</li>
-</ul>
-<h3 id="映射函数"><a href="#映射函数" class="headerlink" title="映射函数"></a>映射函数</h3><p>略</p>
-<h3 id="选择器函数"><a href="#选择器函数" class="headerlink" title="选择器函数"></a>选择器函数</h3><p>实用性不大，略</p>
+<p>random($number) 生成随机数，如果 limit 是 null，返回一个 0-1 之间的随机数</p>
+<p>unitless($number) //=&gt; boolean 判断 $number 是否具有单位</p>
+<h3 id="字符串函数"><a href="#字符串函数" class="headerlink" title="字符串函数"></a>字符串函数</h3><p>quote($string) //=&gt; string 加上双引号, unquote 去掉双引号</p>
+<p>str-index,str-insert,str-length,str-slice,to-upper-case,to-lower-case 顾名思义</p>
+<p>unique-id() //=&gt; string 生成随机字符串</p>
+<h3 id="颜色函数"><a href="#颜色函数" class="headerlink" title="颜色函数"></a>颜色函数</h3><p>adjust-color($color,<br>  $red: null, $green: null, $blue: null,<br>$hue: null, $saturation: null, $lightness: null,<br>  $alpha: null) //=&gt; color 综合调整</p>
+<p>adjust-hue($color, $degrees) //=&gt; color 色调调整</p>
+<p>alpha($color)<br>opacity($color) //=&gt; number 返回 alpha 通道的数值</p>
+<p>blue,red,green,hue,saturation,lightness,aplha 用法类似</p>
+<p>change-color($color,<br>  $red: null, $green: null, $blue: null,<br>$hue: null, $saturation: null, $lightness: null,<br>  $alpha: null) //=&gt; color 调整颜色参数的某一项数值</p>
+<p>complement($color) 返回补色</p>
+<p>太多了就不罗列了 详见官方文档 <a href="https://sass-lang.com/documentation/functions/color" target="_blank" rel="noopener">sass 颜色函数</a></p>
+<h2 id="列表函数"><a href="#列表函数" class="headerlink" title="列表函数"></a>列表函数</h2><p>append,index,length,nth,set-nth 顾名思义</p>
+<p>join($list1, $list2, $separator: auto, $bracketed: auto) //=&gt; list 合并两个列表</p>
+<p>list-separator($list) //=&gt; unquoted string 返回列表的分隔符</p>
+<h2 id="映射函数"><a href="#映射函数" class="headerlink" title="映射函数"></a>映射函数</h2><p>略</p>
+<h2 id="选择器函数"><a href="#选择器函数" class="headerlink" title="选择器函数"></a>选择器函数</h2><p>实用性不大，略过</p>
 
           
         
@@ -1459,8 +1521,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/工具/" itemprop="url" rel="index">
-                    <span itemprop="name">工具</span>
+                  <a href="/categories/开发工具/" itemprop="url" rel="index">
+                    <span itemprop="name">开发工具</span>
                   </a>
                 </span>
 
@@ -1476,6 +1538,26 @@
 
           
           
+
+         <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-bar-chart"></i>
+           </span>
+           <span class="post-meta-item-text">字数统计:</span>
+           <span class="post-count">436(字)</span>
+
+         </span>
+
+      <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-clock-o"></i>
+           </span>
+           <span class="post-meta-item-text">阅读时长:</span>
+           <span class="post-count">1(分)</span>
+
+         </span>
 
           
 
@@ -1499,15 +1581,16 @@
         
           
             <p>跟着掘金小册学习如何在工作中使用 git</p>
-<h3 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h3><h3 id="多人合作基本工作模型-2-0"><a href="#多人合作基本工作模型-2-0" class="headerlink" title="多人合作基本工作模型 2.0"></a>多人合作基本工作模型 2.0</h3><p>写完所有的 commit 后，不用考虑中央仓库是否有新的提交，直接 push 就好</p>
+<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><h2 id="多人合作基本工作模型-2-0"><a href="#多人合作基本工作模型-2-0" class="headerlink" title="多人合作基本工作模型 2.0"></a>多人合作基本工作模型 2.0</h2><p>写完所有的 commit 后，不用考虑中央仓库是否有新的提交，直接 push 就好</p>
 <p>如果 push 失败，就用 pull 把本地仓库的提交和中央仓库的提交进行合并，然后再 push 一次</p>
-<h3 id="head，master"><a href="#head，master" class="headerlink" title="head，master"></a>head，master</h3><p>HEAD 指向的 branch 不能删除，如果要删除，需要先用 checkout 把 HEAD 指向其他地方</p>
+<h2 id="head，master"><a href="#head，master" class="headerlink" title="head，master"></a>head，master</h2><p>HEAD 指向的 branch 不能删除，如果要删除，需要先用 checkout 把 HEAD 指向其他地方</p>
 <p>没有被合并到 master 过的 branch 在删除时会失败 如果需要删除 使用 -D</p>
-<h3 id="push"><a href="#push" class="headerlink" title="push"></a>push</h3><p>push 是把当前的分支上传到远程仓库，并把这个 branch 的路径上的所有 commits 也一并上传。</p>
+<h2 id="push"><a href="#push" class="headerlink" title="push"></a>push</h2><p>push 是把当前的分支上传到远程仓库，并把这个 branch 的路径上的所有 commits 也一并上传。</p>
 <p>push 的时候，如果当前分支是一个本地创建的分支，需要指定远程仓库名和分支名，用 git push origin branch_name 的格式，而不能只用 git push；或者可以通过 git config 修改 push.default 来改变 push 时的行为逻辑。</p>
 <p>push 的时候之后上传当前分支，并不会上传 HEAD；远程仓库的 HEAD 是永远指向默认分支（即 master）的。</p>
-<h3 id="merge"><a href="#merge" class="headerlink" title="merge"></a>merge</h3><p>从目标 commit 和当前 commit （即 HEAD 所指向的 commit）分叉的位置起，把目标 commit 的路径上的所有 commit 的内容一并应用到当前 commit，然后自动生成一个新的 commit。</p>
-<h3 id="fast-forward"><a href="#fast-forward" class="headerlink" title="fast-forward"></a>fast-forward</h3><p>当你试图合并两个<br>分支时，如果顺着一个分支走下去能够到达另一个分支，那么 Git 在合并两者的时候，只会简单的将指针向前推进（指针右移），因为这种情况下的合并操作没有需要解决的分歧——这就叫做 “快进（fast-forward）</p>
+<h2 id="merge"><a href="#merge" class="headerlink" title="merge"></a>merge</h2><p>从目标 commit 和当前 commit （即 HEAD 所指向的 commit）分叉的位置起，把目标 commit 的路径上的所有 commit 的内容一并应用到当前 commit，然后自动生成一个新的 commit。</p>
+<h2 id="fast-forward"><a href="#fast-forward" class="headerlink" title="fast-forward"></a>fast-forward</h2><p>当你试图合并两个<br>分支时，如果顺着一个分支走下去能够到达另一个分支，那么 Git 在合并两者的时候，只会简单的将指针向前推进（指针右移），因为这种情况下的合并操作没有需要解决的分歧——这就叫做 “快进（fast-forward）</p>
+<p>待填坑中</p>
 
           
         
@@ -1627,6 +1710,26 @@
 
           
           
+
+         <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-bar-chart"></i>
+           </span>
+           <span class="post-meta-item-text">字数统计:</span>
+           <span class="post-count">84(字)</span>
+
+         </span>
+
+      <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-clock-o"></i>
+           </span>
+           <span class="post-meta-item-text">阅读时长:</span>
+           <span class="post-count">1(分)</span>
+
+         </span>
 
           
 
@@ -1770,6 +1873,26 @@
 
           
           
+
+         <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-bar-chart"></i>
+           </span>
+           <span class="post-meta-item-text">字数统计:</span>
+           <span class="post-count">337(字)</span>
+
+         </span>
+
+      <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-clock-o"></i>
+           </span>
+           <span class="post-meta-item-text">阅读时长:</span>
+           <span class="post-count">1(分)</span>
+
+         </span>
 
           
 
@@ -1931,6 +2054,26 @@
           
           
 
+         <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-bar-chart"></i>
+           </span>
+           <span class="post-meta-item-text">字数统计:</span>
+           <span class="post-count">2k(字)</span>
+
+         </span>
+
+      <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-clock-o"></i>
+           </span>
+           <span class="post-meta-item-text">阅读时长:</span>
+           <span class="post-count">7(分)</span>
+
+         </span>
+
           
 
           
@@ -2080,6 +2223,150 @@
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="jiezi19971225.cn/2019/09/02/树状数组/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/09/02/树状数组/" itemprop="url">树状数组</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-02T23:38:50+08:00">
+                2019-09-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+         <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-bar-chart"></i>
+           </span>
+           <span class="post-meta-item-text">字数统计:</span>
+           <span class="post-count">559(字)</span>
+
+         </span>
+
+      <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-clock-o"></i>
+           </span>
+           <span class="post-meta-item-text">阅读时长:</span>
+           <span class="post-count">2(分)</span>
+
+         </span>
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>树状数组是一种用来解决区间单点更新，区间求和问题的简单数据结构。其核心思想在于二进制特殊性质。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">lowbit</span><span class="params">(<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x &amp; (-x);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>lowbit 函数的作用是取得 x 最右边一个 1 对应的数值。 如果 x 的二进制可以表示为 00010010，那么 lowbit 的结果为 2。怎么做到的呢？-x 的补码是 x 按位取反加 1，0010 变成 1101 +1 = 1110 ，-x 从右数第一个 1 的位置对应 x 从右数第一个 x 的位置，其他均取反。<br>如此便可以取得所要得到的数。<br>得到了这个数又有什么用呢。树状数组是这样存储数据的。普通数组在左边，右边是树状数组。懒得找图了，可以百度。<br>1 1<br>2 3<br>3 3<br>4 10<br>5 5<br>6 11<br>7 7<br>8 36<br>9 9<br>对于一个位置，看它的二进制，这个位置存储二进制最右边的 1 对应的十进制数值个元素，从这个位置减去最右边 1 的数值的位置开始存储。这里有点抽象。<br>对于区间求和，就很简单变成了不断找最右边 1 位置的过程。<br>对于区间更新，则是求和的逆过程。从最右边的 1 开始，不断找其父节点。</p>
+<p>树状数组多用于求逆序对，原理是将序列按顺序插入树状数组时，每次统计比当前数小的元素数量 sum，则与当前数构成逆序的对数有 i-sum<br>可以离散化数据，我们不关心具体元素的数值，只关心其对应关系。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> ll;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">double</span> PI = <span class="built_in">acos</span>(<span class="number">-1.0</span>);</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">double</span> eps = <span class="number">1e-6</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> INF = <span class="number">0x3f3f3f3f</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">1e5</span> + <span class="number">7</span>;</span><br><span class="line"><span class="keyword">int</span> n;</span><br><span class="line"><span class="keyword">int</span> c[maxn];</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">lowbit</span><span class="params">(<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x &amp; (-x);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">update</span><span class="params">(<span class="keyword">int</span> i, <span class="keyword">int</span> v)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (i &lt; n)</span><br><span class="line">    &#123;</span><br><span class="line">        c[i] += v;</span><br><span class="line">        i += lowbit(i);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getsum</span><span class="params">(<span class="keyword">int</span> i)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (i &gt; <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        sum += c[i];</span><br><span class="line">        i -= lowbit(i);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    freopen(<span class="string">"data.in"</span>, <span class="string">"r"</span>, <span class="built_in">stdin</span>);</span><br><span class="line">    n = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">int</span> tmp;</span><br><span class="line">        <span class="built_in">cin</span> &gt;&gt; tmp;</span><br><span class="line">        update(i, tmp);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">10</span>; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; c[i] &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
   </section>
 
   
@@ -2130,7 +2417,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-count">38</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2152,7 +2439,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-count">40</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -2352,6 +2639,323 @@
 
 
   
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
 
 
 

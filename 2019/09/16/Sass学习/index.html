@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="记录一下从 Sass 官网学习到的 Sass 的一些高级应用。 属性嵌套 有些 CSS 属性遵循相同的命名空间 (namespace)，比如 font-family, font-size, font-weight 都以 font 作为属性的命名空间。为了便于管理这样的属性，同时也为了避免了重复输入，Sass 允许将属性嵌套在命名空间中，例如：  1234567.funky &amp;#123;  font">
+<meta name="description" content="记录一下从 Sass 官网学习到的 Sass 的一些高级应用。 属性嵌套有些 CSS 属性遵循相同的命名空间 (namespace)，比如 font-family, font-size, font-weight 都以 font 作为属性的命名空间。为了便于管理这样的属性，同时也为了避免了重复输入，Sass 允许将属性嵌套在命名空间中，例如： 1234567.funky &amp;#123;  font:">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Sass学习">
 <meta property="og:url" content="jiezi19971225.cn/2019/09/16/Sass学习/index.html">
 <meta property="og:site_name" content="Jiez19971225‘s Blog">
-<meta property="og:description" content="记录一下从 Sass 官网学习到的 Sass 的一些高级应用。 属性嵌套 有些 CSS 属性遵循相同的命名空间 (namespace)，比如 font-family, font-size, font-weight 都以 font 作为属性的命名空间。为了便于管理这样的属性，同时也为了避免了重复输入，Sass 允许将属性嵌套在命名空间中，例如：  1234567.funky &amp;#123;  font">
+<meta property="og:description" content="记录一下从 Sass 官网学习到的 Sass 的一些高级应用。 属性嵌套有些 CSS 属性遵循相同的命名空间 (namespace)，比如 font-family, font-size, font-weight 都以 font 作为属性的命名空间。为了便于管理这样的属性，同时也为了避免了重复输入，Sass 允许将属性嵌套在命名空间中，例如： 1234567.funky &amp;#123;  font:">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-02-21T19:01:20.674Z">
+<meta property="og:updated_time" content="2020-03-23T15:23:40.037Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Sass学习">
-<meta name="twitter:description" content="记录一下从 Sass 官网学习到的 Sass 的一些高级应用。 属性嵌套 有些 CSS 属性遵循相同的命名空间 (namespace)，比如 font-family, font-size, font-weight 都以 font 作为属性的命名空间。为了便于管理这样的属性，同时也为了避免了重复输入，Sass 允许将属性嵌套在命名空间中，例如：  1234567.funky &amp;#123;  font">
+<meta name="twitter:description" content="记录一下从 Sass 官网学习到的 Sass 的一些高级应用。 属性嵌套有些 CSS 属性遵循相同的命名空间 (namespace)，比如 font-family, font-size, font-weight 都以 font 作为属性的命名空间。为了便于管理这样的属性，同时也为了避免了重复输入，Sass 允许将属性嵌套在命名空间中，例如： 1234567.funky &amp;#123;  font:">
 
 
 
@@ -231,9 +231,41 @@
       
 
       
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
     </ul>
   
 
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
   
 </nav>
 
@@ -310,6 +342,26 @@
           
           
 
+         <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-bar-chart"></i>
+           </span>
+           <span class="post-meta-item-text">字数统计:</span>
+           <span class="post-count">600(字)</span>
+
+         </span>
+
+      <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-clock-o"></i>
+           </span>
+           <span class="post-meta-item-text">阅读时长:</span>
+           <span class="post-count">2(分)</span>
+
+         </span>
+
           
 
           
@@ -330,51 +382,33 @@
 
       
         <p>记录一下从 Sass 官网学习到的 Sass 的一些高级应用。</p>
-<h3 id="属性嵌套"><a href="#属性嵌套" class="headerlink" title="属性嵌套"></a>属性嵌套</h3><ul>
-<li>有些 CSS 属性遵循相同的命名空间 (namespace)，比如 font-family, font-size, font-weight 都以 font 作为属性的命名空间。为了便于管理这样的属性，同时也为了避免了重复输入，Sass 允许将属性嵌套在命名空间中，例如：</li>
-</ul>
+<h2 id="属性嵌套"><a href="#属性嵌套" class="headerlink" title="属性嵌套"></a>属性嵌套</h2><p>有些 CSS 属性遵循相同的命名空间 (namespace)，比如 font-family, font-size, font-weight 都以 font 作为属性的命名空间。为了便于管理这样的属性，同时也为了避免了重复输入，Sass 允许将属性嵌套在命名空间中，例如：</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.funky</span> &#123;</span><br><span class="line">  <span class="attribute">font</span>: &#123;</span><br><span class="line">    family: fantasy;</span><br><span class="line">    <span class="attribute">size</span>: <span class="number">30em</span>;</span><br><span class="line">    <span class="attribute">weight</span>: bold;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h3><ul>
-<li>变量支持块级作用域，嵌套规则内定义的变量只能在嵌套规则内使用（局部变量），不在嵌套规则内定义的变量则可在任何地方使用（全局变量）。将局部变量转换为全局变量可以添加 !global 声明</li>
-</ul>
-<h3 id="extend"><a href="#extend" class="headerlink" title="@extend"></a>@extend</h3><ul>
-<li>用于扩展继承样式</li>
-<li>可以继承一个 html 元素的样式，你对于该元素添加的样式都会继承</li>
-</ul>
-<h3 id="变量默认值"><a href="#变量默认值" class="headerlink" title="变量默认值"></a>变量默认值</h3><ul>
-<li>使用 !default 用于变量</li>
-</ul>
-<h3 id="内置函数"><a href="#内置函数" class="headerlink" title="内置函数"></a>内置函数</h3><h4 id="普通-CSS-函数"><a href="#普通-CSS-函数" class="headerlink" title="普通 CSS 函数"></a>普通 CSS 函数</h4><p>任何不再内置和用户定义函数列表中的函数会被编译为 css 函数，除非它使用了 scss 的参数语法</p>
-<h4 id="数值函数"><a href="#数值函数" class="headerlink" title="数值函数"></a>数值函数</h4><ul>
-<li>abs, ceil, floor,max,min,percentage,round 顾名思义</li>
-<li>comparable($number1,$number2) //=&gt; boolean 返回数值单位是否具有可比较性</li>
-</ul>
+<h2 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h2><p>变量支持块级作用域，嵌套规则内定义的变量只能在嵌套规则内使用（局部变量），不在嵌套规则内定义的变量则可在任何地方使用（全局变量）。将局部变量转换为全局变量可以添加 !global 声明</p>
+<h2 id="extend"><a href="#extend" class="headerlink" title="@extend"></a>@extend</h2><p>用于扩展继承样式</p>
+<p>可以继承一个 html 元素的样式，你对于该元素添加的样式都会继承</p>
+<h2 id="变量默认值"><a href="#变量默认值" class="headerlink" title="变量默认值"></a>变量默认值</h2><p>使用 !default 用于变量</p>
+<h2 id="内置函数"><a href="#内置函数" class="headerlink" title="内置函数"></a>内置函数</h2><h3 id="普通-CSS-函数"><a href="#普通-CSS-函数" class="headerlink" title="普通 CSS 函数"></a>普通 CSS 函数</h3><p>任何不再内置和用户定义函数列表中的函数会被编译为 css 函数，除非它使用了 scss 的参数语法</p>
+<h3 id="数值函数"><a href="#数值函数" class="headerlink" title="数值函数"></a>数值函数</h3><p>abs, ceil, floor,max,min,percentage,round 顾名思义</p>
+<p>comparable($number1,$number2) //=&gt; boolean 返回数值单位是否具有可比较性</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@debug comparable(2px, 1px); // true</span><br><span class="line">@debug comparable(100px, 3em); // false</span><br><span class="line">@debug comparable(10cm, 3mm); // true</span><br></pre></td></tr></table></figure>
-<ul>
-<li>random($number) 生成随机数，如果 limit 是 null，返回一个 0-1 之间的随机数</li>
-<li>unitless($number) //=&gt; boolean 判断 $number 是否具有单位</li>
-</ul>
-<h4 id="字符串函数"><a href="#字符串函数" class="headerlink" title="字符串函数"></a>字符串函数</h4><ul>
-<li>quote($string) //=&gt; string 加上双引号, unquote 去掉双引号</li>
-<li>str-index,str-insert,str-length,str-slice,to-upper-case,to-lower-case 顾名思义</li>
-<li>unique-id() //=&gt; string 生成随机字符串</li>
-</ul>
-<h4 id="颜色函数"><a href="#颜色函数" class="headerlink" title="颜色函数"></a>颜色函数</h4><ul>
-<li>adjust-color($color,<br>$red: null, $green: null, $blue: null,<br>$hue: null, $saturation: null, $lightness: null,<br>$alpha: null) //=&gt; color 综合调整</li>
-<li>adjust-hue($color, $degrees) //=&gt; color 色调调整</li>
-<li>alpha($color)<br>opacity($color) //=&gt; number 返回 alpha 通道的数值</li>
-<li>blue,red,green,hue,saturation,lightness,aplha 用法类似</li>
-<li>change-color($color,<br>$red: null, $green: null, $blue: null,<br>$hue: null, $saturation: null, $lightness: null,<br>$alpha: null) //=&gt; color 调整颜色参数的某一项数值</li>
-<li>complement($color) 返回补色</li>
-<li>太多了 剩下的看官方文档<a href="https://sass-lang.com/documentation/functions/color" target="_blank" rel="noopener">sass 颜色函数]</a></li>
-</ul>
-<h3 id="列表函数"><a href="#列表函数" class="headerlink" title="列表函数"></a>列表函数</h3><ul>
-<li>append,index,length,nth,set-nth 顾名思义</li>
-<li>join($list1, $list2, $separator: auto, $bracketed: auto) //=&gt; list 合并两个列表</li>
-<li>list-separator($list) //=&gt; unquoted string 返回列表的分隔符</li>
-</ul>
-<h3 id="映射函数"><a href="#映射函数" class="headerlink" title="映射函数"></a>映射函数</h3><p>略</p>
-<h3 id="选择器函数"><a href="#选择器函数" class="headerlink" title="选择器函数"></a>选择器函数</h3><p>实用性不大，略</p>
+<p>random($number) 生成随机数，如果 limit 是 null，返回一个 0-1 之间的随机数</p>
+<p>unitless($number) //=&gt; boolean 判断 $number 是否具有单位</p>
+<h3 id="字符串函数"><a href="#字符串函数" class="headerlink" title="字符串函数"></a>字符串函数</h3><p>quote($string) //=&gt; string 加上双引号, unquote 去掉双引号</p>
+<p>str-index,str-insert,str-length,str-slice,to-upper-case,to-lower-case 顾名思义</p>
+<p>unique-id() //=&gt; string 生成随机字符串</p>
+<h3 id="颜色函数"><a href="#颜色函数" class="headerlink" title="颜色函数"></a>颜色函数</h3><p>adjust-color($color,<br>  $red: null, $green: null, $blue: null,<br>$hue: null, $saturation: null, $lightness: null,<br>  $alpha: null) //=&gt; color 综合调整</p>
+<p>adjust-hue($color, $degrees) //=&gt; color 色调调整</p>
+<p>alpha($color)<br>opacity($color) //=&gt; number 返回 alpha 通道的数值</p>
+<p>blue,red,green,hue,saturation,lightness,aplha 用法类似</p>
+<p>change-color($color,<br>  $red: null, $green: null, $blue: null,<br>$hue: null, $saturation: null, $lightness: null,<br>  $alpha: null) //=&gt; color 调整颜色参数的某一项数值</p>
+<p>complement($color) 返回补色</p>
+<p>太多了就不罗列了 详见官方文档 <a href="https://sass-lang.com/documentation/functions/color" target="_blank" rel="noopener">sass 颜色函数</a></p>
+<h2 id="列表函数"><a href="#列表函数" class="headerlink" title="列表函数"></a>列表函数</h2><p>append,index,length,nth,set-nth 顾名思义</p>
+<p>join($list1, $list2, $separator: auto, $bracketed: auto) //=&gt; list 合并两个列表</p>
+<p>list-separator($list) //=&gt; unquoted string 返回列表的分隔符</p>
+<h2 id="映射函数"><a href="#映射函数" class="headerlink" title="映射函数"></a>映射函数</h2><p>略</p>
+<h2 id="选择器函数"><a href="#选择器函数" class="headerlink" title="选择器函数"></a>选择器函数</h2><p>实用性不大，略过</p>
 
       
     </div>
@@ -425,7 +459,6 @@
   
   
   </article>
-
 
 
     <div class="post-spread">
@@ -488,7 +521,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-count">38</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -510,7 +543,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-count">40</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -543,7 +576,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#属性嵌套"><span class="nav-number">1.</span> <span class="nav-text">属性嵌套</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#变量"><span class="nav-number">2.</span> <span class="nav-text">变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#extend"><span class="nav-number">3.</span> <span class="nav-text">@extend</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#变量默认值"><span class="nav-number">4.</span> <span class="nav-text">变量默认值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内置函数"><span class="nav-number">5.</span> <span class="nav-text">内置函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#普通-CSS-函数"><span class="nav-number">5.1.</span> <span class="nav-text">普通 CSS 函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数值函数"><span class="nav-number">5.2.</span> <span class="nav-text">数值函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#字符串函数"><span class="nav-number">5.3.</span> <span class="nav-text">字符串函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#颜色函数"><span class="nav-number">5.4.</span> <span class="nav-text">颜色函数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#列表函数"><span class="nav-number">6.</span> <span class="nav-text">列表函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#映射函数"><span class="nav-number">7.</span> <span class="nav-text">映射函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#选择器函数"><span class="nav-number">8.</span> <span class="nav-text">选择器函数</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#属性嵌套"><span class="nav-number">1.</span> <span class="nav-text">属性嵌套</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#变量"><span class="nav-number">2.</span> <span class="nav-text">变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#extend"><span class="nav-number">3.</span> <span class="nav-text">@extend</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#变量默认值"><span class="nav-number">4.</span> <span class="nav-text">变量默认值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内置函数"><span class="nav-number">5.</span> <span class="nav-text">内置函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#普通-CSS-函数"><span class="nav-number">5.1.</span> <span class="nav-text">普通 CSS 函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数值函数"><span class="nav-number">5.2.</span> <span class="nav-text">数值函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串函数"><span class="nav-number">5.3.</span> <span class="nav-text">字符串函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#颜色函数"><span class="nav-number">5.4.</span> <span class="nav-text">颜色函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#列表函数"><span class="nav-number">6.</span> <span class="nav-text">列表函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#映射函数"><span class="nav-number">7.</span> <span class="nav-text">映射函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#选择器函数"><span class="nav-number">8.</span> <span class="nav-text">选择器函数</span></a></li></ol></div>
             
 
           </div>
@@ -730,6 +763,323 @@
 
 
   
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
 
 
 
