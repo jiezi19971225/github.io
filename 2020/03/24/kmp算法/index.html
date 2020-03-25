@@ -88,7 +88,7 @@
 <meta property="og:description" content="推荐 B 站一个 UP 的视频，讲的非常容易理解 链接 暴力匹配思路设模式串为 sp，要匹配的目标字符串为 st 扫一遍 st，每次从 st 当前位置开始匹配 sp，这样做浪费了大量时间，之前匹配过程得到信息没有被有效利用。 KMP 算法最大公共前后缀KMP 中为了有效利用之前已获得的信息，使用了最大公共前后缀。前后缀的概念我们都知道，而公共前后缀是指该位置的前缀与后缀相同的部分。应当注意，前缀是">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="/2020/03/24/kmp算法/构造过程.png">
-<meta property="og:updated_time" content="2020-03-24T04:32:46.818Z">
+<meta property="og:updated_time" content="2020-03-24T06:36:03.388Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="kmp算法">
 <meta name="twitter:description" content="推荐 B 站一个 UP 的视频，讲的非常容易理解 链接 暴力匹配思路设模式串为 sp，要匹配的目标字符串为 st 扫一遍 st，每次从 st 当前位置开始匹配 sp，这样做浪费了大量时间，之前匹配过程得到信息没有被有效利用。 KMP 算法最大公共前后缀KMP 中为了有效利用之前已获得的信息，使用了最大公共前后缀。前后缀的概念我们都知道，而公共前后缀是指该位置的前缀与后缀相同的部分。应当注意，前缀是">
@@ -373,7 +373,7 @@
              <i class="fa fa-bar-chart"></i>
            </span>
            <span class="post-meta-item-text">字数统计:</span>
-           <span class="post-count">577(字)</span>
+           <span class="post-count">635(字)</span>
 
          </span>
 
@@ -417,6 +417,7 @@
 <h4 id="匹配流程"><a href="#匹配流程" class="headerlink" title="匹配流程"></a>匹配流程</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">i = 0</span><br><span class="line">j = 0</span><br><span class="line">m = st.length()</span><br><span class="line">while j &lt; m</span><br><span class="line">    if i &lt; 0 || sp[i] == st[i]</span><br><span class="line">        ++i,++j</span><br><span class="line">        if i == sp.length()</span><br><span class="line">            // 得到结果</span><br><span class="line">    else</span><br><span class="line">        // 这一步也很好理解，和构造过程是一样</span><br><span class="line">        i = presuf[i]</span><br></pre></td></tr></table></figure>
 <h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>为了便于理解，变量名都是用了更具意义的缩写</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">10005</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">string</span> st = <span class="string">"AAAAAAAAB"</span>;</span><br><span class="line">    <span class="built_in">string</span> sp = <span class="string">"AAAAB"</span>;</span><br><span class="line">    <span class="keyword">int</span> presuf[maxn];</span><br><span class="line">    <span class="built_in">memset</span>(presuf, <span class="number">0</span>, <span class="keyword">sizeof</span>(presuf));</span><br><span class="line">    <span class="comment">// 构造过程</span></span><br><span class="line">    <span class="keyword">int</span> prep = presuf[<span class="number">0</span>] = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">int</span> sufp = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (sufp &lt; sp.size())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (prep &lt; <span class="number">0</span> || sp[prep] == sp[sufp])</span><br><span class="line">        &#123;</span><br><span class="line">            presuf[++sufp] = ++prep;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            prep = presuf[prep];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 匹配过程</span></span><br><span class="line">    <span class="keyword">int</span> stp = <span class="number">0</span>, spp = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> res = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">while</span> (stp &lt; st.size())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (spp &lt; <span class="number">0</span> || st[stp] == sp[spp])</span><br><span class="line">        &#123;</span><br><span class="line">            ++spp, ++stp;</span><br><span class="line">            <span class="keyword">if</span> (spp == sp.length())</span><br><span class="line">            &#123;</span><br><span class="line">                res = stp;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            spp = presuf[spp];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><p>KMP 算法的应用，判定一棵二叉树是否是另一颗二叉树的子树，如果这棵树的序列化字符串是另一棵树序列化字符串的子串，则可以判定。</p>
 
       
     </div>
@@ -456,6 +457,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/03/24/AC自动机/" rel="prev" title="AC自动机">
+                AC自动机 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -531,7 +536,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-count">40</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -586,7 +591,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#暴力匹配思路"><span class="nav-number">1.</span> <span class="nav-text">暴力匹配思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#KMP-算法"><span class="nav-number">2.</span> <span class="nav-text">KMP 算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#最大公共前后缀"><span class="nav-number">2.1.</span> <span class="nav-text">最大公共前后缀</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#KMP-算法流程"><span class="nav-number">2.2.</span> <span class="nav-text">KMP 算法流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#构造最大前后缀数组"><span class="nav-number">2.2.1.</span> <span class="nav-text">构造最大前后缀数组</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#匹配流程"><span class="nav-number">2.2.2.</span> <span class="nav-text">匹配流程</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码实现"><span class="nav-number">3.</span> <span class="nav-text">代码实现</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#暴力匹配思路"><span class="nav-number">1.</span> <span class="nav-text">暴力匹配思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#KMP-算法"><span class="nav-number">2.</span> <span class="nav-text">KMP 算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#最大公共前后缀"><span class="nav-number">2.1.</span> <span class="nav-text">最大公共前后缀</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#KMP-算法流程"><span class="nav-number">2.2.</span> <span class="nav-text">KMP 算法流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#构造最大前后缀数组"><span class="nav-number">2.2.1.</span> <span class="nav-text">构造最大前后缀数组</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#匹配流程"><span class="nav-number">2.2.2.</span> <span class="nav-text">匹配流程</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码实现"><span class="nav-number">3.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用"><span class="nav-number">4.</span> <span class="nav-text">应用</span></a></li></ol></div>
             
 
           </div>
