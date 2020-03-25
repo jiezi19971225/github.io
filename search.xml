@@ -696,11 +696,89 @@
   <entry>
     <title>树状数组</title>
     <url>/2019/09/02/%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84/</url>
-    <content><![CDATA[<p>树状数组是一种用来解决区间单点更新，区间求和问题的简单数据结构。其核心思想在于二进制特殊性质。</p>
+    <content><![CDATA[<h2 id="核心"><a href="#核心" class="headerlink" title="核心"></a>核心</h2><p>树状数组是一种用来解决区间单点更新，区间求和问题的简单数据结构。其核心思想在于二进制特殊性质。</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">lowbit</span><span class="params">(<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x &amp; (-x);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>lowbit 函数的作用是取得 x 最右边一个 1 对应的数值。 如果 x 的二进制可以表示为 00010010，那么 lowbit 的结果为 2。怎么做到的呢？-x 的补码是 x 按位取反加 1，0010 变成 1101 +1 = 1110 ，-x 从右数第一个 1 的位置对应 x 从右数第一个 x 的位置，其他均取反。<br>如此便可以取得所要得到的数。<br>得到了这个数又有什么用呢。树状数组是这样存储数据的。普通数组在左边，右边是树状数组。懒得找图了，可以百度。<br>1 1<br>2 3<br>3 3<br>4 10<br>5 5<br>6 11<br>7 7<br>8 36<br>9 9<br>对于一个位置，看它的二进制，这个位置存储二进制最右边的 1 对应的十进制数值个元素，从这个位置减去最右边 1 的数值的位置开始存储。这里有点抽象。<br>对于区间求和，就很简单变成了不断找最右边 1 位置的过程。<br>对于区间更新，则是求和的逆过程。从最右边的 1 开始，不断找其父节点。</p>
+<h2 id="lowbit"><a href="#lowbit" class="headerlink" title="lowbit"></a>lowbit</h2><p>lowbit 函数的作用是取得 x 最右边一个 1 对应的数值。 如果 x 的二进制可以表示为 00010010，那么 lowbit 的结果为 2。怎么做到的呢？-x 的补码是 x 按位取反加 1，0010 变成 1101 +1 = 1110 ，-x 从右数第一个 1 的位置对应 x 从右数第一个 x 的位置，其他均取反。<br>如此便可以取得所要得到的数。<br>得到了这个数又有什么用呢。可以看下表</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>普通数组 a</th>
+<th>树状数组 c</th>
+<th>解释</th>
+<th>二进制</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>a[1]</td>
+<td>0001</td>
+</tr>
+<tr>
+<td>2</td>
+<td>3</td>
+<td>a[1]+a[2]</td>
+<td>0010</td>
+</tr>
+<tr>
+<td>3</td>
+<td>3</td>
+<td>a[3]</td>
+<td>0011</td>
+</tr>
+<tr>
+<td>4</td>
+<td>10</td>
+<td>a[1]+a[2]+a[3]+a[4]</td>
+<td>0100</td>
+</tr>
+<tr>
+<td>5</td>
+<td>5</td>
+<td>a[5]</td>
+<td>0101</td>
+</tr>
+<tr>
+<td>6</td>
+<td>11</td>
+<td>a[5]+a[6]</td>
+<td>0110</td>
+</tr>
+<tr>
+<td>7</td>
+<td>7</td>
+<td>a[7]</td>
+<td>0111</td>
+</tr>
+<tr>
+<td>8</td>
+<td>36</td>
+<td>a[1]+…+a[8]</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>9</td>
+<td>9</td>
+<td>a[9]</td>
+<td>1001</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>对于一个位置，看它的二进制，这个位置保存的元素个数就是其二进制最右边 1 代表的大小，保存从去掉最右边 1 到加上最右边 1 的位置之间的数据（左开右闭）。<br>这样表述很不清楚，直接距离，看 c[6]位置，6 的二进制是 0110，去掉最右边 1 是 0100，即十进制的 4，它保存的是(4,6]之间的数据。</p>
+<p>那么对于求和操作，就变成了不断找右边的 1 的过程。</p>
+<p>对于更新操作，我们要同时更新其之后的父节点。<br>当我们修改 a[i]的值时，可以从 c[i]往根节点一路上溯，调整这条路上的所有 C[]即可，对于节点 i，父节点下标 p=i+lowbit(i)</p>
 <p>树状数组多用于求逆序对，原理是将序列按顺序插入树状数组时，每次统计比当前数小的元素数量 sum，则与当前数构成逆序的对数有 i-sum<br>可以离散化数据，我们不关心具体元素的数值，只关心其对应关系。</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> ll;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">double</span> PI = <span class="built_in">acos</span>(<span class="number">-1.0</span>);</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">double</span> eps = <span class="number">1e-6</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> INF = <span class="number">0x3f3f3f3f</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">1e5</span> + <span class="number">7</span>;</span><br><span class="line"><span class="keyword">int</span> n;</span><br><span class="line"><span class="keyword">int</span> c[maxn];</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">lowbit</span><span class="params">(<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x &amp; (-x);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">update</span><span class="params">(<span class="keyword">int</span> i, <span class="keyword">int</span> v)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (i &lt; n)</span><br><span class="line">    &#123;</span><br><span class="line">        c[i] += v;</span><br><span class="line">        i += lowbit(i);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getsum</span><span class="params">(<span class="keyword">int</span> i)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (i &gt; <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        sum += c[i];</span><br><span class="line">        i -= lowbit(i);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    freopen(<span class="string">"data.in"</span>, <span class="string">"r"</span>, <span class="built_in">stdin</span>);</span><br><span class="line">    n = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">int</span> tmp;</span><br><span class="line">        <span class="built_in">cin</span> &gt;&gt; tmp;</span><br><span class="line">        update(i, tmp);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">10</span>; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; c[i] &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> ll;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">double</span> PI = <span class="built_in">acos</span>(<span class="number">-1.0</span>);</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">double</span> eps = <span class="number">1e-6</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> INF = <span class="number">0x3f3f3f3f</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">1e5</span> + <span class="number">7</span>;</span><br><span class="line"><span class="keyword">int</span> n;</span><br><span class="line"><span class="keyword">int</span> c[maxn];</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">lowbit</span><span class="params">(<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x &amp; (-x);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">update</span><span class="params">(<span class="keyword">int</span> i, <span class="keyword">int</span> v)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (i &lt; n)</span><br><span class="line">    &#123;</span><br><span class="line">        c[i] += v;</span><br><span class="line">        i += lowbit(i);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getsum</span><span class="params">(<span class="keyword">int</span> i)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (i &gt; <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        sum += c[i];</span><br><span class="line">        i -= lowbit(i);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    freopen(<span class="string">"data.in"</span>, <span class="string">"r"</span>, <span class="built_in">stdin</span>);</span><br><span class="line">    n = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">int</span> tmp;</span><br><span class="line">        <span class="built_in">cin</span> &gt;&gt; tmp;</span><br><span class="line">        update(i, tmp);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">10</span>; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; c[i] &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="扩展到二维"><a href="#扩展到二维" class="headerlink" title="扩展到二维"></a>扩展到二维</h2><p>问题：一个由数字构成的大矩阵，能进行两种操作</p>
+<ul>
+<li>对矩阵里的某个数加上一个整数（可正可负）</li>
+<li>查询某个子矩阵里所有数字的和,要求对每次查询，输出结果。</li>
+</ul>
+<p>一维树状数组很容易扩展到二维，在二维情况下:数组 A[][]的树状数组定义为：</p>
+<script type="math/tex; mode=display">C[x][y] = \Sigma a[i][j]</script><script type="math/tex; mode=display">x-lowbit(x) + 1 <= i <= x</script><script type="math/tex; mode=display">y-lowbit(y) + 1 <= j <= y</script><p>其相应的更新与求和操作也很容易类比出来，这里就不做说明了。</p>
 ]]></content>
       <categories>
         <category>算法</category>
