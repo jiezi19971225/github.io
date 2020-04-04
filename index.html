@@ -294,6 +294,1127 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="jiezi19971225.cn/2020/04/04/计算机基础之数据的机器级表示与处理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/04/04/计算机基础之数据的机器级表示与处理/" itemprop="url">计算机基础之数据的机器级表示与处理</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-04T22:50:27+08:00">
+                2020-04-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机基础/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机基础</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+         <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-bar-chart"></i>
+           </span>
+           <span class="post-meta-item-text">字数统计:</span>
+           <span class="post-count">3.3k(字)</span>
+
+         </span>
+
+      <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-clock-o"></i>
+           </span>
+           <span class="post-meta-item-text">阅读时长:</span>
+           <span class="post-count">11(分)</span>
+
+         </span>
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="数据的机器级表示与处理"><a href="#数据的机器级表示与处理" class="headerlink" title="数据的机器级表示与处理"></a>数据的机器级表示与处理</h3><h4 id="数制和编码"><a href="#数制和编码" class="headerlink" title="数制和编码"></a>数制和编码</h4><h5 id="信息的二进制编码"><a href="#信息的二进制编码" class="headerlink" title="信息的二进制编码"></a>信息的二进制编码</h5><p>计算机内部处理的所有数据都必须是<strong>数字化编码</strong>了的数据。</p>
+<p>采用二进制表示方式的原因如下：</p>
+<ul>
+<li>二进制只有两种基本状态，使用有两个稳定状态的物理器件就可以表示二进制数的每一位，而制造有两个稳定状态的物理器件要比制造有多个稳定状态的物理器件容易得多。如用高低两个电位，脉冲的有无，脉冲的正负极性。</li>
+<li>二进制的编码，计数和运算规则都很简单</li>
+<li>两个符号 1 和 0 正好与逻辑命题的真假相对应，为计算机中实现逻辑运算和程序中的逻辑判断提供了便利的条件</li>
+</ul>
+<p>机器指令的操作数只能是以下四种简单的基本数据类型：无符号定点整数，带符号定点整数，浮点数和非数值型数据</p>
+<p>指令所处理的数据类型分为数值数据和非数值数据两种。<strong>数值数据</strong>可用来表示数量的多少，可比较其大小，分为整数和实数，整数又分为无符号整数和带符号整数，实数用浮点数表示。<strong>非数值数据</strong>是一个没有大小之分的位串，不表示数量的多少，主要用来表示字符数据和逻辑数据。</p>
+<p>在计算机内部，数值的表示方法又两大类，第一种是直接用二进制数表示，另一种是采用二进制编码的十进制数（Binary Coded Decimal Number 简称 BCD）表示。</p>
+<p>表示一个数值数据要确定三个要素：进位计数制，定/浮点表示和编码规则。</p>
+<h5 id="进位计数制"><a href="#进位计数制" class="headerlink" title="进位计数制"></a>进位计数制</h5><script type="math/tex; mode=display">(25.6)_{10} = 2*10^1 + 5*10^0 + 6 * 10 ^{-1}</script><p>十进制数字可以表示成以上形式，10 称为基数，$10^i$ 称为第 i 位上的权，运算时采用逢十进一。</p>
+<p>类似地，二进制数的基数是 2，运算时逢二进一。</p>
+<p>以上规律可以扩展到 R 进制的数字系统。</p>
+<p>进制转换相关不再赘述。</p>
+<h5 id="定点与浮点表示"><a href="#定点与浮点表示" class="headerlink" title="定点与浮点表示"></a>定点与浮点表示</h5><p>定点表示</p>
+<p>定点表示法用来对定点小数和定点整数进行表示，对于定点小数，其小数点总是固定在数的左边，一般用来表示浮点数的尾数部分。对于定点整数，其小数点总是固定在数的最右边。</p>
+<p>浮点表示</p>
+<p>对于任意一个实数 X，可以表示成如下形式：</p>
+<script type="math/tex; mode=display">X=(-1)^s*M*R^E</script><p>其中 S 取值为 0 或 1，用来决定数 X 的符号；M 是一个二进制定点小数，称为数 X 的<strong>尾数</strong>（mantissa），E 是一个二进制定点整数，称为数 X 的<strong>阶</strong>或<strong>指数</strong>；R 是<strong>基数</strong>（radix、base）。在基数 R 一定的情况下，尾数 M 的位数反映数 X 的有效位数，它决定了数的表示精度，有效位数越多，表示精度就越高，阶 E 的位数决定数 X 的表示范围，阶 E 的位数决定数 X 的表示范围；阶 E 的值确定了小数点的位置。</p>
+<p>从浮点数的形式来看，绝对值最小的非零数是如下形式的数：$0.0···01<em>R^{-11···1}$，而绝对值最大的数的形式应为 $0.11···1</em>R^{11···1}$，所以假设 m 和 n 分别表示阶和尾数的位数，基数为 2，则浮点数 X 的绝对值的范围为：</p>
+<script type="math/tex; mode=display">2^{-(2^m-1)}*2^{-n} \leq |X|\leq (1-2^{-n})*2^{(2^m-1)}</script><p>浮点数的最小数是定点小数的最小数 $2^{-n}$ 去除一个很大的数$2^{2^m-1}$,而浮点数的最大数则是定点小数的最大数 $1-2^{-n}$乘以这个大数$2^{2^m-1}$</p>
+<h5 id="定点数的编码表示"><a href="#定点数的编码表示" class="headerlink" title="定点数的编码表示"></a>定点数的编码表示</h5><p>定/浮点表示解决了小数点的表示问题，但是对于一个数值数据来说，还有一个正负号的表示问题。一般用 0 和 1 来表示数字的符号，称为<strong>符号数字化</strong>，一般规定 0 表示正号，1 表示负号。</p>
+<p>通常将数值数据在计算机内部编码表示的数称为<strong>机器数</strong>，而机器数真正的值称为机器数的<strong>真值</strong>。</p>
+<p>约定一个机器数$X$的真值$X_T$用 n 位的二进制数编码，有以下方式：</p>
+<p>原码表示法</p>
+<p>一个数的原码表示由符号位直接跟数值位构成，称为“符号-数值”表示法。</p>
+<p>原码编码规则如下</p>
+<ul>
+<li>当 $X<em>T$为正数时，$X</em>{n-1} = 0,X_i=X_i^” (0\leq i \leq n-2)$</li>
+<li>当 $X<em>T$为负数时，$X</em>{n-1} = 1,X_i=X_i^” (0\leq i \leq n-2)$</li>
+</ul>
+<p>原码表示的优点是：与真值的对应关系直观，方便，用原码实现乘除运算也比较简便。</p>
+<p>缺点是：0 的表示不唯一，加减法运算规则复杂。在加减运算过程中，要判定是否是两个异号数相加或两个同号数详见，若是，则必须判定两个数的绝对值大小，根据判断结果决定结果符号，然后用绝对值大的数减去绝对值小的数。现代计算机不用原码表示整数，只用定点原码小数来表示浮点数的尾数部分。</p>
+<p>补码表示法</p>
+<p>补码表示可以实现加减运算的统一，用加法来实现减法运算。计算机中，补码用来表示带符号整数，补码表示法也称为“2-补码”（two’s complement）表示法，由符号位后跟上真值的模$2^n$补码构成。</p>
+<p>可以用以下方法求一个数的补码：对于正数，符号位取 0，其余各位同真值中对应的各位。对于负数，符号位取 1，其余各位由真值各位取反，末尾加 1 得到。</p>
+<img src="/2020/04/04/计算机基础之数据的机器级表示与处理/补码运算的推导.png" title="补码运算的推导">
+<p>两个正数相加，两个负数相加，可能会出现<strong>溢出</strong>的情况。</p>
+<p>变形补码</p>
+<p>为了便于判断运算结果是否溢出，某些计算机中采用了一种双符号位的补码表示方式，也成为变形补码，或者模 4 补码。在双符号位中，左符是真正的符号位，右符用来判别溢出。</p>
+<p>反码表示法</p>
+<p>负数的补码可用各位求反，末尾加 1 得到，如果仅仅求反而不加 1，得到的是负数的反码表示。</p>
+<p>反码表示存在以下不足：0 的表示不为 1，表数范围比补码少 1，运算时需考虑循环进位。</p>
+<p>移码表示法</p>
+<p>浮点数实际上使用两个定点数来表示的，用一个定点小数来表示浮点数的尾数，一个定点整数表示浮点数的阶。一般来说，浮点数的阶都用一种称为移码的编码方式，通常将阶的编码表示称为<strong>阶码</strong>。</p>
+<p>阶可以是正数，也可以是负数。当进行浮点数的加减运算时，必须先对阶，为了简化比较操作，在操作过程中不涉及阶的符号，可以对每个阶都加上一个正的常数，称为<strong>偏置常数（bias）</strong>。</p>
+<h4 id="整数的表示"><a href="#整数的表示" class="headerlink" title="整数的表示"></a>整数的表示</h4><p>计算机中的整数分为<strong>无符号整数</strong>和<strong>带符号整数</strong>两种。</p>
+<p>省略有关 C 语言相关处理内容。</p>
+<h4 id="浮点数的表示"><a href="#浮点数的表示" class="headerlink" title="浮点数的表示"></a>浮点数的表示</h4><h5 id="浮点数的表示范围"><a href="#浮点数的表示范围" class="headerlink" title="浮点数的表示范围"></a>浮点数的表示范围</h5><img src="/2020/04/04/计算机基础之数据的机器级表示与处理/浮点数的表示范围.png" title="浮点数的表示范围">
+<p>根据浮点数的格式格式，只要尾数为 0，阶码取任何值都为 0，这样的数被称为<strong>机器零</strong>。因此机器零不唯一。</p>
+<h5 id="浮点数的规格化"><a href="#浮点数的规格化" class="headerlink" title="浮点数的规格化"></a>浮点数的规格化</h5><p>规格化数的标志是真值的尾数部分中最高位具有非零数字。</p>
+<ul>
+<li>右规 当有效数位进到小数点前面时，需要进行右规，右规时，尾数每右移一位，阶码+1</li>
+<li>左规 当尾数出现 $ 0.0···bbbb $的结果时，需要进行左规，右规时，尾数每左移一位，阶码-1</li>
+</ul>
+<h5 id="IEEE-754-标准"><a href="#IEEE-754-标准" class="headerlink" title="IEEE 754 标准"></a>IEEE 754 标准</h5><p>32 位包括 1 位符号位 8 位阶码 23 位有效位</p>
+<p>64 位包括 1 位符号位 52 位有效位</p>
+<p>规格化尾数最高位总是 1，所以隐含表示，省略一位</p>
+<p>阶码使用移码表示 大小为 $2^{n-1}-1$</p>
+<p>全 0 +0</p>
+<p>符号位 1 之后全 0 -0</p>
+<p>浮点数除 0 的结果是正负无穷大，而不是一出一场</p>
+<p>0 11111111 00000000000000000000000 正无穷大</p>
+<p>1 11111111 00000000000000000000000 负无穷大</p>
+<p>Not a Number 非数 sqrt(-0.4) 0/0 使用全 1 的阶码和非 0 的尾数</p>
+<p>非规格化数 阶码全 0 尾数非 0</p>
+<h4 id="十进制数的表示"><a href="#十进制数的表示" class="headerlink" title="十进制数的表示"></a>十进制数的表示</h4><p>ASCII</p>
+<p>BCD 码</p>
+<p>有权 BCD 码</p>
+<p>每个十进制数位的 4 个二进制数位都有一个确定的权，它选取 4 位二进制按照计数顺序的前 10 个代码与十进制数字相对应。每位的权分别为 8，4，2，1，因此称为 8421 码，也称自然 BCD 码。</p>
+<p>无权 BCD 码</p>
+<p>无权 BCD 码是指每个十进制数位的 4 个基 2 码没有确定的权。如余 3 码和格雷码。</p>
+<p>余 3 码是在 8421 BCD 数码的基础上每个码加上 3 （0011）形成的</p>
+<p>格雷码在一组数的编码中，任意两个相邻的代码只有一位二进制数不同。最大数和最小数也仅有一位不同，即收尾相连。</p>
+<h4 id="数据的宽度和存储"><a href="#数据的宽度和存储" class="headerlink" title="数据的宽度和存储"></a>数据的宽度和存储</h4><h5 id="数据的宽度和单位"><a href="#数据的宽度和单位" class="headerlink" title="数据的宽度和单位"></a>数据的宽度和单位</h5><p><strong>机器字长</strong>是 CPU 内部用于整数运算时的数据通路的宽度，字长等于 CPU 内部用于整数运算的运算器位数和通用寄存器宽度。</p>
+<p>描述距离，频率等数值通常用 10 的幂次表示，因而在由时钟频率计算得到的总线带宽或外设数据传输率中，度量单位表示的也是 10 的幂次，通常用 K 表示 1024，k 表示 1000，其他前缀字母均大写，表示大小由上下文决定。</p>
+<h5 id="数据的存储和排列顺序"><a href="#数据的存储和排列顺序" class="headerlink" title="数据的存储和排列顺序"></a>数据的存储和排列顺序</h5><p>一般用<strong>最低有效位</strong>和<strong>最高有效位</strong>分别表示数的最低位和最高位。对于带符号的数，最高位就是符号位。</p>
+<p>如果以字节为一个排列基本单位 LSB 表示 <strong>最低有效字节</strong>，MSB 表示 <strong>最高有效字节</strong></p>
+<p>排列方式有两种，大端和小端</p>
+<p>小端方式将最高有效字节放在高地址单元，最低有效字节存放在地地质单元。Intel 80x86 采用小端方式。</p>
+<h4 id="数据的基本运算"><a href="#数据的基本运算" class="headerlink" title="数据的基本运算"></a>数据的基本运算</h4><p>!(x^y) 等价于表达式 x == y</p>
+<h5 id="左移运算和右移运算"><a href="#左移运算和右移运算" class="headerlink" title="左移运算和右移运算"></a>左移运算和右移运算</h5><p>C 的移位操作有<strong>逻辑移位</strong>和<strong>算数移位</strong>。</p>
+<ul>
+<li>逻辑移位不考虑符号位的问题，左移时，高位移出，低位补 0。右移时，低位移出，高位补 0。</li>
+<li>算数移位左移时，高位移出，低位补 0.右移时，低位移出，高位补符号。</li>
+</ul>
+<h5 id="位扩展运算和位截断运算"><a href="#位扩展运算和位截断运算" class="headerlink" title="位扩展运算和位截断运算"></a>位扩展运算和位截断运算</h5><p>截断一个数可能因为溢出而改变它的数值。</p>
+<h5 id="整数加减运算"><a href="#整数加减运算" class="headerlink" title="整数加减运算"></a>整数加减运算</h5><p>整数加法运算器通常包含以下输出标志：</p>
+<ul>
+<li>零标志 ZF，当结果所有位都是 0 时，ZF=1，否则，ZF=0</li>
+<li>溢出标志 OF，OF=1 表示带符号整数的加减运算发生溢出<br>全加器 溢出标志的逻辑表达式<br>$OF=C<em>n \oplus C</em>(n-1)$<br>因为若为两个正数相加，最高位必然没有进位，而若次高位有进位，则说明溢出 若为两个负数相加，最高位必然有进位，若次高位没有进位，则说明溢出</li>
+<li>符号标志 SF 一般取有符号数的最高位</li>
+<li>进/借位标志 CF 表示无符号数加减法时的进/借位。加法时，CF=1 表示加法有进位，减法时，CF=1 表示不够减。因此，加法时 CF 等于进位输出 C，减法时，CF 等于进位输出 C 的取反。</li>
+</ul>
+<h5 id="整数乘除运算"><a href="#整数乘除运算" class="headerlink" title="整数乘除运算"></a>整数乘除运算</h5><p>好难啊，看不懂，先坑着</p>
+<h5 id="常量的乘除运算"><a href="#常量的乘除运算" class="headerlink" title="常量的乘除运算"></a>常量的乘除运算</h5><p>编译器在处理变量与常数相乘，往往用移位和加减法组合代替乘法运算。</p>
+<h5 id="浮点数运算"><a href="#浮点数运算" class="headerlink" title="浮点数运算"></a>浮点数运算</h5><p>加减运算</p>
+<script type="math/tex; mode=display">x+y = (M_x\times2^{E_x-E_y}+M_y)\times2^{E_y}</script><script type="math/tex; mode=display">x-y = (M_x\times2^{E_x-E_y}-M_y)\times2^{E_y}</script><p>计算机实现上述过程需要经过对阶，尾数相减，规格化和舍入四个步骤</p>
+<p>阶码溢出判断<br>在进行尾数规格化和尾数舍入时，可能会对结果的阶码执行加减运算，必须考虑阶码的溢出问题。如果阶码全为 1，发生阶码上溢，此时可将结果置为无穷，若阶码全为 0，发生阶码下溢，此时可将结果置为 0。</p>
+<p>乘除运算</p>
+<script type="math/tex; mode=display">x \times y = (M_x \times M_y)\times2^{E_x+E_y}</script><script type="math/tex; mode=display">x \div y = (M_x \times M_y)\times2^{E_x-E_y}</script><p>无需对阶的步骤，但是对于结果的处理步骤是一样的。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="jiezi19971225.cn/2020/04/04/nginxLocation模块学习/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/04/04/nginxLocation模块学习/" itemprop="url">nginxLocation模块学习</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-04T22:48:54+08:00">
+                2020-04-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/nginx/" itemprop="url" rel="index">
+                    <span itemprop="name">nginx</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+         <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-bar-chart"></i>
+           </span>
+           <span class="post-meta-item-text">字数统计:</span>
+           <span class="post-count">497(字)</span>
+
+         </span>
+
+      <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-clock-o"></i>
+           </span>
+           <span class="post-meta-item-text">阅读时长:</span>
+           <span class="post-count">1(分)</span>
+
+         </span>
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="uri-匹配规则"><a href="#uri-匹配规则" class="headerlink" title="uri 匹配规则"></a>uri 匹配规则</h3><h4 id="location-规则类型"><a href="#location-规则类型" class="headerlink" title="location 规则类型"></a>location 规则类型</h4><p>这部分内容来自<a href="https://www.cnblogs.com/dreamanddead/p/how-uri-match-location-rule-in-nginx.html" target="_blank" rel="noopener">详细解析 nginx uri 如何匹配 location 规则</a></p>
+<ul>
+<li>= exact uri</li>
+</ul>
+<p>完全匹配规则，要求 url 和规则完全相同</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">location ~ /api/v1 &#123;</span><br><span class="line">    ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>~ case-sensitive regex</li>
+</ul>
+<p>区分大小写的正则表达式匹配规则</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">location ~ /api/v1 &#123;</span><br><span class="line">    ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>~* case-insensitive regex</li>
+</ul>
+<p>不区分大小写的正则表达式匹配规则</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">location ~ /api/v1 &#123;</span><br><span class="line">    ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>~* case-insensitive regex</li>
+</ul>
+<p>不大小写的正则表达式匹配规则</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">location ~ /api/v1 &#123;</span><br><span class="line">    ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>^～ disable regex prefix</li>
+</ul>
+<p>匹配流程与 prefix 规则相同，有一点区别在于，如果最长匹配是当前规则，则之后不进行 正则表达式 规则的搜索。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">location ~ /api/v1 &#123;</span><br><span class="line">    ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="uri-如何选择-location"><a href="#uri-如何选择-location" class="headerlink" title="uri 如何选择 location"></a>uri 如何选择 location</h4><ol>
+<li>如果存在 exact uri 规则与 uri 匹配，至步骤 6</li>
+<li><p>在所有 prefix 规则和 disable regex prefix 规则中进行匹配（与这些规则定义的顺序无关），<br>如果没有匹配到规则，至步骤 3；如果存在匹配的规则，选择出最长匹配 uri 的规则：</p>
+<ul>
+<li>如果规则是 disable regex prefix 类型，至步骤 6</li>
+<li>如果规则是 prefix 类型，记住当前匹配的 prefix 规则，选为待定，至步骤 3</li>
+</ul>
+</li>
+<li><p>逐个遍历 case-sensitive regex 规则和 case-insensitive regex 规则（按照这些规则定义的前后顺序）:</p>
+<ul>
+<li>如果规则匹配，则遍历终止，至步骤 6</li>
+<li>如果规则没有匹配，则继续</li>
+</ul>
+</li>
+<li><p>如果之前有 prefix 规则条目被选择为待定，至步骤 6</p>
+</li>
+<li>匹配失败，返回 404，结束</li>
+<li>选择当前规则，使用其配置，结束</li>
+</ol>
+<h4 id="try-files-解析"><a href="#try-files-解析" class="headerlink" title="try_files 解析"></a>try_files 解析</h4><p>$uri 指代访问的 uri 资源，”$uri/“语法可以用来检测一个目录的存在，如果没有找到，一个内置的重定向将请求重定向到最后一个参数<br>最后一个参数可以指向一个命名的 location</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">location / &#123;</span><br><span class="line">    try_files $uri $uri/ index.html $uri.html =404;</span><br><span class="line">&#125;</span><br><span class="line">location / &#123;</span><br><span class="line">    try_files /system/maintenance.html</span><br><span class="line">              $uri $uri/index.html $uri.html</span><br><span class="line">              @mongrel;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">location @mongrel &#123;</span><br><span class="line">    proxy_pass http://mongrel;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="jiezi19971225.cn/2020/04/04/实现Promise/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/04/04/实现Promise/" itemprop="url">Promise</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-04T22:45:51+08:00">
+                2020-04-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/前端/" itemprop="url" rel="index">
+                    <span itemprop="name">前端</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+         <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-bar-chart"></i>
+           </span>
+           <span class="post-meta-item-text">字数统计:</span>
+           <span class="post-count">889(字)</span>
+
+         </span>
+
+      <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-clock-o"></i>
+           </span>
+           <span class="post-meta-item-text">阅读时长:</span>
+           <span class="post-count">5(分)</span>
+
+         </span>
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="高阶函数"><a href="#高阶函数" class="headerlink" title="高阶函数"></a>高阶函数</h3><p>JS 中 函数是一等公民<br>函数可以作为参数和返回值传递</p>
+<h3 id="回调函数的问题"><a href="#回调函数的问题" class="headerlink" title="回调函数的问题"></a>回调函数的问题</h3><ol>
+<li>不能 trycatch</li>
+<li>不能 return</li>
+<li>回调地狱</li>
+</ol>
+<h3 id="解决回调地狱"><a href="#解决回调地狱" class="headerlink" title="解决回调地狱"></a>解决回调地狱</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> EventEmitter = <span class="built_in">require</span>(<span class="string">"events"</span>);</span><br><span class="line"><span class="keyword">let</span> eve = <span class="keyword">new</span> EventEmitter();</span><br><span class="line"><span class="keyword">let</span> html = &#123;&#125;</span><br><span class="line">eve.on(<span class="string">"ready"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">key, value</span>) </span>&#123;</span><br><span class="line">  html[key] = value;</span><br><span class="line">  <span class="keyword">if</span>(<span class="built_in">Object</span>.keys(html).length === <span class="number">2</span>)&#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">"ok)</span></span><br><span class="line"><span class="string">  &#125;</span></span><br><span class="line"><span class="string">&#125;);</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">fs.readFile("</span>./node/template.txt<span class="string">", "</span>utf8<span class="string">", function(err, data) &#123;</span></span><br><span class="line"><span class="string">  eve.emit("</span>ready<span class="string">", "</span>template<span class="string">", data);</span></span><br><span class="line"><span class="string">&#125;);</span></span><br><span class="line"><span class="string">fs.readFile("</span>./node/data.txt<span class="string">", "</span>utf8<span class="string">", function(err, data) &#123;</span></span><br><span class="line"><span class="string">  eve.emit("</span>ready<span class="string">", "</span>data<span class="string">", data);</span></span><br><span class="line"><span class="string">&#125;);</span></span><br></pre></td></tr></table></figure>
+<p>哨兵函数</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> html = &#123;&#125;;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">done</span>(<span class="params">key, value</span>) </span>&#123;</span><br><span class="line">  html[key] = value;</span><br><span class="line">  <span class="keyword">if</span> (<span class="built_in">Object</span>.keys(html).length === <span class="number">2</span>) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"ok"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fs.readFile(<span class="string">"./node/template.txt"</span>, <span class="string">"utf8"</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err, data</span>) </span>&#123;</span><br><span class="line">  done(<span class="string">"template"</span>, data);</span><br><span class="line">&#125;);</span><br><span class="line">fs.readFile(<span class="string">"./node/data.txt"</span>, <span class="string">"utf8"</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err, data</span>) </span>&#123;</span><br><span class="line">  done(<span class="string">"data"</span>, data);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>进一步优化</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">render</span>(<span class="params">length,cb</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">key,value</span>)</span>&#123;</span><br><span class="line">        html[key] = value</span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">Object</span>.keys(html).length === length)&#123;</span><br><span class="line">            cb()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">done</span> = <span class="title">render</span>(<span class="params"><span class="number">2</span>,function(</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"ok"</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">fs.readFile(<span class="string">"./node/template.txt"</span>, <span class="string">"utf8"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, data</span>) </span>&#123;</span><br><span class="line">  done(<span class="string">"template"</span>, data);</span><br><span class="line">&#125;);</span><br><span class="line">fs.readFile(<span class="string">"./node/data.txt"</span>, <span class="string">"utf8"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, data</span>) </span>&#123;</span><br><span class="line">  done(<span class="string">"data"</span>, data);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="generator"><a href="#generator" class="headerlink" title="generator"></a>generator</h3><p>生成器是一个函数，可以用来生成迭代器，生成器函数和普通函数不同，生成器函数中间可以暂停</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">read</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">let</span> template = <span class="keyword">await</span> readFile(<span class="string">'./template.txt)</span></span><br><span class="line"><span class="string">    let data = await readFile('</span>./data.txt<span class="string">')</span></span><br><span class="line"><span class="string">    return template + data</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">// 等同于</span></span><br><span class="line"><span class="string">return read()&#123;</span></span><br><span class="line"><span class="string">    return co(function*()&#123;</span></span><br><span class="line"><span class="string">        let template = yield readFile('</span>./template<span class="string">')</span></span><br><span class="line"><span class="string">        let data = yield readFile('</span>./data<span class="string">')</span></span><br><span class="line"><span class="string">        return template + data</span></span><br><span class="line"><span class="string">    &#125;)</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
+<h3 id="co"><a href="#co" class="headerlink" title="co"></a>co</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">co</span>(<span class="params">gen</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">let</span> it = gen();  <span class="comment">// gen是一个genarator函数</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve,reject</span>) =&gt;</span> &#123;</span><br><span class="line">        !<span class="function"><span class="keyword">function</span> <span class="title">next</span>(<span class="params">lastVal</span>)</span>&#123;</span><br><span class="line">            <span class="keyword">if</span>&#123;value,done&#125; = it.next(lastVal);</span><br><span class="line">            <span class="keyword">if</span>(done)&#123;</span><br><span class="line">                resolve(value);</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                value.then(next,reject)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Promise-A-实现"><a href="#Promise-A-实现" class="headerlink" title="Promise A+ 实现"></a>Promise A+ 实现</h3><p>对照 <a href="https://promisesaplus.com/" target="_blank" rel="noopener">https://promisesaplus.com/</a>实现就好。</p>
+<p>需要注意的规范中的 3.1 注明了 then 中的 onFulfilled and onRejected 需要在本次事件循环结束后方可执行。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> PENDING = <span class="string">"pending"</span>;</span><br><span class="line"><span class="keyword">const</span> FULFILLED = <span class="string">"fulfilled"</span>;</span><br><span class="line"><span class="keyword">const</span> REJECTED = <span class="string">"rejected"</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Promise</span>(<span class="params">executor</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> self = <span class="keyword">this</span>; <span class="comment">// 缓存 promise 实例</span></span><br><span class="line">  self.status = PENDING;</span><br><span class="line">  self.onResolvedCallbacks = [];</span><br><span class="line">  self.onRejectedCallbacks = [];</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 2.1</span></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">resolve</span>(<span class="params">value</span>) </span>&#123;</span><br><span class="line">    setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (self.status === PENDING) &#123;</span><br><span class="line">        self.status = FULFILLED;</span><br><span class="line">        self.value = value;</span><br><span class="line">        self.onResolvedCallbacks.forEach(<span class="function">(<span class="params">cb</span>) =&gt;</span> cb());</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">reject</span>(<span class="params">reason</span>) </span>&#123;</span><br><span class="line">    setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (self.status === PENDING) &#123;</span><br><span class="line">        self.status = REJECTED;</span><br><span class="line">        self.value = reason;</span><br><span class="line">        self.onRejectedCallbacks.forEach(<span class="function">(<span class="params">cb</span>) =&gt;</span> cb());</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    executor(resolve, reject);</span><br><span class="line">  &#125; <span class="keyword">catch</span> (err) &#123;</span><br><span class="line">    reject(err);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">Promise</span>.prototype.then = <span class="function"><span class="keyword">function</span> (<span class="params">onFulfilled, onRejected</span>) </span>&#123;</span><br><span class="line">  onFulfilled =</span><br><span class="line">    <span class="keyword">typeof</span> onFulfilled === <span class="string">"function"</span> ? onFulfilled : <span class="function">(<span class="params">value</span>) =&gt;</span> value;</span><br><span class="line">  onRejected =</span><br><span class="line">    <span class="keyword">typeof</span> onRejected === <span class="string">"function"</span></span><br><span class="line">      ? onRejected</span><br><span class="line">      : <span class="function">(<span class="params">reason</span>) =&gt;</span> &#123;</span><br><span class="line">          <span class="keyword">throw</span> reason;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> self = <span class="keyword">this</span>;</span><br><span class="line">  <span class="keyword">let</span> promise2;</span><br><span class="line">  <span class="keyword">if</span> (self.status === FULFILLED) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function">(<span class="params">promise2 = <span class="keyword">new</span> <span class="built_in">Promise</span>((resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">      setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          <span class="keyword">let</span> x = onFulfilled(self.value);</span><br><span class="line">          resolvePromise(promise2, x, resolve, reject);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (err) &#123;</span><br><span class="line">          reject(err);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;));</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (self.status === REJECTED) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function">(<span class="params">promise2 = <span class="keyword">new</span> <span class="built_in">Promise</span>((resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">      setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          <span class="keyword">let</span> x = onRejected(self.value);</span><br><span class="line">          resolvePromise(promise2, x, resolve, reject);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">          reject(e);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;));</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (self.status === PENDING) &#123;</span><br><span class="line">    <span class="keyword">return</span> (promise2 = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">      self.onResolvedCallbacks.push(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          <span class="keyword">let</span> x = onFulfilled(self.value);</span><br><span class="line">          resolvePromise(promise2, x, resolve, reject);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">          reject(e);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;);</span><br><span class="line">      self.onRejectedCallbacks.push(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          <span class="keyword">let</span> x = onRejected(self.value);</span><br><span class="line">          resolvePromise(promise2, x, resolve, reject);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">          reject(e);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 根据 then 的传入处理函数 决定 then 返回的 promise 的状态</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">resolvePromise</span>(<span class="params">promise2, x, resolve, reject</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (x === promise2) &#123;</span><br><span class="line">    <span class="keyword">return</span> reject(<span class="keyword">new</span> <span class="built_in">TypeError</span>(<span class="string">"Circular reference"</span>));</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">let</span> called = <span class="literal">false</span>;</span><br><span class="line">  <span class="keyword">if</span> (x !== <span class="literal">null</span> &amp;&amp; (<span class="keyword">typeof</span> x === <span class="string">"object"</span> || <span class="keyword">typeof</span> x === <span class="string">"function"</span>)) &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="keyword">let</span> then = x.then;</span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">typeof</span> then === <span class="string">"function"</span>) &#123;</span><br><span class="line">        then.call(</span><br><span class="line">          x,</span><br><span class="line">          <span class="function"><span class="keyword">function</span> (<span class="params">y</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (called) <span class="keyword">return</span>;</span><br><span class="line">            called = <span class="literal">true</span>;</span><br><span class="line">            resolvePromise(promise2, y, resolve, reject);</span><br><span class="line">          &#125;,</span><br><span class="line">          <span class="function"><span class="keyword">function</span> (<span class="params">err</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (called) <span class="keyword">return</span>;</span><br><span class="line">            called = <span class="literal">true</span>;</span><br><span class="line">            reject(err);</span><br><span class="line">          &#125;</span><br><span class="line">        );</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (called) <span class="keyword">return</span>;</span><br><span class="line">        called = <span class="literal">true</span>;</span><br><span class="line">        resolve(x);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (err) &#123;</span><br><span class="line">      <span class="keyword">if</span> (called) <span class="keyword">return</span>;</span><br><span class="line">      called = <span class="literal">true</span>;</span><br><span class="line">      reject(err);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    resolve(x);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">Promise</span>.prototype.catch = <span class="function"><span class="keyword">function</span> (<span class="params">onRejected</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">this</span>.then(<span class="literal">null</span>, onRejected);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="built_in">Promise</span>.prototype.resolve = <span class="function"><span class="keyword">function</span> (<span class="params">value</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve</span>) </span>&#123;</span><br><span class="line">    resolve(vzlue);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="built_in">Promise</span>.reject = <span class="function"><span class="keyword">function</span> (<span class="params">reason</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">    reject(reason);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="built_in">Promise</span>.deferred = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> res, rej;</span><br><span class="line">  <span class="keyword">const</span> promise = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    res = resolve;</span><br><span class="line">    rej = reject;</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    promise,</span><br><span class="line">    resolve: res,</span><br><span class="line">    reject: rej,</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = <span class="built_in">Promise</span>;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="jiezi19971225.cn/2020/04/04/http权威指南笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/04/04/http权威指南笔记/" itemprop="url">http权威指南</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-04T22:37:18+08:00">
+                2020-04-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/前端/" itemprop="url" rel="index">
+                    <span itemprop="name">前端</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+         <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-bar-chart"></i>
+           </span>
+           <span class="post-meta-item-text">字数统计:</span>
+           <span class="post-count">1.3k(字)</span>
+
+         </span>
+
+      <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-clock-o"></i>
+           </span>
+           <span class="post-meta-item-text">阅读时长:</span>
+           <span class="post-count">5(分)</span>
+
+         </span>
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>记录一下自己不太清楚的知识点</p>
+<h2 id="第二章-URL-与资源"><a href="#第二章-URL-与资源" class="headerlink" title="第二章 URL 与资源"></a>第二章 URL 与资源</h2><h3 id="URL"><a href="#URL" class="headerlink" title="URL"></a>URL</h3><p>url 的语法 \<scheme\>://\<user\>:\&lt;password>@\<host\>:\<port\>/\<path\>;\<params\>?\<query\>#\<frag\></frag\></query\></params\></path\></port\></host\></user\></scheme\></p>
+<p>基础 URL HTML 标记\<base\>，可以设定基础 URL</base\></p>
+<p>URL 编码机制 urlencode 通过转义表示不安全的字符 包含一个百分号(%)，后面跟着两个表示字符 ASCII 码的十六进制数</p>
+<h2 id="第三章-HTTP-报文"><a href="#第三章-HTTP-报文" class="headerlink" title="第三章 HTTP 报文"></a>第三章 HTTP 报文</h2><h3 id="报文的组成"><a href="#报文的组成" class="headerlink" title="报文的组成"></a>报文的组成</h3><p>组成 对报文进行描述的其实航 包含属性的首部块 可选的包含数据的主题 body<br>一般只有 PUT 和 POST 方法包含 body<br>PUT 方法的语义是让服务器用请求的主体部分来创建一个由所请求的 URL 命名的新文档，如果那个 URL 已经存在的话，就用这个主题来替代它</p>
+<p>Http 协议中的 Header 与 Body。Header 的每行最后要加\r\n。Header 与 Body 之间要用\r\n 隔开。Body 后无需加\r\n。</p>
+<p>ACSII 码中</p>
+<p>‘\n’ 10 换行</p>
+<p>‘\r’ 13 回车</p>
+<p>也可以表示为’\x0a’和’\x0d’.(16 进制)</p>
+<p>示例：HTTP 开始部分为 header，html 部分为 body。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK\r\n</span><br><span class="line">Content-Encoding: gzip\r\n</span><br><span class="line">Content-Type: text/xml\r\n</span><br><span class="line">Content-Length: 399\r\n</span><br><span class="line">Connection: keep-alive\r\n</span><br><span class="line">X-Varnish-Cache: HIT\r\n</span><br><span class="line">X-Varnish-Cache-Hits: 1241\r\n</span><br><span class="line">\r\n</span><br><span class="line">&lt;html.....&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="状态码"><a href="#状态码" class="headerlink" title="状态码"></a>状态码</h3><ul>
+<li>101 Switching Protocols</li>
+<li>300 Multiple Choices 请求一个实际指向多个资源的 URL</li>
+<li>301 Moved Permanently 响应的 Location 首部包含资源现在所处的 URL</li>
+<li>302 Found 响应的 Location 首部的 URL 来临时定位资源 HTTP 1.0</li>
+<li>303 See Other HTTP 1.1</li>
+<li>307 Temporary Redirect POST 不会转为 GET</li>
+</ul>
+<p>当 HTTP/1.0 客户端发起一个 POST 请求,并在响应中收到 302 重定向状态码时,它会接受 Location 首部的重定向 URL,并向那个 URL 发起一个 GET 请求(而不会像原始请求中那样发起 POST 请求)。<br>问题出在 HTTP/1.1。HTTP/1.1 规范使用 303 状态码来实现同样的行为(服务器发送 303 状态码来重定向客户端的 POST 请求,在它后面跟上一个 GET 请求)。<br>为了避开这个问题,HTTP/1.1 规范指出,对于 HTTP/1.1 客户端,用 307 状态码取代 302 状态码来进行临时重定向。这样服务器就可以将 302 状态码保留起来,为 HTTP/1.0 客户端使用了。</p>
+<h3 id="Keep-Alive"><a href="#Keep-Alive" class="headerlink" title="Keep-Alive"></a>Keep-Alive</h3><p>在 HTTP1.1 中默认开启，可以用 Connection:close 关闭，在 HTTP1.0 默认关闭，通过 Connection:keep-alive 开启</p>
+<p>哑代理问题，所谓哑代理，是不会处理 Keep-Alive 连接，而是直接将其转发的代理。<br>在网景的变通做法是,浏览器会向代理发送非标准的 Proxy-Connection 扩展首部,而不是官方支持的著名的 Connection 首部。如果代理是盲中继,它会将无意义的 Proxy-Connection 首部转发给 Web 服务器,服务器会忽略此首部,不会带<br>来任何问题。但如果代理是个聪明的代理(能够理解持久连接的握手动作),就用一个 Connection 首部取代无意义的 Proxy-Connection 首部,然后将其发送给服务器,以收到预期的效果。</p>
+<p>HTTP1.1 会使用管道优化，将一连串请求放入管道中，但是对于 POST 这个样非幂等的请求不应该放在管道中</p>
+<h3 id="代理和网关的区别"><a href="#代理和网关的区别" class="headerlink" title="代理和网关的区别"></a>代理和网关的区别</h3><p>严格来说,代理连接的是两个或多个使用相同协议的应用程序,而网关连接的则是两个或多个使用不同协议的端点。网关扮演的是“协议转换器”的角色,即使客户端和服务器使用的是不同的协议,客户端也可以通过它完成与服务器之间的事务处理。</p>
+<h3 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h3><p>缓存有两种，强缓存和协商缓存<br>强缓存使用 Expired 和 Cache Control 字段，不需要向服务器通信<br>协商缓存需要携带协商字段与服务器通信，如果服务器返回 304 NOT Modified 信息，就使用缓存中的资源，并在相应中插入新鲜度信息<br>no-store 不缓存<br>no-cache 在与服务器进行新鲜度验证前不使用缓存</p>
+<h3 id="安全"><a href="#安全" class="headerlink" title="安全"></a>安全</h3><p>CSRF Cross Site Request Forgery<br>点击劫持 设置 X-FRAME-OPTIONS</p>
+<h3 id="cookie"><a href="#cookie" class="headerlink" title="cookie"></a>cookie</h3><ul>
+<li>cookie 的域名属性</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set-cookie: user=&quot;mary17&quot;; domain=&quot;airtravelbargains.com&quot;</span><br></pre></td></tr></table></figure>
+<p>将 cookie user=”mary17” 发送给域 “.airtravelbargains.com” 中的所有站点:</p>
+<ul>
+<li>cookie 的路径属性<br>cookie 规范允许用户将 cookie 与部分 Web 站点关联起来</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set-cookie: pref=compact; domain=&quot;airtravelbargains.com&quot;; path=/autos/</span><br></pre></td></tr></table></figure>
+<p>如果用户访问 <a href="http://www.airtravelbargains.com/specials.html,就只会获得这个" target="_blank" rel="noopener">http://www.airtravelbargains.com/specials.html,就只会获得这个</a> cookie:<br>Cookie: user=”mary17”<br>但 如 果 访 问 <a href="http://www.airtravelbargains.com/autos/cheapo/index.html," target="_blank" rel="noopener">http://www.airtravelbargains.com/autos/cheapo/index.html,</a> 就 会 获 得 这<br>两个 cookie:<br>Cookie: user=”mary17”<br>Cookie: pref=compact<br>Cache-Control:no-cache=” Set-Cookie” 除了 cookie 以外是可以缓存的</p>
+<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><h3 id="HTTP-首部参考"><a href="#HTTP-首部参考" class="headerlink" title="HTTP 首部参考"></a>HTTP 首部参考</h3><ul>
+<li>Accept</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Accept */* 表示所有类型</span><br><span class="line">Accept: text/*, image/* 图片</span><br><span class="line">Accept: text/*, image/gif, image/jpeg; q=1 图片 q表示质量</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Age HTTP/1.1 缓存必须在发送的每条响应中都包含一个 Age 首部</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="jiezi19971225.cn/2020/03/30/react基础学习/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/30/react基础学习/" itemprop="url">react基础学习</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-30T12:26:31+08:00">
+                2020-03-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+         <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-bar-chart"></i>
+           </span>
+           <span class="post-meta-item-text">字数统计:</span>
+           <span class="post-count">3.4k(字)</span>
+
+         </span>
+
+      <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-clock-o"></i>
+           </span>
+           <span class="post-meta-item-text">阅读时长:</span>
+           <span class="post-count">13(分)</span>
+
+         </span>
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>闭关学习 react！</p>
+<h2 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h2><h3 id="jsx"><a href="#jsx" class="headerlink" title="jsx"></a>jsx</h3><figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> name = <span class="string">"Josh Perez"</span>;</span><br><span class="line"><span class="keyword">const</span> element = <span class="xml"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>Hello, &#123;name&#125;<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span>;</span><br><span class="line">ReactDOM.render(element, <span class="built_in">document</span>.getElementById(<span class="string">"root"</span>));</span><br></pre></td></tr></table></figure>
+<p>再大括号中可以填入任何有效的 javascript 表达式。</p>
+<p>在编译之后，JSX 表达式会被转为普通 JavaScript 函数调用，并且对其取值后得到 JavaScript 对象。</p>
+<p>也就是说，你可以在 if 语句和 for 循环的代码块中使用 JSX，将 JSX 赋值给变量，把 JSX 当作参数传入，以及从函数中返回 JSX：</p>
+<p>React DOM 在渲染所有输入内容之前，默认会进行转义。这可以有效防止 XSS 攻击。</p>
+<p>Babel 会把 JSX 转译成一个名为 React.createElement() 函数调用。他会创建这样一个虚拟 dom 对象。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> element = &#123;</span><br><span class="line">  type: <span class="string">"h1"</span>,</span><br><span class="line">  props: &#123;</span><br><span class="line">    className: <span class="string">"greeting"</span>,</span><br><span class="line">    children: <span class="string">"Hello, world!"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="元素渲染"><a href="#元素渲染" class="headerlink" title="元素渲染"></a>元素渲染</h3><p>React 元素是不可变对象，一旦被创建，就无法更改他的子元素或者属性。更新 UI 的唯一方式就是创建一个新的元素，将其传入 ReactDOM.render()。</p>
+<p>React 只更新它需要更新的部分。React DOM 会将元素和它的子元素与它们之前的状态进行比较，并只会进行必要的更新来使 DOM 达到预期的状态。</p>
+<h3 id="组件-amp-props"><a href="#组件-amp-props" class="headerlink" title="组件&amp;props"></a>组件&amp;props</h3><p>函数组件，接受 props，返回 jsx</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Welcome</span>(<span class="params">props</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>Hello, &#123;props.name&#125;<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>组件可以是用户自定义的组件，这时它会将 jsx 所接收的属性以及自组件转换为单个对象传给组件。组件必须以大写字母开头。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Welcome</span>(<span class="params">props</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>Hello, &#123;props.name&#125;<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> element = <span class="xml"><span class="tag">&lt;<span class="name">Welcome</span> <span class="attr">name</span>=<span class="string">"Sara"</span> /&gt;</span></span>;</span><br><span class="line">ReactDOM.render(element, <span class="built_in">document</span>.getElementById(<span class="string">"root"</span>));</span><br></pre></td></tr></table></figure>
+<p>解构写法</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ReactDOM.render(<span class="xml"><span class="tag">&lt;<span class="name">Comment</span> &#123;<span class="attr">...data</span>&#125;&gt;</span>,document.getElementById('root'));</span></span><br></pre></td></tr></table></figure>
+<p>props 应该是只读的，函数组件都应该为纯函数</p>
+<p>所有 React 组件都必须像纯函数一样保护它们的 props 不被更改。</p>
+<p>当然，应用程序的 UI 是动态的，并会伴随着时间的推移而变化。在下一章节中，我们将介绍一种新的概念，称之为 “state”。在不违反上述规则的情况下，state 允许 React 组件随用户操作、网络响应或者其他变化而动态更改输出内容。</p>
+<h4 id="组件的运作方式"><a href="#组件的运作方式" class="headerlink" title="组件的运作方式"></a>组件的运作方式</h4><ul>
+<li>render 发现一个用户自定义组件，如果标签名是大写字母开头的，就会认为它是一个用户自定义组件</li>
+<li>先把 jsx 属性封装为一个 props 对象</li>
+<li>把它作为参数传递给组件</li>
+<li>render 方法会把次 react 元素渲染到页面上</li>
+</ul>
+<h3 id="state-amp-生命周期"><a href="#state-amp-生命周期" class="headerlink" title="state&amp;生命周期"></a>state&amp;生命周期</h3><h4 id="不要直接修改-state"><a href="#不要直接修改-state" class="headerlink" title="不要直接修改 state"></a>不要直接修改 state</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Wrong</span></span><br><span class="line"><span class="keyword">this</span>.state.comment = <span class="string">"Hello"</span>;</span><br></pre></td></tr></table></figure>
+<p>而应该使用 setState()</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Correct</span></span><br><span class="line"><span class="keyword">this</span>.setState(&#123; <span class="attr">comment</span>: <span class="string">"Hello"</span> &#125;);</span><br></pre></td></tr></table></figure>
+<h4 id="state-更新可能是异步的"><a href="#state-更新可能是异步的" class="headerlink" title="state 更新可能是异步的"></a>state 更新可能是异步的</h4><p>不要依赖他们的值来跟新下一个状态</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Wrong</span></span><br><span class="line"><span class="keyword">this</span>.setState(&#123;</span><br><span class="line">  counter: <span class="keyword">this</span>.state.counter + <span class="keyword">this</span>.props.increment</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>可以让 setState() 接收一个函数而不是一个对象。这个函数用上一个 state 作为第一个参数，将此次更新被应用时的 props 做为第二个参数：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Correct</span></span><br><span class="line"><span class="keyword">this</span>.setState(<span class="function">(<span class="params">state, props</span>) =&gt;</span> (&#123;</span><br><span class="line">  counter: state.counter + props.increment</span><br><span class="line">&#125;));</span><br></pre></td></tr></table></figure>
+<p>state 的更新可以被合并</p>
+<h4 id="数据向下流动"><a href="#数据向下流动" class="headerlink" title="数据向下流动"></a>数据向下流动</h4><p>state 是局部的，除了拥有并且设置了它的组件，其他组件都无法访问。组件可以选择把它的 state 作为 props 向下传递给它的子组件中</p>
+<h3 id="事件处理"><a href="#事件处理" class="headerlink" title="事件处理"></a>事件处理</h3><p>react 事件命名采用小驼峰。</p>
+<p>使用 jsx 语法时，需要传入一个函数作为事件处理函数，而不是一个字符串，不能使用 return false 的方式组织默认行为，必须显式使用 preventDefault。</p>
+<h4 id="传参的方式"><a href="#传参的方式" class="headerlink" title="传参的方式"></a>传参的方式</h4><p>默认会将 e 作为最后一个参数传递，如果使用箭头函数的方式绑定，需要使用如下形式</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">e =&gt; handleFunc(e);</span><br></pre></td></tr></table></figure>
+<h3 id="条件渲染"><a href="#条件渲染" class="headerlink" title="条件渲染"></a>条件渲染</h3><p>if &amp;&amp; || 三目运算符</p>
+<h4 id="阻止组件渲染"><a href="#阻止组件渲染" class="headerlink" title="阻止组件渲染"></a>阻止组件渲染</h4><p>让 render 函数返回 null</p>
+<h3 id="列表-amp-key"><a href="#列表-amp-key" class="headerlink" title="列表&amp;key"></a>列表&amp;key</h3><h4 id="渲染多个组件"><a href="#渲染多个组件" class="headerlink" title="渲染多个组件"></a>渲染多个组件</h4><p>使用 map 数组方法，渲染列表时应该提供一个 key 属性，通常使用数据中的 id 来作为元素的 key。</p>
+<h3 id="表单"><a href="#表单" class="headerlink" title="表单"></a>表单</h3><h4 id="受控组件"><a href="#受控组件" class="headerlink" title="受控组件"></a>受控组件</h4><p>在 HTML 中，表单元素（如 input、 textarea 和 select）之类的表单元素通常自己维护 state，并根据用户输入进行更新。而在 React 中，可变状态（mutable state）通常保存在组件的 state 属性中，并且只能通过使用 setState()来更新。</p>
+<p>我们可以把两者结合起来，使 React 的 state 成为“唯一数据源”。渲染表单的 React 组件还控制着用户输入过程中表单发生的操作。被 React 以这种方式控制取值的表单输入元素就叫做“受控组件”。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">NameForm</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(props) &#123;</span><br><span class="line">    <span class="keyword">super</span>(props);</span><br><span class="line">    <span class="keyword">this</span>.state = &#123; <span class="attr">value</span>: <span class="string">""</span> &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.handleChange = <span class="keyword">this</span>.handleChange.bind(<span class="keyword">this</span>);</span><br><span class="line">    <span class="keyword">this</span>.handleSubmit = <span class="keyword">this</span>.handleSubmit.bind(<span class="keyword">this</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  handleChange(event) &#123;</span><br><span class="line">    <span class="keyword">this</span>.setState(&#123; <span class="attr">value</span>: event.target.value &#125;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  handleSubmit(event) &#123;</span><br><span class="line">    alert(<span class="string">"提交的名字: "</span> + <span class="keyword">this</span>.state.value);</span><br><span class="line">    event.preventDefault();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;form onSubmit=&#123;<span class="keyword">this</span>.handleSubmit&#125;&gt;</span><br><span class="line">        &lt;label&gt;</span><br><span class="line">          名字:</span><br><span class="line">          &lt;input</span><br><span class="line">            type=<span class="string">"text"</span></span><br><span class="line">            value=&#123;<span class="keyword">this</span>.state.value&#125;</span><br><span class="line">            onChange=&#123;<span class="keyword">this</span>.handleChange&#125;</span><br><span class="line">          /&gt;</span><br><span class="line">        &lt;<span class="regexp">/label&gt;</span></span><br><span class="line"><span class="regexp">        &lt;input type="submit" value="提交" /</span>&gt;</span><br><span class="line">      &lt;<span class="regexp">/form&gt;</span></span><br><span class="line"><span class="regexp">    );</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
+<h4 id="textarea"><a href="#textarea" class="headerlink" title="textarea"></a>textarea</h4><p>在 html 中，textarea 使用子元素定义其文本，在 react 中，使用 value 属性代替</p>
+<h4 id="select"><a href="#select" class="headerlink" title="select"></a>select</h4><p>在 html 中 使用 selected 表明属性默认选中，react 在根 select 标签使用 value 属性</p>
+<h4 id="input-type-file"><a href="#input-type-file" class="headerlink" title="input type=file"></a>input type=file</h4><p>在 react 中，它是一个非受控组件</p>
+<h4 id="处理多个输入"><a href="#处理多个输入" class="headerlink" title="处理多个输入"></a>处理多个输入</h4><p>当需要处理多个 input 元素时，我们可以给每个元素添加 name 属性，并让处理函数根据 event.target.name 的值选择要执行的操作。</p>
+<h4 id="受控输入空值"><a href="#受控输入空值" class="headerlink" title="受控输入空值"></a>受控输入空值</h4><p>在受控组件上指定 value 的 prop 会阻止用户更改输入。如果你指定了 value，但输入仍可编辑，则可能是你意外地将 value 设置为 undefined 或 null<br>如果确实是只读属性，应当加上 readOnly 属性</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ReactDOM.render(<span class="xml"><span class="tag">&lt;<span class="name">input</span> <span class="attr">value</span>=<span class="string">"hi"</span> /&gt;</span></span>, mountNode);</span><br><span class="line"></span><br><span class="line">setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  ReactDOM.render(<span class="xml"><span class="tag">&lt;<span class="name">input</span> <span class="attr">value</span>=<span class="string">&#123;null&#125;</span> /&gt;</span></span>, mountNode);</span><br><span class="line">&#125;, <span class="number">1000</span>);</span><br></pre></td></tr></table></figure>
+<h3 id="状态提升"><a href="#状态提升" class="headerlink" title="状态提升"></a>状态提升</h3><p>传递共同父组件的 props，props 是只读的，要在子组件中改变它，通常使用受控组件来解决，将父组件中改变 state 的函数作为 props 传递给子组件调用。</p>
+<h4 id="组合-amp-继承"><a href="#组合-amp-继承" class="headerlink" title="组合&amp;继承"></a>组合&amp;继承</h4><p>使用组合而非继承实现组件之间的代码重用</p>
+<p>类似于 vue 的 slot，默认放在组件内部会作为 props.children 传递给子组件，当需要区分的时候，需要自定约定传入的 props</p>
+<h2 id="高级指引"><a href="#高级指引" class="headerlink" title="高级指引"></a>高级指引</h2><h3 id="无障碍"><a href="#无障碍" class="headerlink" title="无障碍"></a>无障碍</h3><h4 id="语义化"><a href="#语义化" class="headerlink" title="语义化"></a>语义化</h4><p>使用 React Fragments 来组合各个组件，类似于 Vue 中的 template<br>简写形式是 &lt;&gt;&lt;/ &gt;</p>
+<p>其他内容看起来不是那么重要，略过</p>
+<h3 id="Context"><a href="#Context" class="headerlink" title="Context"></a>Context</h3><h4 id="react-createContext"><a href="#react-createContext" class="headerlink" title="react.createContext"></a>react.createContext</h4><p>创建一个 Context 对象。当 React 渲染一个订阅了这个 Context 对象的组件，这个组件会从组件树中离自身最近的那个匹配的 Provider 中读取到当前的 context 值。<br>只有当组件所处的树中没有匹配到 Provider 时，其 defaultValue 参数才会生效。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> MyContext = React.createContext(defaultValue);</span><br></pre></td></tr></table></figure>
+<h4 id="Class-contextType"><a href="#Class-contextType" class="headerlink" title="Class.contextType"></a>Class.contextType</h4><p>挂载在 class 上的 contextType 属性会被重赋值为一个由 React.createContext() 创建的 Context 对象。这能让你使用 this.context 来消费最近 Context 上的那个值。你可以在任何生命周期中访问到它，包括 render 函数中。不对其赋值是无法使用 this.context 获取值的。</p>
+<h3 id="refs-转发"><a href="#refs-转发" class="headerlink" title="refs 转发"></a>refs 转发</h3><p>refs 提供了一种方式，允许我们访问 DOM 节点或者在 render 方法中创建的 React 元素</p>
+<p>基本用法 首先声明引用</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> ref = React.createRef();</span><br></pre></td></tr></table></figure>
+<p>然后再你希望获取引用的节点上</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;input type=<span class="string">"text"</span> ref=&#123;ref&#125; value=&#123;props.content&#125; /&gt;</span><br></pre></td></tr></table></figure>
+<p>这样在声明周期函数中，就可以使用 ref.current 获取到该节点的引用的</p>
+<h4 id="在高阶组件转发-refs"><a href="#在高阶组件转发-refs" class="headerlink" title="在高阶组件转发 refs"></a>在高阶组件转发 refs</h4><p>一般我们用高阶组件，会将所有 props 传递到其包裹的组件。但是 refs 不会传递，</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">render() &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">WrappedComponent</span> &#123;<span class="attr">...this.props</span>&#125; /&gt;</span></span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>可以使用 React.forwardRef API 明确地将 refs 转发到内部的组件。React.forwardRef 接受一个渲染函数，其接收 props 和 ref 参数并返回一个 React 节点。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">logProps</span>(<span class="params">Component</span>) </span>&#123;</span><br><span class="line">  <span class="class"><span class="keyword">class</span> <span class="title">LogProps</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">    componentDidUpdate(prevProps) &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">"old props:"</span>, prevProps);</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">"new props:"</span>, <span class="keyword">this</span>.props);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    render() &#123;</span><br><span class="line">      <span class="keyword">const</span> &#123; forwardedRef, ...rest &#125; = <span class="keyword">this</span>.props;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 将自定义的 prop 属性 “forwardedRef” 定义为 ref</span></span><br><span class="line">      <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">Component</span> <span class="attr">ref</span>=<span class="string">&#123;forwardedRef&#125;</span> &#123;<span class="attr">...rest</span>&#125; /&gt;</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 注意 React.forwardRef 回调的第二个参数 “ref”。</span></span><br><span class="line">  <span class="comment">// 我们可以将其作为常规 prop 属性传递给 LogProps，例如 “forwardedRef”</span></span><br><span class="line">  <span class="comment">// 然后它就可以被挂载到被 LogProps 包裹的子组件上。</span></span><br><span class="line">  <span class="keyword">return</span> React.forwardRef(<span class="function">(<span class="params">props, ref</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">LogProps</span> &#123;<span class="attr">...props</span>&#125; <span class="attr">forwardedRef</span>=<span class="string">&#123;ref&#125;</span> /&gt;</span></span>;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果不使用 React.forwardRef,普通的函数组件是不会获得该参数的，因为函数组件没有实例。<br>不管怎样，你可以在函数组件内部使用 ref 属性，只要它指向一个 DOM 元素或 class 组件：<br>使用 hooks</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">CustomTextInput</span>(<span class="params">props</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 这里必须声明 textInput，这样 ref 才可以引用它</span></span><br><span class="line">  <span class="keyword">const</span> textInput = useRef(<span class="literal">null</span>);</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">handleClick</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    textInput.current.focus();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;input type=<span class="string">"text"</span> ref=&#123;textInput&#125; /&gt;</span><br><span class="line">      &lt;input type=<span class="string">"button"</span> value=<span class="string">"Focus the text input"</span> onClick=&#123;handleClick&#125; /&gt;</span><br><span class="line">    &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">  );</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>现在有个问题，useRef 和 createRef 看起来没啥区别啊</p>
+<p>百度之后得到的答案是 createRef 每次渲染都会返回一个新的引用，而 useRef 每次都会返回相同的引用。</p>
+<p>useRef 仅能用在 FunctionComponent，createRef 仅能用在 ClassComponent。！！！</p>
+<h3 id="错误边界"><a href="#错误边界" class="headerlink" title="错误边界"></a>错误边界</h3><p>如果一个 class 组件中定义了 static getDerivedStateFromError() 或 componentDidCatch() 这两个生命周期方法中的任意一个（或两个）时，那么它就变成一个错误边界。当抛出错误后，请使用 static getDerivedStateFromError() 渲染备用 UI ，使用 componentDidCatch() 打印错误信息。</p>
+<h2 id="珠峰前端"><a href="#珠峰前端" class="headerlink" title="珠峰前端"></a>珠峰前端</h2><h3 id="生命周期详解"><a href="#生命周期详解" class="headerlink" title="生命周期详解"></a>生命周期详解</h3><h4 id="初始渲染阶段"><a href="#初始渲染阶段" class="headerlink" title="初始渲染阶段"></a>初始渲染阶段</h4><p>componentWillMount -&gt; render -&gt; componentDidMount</p>
+<h4 id="更新阶段"><a href="#更新阶段" class="headerlink" title="更新阶段"></a>更新阶段</h4><p>shouldComponentUpdate</p>
+<ul>
+<li>返回 true -&gt; componentWillUpdate -&gt; render -&gt; componentDidUpdate</li>
+<li>返回 false 不处理</li>
+</ul>
+<p>从父组件传来的 props 改变<br>componentWillReceiveProps</p>
+<ul>
+<li>返回 true -&gt; shouldComponentUpdate -&gt; 走上面的流程</li>
+<li>返回 false 不处理</li>
+</ul>
+<img src="/2020/03/30/react基础学习/生命周期.png" title="生命周期">
+<h4 id="销毁阶段"><a href="#销毁阶段" class="headerlink" title="销毁阶段"></a>销毁阶段</h4><p>componentWillUnmount</p>
+<p>清除定时器，防止内存泄漏</p>
+<h3 id="PropTypes-类型检查"><a href="#PropTypes-类型检查" class="headerlink" title="PropTypes 类型检查"></a>PropTypes 类型检查</h3><ul>
+<li>array 数组</li>
+<li>bool 布尔值</li>
+<li>func 函数</li>
+<li>number 数字</li>
+<li>object 对象</li>
+<li>string 字符换</li>
+<li>symbol 符号</li>
+<li>node 任何节点 numbers strings elements 或者包含这些类型的数组或者片段</li>
+<li>element React 元素</li>
+<li>instanceOf(Message) 类的一个实例</li>
+<li>oneOf([‘News’,’Photos’]) 枚举值</li>
+<li>oneOfType([PropTypes.string,PropTypes.number]) 多种类型中其中之一</li>
+<li>arrayOf(PropTypes.number) 某种类型的数组</li>
+<li>objectOf(PropTypes.number) 某种类型的对象</li>
+<li>shape 特定形式的对象</li>
+<li>.required 必填</li>
+<li>function(){return new Error()} 自定义验证器<!-- - create-react-app 使用命令 yarn run eject 暴露配置文件 -->
+</li>
+</ul>
+<h3 id="性能分析"><a href="#性能分析" class="headerlink" title="性能分析"></a>性能分析</h3><p>分析性能 react 可以直接使用 ?react_perf，然后使用 chrome 进行录制分析</p>
+<h3 id="避免重复渲染"><a href="#避免重复渲染" class="headerlink" title="避免重复渲染"></a>避免重复渲染</h3><p>重写 shouldComponentUpdate 减少重新渲染</p>
+<h4 id="PureConponent"><a href="#PureConponent" class="headerlink" title="PureConponent"></a>PureConponent</h4><p>继承自 component，它做了一个优化，它重写了 shouleComponentUpdate 方法<br>这个比较是浅比较，所以 props 如果是对象，会出现无法更新的问题</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">shouldComponentUpdate(nextProps,nextState)&#123;</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">let</span> prop <span class="keyword">in</span> nextProps)&#123;</span><br><span class="line">    <span class="keyword">if</span>(nextProps[prop]!==<span class="keyword">this</span>.props[prop])&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">let</span> state <span class="keyword">in</span> nextStates)&#123;</span><br><span class="line">    <span class="keyword">if</span>(nextStates[state]!==<span class="keyword">this</span>.states[state])&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="immutable-js"><a href="#immutable-js" class="headerlink" title="immutable.js"></a>immutable.js</h3><p>可共享的变化是万恶之源，js 中的对象一般是可变的，因为使用引用赋值，对引用对象的修改会影响的原始对相关，为了避免这种影响，一般采用浅拷贝或者深拷贝的方式，但是如果对象的属性很多，就会造成 CPU 和内存的浪费。</p>
+<p>immutable 中的数据一旦被创建，就不能被更改，所有修改和添加删除操作都会返回一个新的 immutable 对象。immutable 的实现原理是 Persistent Data Structure(持久化数据结构)，这个咱之前也接触过，主席树的原理啊，抽空研究一下。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> &#123; <span class="built_in">Map</span> &#125; = <span class="built_in">require</span>(<span class="string">"immutable"</span>);</span><br><span class="line"><span class="keyword">let</span> m1 = <span class="built_in">Map</span>(&#123; <span class="attr">a</span>: <span class="number">1</span>, <span class="attr">b</span>: <span class="number">2</span>, <span class="attr">c</span>: <span class="number">3</span> &#125;);</span><br><span class="line"><span class="built_in">console</span>.log(m1.get(<span class="string">"a"</span>));</span><br><span class="line"><span class="keyword">let</span> m2 = m1.set(<span class="string">"a"</span>, <span class="string">"11"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(m2.get(<span class="string">"a"</span>));</span><br><span class="line"><span class="built_in">console</span>.log(m1.get(<span class="string">"a"</span>));</span><br><span class="line"><span class="built_in">console</span>.log(m1 === m2);</span><br></pre></td></tr></table></figure>
+<p>缺陷 体积过大 20k</p>
+<h4 id="seamiess-immutable"><a href="#seamiess-immutable" class="headerlink" title="seamiess-immutable"></a>seamiess-immutable</h4><p>使用 Object.defineProperty 扩展的 Javascript 的 Array 和 Object 对象来实现，只支持 Array 和 Objcet 两种数据类型</p>
+<h2 id="hooks"><a href="#hooks" class="headerlink" title="hooks"></a>hooks</h2><h3 id="useState"><a href="#useState" class="headerlink" title="useState"></a>useState</h3><p>标准写法，参数就是 state 的初始值，解构得到的第二个变量是设置该 state 的函数</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> [age, setAge] = useState(<span class="number">42</span>);</span><br></pre></td></tr></table></figure>
+<h3 id="useEffect"><a href="#useEffect" class="headerlink" title="useEffect"></a>useEffect</h3><p>它跟 class 组件中的 componentDidMount、componentDidUpdate 和 componentWillUnmount 具有相同的用途，只不过被合并成了一个 API。</p>
+<p>当你调用 useEffect 时，就是在告诉 React 在完成对 DOM 的更改后运行你的“副作用”函数。由于副作用函数是在组件内声明的，所以它们可以访问到组件的 props 和 state。默认情况下，React 会在每次渲染后调用副作用函数 —— 包括第一次渲染的时候。</p>
+<p>副作用函数还可以通过返回一个函数来指定如何“清除”副作用。例如，在下面的组件中使用副作用函数来订阅好友的在线状态，并通过取消订阅来进行清除操作：</p>
+<h3 id="使用规则"><a href="#使用规则" class="headerlink" title="使用规则"></a>使用规则</h3><p>只能在函数最外层调用 Hook。不要在循环、条件判断或者子函数中调用。</p>
+<p>只能在 React 的函数组件中调用 Hook。不要在其他 JavaScript 函数中调用。（还有一个地方可以调用 Hook —— 就是自定义的 Hook 中。）</p>
+<h3 id="通过跳过-Effect-进行性能优化"><a href="#通过跳过-Effect-进行性能优化" class="headerlink" title="通过跳过 Effect 进行性能优化"></a>通过跳过 Effect 进行性能优化</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">useEffect(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">document</span>.title = <span class="string">`You clicked <span class="subst">$&#123;count&#125;</span> times`</span>;</span><br><span class="line">&#125;, [count]); <span class="comment">// 仅在 count 更改时更新</span></span><br></pre></td></tr></table></figure>
+<h2 id="createPortal"><a href="#createPortal" class="headerlink" title="createPortal"></a>createPortal</h2><p>将组件渲染到组件树之外的地方，可以用来做弹窗</p>
+<h3 id="diff-算法处理-key"><a href="#diff-算法处理-key" class="headerlink" title="diff 算法处理 key"></a>diff 算法处理 key</h3><p>希望操作最小化</p>
+<p>第一步，把老数组在新数组中没有的元素移除掉</p>
+<h3 id="redux"><a href="#redux" class="headerlink" title="redux"></a>redux</h3>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="jiezi19971225.cn/2020/03/24/AC自动机/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -889,7 +2010,7 @@
 <li>状态集合 F 是接受（或中止）状态集合 = {3}</li>
 </ul>
 <p>根据如下信息就可以开始编码了</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;bits/stdc++.h&gt;</span><br><span class="line">using namespace std;</span><br><span class="line">string str;</span><br><span class="line">void dfa()</span><br><span class="line">&#123;</span><br><span class="line">    bool ok = true; // 是否合法</span><br><span class="line">    int pos = 0;    // 当前扫描位置</span><br><span class="line">    int state = 0;  // 当前状态</span><br><span class="line">    while (str[pos] != &apos;#&apos;)</span><br><span class="line">    &#123;</span><br><span class="line">        char next = str[pos];</span><br><span class="line">        ++pos;</span><br><span class="line">        if (state == 0)</span><br><span class="line">        &#123;</span><br><span class="line">            if (next == &apos;a&apos;)</span><br><span class="line">            &#123;</span><br><span class="line">                state = 1;</span><br><span class="line">            &#125;</span><br><span class="line">            else if (next == &apos;b&apos;)</span><br><span class="line">            &#123;</span><br><span class="line">                state = 0;</span><br><span class="line">            &#125;</span><br><span class="line">            else</span><br><span class="line">            &#123;</span><br><span class="line">                ok = false;</span><br><span class="line">                break;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        else if (state == 1)</span><br><span class="line">        &#123;</span><br><span class="line">            if (next == &apos;a&apos;)</span><br><span class="line">            &#123;</span><br><span class="line">                state = 1;</span><br><span class="line">            &#125;</span><br><span class="line">            else if (next == &apos;b&apos;)</span><br><span class="line">            &#123;</span><br><span class="line">                state = 2;</span><br><span class="line">            &#125;</span><br><span class="line">            else</span><br><span class="line">            &#123;</span><br><span class="line">                ok = false;</span><br><span class="line">                break;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        else if (state == 2)</span><br><span class="line">        &#123;</span><br><span class="line">            if (next == &apos;a&apos;)</span><br><span class="line">            &#123;</span><br><span class="line">                state = 1;</span><br><span class="line">            &#125;</span><br><span class="line">            else if (next == &apos;b&apos;)</span><br><span class="line">            &#123;</span><br><span class="line">                state = 3;</span><br><span class="line">            &#125;</span><br><span class="line">            else</span><br><span class="line">            &#123;</span><br><span class="line">                ok = false;</span><br><span class="line">                break;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        else if (state == 3)</span><br><span class="line">        &#123;</span><br><span class="line">            if (next == &apos;a&apos;)</span><br><span class="line">            &#123;</span><br><span class="line">                state = 1;</span><br><span class="line">            &#125;</span><br><span class="line">            else if (next == &apos;b&apos;)</span><br><span class="line">            &#123;</span><br><span class="line">                state = 0;</span><br><span class="line">            &#125;</span><br><span class="line">            else</span><br><span class="line">            &#123;</span><br><span class="line">                ok = false;</span><br><span class="line">                break;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    if (state != 3)</span><br><span class="line">    &#123;</span><br><span class="line">        ok = false;</span><br><span class="line">    &#125;</span><br><span class="line">    if (ok)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;接受&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    else</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;不接受&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    while (cin &gt;&gt; str)</span><br><span class="line">    &#123;</span><br><span class="line">        dfa();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="built_in">string</span> str;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dfa</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">bool</span> ok = <span class="literal">true</span>; <span class="comment">// 是否合法</span></span><br><span class="line">    <span class="keyword">int</span> pos = <span class="number">0</span>;    <span class="comment">// 当前扫描位置</span></span><br><span class="line">    <span class="keyword">int</span> state = <span class="number">0</span>;  <span class="comment">// 当前状态</span></span><br><span class="line">    <span class="keyword">while</span> (str[pos] != <span class="string">'#'</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">char</span> next = str[pos];</span><br><span class="line">        ++pos;</span><br><span class="line">        <span class="keyword">if</span> (state == <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (next == <span class="string">'a'</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                state = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (next == <span class="string">'b'</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                state = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                ok = <span class="literal">false</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (state == <span class="number">1</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (next == <span class="string">'a'</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                state = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (next == <span class="string">'b'</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                state = <span class="number">2</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                ok = <span class="literal">false</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (state == <span class="number">2</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (next == <span class="string">'a'</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                state = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (next == <span class="string">'b'</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                state = <span class="number">3</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                ok = <span class="literal">false</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (state == <span class="number">3</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (next == <span class="string">'a'</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                state = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (next == <span class="string">'b'</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                state = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                ok = <span class="literal">false</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (state != <span class="number">3</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        ok = <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (ok)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"接受"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"不接受"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (<span class="built_in">cin</span> &gt;&gt; str)</span><br><span class="line">    &#123;</span><br><span class="line">        dfa();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>输入：<br>abbab#<br>abb#<br>输出：<br>不接受<br>接受</p>
 
           
@@ -1082,7 +2203,7 @@
 <p>一个重要的上下文信息是 PC，当前进程被打断的断点处的 PC 作为寄存器上下文的一部分被保存在进程现场信息中。</p>
 <h3 id="进程的私有地址空间"><a href="#进程的私有地址空间" class="headerlink" title="进程的私有地址空间"></a>进程的私有地址空间</h3><img src="/2020/03/21/计算机基础之异常控制流学习笔记/虚拟地址空间映像.png" title="虚拟地址空间映像">
 <p>整个虚拟地址空间分为两大部分。<strong>内核虚拟存储空间</strong>（简称内核空间）和<strong>进程虚拟内存空间</strong>（简称用户空间）。在采用虚拟存储机制的系统中，每个程序的可执行目标文件在装入时都被映射到同样的虚拟地址空间上，即所有用户进程的虚拟地址空间是一致的，只是在相应的制度区域和可读写数据区域中映射的信息不同而已。</p>
-<p>linux 将用户空间对应的进程虚拟存储空间组织成若干“区域”的集合，<br>内核为每个进程维护了一个进程描述符，记录或者指向内核运行该进程所需要的所有信息，如进程 pid，指向用户栈的指针，可执行目标文件的文件名，程序技术值 PC 等。</p>
+<p>linux 将用户空间对应的进程虚拟存储空间组织成若干“区域”的集合，<br>内核为每个进程维护了一个进程描述符，记录或者指向内核运行该进程所需要的所有信息，如进程 pid，指向用户栈的指针，可执行目标文件的文件名，程序计数器 PC 等。</p>
 <h3 id="程序的加载和运行"><a href="#程序的加载和运行" class="headerlink" title="程序的加载和运行"></a>程序的加载和运行</h3><p>当启动一个可以行目标文件执行时，首先会通过某种方式调出常驻内存的一个称为加载器的操作系统程序来处理。在 UNIX/Linux 系统中，可以通过 execve() 函数来启动加载器，其作用是在当前进程的上下文中加载并且运行一个新程序。</p>
 <h2 id="异常和中断"><a href="#异常和中断" class="headerlink" title="异常和中断"></a>异常和中断</h2><p>除了时间片到，当前进程的执行被新进程打断，还有用户按下 CTRL+C，当前执行执行中发生了不能使指令执行的意外事件，IO 设备完成了系统交给的任务需要进一步处理，这些特殊事件统称为<strong>异常</strong>或者<strong>中断</strong>。<br>当发生异常或者终端，正在执行进程的逻辑控制流被打断，CPU 转到具体的特殊处理事件的内核程序去执行。他与上下文切换有一个明显的不同：上下文切换后 CPU 执行另一个用户进程，但是，中断或异常处理程序执行的代码不是一个进程，而是一个<strong>内核控制路径</strong>，它代表异常或终端发生时正在运行的当前进程在内核态执行的一个独立的指令序列。作为一个内核控制路径，他比进程更轻，其上下文信息比一个进程的上下文信息少得多。</p>
 <h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p>异常是在 CPU 内部执行时发生的，中断是 CPU 外部的 IO 设备向 CPU 发出的请求，通常称异常为<strong>内部异常</strong>，而称中断为<strong>外部中断</strong>。</p>
@@ -1362,1002 +2483,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="jiezi19971225.cn/2020/02/22/css世界笔记/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="jiezi19971225">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Jiez19971225‘s Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/22/css世界笔记/" itemprop="url">css世界笔记</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-22T02:33:37+08:00">
-                2020-02-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/前端/" itemprop="url" rel="index">
-                    <span itemprop="name">前端</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-         <span class="post-time">
-	   &nbsp; | &nbsp;
-           <span class="post-meta-item-icon">
-             <i class="fa fa-bar-chart"></i>
-           </span>
-           <span class="post-meta-item-text">字数统计:</span>
-           <span class="post-count">3k(字)</span>
-
-         </span>
-
-      <span class="post-time">
-	   &nbsp; | &nbsp;
-           <span class="post-meta-item-icon">
-             <i class="fa fa-clock-o"></i>
-           </span>
-           <span class="post-meta-item-text">阅读时长:</span>
-           <span class="post-count">11(分)</span>
-
-         </span>
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="chapter3-流，元素与基本尺寸"><a href="#chapter3-流，元素与基本尺寸" class="headerlink" title="chapter3 流，元素与基本尺寸"></a>chapter3 流，元素与基本尺寸</h2><p>外在盒子与内在盒子-外在盒子负责元素是可以一行显示,还是只能换行显示;内在盒子负责宽高、内容呈现什么的。内在盒子专业的名称是“容器盒子”。y 属性值是 inline-block 的元素既能和图文一行显示,又能直接设置 width/height。</p>
-<p>width:auto 的四种表现</p>
-<ul>
-<li>充分利用可用空间，即 fill-available， 4 。比方说,&lt;div&gt;、 &lt;p&gt;这些元素的宽度默认是 100% 于父级容器的。</li>
-<li>收缩与包裹。典型代表就是浮动、绝对定位、inline-block 元素或 table 元素,<br>英文称为 shrink-to-fit,可简单理解为“包裹性”。CSS3 中的 fit-content 指的就是这种宽度表现。</li>
-<li>收缩到最小。这个最容易出现在 table-layout 为 auto 的表格中,</li>
-<li>超出容器限制。除非有明确的 width 相关设置,否则上面 3 种情况尺寸都不会主动<br>超过父级容器宽度的,但是存在一些特殊情况。例如,内容很长的连续的英文和数字,或者内联<br>元素被设置了 white-space:nowarp。</li>
-</ul>
-<p>唯一的外部尺寸是 div 的宽，外部尺寸是指宽度由外部元素决定</p>
-<h3 id="外部尺寸与流体特性"><a href="#外部尺寸与流体特性" class="headerlink" title="外部尺寸与流体特性"></a>外部尺寸与流体特性</h3><p>正常流宽度</p>
-<p>正常填充满盒子。</p>
-<p>格式化宽度</p>
-<p>格式化宽度仅出现在“绝对定位模型”中,也就是出现在 position 属性值为 absolute 或 fixed 的元素中。在默认情况下,绝对定位元素的宽度表现是“包裹性”,宽度由于内部尺寸决定。但有一种情况例外。对于非替换元素，,当 left/top 或 top/bottom 对立方位的属性值同时存在的时候,元素的宽度表现为“格式化宽度”,其宽度大小相对于最近的具有定位特性<br>(position 属性值不是 static)的祖先元素计算。</p>
-<h3 id="内部尺寸与流体特性"><a href="#内部尺寸与流体特性" class="headerlink" title="内部尺寸与流体特性"></a>内部尺寸与流体特性</h3><p>包裹性</p>
-<p>自适应性 元素尺寸是元素尺寸由内部元素决定,但永远小于“包含块”容器的尺寸。因此,对于一个元素,如果其 display 属性值是 inline-block,那么即使其里面内容再多,只要是正常文本,宽度也不会超过容器。</p>
-<p>文字少的时候居中显示,文字超过一行的时候居左显示</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.box</span> &#123;</span><br><span class="line">  <span class="attribute">text-align</span>: center;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.content</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: inline-block;</span><br><span class="line">  <span class="attribute">text-align</span>: left;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>首选最小宽度 对于东亚文字，最小宽度为每个字的宽度，西方文字的最小宽度是由特定的连续的英文字符单元决定的，利用首选最小宽度可以实现</p>
-<h3 id="宽度分离原则"><a href="#宽度分离原则" class="headerlink" title="宽度分离原则"></a>宽度分离原则</h3><p>width 属性不与 padding/border 共存，更好的方式是使用 box-sizing:border-box</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.father</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">180px</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.son</span> &#123;</span><br><span class="line">  <span class="attribute">margin</span>: <span class="number">0</span> <span class="number">20px</span>;</span><br><span class="line">  <span class="attribute">padding</span>: <span class="number">20px</span>;</span><br><span class="line">  <span class="attribute">border</span>: <span class="number">1px</span> solid;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="height-auto"><a href="#height-auto" class="headerlink" title="height:auto"></a>height:auto</h3><p>对于 height 属性,如果父元素 height 为 auto,只要子元素在文档流中,其百分比值完全就被忽略了</p>
-<p>如果包含块的高度没有显式指定(即高度由内容决定),并且该元素不是绝对定位,则计算值为 auto，auto 无法进行百分比计算</p>
-<p>height:100% 的两种计算，绝对定位的宽高百分比计算是相对于 padding box ，,非绝对定位元素则是相对于 content box 计算的。</p>
-<h3 id="min-width-max-width"><a href="#min-width-max-width" class="headerlink" title="min-width/max-width"></a>min-width/max-width</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">img</span> &#123;</span><br><span class="line">  <span class="attribute">max-width</span>: <span class="number">100%</span>;</span><br><span class="line">  <span class="attribute">height</span>: auto <span class="meta">!important</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>height:auto 是必需的,否则,如果原始图片有设定 height, max-width 生效的时候,图片就会被水平压缩。</p>
-<p>max-*初始值是 none，min-*初始值是 auto</p>
-<p>数值变化无动画，需要设置初始值为 0</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.box</span> &#123;</span><br><span class="line">  <span class="attribute">min-height</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">transition</span>: min-height <span class="number">0.3s</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.box</span><span class="selector-pseudo">:hover</span> &#123;</span><br><span class="line">  <span class="attribute">min-height</span>: <span class="number">300px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>max-*会覆盖 !important 的 width/height</p>
-<p>::selection 选择器匹配被用户选取的选取是部分。即对选中文本的操作。<br>只能向 ::selection 选择器应用少量 CSS 属性：color、background、cursor 以及 outline。</p>
-<h2 id="chapter4-盒尺寸四大家族"><a href="#chapter4-盒尺寸四大家族" class="headerlink" title="chapter4 盒尺寸四大家族"></a>chapter4 盒尺寸四大家族</h2><h3 id="content-与替换元素"><a href="#content-与替换元素" class="headerlink" title="content 与替换元素"></a>content 与替换元素</h3><p>&lt;img&gt;、&lt;object&gt;、&lt;video&gt;、&lt;iframe&gt;或者表单元素&lt;textarea&gt;和&lt;input&gt;都是典型的替换元素</p>
-<p>vertical-align 在替换元素的基线定义为元素的下边缘</p>
-<p>&lt;select&gt; 也是替换元素</p>
-<p>&lt;input&gt;和&lt;button&gt;按钮的区别在钮默认的 white-space 值不一样,前者是 pre,后者是 normal</p>
-<p>透明图片占位的替代方法</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">img</span> &#123;</span><br><span class="line">  <span class="attribute">visibility</span>: hidden;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-tag">img</span><span class="selector-attr">[src]</span> &#123;</span><br><span class="line">  <span class="attribute">visibility</span>: visible;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>对于 Firefox 浏览器,src 缺省的\<img\>不是替换元素,而是一个普通的内联元素,所以使用的就不是替换元素的尺寸规则,而是类似\<span\>的内联元素尺寸规则,宽高会无效。因此可以在 CSS 重置时加上下面一条</span\></img\></p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">img</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: inline-block;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>:before,:after 伪元素是非替换元素，其 content 属性若显示图片则显示的是图片的固有尺寸，不会因 width 和 height 更改</li>
-<li>基于伪元素的图片内容生成技术 <a href="https://demo.cssworld.cn/4/1-2.php" target="_blank" rel="noopener">链接</a></li>
-<li>,使用 content 属性,我们还可以让普通标签元素变成替换元素。一般网站的标志使用的是 h1 标签，可以用 content 改变图片</li>
-<li>使用 content 属性生成的文本无法选中，无法复制，像设置了 user-select:none 一样</li>
-<li>:empty 伪元素依然会选取 有 content 属性的元素</li>
-<li>动态加载效果</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">dot</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: inline-block;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">1em</span>;</span><br><span class="line">  <span class="attribute">line-height</span>: <span class="number">1</span>;</span><br><span class="line">  <span class="attribute">text-align</span>: left;</span><br><span class="line">  <span class="attribute">vertical-align</span>: -<span class="number">0.25em</span>;</span><br><span class="line">  <span class="attribute">overflow</span>: hidden;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-tag">dot</span><span class="selector-pseudo">::before</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: block;</span><br><span class="line">  <span class="attribute">content</span>: <span class="string">"...\A..\A."</span>;</span><br><span class="line">  <span class="attribute">white-space</span>: pre-wrap;</span><br><span class="line">  <span class="attribute">animation</span>: dot <span class="number">3s</span> infinite step-start both;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@keyframes</span> dot &#123;</span><br><span class="line">  33% &#123;</span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">translateY</span>(-<span class="number">2em</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  66% &#123;</span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">translateY</span>(-<span class="number">1em</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="padding-属性"><a href="#padding-属性" class="headerlink" title="padding 属性"></a>padding 属性</h3><ul>
-<li>内联的元素设置垂直 padding 依然有效果，如果父元素设置 overflow: auto，会显示滚动条。id 锚点元素可以设置为内联元素然后设置 padding-top 使得定位位置偏下</li>
-<li>实际上,对于非替换元素的内联元素,不仅 padding 不会加入行盒高度的计算,margin 和 border 也都是如此,都是不计算高度,但实际上在内联盒周围发生了渲染。</li>
-<li>padding 的百分比数值无论水平数值都是相对父元素宽度计算的</li>
-</ul>
-<h3 id="margin-与元素尺寸以及相关布局"><a href="#margin-与元素尺寸以及相关布局" class="headerlink" title="margin 与元素尺寸以及相关布局"></a>margin 与元素尺寸以及相关布局</h3><ul>
-<li>只有元素是“充分利用可用空间”状态的时候,margin 才可以改变元素的可视尺寸。因为只要宽度设定,margin 就无法改变元素尺寸。对于水平排列的列表，采用 float 方案，可以在 ul 设置负的 margin 数值，来增加可用宽度。</li>
-<li>由于 Firefox 和 Chrome 浏览器对于子元素触发滚动条的方式不一样，滚动容器底部留白使用 padding 是不推荐的，可以接触 margin 的外部尺寸特性来实现底部留白</li>
-<li>两栏等高</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.column-box</span> &#123;</span><br><span class="line">  <span class="attribute">overflow</span>: hidden;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.column-left</span>,</span><br><span class="line"><span class="selector-class">.column-right</span> &#123;</span><br><span class="line">  <span class="attribute">margin-bottom</span>: -<span class="number">9999px</span>;</span><br><span class="line">  <span class="attribute">padding-bottom</span>: <span class="number">9999px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>视觉层多了 9999px 高度可以使用的背景色，当任一栏的高度增加时，父元素总的高度增加</p>
-<ul>
-<li>margin 的百分比数值无论水平数值都是相对父元素宽度计算的</li>
-<li>margin 合并的 3 种场景<ul>
-<li>相邻兄弟元素 margin 合并</li>
-<li>父级和第一个/最后一个子元素</li>
-<li>空块级元素的 margin 合并</li>
-</ul>
-</li>
-<li>margin 合并的计算规则 “正正取大值”<br>“正负值相加”<br>“负负最负值”</li>
-<li>由于 css 中 margin 初始值是 0，实现块级元素右对齐可以使用 margin-left:auto</li>
-<li>实现块级元素垂直居中 绝对定位元素的格式化高度即使父元素 height:auto 也是支持的,</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.father</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">300px</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">150px</span>;</span><br><span class="line">  <span class="attribute">background-color</span>: <span class="number">#f0f3f9</span>;</span><br><span class="line">  <span class="attribute">position</span>: relative;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.son</span> &#123;</span><br><span class="line">  <span class="attribute">position</span>: absolute;</span><br><span class="line">  <span class="attribute">top</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">right</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">bottom</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">left</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">200px</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">100px</span>;</span><br><span class="line">  <span class="attribute">background-color</span>: <span class="number">#cd0000</span>;</span><br><span class="line">  <span class="attribute">margin</span>: auto;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>margin 无效<ul>
-<li>display 计算值 inline 的非替换元素的垂直 margin 是无效的</li>
-<li>表格中的<tr>和<td>元素或者设置 display 计算值是 table-cell 或 table-row 的 margin 是无效的</td></tr></li>
-<li>margin 合并的时候,更改 margin 值可能是没有效果的</li>
-<li>绝对定位元素非定位方位的 margin 值“无效”</li>
-<li>定高容器的子元素的 margin-bottom 或者宽度定死的子元素的 margin-right 的失效</li>
-</ul>
-</li>
-</ul>
-<h3 id="border-属性"><a href="#border-属性" class="headerlink" title="border 属性"></a>border 属性</h3><ul>
-<li>border-width 不支持半分比</li>
-<li>透明边框技巧 使用透明 border 增加点击区域</li>
-<li>图形构建 三角形效果</li>
-<li>登高布局技术 <a href="http://demo.cssworld.cn/4/4-4.php" target="_blank" rel="noopener">http://demo.cssworld.cn/4/4-4.php</a></li>
-</ul>
-<h2 id="charpter5-内联元素与流"><a href="#charpter5-内联元素与流" class="headerlink" title="charpter5 内联元素与流"></a>charpter5 内联元素与流</h2><p>ex 单位 对应 x-height，可用于图标与文字的对齐</p>
-<p>line-height 的默认值是 normal,还支持数值、百分比值以及长度值。</p>
-<p>无论内联元素 line-height 如何设置,最终父级元素的高度都是由数值大的<br>那个 line-height 决定的,我称之为“内联元素 line-height 的大值特性”</p>
-<p>table-cell 元素设置 vertical-align 垂直对齐的是子元素,但是其作用的并不是子元素,而是 table-cell 元素自身</p>
-<p>消除 strut 的影响 图片块状化 设置 lineheight 为 0 fontsize 足够小 图片设置 vertical-align</p>
-<p>text-align:justify 文字向两侧对齐，对最后一行无效。</p>
-<p>一个 inline-block 元素,如果里面没有内联元素,或者 overflow 不是 visible,<br>则该元素的基线就是其 margin 底边缘;否则其基线就是元素里面最后一行内联元素的基线。</p>
-<p>vertical-align 的百分比数值是按照行高计算的</p>
-<p>改造“幽灵空白节点”的基线位置可以使用 font-size：0</p>
-<p>基于 vertical-align 属性的水平垂直居中弹框 <a href="http://demo.cssworld.cn/5/3-10.php" target="_blank" rel="noopener">链接</a></p>
-<h2 id="charpter6-流的破坏与保护"><a href="#charpter6-流的破坏与保护" class="headerlink" title="charpter6 流的破坏与保护"></a>charpter6 流的破坏与保护</h2><h3 id="float"><a href="#float" class="headerlink" title="float"></a>float</h3><ul>
-<li>float 导致的。float 都有哪些有意思的特性呢?具体如下:<ul>
-<li>包裹性;</li>
-<li>块状化并格式化上下文;</li>
-<li>破坏文档流;</li>
-<li>没有任何 margin 合并;</li>
-</ul>
-</li>
-<li>设定了 float 的 inline-table 计算为 table，其他都为 block</li>
-<li>clearfix</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.father</span><span class="selector-pseudo">:after</span> &#123;</span><br><span class="line">  <span class="attribute">content</span>: <span class="string">""</span>;</span><br><span class="line">  <span class="attribute">display</span>: table;</span><br><span class="line">  <span class="attribute">clear</span>: both;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="bfc"><a href="#bfc" class="headerlink" title="bfc"></a>bfc</h3><ul>
-<li>那什么时候会触发 BFC 呢?常见的情况如下:<ul>
-<li>&lt;html&gt;根元素;</li>
-<li>float 的值不为 none;</li>
-<li>overflow 的值为 auto、scroll 或 hidden;</li>
-<li>display 的值为 table-cell、table-caption 和 inline-block 中的任何一个</li>
-<li>position 的值不为 relative 和 static。</li>
-</ul>
-</li>
-<li>尽量避免滚动容器设置 padding-bottom 值</li>
-<li>永远不可能实现一个方向溢出剪裁或滚动,另一方向内容溢出显示的效果</li>
-</ul>
-<h3 id="overflow"><a href="#overflow" class="headerlink" title="overflow"></a>overflow</h3><ul>
-<li>则当子元素内容超出容器宽度高度限制的时候, 剪裁的边界是 border box 的内边缘,而非 padding,box 的内边缘</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.ell</span> &#123;</span><br><span class="line">  <span class="attribute">text-overflow</span>: ellipsis;</span><br><span class="line">  <span class="attribute">white-space</span>: nowrap;</span><br><span class="line">  <span class="attribute">overflow</span>: hidden;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="scrollbar"><a href="#scrollbar" class="headerlink" title="scrollbar"></a>scrollbar</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">我们平时开发中只用下面 3 个属性:</span><br><span class="line"><span class="selector-pseudo">::-webkit-scrollbar</span> &#123;</span><br><span class="line">  <span class="comment">/* 血槽宽度 */</span></span><br><span class="line">  <span class="attribute">width</span>: <span class="number">8px</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">8px</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-pseudo">::-webkit-scrollbar-thumb</span> &#123;</span><br><span class="line">  <span class="comment">/* 拖动条 */</span></span><br><span class="line">  <span class="attribute">background-color</span>: <span class="built_in">rgba</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0.3</span>);</span><br><span class="line">  <span class="attribute">border-radius</span>: <span class="number">6px</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-pseudo">::-webkit-scrollbar-track</span> &#123;</span><br><span class="line">  <span class="comment">/* 背景槽 */</span></span><br><span class="line">  <span class="attribute">background-color</span>: <span class="number">#ddd</span>;</span><br><span class="line">  <span class="attribute">border-radius</span>: <span class="number">6px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="chapter7-css-层叠规则"><a href="#chapter7-css-层叠规则" class="headerlink" title="chapter7 css 层叠规则"></a>chapter7 css 层叠规则</h2><ul>
-<li>background/border 是装饰属性，浮动和块用作布局，而内联元素作为内容，自然在上面显示</li>
-</ul>
-<h3 id="层叠上下文"><a href="#层叠上下文" class="headerlink" title="层叠上下文"></a>层叠上下文</h3><h4 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h4><ul>
-<li>页面根元素称为根层叠上下文</li>
-<li>z-index 为数值的定位元素是传统层叠上下文</li>
-<li><p>css3 属性</p>
-<ul>
-<li>flex 的布局元素同时 z-index 不为 auto</li>
-<li>opacity 不为 1</li>
-<li>mix-blend-mode 不是 normal</li>
-</ul>
-</li>
-<li><p>定位元素会层叠在普通元素的上面的原因是元素一旦称为定位元素， 其 z-index 就会自动生效，此时其 z-index 就是默认的 auto，也就是 0 级别。</p>
-</li>
-<li><p>opacity 动画问题，当 opacity 不为 1 的时候，其具有层叠上下文 z-index:auto，导致其显示于文字之上，解决方法是设置文字的 z-index 为正数值</p>
-</li>
-</ul>
-<h4 id="负-index-应用"><a href="#负-index-应用" class="headerlink" title="负 index 应用"></a>负 index 应用</h4><ul>
-<li>可访问性隐藏，可以隐藏元素，只需要层叠上下文内某一个父元素加背景色</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="jiezi19971225.cn/2019/09/16/Sass学习/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="jiezi19971225">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Jiez19971225‘s Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/09/16/Sass学习/" itemprop="url">Sass学习</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-16T15:00:54+08:00">
-                2019-09-16
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-         <span class="post-time">
-	   &nbsp; | &nbsp;
-           <span class="post-meta-item-icon">
-             <i class="fa fa-bar-chart"></i>
-           </span>
-           <span class="post-meta-item-text">字数统计:</span>
-           <span class="post-count">600(字)</span>
-
-         </span>
-
-      <span class="post-time">
-	   &nbsp; | &nbsp;
-           <span class="post-meta-item-icon">
-             <i class="fa fa-clock-o"></i>
-           </span>
-           <span class="post-meta-item-text">阅读时长:</span>
-           <span class="post-count">2(分)</span>
-
-         </span>
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>记录一下从 Sass 官网学习到的 Sass 的一些高级应用。</p>
-<h2 id="属性嵌套"><a href="#属性嵌套" class="headerlink" title="属性嵌套"></a>属性嵌套</h2><p>有些 CSS 属性遵循相同的命名空间 (namespace)，比如 font-family, font-size, font-weight 都以 font 作为属性的命名空间。为了便于管理这样的属性，同时也为了避免了重复输入，Sass 允许将属性嵌套在命名空间中，例如：</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.funky</span> &#123;</span><br><span class="line">  <span class="attribute">font</span>: &#123;</span><br><span class="line">    family: fantasy;</span><br><span class="line">    <span class="attribute">size</span>: <span class="number">30em</span>;</span><br><span class="line">    <span class="attribute">weight</span>: bold;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h2><p>变量支持块级作用域，嵌套规则内定义的变量只能在嵌套规则内使用（局部变量），不在嵌套规则内定义的变量则可在任何地方使用（全局变量）。将局部变量转换为全局变量可以添加 !global 声明</p>
-<h2 id="extend"><a href="#extend" class="headerlink" title="@extend"></a>@extend</h2><p>用于扩展继承样式</p>
-<p>可以继承一个 html 元素的样式，你对于该元素添加的样式都会继承</p>
-<h2 id="变量默认值"><a href="#变量默认值" class="headerlink" title="变量默认值"></a>变量默认值</h2><p>使用 !default 用于变量</p>
-<h2 id="内置函数"><a href="#内置函数" class="headerlink" title="内置函数"></a>内置函数</h2><h3 id="普通-CSS-函数"><a href="#普通-CSS-函数" class="headerlink" title="普通 CSS 函数"></a>普通 CSS 函数</h3><p>任何不再内置和用户定义函数列表中的函数会被编译为 css 函数，除非它使用了 scss 的参数语法</p>
-<h3 id="数值函数"><a href="#数值函数" class="headerlink" title="数值函数"></a>数值函数</h3><p>abs, ceil, floor,max,min,percentage,round 顾名思义</p>
-<p>comparable($number1,$number2) //=&gt; boolean 返回数值单位是否具有可比较性</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@debug comparable(2px, 1px); // true</span><br><span class="line">@debug comparable(100px, 3em); // false</span><br><span class="line">@debug comparable(10cm, 3mm); // true</span><br></pre></td></tr></table></figure>
-<p>random($number) 生成随机数，如果 limit 是 null，返回一个 0-1 之间的随机数</p>
-<p>unitless($number) //=&gt; boolean 判断 $number 是否具有单位</p>
-<h3 id="字符串函数"><a href="#字符串函数" class="headerlink" title="字符串函数"></a>字符串函数</h3><p>quote($string) //=&gt; string 加上双引号, unquote 去掉双引号</p>
-<p>str-index,str-insert,str-length,str-slice,to-upper-case,to-lower-case 顾名思义</p>
-<p>unique-id() //=&gt; string 生成随机字符串</p>
-<h3 id="颜色函数"><a href="#颜色函数" class="headerlink" title="颜色函数"></a>颜色函数</h3><p>adjust-color($color,<br>  $red: null, $green: null, $blue: null,<br>$hue: null, $saturation: null, $lightness: null,<br>  $alpha: null) //=&gt; color 综合调整</p>
-<p>adjust-hue($color, $degrees) //=&gt; color 色调调整</p>
-<p>alpha($color)<br>opacity($color) //=&gt; number 返回 alpha 通道的数值</p>
-<p>blue,red,green,hue,saturation,lightness,aplha 用法类似</p>
-<p>change-color($color,<br>  $red: null, $green: null, $blue: null,<br>$hue: null, $saturation: null, $lightness: null,<br>  $alpha: null) //=&gt; color 调整颜色参数的某一项数值</p>
-<p>complement($color) 返回补色</p>
-<p>太多了就不罗列了 详见官方文档 <a href="https://sass-lang.com/documentation/functions/color" target="_blank" rel="noopener">sass 颜色函数</a></p>
-<h2 id="列表函数"><a href="#列表函数" class="headerlink" title="列表函数"></a>列表函数</h2><p>append,index,length,nth,set-nth 顾名思义</p>
-<p>join($list1, $list2, $separator: auto, $bracketed: auto) //=&gt; list 合并两个列表</p>
-<p>list-separator($list) //=&gt; unquoted string 返回列表的分隔符</p>
-<h2 id="映射函数"><a href="#映射函数" class="headerlink" title="映射函数"></a>映射函数</h2><p>略</p>
-<h2 id="选择器函数"><a href="#选择器函数" class="headerlink" title="选择器函数"></a>选择器函数</h2><p>实用性不大，略过</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="jiezi19971225.cn/2019/09/16/git学习/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="jiezi19971225">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Jiez19971225‘s Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/09/16/git学习/" itemprop="url">git学习</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-16T14:44:18+08:00">
-                2019-09-16
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/开发工具/" itemprop="url" rel="index">
-                    <span itemprop="name">开发工具</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-         <span class="post-time">
-	   &nbsp; | &nbsp;
-           <span class="post-meta-item-icon">
-             <i class="fa fa-bar-chart"></i>
-           </span>
-           <span class="post-meta-item-text">字数统计:</span>
-           <span class="post-count">436(字)</span>
-
-         </span>
-
-      <span class="post-time">
-	   &nbsp; | &nbsp;
-           <span class="post-meta-item-icon">
-             <i class="fa fa-clock-o"></i>
-           </span>
-           <span class="post-meta-item-text">阅读时长:</span>
-           <span class="post-count">1(分)</span>
-
-         </span>
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>跟着掘金小册学习如何在工作中使用 git</p>
-<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><h2 id="多人合作基本工作模型-2-0"><a href="#多人合作基本工作模型-2-0" class="headerlink" title="多人合作基本工作模型 2.0"></a>多人合作基本工作模型 2.0</h2><p>写完所有的 commit 后，不用考虑中央仓库是否有新的提交，直接 push 就好</p>
-<p>如果 push 失败，就用 pull 把本地仓库的提交和中央仓库的提交进行合并，然后再 push 一次</p>
-<h2 id="head，master"><a href="#head，master" class="headerlink" title="head，master"></a>head，master</h2><p>HEAD 指向的 branch 不能删除，如果要删除，需要先用 checkout 把 HEAD 指向其他地方</p>
-<p>没有被合并到 master 过的 branch 在删除时会失败 如果需要删除 使用 -D</p>
-<h2 id="push"><a href="#push" class="headerlink" title="push"></a>push</h2><p>push 是把当前的分支上传到远程仓库，并把这个 branch 的路径上的所有 commits 也一并上传。</p>
-<p>push 的时候，如果当前分支是一个本地创建的分支，需要指定远程仓库名和分支名，用 git push origin branch_name 的格式，而不能只用 git push；或者可以通过 git config 修改 push.default 来改变 push 时的行为逻辑。</p>
-<p>push 的时候之后上传当前分支，并不会上传 HEAD；远程仓库的 HEAD 是永远指向默认分支（即 master）的。</p>
-<h2 id="merge"><a href="#merge" class="headerlink" title="merge"></a>merge</h2><p>从目标 commit 和当前 commit （即 HEAD 所指向的 commit）分叉的位置起，把目标 commit 的路径上的所有 commit 的内容一并应用到当前 commit，然后自动生成一个新的 commit。</p>
-<h2 id="fast-forward"><a href="#fast-forward" class="headerlink" title="fast-forward"></a>fast-forward</h2><p>当你试图合并两个<br>分支时，如果顺着一个分支走下去能够到达另一个分支，那么 Git 在合并两者的时候，只会简单的将指针向前推进（指针右移），因为这种情况下的合并操作没有需要解决的分歧——这就叫做 “快进（fast-forward）</p>
-<p>待填坑中</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="jiezi19971225.cn/2019/09/13/配置archlinux计划任务/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="jiezi19971225">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Jiez19971225‘s Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/09/13/配置archlinux计划任务/" itemprop="url">配置archlinux计划任务</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-13T18:40:48+08:00">
-                2019-09-13
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/linux使用/" itemprop="url" rel="index">
-                    <span itemprop="name">linux使用</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-         <span class="post-time">
-	   &nbsp; | &nbsp;
-           <span class="post-meta-item-icon">
-             <i class="fa fa-bar-chart"></i>
-           </span>
-           <span class="post-meta-item-text">字数统计:</span>
-           <span class="post-count">84(字)</span>
-
-         </span>
-
-      <span class="post-time">
-	   &nbsp; | &nbsp;
-           <span class="post-meta-item-icon">
-             <i class="fa fa-clock-o"></i>
-           </span>
-           <span class="post-meta-item-text">阅读时长:</span>
-           <span class="post-count">1(分)</span>
-
-         </span>
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="cron"><a href="#cron" class="headerlink" title="cron"></a>cron</h3><h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><p>cron 在类 Unix 系统中是一种基于时间的的任务调度器(job scheduler)，其有多种实现，在 archlinux 中，可以使用 pacman -S cronie 安装该软件。</p>
-<h4 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h4><p>开启启动 systemctl enable cronie<br>编辑，推荐使用命令，crontab -e，默认的编辑器是 vim，可以使用 EXPORT EDITOR=XXX 覆盖设置</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="jiezi19971225.cn/2019/09/10/dart-sass与node-sass的区别/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="jiezi19971225">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Jiez19971225‘s Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/09/10/dart-sass与node-sass的区别/" itemprop="url">dart-sass 和 ruby-sass 的区别</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-10T20:13:21+08:00">
-                2019-09-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/前端/" itemprop="url" rel="index">
-                    <span itemprop="name">前端</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-         <span class="post-time">
-	   &nbsp; | &nbsp;
-           <span class="post-meta-item-icon">
-             <i class="fa fa-bar-chart"></i>
-           </span>
-           <span class="post-meta-item-text">字数统计:</span>
-           <span class="post-count">337(字)</span>
-
-         </span>
-
-      <span class="post-time">
-	   &nbsp; | &nbsp;
-           <span class="post-meta-item-icon">
-             <i class="fa fa-clock-o"></i>
-           </span>
-           <span class="post-meta-item-text">阅读时长:</span>
-           <span class="post-count">1(分)</span>
-
-         </span>
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>sass 有多个版本，目前官方主推的是 dart-sass，因为 dart 在处理大型样式表的时候性能更佳。dart-sass 没有支持完整的 sass 语法功能。今天在使用 sass 的颜色运算的时候，发现 webpack 报错，一时摸不着头脑。搜索报错信息，也得不到什么相关信息。后来在 dart-sass 的 github 主页才发现原来 dart-sass 并不支持颜色的通道运算，以下是 dart-sass 与 ruby-sass 的主要不同点。</p>
-<ul>
-<li>@extend 仅仅接收一个选择器，并且将其作为 selector-extend() 的第二个参数</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.a</span> &#123;</span><br><span class="line">  <span class="attribute">x</span>: y;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.b</span> &#123;</span><br><span class="line">  <span class="attribute">x</span>: y;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.a</span><span class="selector-class">.b</span> &#123;</span><br><span class="line">  <span class="attribute">x</span>: y;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.c</span> &#123;</span><br><span class="line">  @extend .a.b;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>增加了对于 :has() 伪类的支持</li>
-<li>缩进语法 (sass) 更灵活，不再要求全部文档保持同样的缩进</li>
-<li>颜色不支持通道运算</li>
-<li>无单位的数字不再 == 有单位的数字，map 的 键值比对遵循同样的逻辑</li>
-<li>rgba() and hsla() 的百分比单位只支持百分比的形式</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.card</span>&#123; <span class="attribute">color</span>: <span class="built_in">rgba</span>(<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">0.5</span>); &#125;</span><br><span class="line"><span class="selector-tag">should</span> <span class="selector-tag">fail</span>, <span class="selector-tag">but</span></span><br><span class="line"><span class="selector-class">.card</span>&#123; <span class="attribute">color</span>: <span class="built_in">rgba</span>(<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">50%</span>); &#125;</span><br><span class="line"><span class="selector-tag">should</span> <span class="selector-tag">pass</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>给函数传递多于函数定义的参数数量会导致错误</li>
-<li>支持 :maches()</li>
-<li>selector-unify() 的结果现在具有对称性</li>
-<li>只支持 UTF-8 格式的文档</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2403,7 +2533,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">40</span>
+                  <span class="site-state-item-count">45</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

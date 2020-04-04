@@ -294,7 +294,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="jiezi19971225.cn/2019/03/27/计算机网络学习笔记3/">
+    <link itemprop="mainEntityOfPage" href="jiezi19971225.cn/2019/05/11/左偏树/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="jiezi19971225">
@@ -313,7 +313,854 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/03/27/计算机网络学习笔记3/" itemprop="url">计算机网络学习笔记3-数据链路层</a></h1>
+                <a class="post-title-link" href="/2019/05/11/左偏树/" itemprop="url">左偏树</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-11T18:46:05+08:00">
+                2019-05-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+         <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-bar-chart"></i>
+           </span>
+           <span class="post-meta-item-text">字数统计:</span>
+           <span class="post-count">980(字)</span>
+
+         </span>
+
+      <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-clock-o"></i>
+           </span>
+           <span class="post-meta-item-text">阅读时长:</span>
+           <span class="post-count">4(分)</span>
+
+         </span>
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>最后一篇以前写的文章了，</p>
+<p>左偏树是一种实现简单的可并堆，可以在 logn 的复杂度下面完成优先队列的插入，删除，合并操作。</p>
+<p>这就是一颗左偏树啦 蓝色是该节点的 dist</p>
+<img src="/2019/05/11/左偏树/左偏树.png" title="左偏树">
+<p>结构体定义</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Node</span>&#123;</span></span><br><span class="line">    <span class="keyword">int</span> l,r,d,v;<span class="comment">//左右子树，距离和键值</span></span><br><span class="line">    Node()&#123;</span><br><span class="line">        l=r=v=d=<span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们定义左偏树的外界点为，一个左子树为空或者一个右子树为空的结点，结点的 dist 为它到它子树内外节点的最短距离。一个左偏树在满足堆的性质的前提下还应该满足它的右子树的 dist 不大于它的左子树的 dist。由此，我们可以得出其他一些性质。</p>
+<p>当前结点的 dist 为右子树 dist 的长度+1<br>若左偏树根节点的 dist 为一定值，则节点数最少的左偏树是一颗完全二叉树，并且为满二叉树<br>由上一条性质，可以知道根节点 dist 为 n 的左偏树，最少含有 2n+1−12n+1−1 个结点<br>一个有 n 个结点的左偏树，根节点距离最大为|log2（n+1）|−1|log2（n+1）|−1<br>左偏树的操作（最大堆）</p>
+<p>递归合并<br>如果有一颗树为空，返回另一棵树<br>否则，就将根节点键值较大树的右子树和根节点键值较小树合并<br>如果合并后破坏了左偏树的性质（左子树 dist&lt;右子树 dist）<br>交换根节点的左右子树<br>更新根节点的 dist 值</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">merge</span><span class="params">(<span class="keyword">int</span> x,<span class="keyword">int</span> y)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(!x)&#123;</span><br><span class="line">        <span class="keyword">return</span> y;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(!y)&#123;</span><br><span class="line">        <span class="keyword">return</span> x;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(node[x].v&lt;node[y].v)&#123;</span><br><span class="line">        swap(x,y);</span><br><span class="line">    &#125;</span><br><span class="line">    node[x].r=merge(node[x].r,y);</span><br><span class="line">    <span class="keyword">if</span>(node[node[x].l].d&lt;node[node[x].r].d)&#123;</span><br><span class="line">        swap(node[x].l,node[x].r);</span><br><span class="line">    &#125;</span><br><span class="line">    node[x].d=node[node[x].r].d+<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>插入<br>相当于和只有一个结点的树合并</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">insert</span><span class="params">(<span class="keyword">int</span> x,<span class="keyword">int</span> v)</span></span>&#123;</span><br><span class="line">    cnt++;</span><br><span class="line">    node[cnt].v=v;</span><br><span class="line">    <span class="keyword">return</span> merge(x,cnt);<span class="comment">//返回新的根节点</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>堆操作</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">top</span><span class="params">(<span class="keyword">int</span> x)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> node[x].v;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pop</span><span class="params">(<span class="keyword">int</span> x)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> merge(node[x].l,node[x].r);<span class="comment">//返回新的根节点</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上操作都以左偏树堆顶的编号代表这一刻左偏树<br>例题 hdu1512 左偏树加并查集的模版题，今年省赛的热身赛就是这题来着，当时乱搞搞出来了（数据太弱），重新用左偏树写一下。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn=<span class="number">1e5</span>+<span class="number">7</span>;</span><br><span class="line"><span class="keyword">int</span> cnt=<span class="number">0</span>;</span><br><span class="line"><span class="keyword">int</span> n,m;</span><br><span class="line"><span class="keyword">int</span> p[maxn],pqroot[maxn];</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Node</span>&#123;</span></span><br><span class="line">    <span class="keyword">int</span> l,r,d,v;</span><br><span class="line">    Node()&#123;</span><br><span class="line">        l=r=v=d=<span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">fight</span><span class="params">()</span></span>&#123;</span><br><span class="line">        l=r=d=<span class="number">0</span>;</span><br><span class="line">        v/=<span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;node[maxn];</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">merge</span><span class="params">(<span class="keyword">int</span> x,<span class="keyword">int</span> y)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(!x)&#123;</span><br><span class="line">        <span class="keyword">return</span> y;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(!y)&#123;</span><br><span class="line">        <span class="keyword">return</span> x;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(node[x].v&lt;node[y].v)&#123;</span><br><span class="line">        swap(x,y);</span><br><span class="line">    &#125;</span><br><span class="line">    node[x].r=merge(node[x].r,y);</span><br><span class="line">    <span class="keyword">if</span>(node[node[x].l].d&lt;node[node[x].r].d)&#123;</span><br><span class="line">        swap(node[x].l,node[x].r);</span><br><span class="line">    &#125;</span><br><span class="line">    node[x].d=node[node[x].r].d+<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pop</span><span class="params">(<span class="keyword">int</span> x)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> merge(node[x].l,node[x].r);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> x)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x==p[x]?x:x=find(p[x]);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">uset</span><span class="params">(<span class="keyword">int</span> x,<span class="keyword">int</span> y,<span class="keyword">int</span> root)</span></span>&#123;</span><br><span class="line">    p[x]=y;</span><br><span class="line">    pqroot[y]=root;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">//freopen("in.txt","r",stdin);</span></span><br><span class="line">    <span class="keyword">while</span>(<span class="built_in">cin</span>&gt;&gt;n)&#123;</span><br><span class="line">        <span class="built_in">memset</span>(node,<span class="number">0</span>,<span class="keyword">sizeof</span>(node));</span><br><span class="line">        <span class="built_in">memset</span>(p,<span class="number">0</span>,<span class="keyword">sizeof</span>(p));</span><br><span class="line">        <span class="built_in">memset</span>(pqroot,<span class="number">0</span>,<span class="keyword">sizeof</span>(pqroot));</span><br><span class="line">        node[<span class="number">0</span>].d=<span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">            p[i]=i;</span><br><span class="line">            pqroot[i]=i;</span><br><span class="line">            <span class="built_in">scanf</span>(<span class="string">"%d"</span>,&amp;node[i].v);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">cin</span>&gt;&gt;m;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;m;i++)&#123;</span><br><span class="line">            <span class="keyword">int</span> p1,p2;</span><br><span class="line">            <span class="built_in">scanf</span>(<span class="string">"%d%d"</span>,&amp;p1,&amp;p2);</span><br><span class="line">            <span class="keyword">int</span> s1=find(p1),s2=find(p2);</span><br><span class="line">            <span class="keyword">if</span>(s1!=s2)&#123;</span><br><span class="line">                <span class="keyword">int</span> pqroot1=pqroot[s1],pqroot2=pqroot[s2];</span><br><span class="line">                <span class="keyword">int</span> newroot1=pop(pqroot1);</span><br><span class="line">                <span class="keyword">int</span> newroot2=pop(pqroot2);</span><br><span class="line">                node[pqroot1].fight();</span><br><span class="line">                node[pqroot2].fight();</span><br><span class="line">                newroot1=merge(newroot1,pqroot1);</span><br><span class="line">                newroot2=merge(newroot2,pqroot2);</span><br><span class="line">                <span class="keyword">int</span> newpqroot=merge(newroot1,newroot2);</span><br><span class="line">                uset(s1,s2,newpqroot);</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">"%d\n"</span>,node[newpqroot].v);</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">"-1\n"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>并查集维护一个当前集合内优先队列的根节点 pqroot，合并的时候注意根的相关操作就 OK 了。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="jiezi19971225.cn/2019/05/11/差分约束/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/05/11/差分约束/" itemprop="url">差分约束</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-11T18:44:49+08:00">
+                2019-05-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+         <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-bar-chart"></i>
+           </span>
+           <span class="post-meta-item-text">字数统计:</span>
+           <span class="post-count">724(字)</span>
+
+         </span>
+
+      <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-clock-o"></i>
+           </span>
+           <span class="post-meta-item-text">阅读时长:</span>
+           <span class="post-count">3(分)</span>
+
+         </span>
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>这还是一篇以前写的文章。</p>
+<p>差分约束问题是一类出一些形如 x-y&lt;=b 不等式的约束，问你是否满足有解的问题，这类问题竟然可以转换成图论里的最短路径问题，下面开始详细介绍下<br>比如给出三个不等式,b-a&lt;=k1,c-b&lt;=k2,c-a&lt;=k3,求出 c-a 的最大值,我们可以把 a,b,c 转换成三个点，k1，k2，k3 是边上的权，如图<br>由题我们可以得知，这个有向图中，由题 b-a&lt;=k1,c-b&lt;=k2,得出 c-a&lt;=k1+k2,因此比较 k1+k2 和 k3 的大小，求出最小的就是 c-a 的最大值了<br>根据以上的解法，我们可能会猜到求解过程实际就是求从 a 到 c 的最短路径，没错的….简单的说就是从 a 到 c 沿着某条路径后把所有权值和 k 求出就是 c -a&lt;=k 的一个<br>推广的不等式约束，既然这样，满足题目的肯定是最小的 k，也就是从 a 到 c 最短距离<br>再看 a - b &lt;= k1，b - c &lt;= k2， c-1 &lt;= k3， 那么有 k1+k2+k3&gt;=0，因此若图中存在负环，就说明不存在满足条件的解<br>判断图中是否存在负环 可以使用 dfs 形式的 spfa 算法，使用一个 vis 数组 值为 1 表示当前正在递归栈中的点，因为点可能多次入栈，需要注意回溯时处理。<br>洛谷 P1993   使用了超级源点的思想，将图中的所有点与超级源点连一条权值为 0 的边，对结果没有影响，但方便了问题的处理。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">int</span> n,m;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> inf = <span class="number">1e9</span>+<span class="number">7</span>;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">node</span>&#123;</span></span><br><span class="line">    <span class="keyword">int</span> to,w;</span><br><span class="line">    node(<span class="keyword">int</span> to,<span class="keyword">int</span> w)&#123;</span><br><span class="line">        <span class="keyword">this</span>-&gt;to = to,<span class="keyword">this</span>-&gt;w = w;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">1e4</span>+<span class="number">7</span>;</span><br><span class="line"><span class="built_in">vector</span>&lt;node&gt; gra[maxn];</span><br><span class="line"><span class="keyword">int</span> dist[maxn],vis[maxn];</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">addedge</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b,<span class="keyword">int</span> c)</span></span>&#123;</span><br><span class="line">    gra[a].push_back(node(b,c));</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">spfa</span><span class="params">(<span class="keyword">int</span> x)</span></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; gra[x].size(); i++)&#123;</span><br><span class="line">        <span class="keyword">int</span> to = gra[x][i].to;</span><br><span class="line">        <span class="keyword">if</span>(dist[to]&gt;dist[x]+gra[x][i].w)&#123;</span><br><span class="line">            <span class="keyword">if</span>(vis[to] == <span class="number">1</span>)&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            vis[to] = <span class="number">1</span>;</span><br><span class="line">            dist[to]=dist[x]+gra[x][i].w;</span><br><span class="line">            <span class="keyword">int</span> flag = spfa(to);</span><br><span class="line">            <span class="keyword">if</span>(!flag)&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            vis[to] = <span class="number">0</span>;<span class="comment">// 回溯的处理</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="built_in">cin</span>&gt;&gt;n&gt;&gt;m;</span><br><span class="line">    <span class="keyword">int</span> flag = <span class="number">1</span>;</span><br><span class="line">    fill(dist,dist+maxn,inf);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; m; i++)&#123;</span><br><span class="line">        <span class="keyword">int</span> t,a,b,c;</span><br><span class="line">        <span class="built_in">cin</span>&gt;&gt;t;</span><br><span class="line">        <span class="keyword">if</span>(t == <span class="number">1</span>)&#123;</span><br><span class="line">            <span class="built_in">cin</span>&gt;&gt;a&gt;&gt;b&gt;&gt;c;</span><br><span class="line">            addedge(b,a,-c);</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(t == <span class="number">2</span>)&#123;</span><br><span class="line">            <span class="built_in">cin</span>&gt;&gt;a&gt;&gt;b&gt;&gt;c;</span><br><span class="line">            addedge(a,b,c);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="built_in">cin</span>&gt;&gt;a&gt;&gt;b;</span><br><span class="line">            addedge(a,b,<span class="number">0</span>);</span><br><span class="line">            addedge(b,a,<span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">memset</span>(vis,<span class="number">0</span>,<span class="keyword">sizeof</span>(vis));</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)&#123;</span><br><span class="line">        addedge(<span class="number">0</span>,i,<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    dist[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span>(spfa(<span class="number">0</span>))&#123;</span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;<span class="string">"Yes"</span>;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;<span class="string">"No"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="jiezi19971225.cn/2019/05/11/图论基础之图中找环/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/05/11/图论基础之图中找环/" itemprop="url">图论基础之图中找环</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-11T18:35:20+08:00">
+                2019-05-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+         <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-bar-chart"></i>
+           </span>
+           <span class="post-meta-item-text">字数统计:</span>
+           <span class="post-count">1.3k(字)</span>
+
+         </span>
+
+      <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-clock-o"></i>
+           </span>
+           <span class="post-meta-item-text">阅读时长:</span>
+           <span class="post-count">6(分)</span>
+
+         </span>
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>对于有向图而言 可以使用拓扑排序的方式找出图中的环</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">1e5</span>+<span class="number">7</span>;</span><br><span class="line"><span class="keyword">int</span> n;</span><br><span class="line"><span class="keyword">int</span> du[maxn];<span class="comment">//入度</span></span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; gra[<span class="number">10</span>];</span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; res;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">addedge</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">    du[b]++;</span><br><span class="line">    gra[a].push_back(b);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">topo</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="built_in">queue</span>&lt;<span class="keyword">int</span>&gt; q;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(du[i] == <span class="number">0</span>)&#123;</span><br><span class="line">            q.push(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span>(!q.empty())&#123;</span><br><span class="line">        <span class="keyword">int</span> temp = q.front();</span><br><span class="line">        q.pop();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; gra[temp].size(); i++)&#123;</span><br><span class="line">            <span class="keyword">int</span> to = gra[temp][i];</span><br><span class="line">            du[to]--;</span><br><span class="line">            <span class="keyword">if</span>(!du[to])&#123;</span><br><span class="line">                q.push(i);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="built_in">cin</span>&gt;&gt;n;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)&#123;</span><br><span class="line">        <span class="keyword">int</span> a,b;</span><br><span class="line">        <span class="built_in">cin</span>&gt;&gt;a&gt;&gt;b;</span><br><span class="line">        addedge(a,b);</span><br><span class="line">    &#125;</span><br><span class="line">    topo();</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(du[i])&#123;</span><br><span class="line">            <span class="built_in">cout</span>&lt;&lt;i&lt;&lt;<span class="string">' '</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对于无向图 可以采用并查集的方式，在读边的时候，如果两个顶点在同一个集合中，说明构成了环，这时令这两个顶点作为起点和终点，深搜一下输出路径即可</p>
+<p>蓝桥杯 2017 国赛 c++b 组 t4 找环</p>
+<p>题意：</p>
+<p>编号为 1 到 n 的 n 个点，以及 n-1 条边构成一棵树。现在在树上加上一条边，这样就构成了一个含环的图了。请你找出该环上的结点，从小到大输出这些结点编号。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">1e+7</span>;</span><br><span class="line"><span class="keyword">int</span> n;</span><br><span class="line"><span class="keyword">int</span> p[maxn];</span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; gra[<span class="number">10</span>];</span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; res;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">init</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="built_in">memset</span>(p,<span class="number">0</span>,<span class="keyword">sizeof</span>(p));</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)&#123;</span><br><span class="line">        p[i] = i;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> x)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> p[x]==x?x:p[x]=find(p[x]);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">unit</span><span class="params">(<span class="keyword">int</span> x,<span class="keyword">int</span> y)</span></span>&#123;</span><br><span class="line">    p[x] = y;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">addedge</span><span class="params">(<span class="keyword">int</span> x,<span class="keyword">int</span> y)</span></span>&#123;</span><br><span class="line">    gra[x].push_back(y);</span><br><span class="line">    gra[y].push_back(x);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">int</span> s,e;</span><br><span class="line"><span class="keyword">int</span> vis[maxn];</span><br><span class="line"><span class="keyword">int</span> path[maxn];</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> x)</span></span>&#123;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;x&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; gra[x].size(); i++)&#123;</span><br><span class="line">        <span class="keyword">int</span> to = gra[x][i];</span><br><span class="line">        <span class="keyword">if</span>(!vis[to])&#123;</span><br><span class="line">            path[to] = x;<span class="comment">// 记录路径</span></span><br><span class="line">            vis[to] = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span>(to == e)&#123;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            dfs(to);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    freopen(<span class="string">"in.txt"</span>,<span class="string">"r"</span>,<span class="built_in">stdin</span>);</span><br><span class="line">    <span class="built_in">cin</span>&gt;&gt;n;</span><br><span class="line">    init();</span><br><span class="line">    <span class="built_in">memset</span>(vis,<span class="number">0</span>,<span class="keyword">sizeof</span>(vis));</span><br><span class="line">    <span class="built_in">memset</span>(path,<span class="number">0</span>,<span class="keyword">sizeof</span>(path));</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)&#123;</span><br><span class="line">        <span class="keyword">int</span> a,b;</span><br><span class="line">        <span class="built_in">cin</span>&gt;&gt;a&gt;&gt;b;</span><br><span class="line">        <span class="keyword">int</span> aa = find(a),bb = find(b);</span><br><span class="line">        <span class="keyword">if</span>(aa!=bb)&#123;</span><br><span class="line">            unit(a,b);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;<span class="comment">// 说明构成了环</span></span><br><span class="line">            s = a,e = b;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        addedge(a,b);</span><br><span class="line">    &#125;</span><br><span class="line">    vis[s] = <span class="number">1</span>;</span><br><span class="line">    dfs(s);</span><br><span class="line">    <span class="keyword">int</span> temp = e;</span><br><span class="line">    res.push_back(temp);</span><br><span class="line">    <span class="keyword">while</span>(path[temp])&#123;</span><br><span class="line">        res.push_back(path[temp]);</span><br><span class="line">        temp = path[temp];</span><br><span class="line">    &#125;</span><br><span class="line">    sort(res.begin(),res.end());</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; res.size(); i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(i&gt;<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="built_in">cout</span>&lt;&lt;<span class="string">' '</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;res[i];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>另外还可以采用深搜的方式，首先需要了解</p>
+<p>在图的遍历中，往往设置了一个标记数组 vis 来记录顶点是否被访问过。但有些时候需要改变 vis 值的意义。令 vis 具有 3 种值并表示 3 种不同含义</p>
+<p>vis = 0,表示该顶点没没有被访问<br>vis = 1,表示该顶点已经被访问，但其子孙后代还没被访问完，也就没从该点返回<br>vis = 2,，表示该顶点已经被访问，其子孙后代也已经访问完，也已经从该顶点返回<br>可以 vis 的 3 种值表示的是一种顺序关系和时间关系</p>
+<p>《算法导论》334 页有这 4 种边的准确定义</p>
+<img src="/2019/05/11/图论基础之图中找环/边的定义.png" title="边的定义">
+<p>DFS 过程中，对于一条边 u-&gt;v<br>vis[v] = 0,说明 v 还没被访问，v 是首次被发现，u-&gt;v 是一条树边<br>vis[v] = 1,说明 v 已经被访问，但其子孙后代还没有被访问完（正在访问中），而 u 又指向 v，说明 u 就是 v 的子孙后代，u-&gt;v 是一条后向边，因此后向边又称返祖边，<br>vis[v] = 2,说明 v 已经被访问，其子孙后代也已经全部访问完，u-&gt;v 这条边可能是一条横叉边，或者前向边</p>
+<p>注意：树边，后向边，前向边，都有祖先，后裔的关系，但横叉边没有，u-&gt;v 为横叉边，说明在这棵 DFS 树中，它们不是祖先后裔的关系它们可能是兄弟关系，堂兄弟关系，甚至更远的关系，如果是 dfs 森林的话，u 和 v 甚至可以在不同的树上</p>
+<p>对于无向图而言，只存在树边和返祖边，当发现一条返祖边时，说明找到了环，这时输出所有 vis[i] = 1 的节点即可</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">1e5</span>+<span class="number">7</span>;</span><br><span class="line"><span class="keyword">int</span> vis[maxn];</span><br><span class="line"><span class="keyword">int</span> n;</span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; gra[<span class="number">10</span>];</span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; res;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">addedge</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">    gra[a].push_back(b);</span><br><span class="line">    gra[b].push_back(a);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">int</span> flag = <span class="number">0</span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">findp</span><span class="params">()</span></span>&#123;  <span class="comment">// 找环</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(vis[i] == <span class="number">1</span>)&#123;</span><br><span class="line">            res.push_back(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> x,<span class="keyword">int</span> p)</span></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; gra[x].size(); i++)&#123;</span><br><span class="line">        <span class="keyword">int</span> to = gra[x][i];</span><br><span class="line">        <span class="keyword">if</span>(!vis[to])&#123;</span><br><span class="line">            vis[to] = <span class="number">1</span>;</span><br><span class="line">            dfs(to,x);</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(to!= p &amp;&amp; vis[to])&#123;</span><br><span class="line">            <span class="keyword">if</span>(!flag)&#123;</span><br><span class="line">                flag = <span class="number">1</span>;</span><br><span class="line">                findp();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    vis[x] = <span class="number">2</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="built_in">cin</span>&gt;&gt;n;</span><br><span class="line">    <span class="built_in">memset</span>(vis,<span class="number">0</span>,<span class="keyword">sizeof</span>(vis));</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)&#123;</span><br><span class="line">        <span class="keyword">int</span> a,b;</span><br><span class="line">        <span class="built_in">cin</span>&gt;&gt;a&gt;&gt;b;</span><br><span class="line">        addedge(a,b);</span><br><span class="line">    &#125;</span><br><span class="line">    vis[<span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line">    dfs(<span class="number">1</span>,<span class="number">0</span>);</span><br><span class="line">    sort(res.begin(),res.end());</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; res.size(); i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(i&gt;<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="built_in">cout</span>&lt;&lt;<span class="string">' '</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;res[i];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="jiezi19971225.cn/2019/04/22/傻逼记录（一）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/04/22/傻逼记录（一）/" itemprop="url">傻逼记录（一）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-22T02:01:20+08:00">
+                2019-04-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/傻逼记录/" itemprop="url" rel="index">
+                    <span itemprop="name">傻逼记录</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+         <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-bar-chart"></i>
+           </span>
+           <span class="post-meta-item-text">字数统计:</span>
+           <span class="post-count">543(字)</span>
+
+         </span>
+
+      <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-clock-o"></i>
+           </span>
+           <span class="post-meta-item-text">阅读时长:</span>
+           <span class="post-count">1(分)</span>
+
+         </span>
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>昨天新买的笔记本到了，折腾了一下午安装 windows 下的软件，尝试了把自己装了 archlinux 移动固态接到笔电上，提示找不到分区 UUID。因为之前一直接在台式用，所以 fstab 上有台式机硬盘的记录，于是换上台式进 arch，把 fstab 里台式的分区都注释了（伏笔）。折腾一番可以进系统了，输完账号密码后，黑屏，是的它黑屏了。<br>开始猜测是显卡驱动的问题，切到字符 tty，安装上 amd 的显卡驱动，重启，依然不行。之后就是漫长的百度与谷歌时间。gnome 桌面是跟着教程安装的，一直以来都是 gdm 启动，所以我对于 X11 的启动过程基本是一窍不通。尝试使用 startx 手动启动，发现 root 可以进入，自己的用户进去就是黑屏。网上的一些方案有删除 gnome 插件，检查 PATH 设置，检查.Xauthority 文件权限，我都尝试了。更令我不能理解的是我换回台式机，它也黑屏了，我只好把自己对系统作的更改一条一条还原。这时看到网上一条评论说 X11 启动会读取用户目录下.x 目录下配置文件，既然 root 能进说明驱动啥的都没问题啊，可能就是配置文件的问题。我看了一下，arch 下没有.x 文件夹，不过在.config 文件下有很多 gnome 的文件夹。我突然想到自己之前因为空间不足，把用户目录下的.cache 和.config 都挂载硬盘的另一个分区上了。cd 到挂载目录，ls 显示目录为空。果然人一傻逼起来是没有救的，看了一下 fstab，果然那个分区的挂载注释掉了。修改之后重启，一切正常，此时已经是夜里 2 点钟。<br>谨以此记录一下我因为傻逼而浪费掉的 4 个小时的人生。<br>另如果想要在移动存储设备上安装 linux，务必参考官方 wiki<a href="https://wiki.archlinux.org/index.php/Installing_Arch_Linux_on_a_USB_key" target="_blank" rel="noopener">在 USB 设备上安装 Arch Linux</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="jiezi19971225.cn/2019/04/20/leetcodeP11-ContainerWithMostWater/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/04/20/leetcodeP11-ContainerWithMostWater/" itemprop="url">leetcodeP11-ContainerWithMostWater</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-20T19:39:45+08:00">
+                2019-04-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+         <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-bar-chart"></i>
+           </span>
+           <span class="post-meta-item-text">字数统计:</span>
+           <span class="post-count">403(字)</span>
+
+         </span>
+
+      <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-clock-o"></i>
+           </span>
+           <span class="post-meta-item-text">阅读时长:</span>
+           <span class="post-count">1(分)</span>
+
+         </span>
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>这道题以前做过，但是忘记怎么做的了。第一次交了一个双重循环的暴力。查看题解一下就明白了正确的贪心算法。</p>
+<h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h3><p>给你 N 个非负的正整数 a1,a2,a3,…an，每个代表了坐标轴上的一个点(i，ai)。n 条垂直的线连接点和 x 轴，要求找出两条线，让它们和 x 轴组成的容器的容积最大。</p>
+<h3 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h3><p>正解是用两点逼近的算法。首先容器的高度是由最短的那条线决定的。<br>维护一个变量记录最大容积。记录所取的两端的端点位置，每次计算当前情况的容积，并更新最大容积。之后更新较短的那条线的端点位置(一定是更新较短的端点位置，否则容积一定小于当前容积，因为只有宽度减小)，更新方法为向另一端的方向遍历直到遇到一条比当前线高度高的线（比当前线高度低的线组成的容积一定小于当前情况的容积）。</p>
+<p>以下是代码</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">maxArea</span><span class="params">(height []<span class="keyword">int</span>)</span> <span class="title">int</span></span> &#123;</span><br><span class="line">    left, right := <span class="number">0</span>, <span class="built_in">len</span>(height)<span class="number">-1</span></span><br><span class="line">    res := <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> left &lt; right &#123;</span><br><span class="line">        minHeight := <span class="number">0</span></span><br><span class="line">        <span class="keyword">if</span> height[left] &lt; height[right] &#123;</span><br><span class="line">            minHeight = height[left]</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            minHeight = height[right]</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        newArea := (right - left) * minHeight</span><br><span class="line">        <span class="keyword">if</span> newArea &gt; res &#123;</span><br><span class="line">            res = newArea</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> height[left] &lt; height[right] &#123;</span><br><span class="line">            newLeft := left + <span class="number">1</span></span><br><span class="line">            <span class="keyword">for</span> newLeft &lt; right &amp;&amp; height[newLeft] &lt; height[left] &#123;</span><br><span class="line">                newLeft = newLeft + <span class="number">1</span></span><br><span class="line">            &#125;</span><br><span class="line">            left = newLeft</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            newRight := right - <span class="number">1</span></span><br><span class="line">            <span class="keyword">for</span> newRight &gt; left &amp;&amp; height[newRight] &lt; height[right] &#123;</span><br><span class="line">                newRight = newRight - <span class="number">1</span></span><br><span class="line">            &#125;</span><br><span class="line">            right = newRight</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="jiezi19971225.cn/2019/03/27/计算机网络学习笔记之数据链路层/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/27/计算机网络学习笔记之数据链路层/" itemprop="url">计算机网络学习笔记之数据链路层</a></h1>
         
 
         <div class="post-meta">
@@ -418,7 +1265,7 @@
 </ul>
 <h3 id="点对点信道的数据链路层"><a href="#点对点信道的数据链路层" class="headerlink" title="点对点信道的数据链路层"></a>点对点信道的数据链路层</h3><ul>
 <li>链路(link)是一条无源的点到点的物理线路段,中间没有任何其他的交换结点。一条链路只是一条通路的一个组成部分。</li>
-<li>数据链路(data link) 除了物理线路外,还必须有通信协议来控制这些数据的传输。若把实现这些协议的硬件和软件加到链路上,就构成了数据链路。现在最常用的方法是使用适配器(即网卡)来实现这些协议的硬件和软件。<img src="/2019/03/27/计算机网络学习笔记3/传送帧.png" title="传送帧"></li>
+<li>数据链路(data link) 除了物理线路外,还必须有通信协议来控制这些数据的传输。若把实现这些协议的硬件和软件加到链路上,就构成了数据链路。现在最常用的方法是使用适配器(即网卡)来实现这些协议的硬件和软件。<img src="/2019/03/27/计算机网络学习笔记之数据链路层/传送帧.png" title="传送帧"></li>
 <li>点对点通信在数据链路层的主要步骤<br><em> 结点 A 的数据链路层把网络层交下来的 IP 数据报添加首部和尾部封装成帧
 </em> 结点 A 把封装好的帧发给结点 B 的数据链路层 * 若结点 B 的数据链路层收到的帧无差错，则从收到的帧中提取出 IP 数据报交给上面的网络层，否则丢弃该帧<br>数据链路层不考虑物理层之间如何实现比特传输的细节</li>
 </ul>
@@ -450,7 +1297,7 @@
 <li>在数据后面添加上的冗余码称为帧检验序列 FCS (Frame Check Sequence)。循环冗余检验 CRC 和帧检验序列 FCS 并不等同。CRC 是一种常用的检错方法,而 FCS 是添加在数据后面的冗余码。FCS 可以用 CRC 这种方法得出,但 CRC 并非用来获得 FCS 的唯一方法。</li>
 <li>若得出的余数 R = 0,则判定这个帧没有差错,就接受(accept)。 若余数 R != 0,则判定这个帧有差错,就丢弃。但这种检测方法并不能确定究竟是哪一个或哪几个比特出现了差错。只要经过严格的挑选,并使用位数足够多的除数 P,那么出现检测不到的差错的概率就很小很小。</li>
 </ul>
-<h5 id="汉明码"><a href="#汉明码" class="headerlink" title="汉明码"></a>汉明码</h5><img src="/2019/03/27/计算机网络学习笔记3/汉明码原理.png" title="汉明码原理">
+<h5 id="汉明码"><a href="#汉明码" class="headerlink" title="汉明码"></a>汉明码</h5><img src="/2019/03/27/计算机网络学习笔记之数据链路层/汉明码原理.png" title="汉明码原理">
 <p>汉明码(Hamming Code)编码的关键是使用多余的奇偶校验位来识别一位错误。假设信息码共有 n 位,海明码共有 h 位,那么总共的码长为 n + h 位。为能检测出 n + h 位编码，中其中一位的错误,海明码必须能够表示至少 n + h + 1 种状态,其中 n + h 种表示 n + h 位编码中有一位错误,另外还需要 1 种来表示整个编码正确无误。则海明码的长度需要满足下列关系:</p>
 <script type="math/tex; mode=display">2^h >= n + h + 1</script><p>把所有 2 的幂次方的数据位标记为奇偶校验位(编号为 1, 2, 4, 8, 16, 32, 64 等的位置)<br>其他数据位用于待编码数据. (编号为 3, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 17 等的位置)<br>每个奇偶校验位的值代表了码字中部分数据位的奇偶性,其所在位置决定了要校验的比特位。<br>位置 1，校验所有二进制最后一位是 1 的位置<br>位置 2，校验所有二进制倒数第二位是 1 的位置<br>位置 4，校验所有二进制倒数第三位是 1 的位置<br>配偶是该位置的数值加上是其要效验的位置和为偶数，可以用异或运算计算。<br>配奇则正好相反。<br>如何得到是哪一位出错了呢？以配偶方式为例，求冗余码的效验和，假设 分别为 1 1 0 0 。正常效验和应当为 0，为 1 说明该位置效验的比特位有一位出现了错误。因此倒数第一位和倒数第二位为 1 的都为 1 的位置出现了错误，这可以唯一确定一个位置，即数据的第三位。</p>
 <h4 id="可靠传输"><a href="#可靠传输" class="headerlink" title="可靠传输"></a>可靠传输</h4><p>在不可靠的信道上实现可靠的数据传输为上层提供一条可靠的逻辑通道。CRC 循环冗余检测只能保证无比特差错，但是可能会出现帧丢失，帧失序等，无法做到无传输差错。</p>
@@ -574,7 +1421,7 @@
 <li>IEEE 的 802.3 标准</li>
 </ul>
 </li>
-<li>最常用的 MAC 帧是以太网 V2 的格式。<img src="/2019/03/27/计算机网络学习笔记3/以太网的帧格式.png" title="以太网的帧格式">
+<li>最常用的 MAC 帧是以太网 V2 的格式。<img src="/2019/03/27/计算机网络学习笔记之数据链路层/以太网的帧格式.png" title="以太网的帧格式">
 <em> 源地址和目的地址的地址指的是 MAC 地址
 </em> 类型字段用来表示上层协议的类型<br><em> FCS 是帧检验学列
 </em> 如果数据字段的长度小于 46 字节，MAC 子层就会在数据字段的最后加入一个整数字节的填充字段</li>
@@ -696,7 +1543,7 @@
 <li>仅在下面的情况下才不使用退避算法:检测到信道是空闲的,并且这个数据帧是要发送的第一个数据帧。<br>除此以外的所有情况,都必须使用退避算法。即:<ul>
 <li>在发送第一个帧之前检测到信道处于忙态。</li>
 <li>在每一次的重传后。</li>
-<li>在每一次的成功发送后。<img src="/2019/03/27/计算机网络学习笔记3/802.11退避机制.png" title="802.11退避机制">
+<li>在每一次的成功发送后。<img src="/2019/03/27/计算机网络学习笔记之数据链路层/802.11退避机制.png" title="802.11退避机制">
 </li>
 </ul>
 </li>
@@ -1295,7 +2142,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="jiezi19971225.cn/2019/03/03/计算机网络学习笔记2/">
+    <link itemprop="mainEntityOfPage" href="jiezi19971225.cn/2019/03/03/计算机网络学习笔记之物理层/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="jiezi19971225">
@@ -1314,7 +2161,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/03/03/计算机网络学习笔记2/" itemprop="url">计算机网络学习笔记2-物理层</a></h1>
+                <a class="post-title-link" href="/2019/03/03/计算机网络学习笔记之物理层/" itemprop="url">计算机网络学习笔记之物理层</a></h1>
         
 
         <div class="post-meta">
@@ -1444,11 +2291,11 @@
 <li>对模拟信号数字化取样，将抽样信号变为离散时间，离散幅度的数字化信号，编码后称为一个二进制码组输出，这种方式叫做<strong>脉编调制</strong>，是 VCD 和 DVD 的视频编码原理。</li>
 </ul>
 </li>
-<li>常用编码方式<img src="/2019/03/03/计算机网络学习笔记2/编码方式.jpg" title="常用的编码方式">
+<li>常用编码方式<img src="/2019/03/03/计算机网络学习笔记之物理层/编码方式.jpg" title="常用的编码方式">
 <em> <strong>不归零制</strong> 正电平代表 1 复电平代表 0
 </em> <strong>归零制</strong> 正脉冲代表 1，负脉冲代表 0<br><em> <strong>曼彻斯特编码</strong> 位周期中心的向上跳代表 0，向下跳代表 1，也可以反过来定义
 </em> <strong>差分曼彻斯特编码</strong> 在每一位的中心处都有跳变，位开始边界有跳变代表 0，位开始边界没有跳变代表 1 * 不归零不能从波形本身提取信号时钟频率，这叫做没有自同步能力，而曼彻斯特编码具有自同步能力</li>
-<li>基本的带通调制方法<img src="/2019/03/03/计算机网络学习笔记2/带通调制方法.jpg" title="基本的带通调制方法">
+<li>基本的带通调制方法<img src="/2019/03/03/计算机网络学习笔记之物理层/带通调制方法.jpg" title="基本的带通调制方法">
 <em> <strong>调幅（AM）</strong> 载波的振幅随着基带数字信号而变化，如 0 或者 1 分别对应无载波或者有载波输出
 </em> <strong>调频（FM）</strong> 载波的频率随着基带数字信号而变化，如 0 或者 1 分别对应于频率 f1 或者 f2 * <strong>调相（PM）</strong> 载波的初始相位随着基带数字变化而变化，如 0 或者 1 分别对应于相位 0 或者 180 度</li>
 <li>为了达到更高的信息传输速率，必须采用技术上更为复杂的多元制的振幅相位混合调制方法，例如<strong>正交振幅调制 QAM（Quadrature Amplitede Modulation）</strong></li>
@@ -1558,1023 +2405,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="jiezi19971225.cn/2019/03/02/go学习笔记-基础与特性总结/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="jiezi19971225">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Jiez19971225‘s Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/03/02/go学习笔记-基础与特性总结/" itemprop="url">go学习笔记-基础与特性总结</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-02T20:04:10+08:00">
-                2019-03-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/go/" itemprop="url" rel="index">
-                    <span itemprop="name">go</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-         <span class="post-time">
-	   &nbsp; | &nbsp;
-           <span class="post-meta-item-icon">
-             <i class="fa fa-bar-chart"></i>
-           </span>
-           <span class="post-meta-item-text">字数统计:</span>
-           <span class="post-count">2.2k(字)</span>
-
-         </span>
-
-      <span class="post-time">
-	   &nbsp; | &nbsp;
-           <span class="post-meta-item-icon">
-             <i class="fa fa-clock-o"></i>
-           </span>
-           <span class="post-meta-item-text">阅读时长:</span>
-           <span class="post-count">8(分)</span>
-
-         </span>
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h3><ul>
-<li>Go 在用一个目录下不能有多个 package</li>
-<li>Go 中立即返回函数中局部变量的地址也是安全的</li>
-<li>Go 中 new 只是一个预定义的函数，不是一个关键字，因此可以将 new 重新定义为别的类型使用，这样将无法使用 new 函数</li>
-<li>Go 的早期版本 GOMAXPROCS 可用核数被设置为 1 因此无法真正做到并行 而 go1.6 版本后 GOMAXPROCS 被设置为可用核心数目</li>
-<li>Go 中++ —是语句 不是表达式，并且只有后缀形式，因此以下的代码是错的</li>
-</ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a := <span class="number">5</span></span><br><span class="line">b := a++ <span class="comment">//不能当做表达式使用</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>Go 不支持隐式类型转换</li>
-<li>Go 不支持三元操作符</li>
-<li>Go 只有值传递</li>
-<li>Go 指针不能进行运算</li>
-<li>特殊只写变量_用于忽略值占位</li>
-</ul>
-<h3 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h3><ul>
-<li>Go 的基本类型有 Basic types<ul>
-<li>bool</li>
-<li>string golang 是没有 char 的 string 在 go 中属于基本数据类型 不可变类型</li>
-<li>int int8 int16 int32 int64 uint uint8 uint16 uint32 uint64 uintptr</li>
-<li>byte 是 uint8 的别名</li>
-<li>rune 是 int32 的别名 代表一个 Unicode 码</li>
-<li>float32 float64</li>
-<li>complex64 complex128 Go 原生支持复数类型</li>
-</ul>
-</li>
-<li>16 进制的转义形式是\xhh。8 进制的转移形式是\ooo，o 代表一个八进制数字，但是不能超过\377（对应十进制的 255）</li>
-<li>无符号数往往只有在位运算或其他特殊的运算场景才会使用</li>
-<li>%q 打印带有单引号的字符</li>
-<li>函数外的每个语句都必须以关键字开始（<code>var</code>、<code>func</code>、等等），<code>:=</code> 结构不能使用在函数外。</li>
-<li>字符串和字节 slice 可以相互转换 一个[]bytes 转换分配了一个新的字节数组用于保存字符串数据的拷贝，然后引用这个底层的字节数组</li>
-<li>将一个整数转为字符串有两种方法，一种是用 fmt.Sprintf 返回一个格式化的字符串，另一种方法是用 strconv.Itoa</li>
-<li>FormatInt(FormatUint) func(i int64, base int) string 可以用不同的进制格式化数字</li>
-<li>strconv.ParseInt 或者 strconv.Atoi 可以用来解析一个字符串为证书，还有用于解析无符号整数的 ParseUint</li>
-</ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">s := <span class="string">"abc"</span></span><br><span class="line">b := []<span class="keyword">byte</span>(s)</span><br><span class="line">s2 := <span class="keyword">string</span>(b)</span><br></pre></td></tr></table></figure>
-<ul>
-<li>可以通过自定义类型来实现枚举类型限制</li>
-<li>math.NaN 与任何数都不相等</li>
-<li>Go 语言中的许多常量并没有一个明确的基础类型，编译器为这些没有明确的基础类型的数字常量提供比基础类型更高精度的算术运算，可认为至少有 256bit 的运算精度。</li>
-</ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Color <span class="keyword">int</span></span><br><span class="line"><span class="keyword">const</span> (</span><br><span class="line">    Black Color = <span class="literal">iota</span> <span class="comment">//iota的初始值为0</span></span><br><span class="line">    Red</span><br><span class="line">)</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">test</span><span class="params">(c Color)</span></span> &#123;&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    c := Black</span><br><span class="line">    test(c)</span><br><span class="line">    x:=<span class="number">1</span></span><br><span class="line">    test(x) <span class="comment">//报错</span></span><br><span class="line">    test(<span class="number">1</span>) <span class="comment">// 常量会被自动转换</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>go 作为编译型语言，不允许重复声明，但有一种特殊情况，即有新的变量被定义，如下</li>
-</ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a := <span class="string">"hellp"</span></span><br><span class="line">a,b := <span class="string">"hel"</span>,<span class="string">"world"</span></span><br></pre></td></tr></table></figure>
-<h3 id="选择-循环结构"><a href="#选择-循环结构" class="headerlink" title="选择 循环结构"></a>选择 循环结构</h3><ul>
-<li>跟 for 一样，<code>if</code> 语句可以在条件之前执行一个简单的语句 由这个语句定义的变量的作用域仅在 if 范围之内。</li>
-<li>go range 只有一个接收参数的时候遍历的是 index</li>
-<li>go 中 range 会复制对象，k，v 都是从复制的对象中取出的，所以 a[k]和 v 实际是两个变量</li>
-</ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">a := [<span class="number">4</span>]<span class="keyword">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>&#125;</span><br><span class="line"><span class="keyword">for</span> k, v := <span class="keyword">range</span> a &#123;</span><br><span class="line">    a[k] = <span class="number">4</span></span><br><span class="line">    a[k] = v + <span class="number">1</span></span><br><span class="line">    fmt.Print(a[k])</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>输出:<br>2345</p>
-<ul>
-<li>控制流 if 支持初始化语句，定义代码块局部变量</li>
-</ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> a := <span class="number">5</span>; a &gt; <span class="number">4</span> &#123;</span><br><span class="line">    fmt.Println(a)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>带有 flag 的双重循环，可以实现准层数确的 continue 和 break</li>
-</ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">L1:</span><br><span class="line">    <span class="keyword">for</span> x := <span class="number">0</span>; x &lt; <span class="number">3</span>; x++ &#123;</span><br><span class="line">    L2:</span><br><span class="line">        <span class="keyword">for</span> y := <span class="number">0</span>; y &lt; <span class="number">5</span>; y++ &#123;</span><br><span class="line">            <span class="keyword">if</span> y &gt; <span class="number">3</span> &#123;</span><br><span class="line">                <span class="keyword">continue</span> L2</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> x &gt; <span class="number">1</span> &#123;</span><br><span class="line">                <span class="keyword">break</span> L1</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="built_in">print</span>(x, <span class="string">":"</span>, y, <span class="string">" "</span>)</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">println</span>()</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<h3 id="数组-amp-amp-切片"><a href="#数组-amp-amp-切片" class="headerlink" title="数组&amp;&amp;切片"></a>数组&amp;&amp;切片</h3><ul>
-<li>make([]T, length, capacity)使用 make 创建切片</li>
-<li>切片的 cap 为切片起始位置到底层数组末尾的长度</li>
-<li>golan 数组传值默认使用值拷贝，但是会造成性能问题，通常会建议使用 slice 或者数组指针</li>
-<li>内置函数 len 和 cap 都能返回数组长度</li>
-<li>reslice 是在 slice 的基础上创建新的 slice 对象，新的对象依旧指向原先底层数组</li>
-<li>append 是向 slice 尾部添加数据，返回新的 slice 对象，一旦超市原 slice 的 cap 就会重新分配底层数组</li>
-<li>copy(dst,src)复制 slice，两个 slice 可以指向不同的数组</li>
-</ul>
-<h3 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h3><ul>
-<li>map 查找，类型断言或者通道接受出现在赋值语句右边不一定是产生两个结果，也可能只产生一个结果</li>
-<li>支持== !=等操作符 可用作 map 键类型 相等的判断依据是值相等而非指针相等</li>
-<li>结构体可作为 map 的 key 和 value</li>
-</ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> people <span class="keyword">struct</span> &#123;</span><br><span class="line">    name <span class="keyword">string</span></span><br><span class="line">    age  <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line">m := <span class="keyword">map</span>[<span class="keyword">int</span>]people&#123;</span><br><span class="line">    <span class="number">1</span>: &#123;<span class="string">"user1"</span>, <span class="number">10</span>&#125;,</span><br><span class="line">    <span class="number">2</span>: &#123;<span class="string">"user2"</span>, <span class="number">20</span>&#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>golang 结构体作为 map 的元素时，不能够直接赋值给结构体的某个字段。因为在 Go 里面所有的都是值 copy，map[“name”]取值的时候实际上是里面的 struct 的值完整的一个 copy，如果允许了这样的操作 list[“name”].XXX 这样的操作，那么实际上你修改的东西没有复制回原来的 struct，所以你可以采用 map[key]*struct 的定义来进行操作，如下所示是可以正确操作的。</li>
-</ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">m := <span class="keyword">map</span>[<span class="keyword">string</span>]*A&#123;<span class="string">"a"</span>: &amp;A&#123;<span class="string">"hello"</span>&#125;&#125;</span><br><span class="line">m[<span class="string">"a"</span>].Name = <span class="string">"Asta"</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>通过双赋值检测某个键存在：</li>
-</ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">elem, ok = m[key]</span><br></pre></td></tr></table></figure>
-<ul>
-<li>*[]int 指向数组的指针 []*int 指针数组</li>
-<li>make 函数可以用于创建 map，预先给 make 函数一个合理的数量参数，有助于提升性能</li>
-</ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> v,ok :=m[<span class="string">"a"</span>];ok&#123;</span><br><span class="line">    <span class="built_in">println</span>(v)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>使用 range 迭代 map 不能保证迭代次序</li>
-</ul>
-<h3 id="Struct"><a href="#Struct" class="headerlink" title="Struct"></a>Struct</h3><ul>
-<li>go 结构体以%v 形式打印，直接输出，指针以%v 形式打印，会在结构体{}之前加上一个&amp;</li>
-<li>go 结构体的几种初始化方式</li>
-</ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Rect <span class="keyword">struct</span> &#123;</span><br><span class="line">    x, y <span class="keyword">float64</span></span><br><span class="line">    width, height <span class="keyword">float64</span></span><br><span class="line">&#125;</span><br><span class="line">rect1 := <span class="built_in">new</span>(Rect)</span><br><span class="line">rect2 := &amp;Rect&#123;&#125;</span><br><span class="line">rect3 := &amp;Rect&#123;<span class="number">0</span>, <span class="number">0</span>, <span class="number">100</span>, <span class="number">200</span>&#125;</span><br><span class="line">rect4 := &amp;Rect&#123;width:<span class="number">100</span>, height:<span class="number">200</span>&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>注意这几个变量全部为指向 Rect 结构的指针(指针变量)，因为使用了 new()函数和&amp;操作符。而如果使用方法，那么则表示这个是一个 Rect{}类型</li>
-</ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a := Rect&#123;&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>内置函数 new 计算类型大小，返回指针，make 会被编译器翻译成具体的创建函数，返回对象</li>
-<li>使用 `` 定义不做转义处理的原始字符串，支持跨行</li>
-<li>使用 ‘’ 表示 Unicode Code Point 字符常量 如 ‘u6211’ 要修改字符串 可以先转换成 []rune 或者[]byte</li>
-</ul>
-<h3 id="Function"><a href="#Function" class="headerlink" title="Function"></a>Function</h3><ul>
-<li>命名返回参数可以被同名局部变量遮蔽，此时需要显式返回</li>
-</ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">add</span><span class="params">(x,y <span class="keyword">int</span>)</span> <span class="params">(z <span class="keyword">int</span>)</span></span>&#123;</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> z = x + y</span><br><span class="line">        <span class="keyword">return</span> z <span class="comment">//必须显式返回</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>defer 与 return 执行顺序</li>
-</ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">add</span> <span class="params">(x,y <span class="keyword">int</span>)</span><span class="params">(z <span class="keyword">int</span>)</span></span>&#123;</span><br><span class="line">    <span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="built_in">println</span>(z)</span><br><span class="line">    &#125;()</span><br><span class="line">    z = x + y</span><br><span class="line">    <span class="keyword">return</span> z + <span class="number">200</span> <span class="comment">//执行顺序 (z = z + 200) -&gt; call defer -&gt; ret</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>延迟调用参数在注册时求值或复制，可用指针或闭包延迟读取</li>
-</ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">    x, y := <span class="number">10</span>,<span class="number">20</span></span><br><span class="line">    <span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">(i <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">        <span class="built_in">println</span>(<span class="string">"defer"</span>,i, y)</span><br><span class="line">    &#125;(x)</span><br><span class="line">    x += <span class="number">10</span></span><br><span class="line">    y += <span class="number">100</span></span><br><span class="line">    <span class="built_in">println</span>(<span class="string">"x="</span>,x,<span class="string">"y="</span>,y)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>输出：<br>x=20 y=120<br>defer: 10 120</p>
-<ul>
-<li>go 学习笔记的一个错误，method value 并不会复制 receiver，而是指向同一个结构体</li>
-<li>延迟调用中引发的错误，可以被后续延迟调用捕获，但是只有最后一个错误可以被捕获</li>
-</ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">test</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">        fmt.Println(<span class="built_in">recover</span>())</span><br><span class="line">    &#125;()</span><br><span class="line">    <span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="built_in">panic</span>(<span class="string">"defer panic"</span>)</span><br><span class="line">    &#125;()</span><br><span class="line">    <span class="built_in">panic</span>(<span class="string">"test panic"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="interface"><a href="#interface" class="headerlink" title="interface"></a>interface</h3><ul>
-<li>空接口没有任何方法签名，这意味着任何类型都实现了空借口，其作用类似面向对象语言中的根对象 object</li>
-<li>匿名接口可以用作变量类型，或者结构成员</li>
-</ul>
-<h3 id="错误处理"><a href="#错误处理" class="headerlink" title="错误处理"></a>错误处理</h3><ul>
-<li>go 的错误处理有 panic 和 error 两种方式，当关键流程出现不可修复性错误使用 panic，其他情况使用 error</li>
-</ul>
-<h3 id="基本输入输出"><a href="#基本输入输出" class="headerlink" title="基本输入输出"></a>基本输入输出</h3><ul>
-<li>fmt.Sprintf 返回一个格式化的字符串，但是不输出，fmt.Println 直接输出</li>
-<li>命令行程序，必须在使用标志参数对应的变量前调用 flag.Parse()，用于更新每个标识变量的值（之前是默认值）</li>
-</ul>
-<h3 id="HTTP"><a href="#HTTP" class="headerlink" title="HTTP"></a>HTTP</h3><ul>
-<li>HandleFunc func(pattern string, handler func(ResponseWriter, *Request)) 如果你的 pattern 是”/“，那么请求的 URL 都是匹配该函数，如果你请求根目录”/“，那么处理函数将会执行两次</li>
-</ul>
-<h3 id="init"><a href="#init" class="headerlink" title="init"></a>init</h3><p>当只想执行包的 init 函数的时候，在其在 import 的包名设置为 _，这将会使 go 编译器忽略未引用的错误，但是仍然会执行 init 函数</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="jiezi19971225.cn/2019/02/24/孤独的人群随记/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="jiezi19971225">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Jiez19971225‘s Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/02/24/孤独的人群随记/" itemprop="url">《孤独的人群》读后感</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-02-24T22:21:56+08:00">
-                2019-02-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/读书笔记/" itemprop="url" rel="index">
-                    <span itemprop="name">读书笔记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-         <span class="post-time">
-	   &nbsp; | &nbsp;
-           <span class="post-meta-item-icon">
-             <i class="fa fa-bar-chart"></i>
-           </span>
-           <span class="post-meta-item-text">字数统计:</span>
-           <span class="post-count">4.7k(字)</span>
-
-         </span>
-
-      <span class="post-time">
-	   &nbsp; | &nbsp;
-           <span class="post-meta-item-icon">
-             <i class="fa fa-clock-o"></i>
-           </span>
-           <span class="post-meta-item-text">阅读时长:</span>
-           <span class="post-count">15(分)</span>
-
-         </span>
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>《孤独的人群》曾被誉为“当代最有影响的著作之一”，是美国社会学家大卫・理斯曼在同事的协助下完成的一部经典学术著作。本书主旨是讨论美国人社会性格的形成及演变。作者根据传统导向、内在导向和他人导向的社会性格类型对具体的社会阶层――美国中产阶级的性格形成和演变进行了全面阐述。理斯曼认为父母、家庭、学校是性格形成的主要原因，而社会性格最终体现为一定的生活方式，在工作、娱乐、政治生活和子女教育等活动表现出来<br>　　作者着重探讨了 19 世纪美国占主导地位的内在导向性格如何被 20 世纪中叶的他人导向性格所取代的过程，研究了这一取代的原因、过程以及对美国当代主要社会生活领域的影响。</p>
-<h3 id="主要内容"><a href="#主要内容" class="headerlink" title="主要内容"></a>主要内容</h3><p>全书分为 3 编，主题分别为性格、政治和自主性。在第 1 编的开始，作者首先提出了社会性格的概念。按照作者的解释，这是指个人用来接触世界和他人的一种定型。不同时代的人的社会性格，呈现出有着深深时代烙印的不同特点。<br>　　作者援引谨精神分析心理学家弗洛姆的观点——为了使社会正常地发挥自己的作用，社会成员必须获得某种性格，从而使他们愿意按照社会成员或社会中特定阶层所必须遵奉的行为方式去行动。即人顺从于社会。这种顺从方式可以追溯到人的童年。顺从不能代表整个社会性格，如创造方式是社会性格的重要部分，没有创造性，社会和个人的生活将会枯燥，但是能生存下去，但没有顺从方式，人们则不能生存下去。<br>　　作者运用人口统计学分析了西方自中世纪以来的人口变化，将其分为高度增长潜力时期，过渡时期，早期人口减少时期三个阶段。这三个阶段的社会中的人，分别呈现出传统引导、内部引导和他人引导的性格特点。<br>　　在高度增长潜力时期的社会，尚未受到工业化的影响，社会的生产处于低水平，而人口的出生率和死亡率都处于相当高的水平。这种社会的秩序相对稳定，处在这种社会中的人呈现出传统引导的特点，个人的顺从性易受同龄人和种族的影响，个人学会和理解并且选择持续了几个世纪之久的传统行为模式。在传统引导的社会，社会的分工较为简单，因此不存在无用的人，只要选择从属于社会，就可以在社会中扮演一个角色。阶级的区别是牢固的，农民的孩子未来仍会是农民，而上层贵族家庭的孩子则从小被鼓励建立起某种个性，以符合其贵族身份。从总体上看，整个社会中个人的选择空间是非常有限的。<br>　　而在过渡时期，因为粮食产量提高和医疗卫生条件改善等因素，人口死亡率大大降低，出生率和死亡率不再平衡，这种变化催生出内部引导这一社会性格。内在引导的人不再沿着以往的既定人生轨道，而由其性格类型所引导。这个时期的社会给予成员更多的选择，如金钱，财产，权利，知识，名誉，善行等。这一时期的社会具有流动性，内部引导者可以凭借自身坚毅的品质和努力奋斗实现阶级的跨越，这一时期的工厂主，银行家是这一类人的代表。<br>　　社会发展进入一定阶段后，随着中产阶级队伍逐渐壮大，社会的出生率降低，社会进入了初期人口下降阶段。人们需要工作的时间减少，享乐主义开始盛行，内部引导者所具有的忍耐心和进取心开始不大重要了。这时的新中产阶级呈现出他人引导型的社会性格——他们把同龄人当做个人引导的来源，他人引导所追求的目标随着这种引导的不同而改变，而追求过程本身和密切注意他人态度的过程在一生中保持不变。<br>　　在这三个阶段，父母、老师和同辈人的作用也有很大的不同。<br>　　在传统引导阶段，社会的流动性很低，成人的角色一代一代稳定不变。大多数成人的生活不要求复杂的技巧和文字知识，儿童通过模仿大人可以很快走向社会成熟。性格形成的主要动因是延续维护家庭或团体的存在，儿童所模仿的通常是大人的整个团体而不是自己的父母。<br>　　到了内部引导阶段，阶级不再固定，社会不再要求个人必须顺应社会。父母在孩子儿童时期便向他们灌输和推行理想和目标。这些理想和目标被孩子所内化，当他们长大后被这种力量驱动，追求有限的价值，财富和权利。劳动分工的进步意味着儿童不再以父母当做学习的榜样。父母不能确定孩子未来的生活方式，但是仍有意识地对孩子进行性格训练，常常更严厉地要求孩子。与传统引导相比，父母培养孩子所需要的时间更长了，儿童在社会化的过程中，承受的压力更大了，孩子是被培养大的，而不是爱大的。在内部引导的后期，上学不再是上层阶级孩子的特权。在为了大量培养工业化时代所需要的人才，政府为普通家庭的孩子提供强制的义务的教育，学校开始大批出现。这一阶段教师的主要任务是培养孩子按照中产阶级的标准去说话做事，教师并不关心孩子的情绪生活，认为自己的工作只限于教孩子读书，并且向学生灌输注重学业的评价标准。这种教育对于那些学业失败者有着巨大的损害，因为他们也认同这种标准。内部引导的孩子希望将友谊局限于同社会阶层的人，他们的友谊往往基于共同的爱好，并且只有少数要好的朋友。这一时期，同侪团体的道德约束力，吸引力或威吓力十分衰弱，但是父母甚至老师却可以打破道德权威。<br>　　而在他人引导阶段，社会的流动性仍然存在，但是这种流动性更依赖于他人的看法，以及个人如何操纵他人或为人所操纵，而不大依赖个人是什么和做什么。父母对于如何培养自己的孩子感到不知所措，开始求助于知名人物或者大众媒体，甚至交给孩子本人。他们将焦虑传递给孩子，当孩子表现出乖巧时，会给予赞扬，但其实是在讨好孩子。通过接触大众传播媒介，孩子可以轻易了解父母的行为规范，父母不再具有权威性，其重要性有所降低，而孩子的地位有所提高。在上层中产阶级，父母以克制的讲道理的方式操纵孩子，孩子则以相同的方式回报父母。这一时期的教育更集中于促使孩子全面发展，注重发展人的个性。2-5 岁的孩子也开始进入学校，他们接触的老师是理解他的，陪他玩的大人，这些新老师高度专业化，了解儿童的心理特点，加入学生的各种社会化过程，如消费，友谊，幻想等。环境鼓励孩子的创造性型与个性，但是学校本身仍是扼杀儿童想象力的场所。老师不大关心教学的内容，情绪和精力投入到团体关系领域。当代学校小班级的教师角色，和现代工厂职工关系部的角色极为相似。学校教育他人引导的儿童要准备步入一个重视团体内部关系和道德规范，不太重视产品的社会。这一时期的同侪团体的权利如同美国的陪审团在审判中拥有无上的权利。孩子们常常受到他人意见的摆布，但同侪团体本身常常是充满友谊和忍耐性的。内部引导时期同侪团体中的竞争转变为获取同侪团体赞同，或获取这种赞同的安全感而进行的竞争。同伴成为衡量一切事物的标准。<br>　　大众传媒也是影响社会性格的一个重要因素。传统引导阶段的社会利用家史，神话，传说等形式传播其相对稳定的社会价值观。这些神话与传说中，有些充满了反抗精神。故事里正反两个方面的悖论有助于年轻人综合自己被压抑的冲动，认识到冲动是人类合理的部分，从而不会真正干出有违传统的事。而到了内部引导时期，正式的学校教育机会增加了，更多年轻人学会了读书，出现了对印刷品和书籍的渴求。印刷物帮助他们建立个人与新的社会之间的联系，他们通过印刷物了解道理，所以能够建立一种新的性格结构，使他们能自愿劳动更长时间。印刷物和其他流行的文化形式，通过促使他们回想起父母对自己寄与的愿望以及为他们成功之路提供各种特殊指导，来满足这些开拓者的要求，指导着人们成功之途径。传记和小说促使内部引导社会的孩子试图在想象中离开家庭，步入社会。个人主义的追求在小说和戏剧所描述的各种生活道路上得到了支持和过度支持，独自看书变成了一种孤独的新方式。<br>　　在对待工作和娱乐的态度上，内部引导的人在青年时期往往面临着物质上的贫困，但同时他们有着儿童时期内化了的雄心壮志，这使得他们信奉吃得苦中苦，方为人上人的准则。他们将工作当做生活的主旋律，认为娱乐只是次要的，他们为了自我赞同而奋斗。他人引导的社会，娱乐活动和内部引导时期没有多少变化，但所不同的是人的社会性格发生了变化。新兴的工业革命更看中沟通和操纵人的技术，而把生产工具和技术的改进看作是第二位的。社会上消费主义开始盛行，他人引导者在儿童时期就被培养成为一名消费者。这个时期，个人在工作中若想一枝独秀，光彩夺目，有时是危险的，人们必须学会通过彻底的合作来保持工作上的竞争。而娱乐也不再被看做浪费时间，生产和消费，顺应团体和为个人兴趣服务，以及工作和娱乐之间没有清楚的界限。<br>　　以上是我粗略地总结了书中第一编的内容，在本书的第二编政治部分，作者探讨了这三种人在美国政治生活上的行为与态度。第三编自主性部分，则在更深层次上探究了不同时期人的自主性，包括工作和娱乐的自主性。美国作为一个移民国家，没有封建统治的历史，其政治结构也与我们国家有很大不同，对于这部分内容，我的感触不多。不过从中，我们还是可以了解到不同时期美国人对政治态度的变化，也更可以理解为何现在的美国人都热衷于政治话题——政治已经成为消费文化的一部分。</p>
-<h3 id="一些思考"><a href="#一些思考" class="headerlink" title="一些思考"></a>一些思考</h3><p>虽然本书研究的是美国的社会性格变化过程，但是在阅读的过程中，却常常引起我的强烈共鸣。这或许就是社会学的魅力所在，社会学家用一种新的思考方式和分析问题的方法解释周围发生的事情，这往往是普通人所注意不到的。虽然中美所代表的中西方在文化上有巨大差异，但是在社会发展的历程上，却有着很多的共同点。书中所定义的传统引导型社会，对应于欧洲的中世纪，而中国则是经历了长达 2000 年的封建王朝统治时代，这一时期的中国人民，正如书中所刻画的传统引导者的形象，守序而一成不变。十九世纪的美国人，在昭昭天命的引领下，背井离乡，来到那时还是一片荒野的美国西部，希望成就自己的一番事业，他们的社会性格呈现出明显的内部引导的特点。而社会主义建设初期的青年们，尤其是那些参与开发北大荒或是支援新疆建设的青年们，也呈现出相同的性格特点。书中所定义的他人引导的社会性格，随着我国现代化建设的推进，也开始在大城市的市民中出现。<br>　　新中国成立后，我们用半个多世纪走过了西方 200 年走过的现代化道路。在书中所述的美国社会变迁中，我们可以感受到其中的撕裂感。一个在旧的传统社会成长起来的人，往往无法适应新的社会发展。而在新中国的发展历程中，这种撕裂感则更为明显，并且不仅仅是时间轴纵向的，还有横向的。中国拥有广阔的国土和世界上最多的人口，各个地区之间的发展有着巨大的差距。在偏远落后的农村，那里的社会还处于传统引导的阶段，而在小城镇，人们的性格处于内部引导阶段，而在北上广深这样的大都会，一些市民的社会性格已经达到了他人引导的阶段。社会整体的流动性依然存在，生活在农村传统社会的人可以通过努力学习实现阶级跨越，成为大城市的新市民，在他的人生的不同阶段，我们可以看到 3 种不同的性格导向特点。中国的这种快速发展在世界上是前所未有的，但是这种不平衡的发展，所带来的伤痛也是不容忽视的。有时我会觉得，中国的大都市和落后乡村，好似是两个世界。虽然同是炎黄子孙，讲着相同的语言，但是生活在那里的人的人生轨迹却完全不同。大城市中产阶级家庭的孩子，他们的人生早被父母规划好，得益于更好的教育资源，他们往往可以进入更好的高等院校，家庭条件更好的孩子，还可以选择出国留学的道路。农村的孩子，除却少部分人通过高考这条上升通道飞上枝头变成了金凤凰，大部分年轻人辍学来到大城市打工，充当了经济发展的廉价劳动力。他们虽也在大城市生活，但是大城市并不接纳他们，他们结婚生子后，往往因无力承担孩子在大城市的教育而将孩子送回老家，形成了数量庞大的留守一代。父母教育和爱的缺失，让留守一代的成长，尤其是心理健康，成为巨大的社会问题。而他们的人生命运，我想大部分也会和他们的父母一样。没有人会认为这种差异是理所应当的。现代化摧枯拉朽般摧毁了传统的体系，却没有给人以足够的时间去适应，社会整体的发展还未达到较高的水平，阶级却已经开始固化，城市和农村愈发对立，形成不同的文化孤岛。中国社会发展的成果瞩目，但背后隐含的伤痛，可能需要几代人的时间去消解。</p>
-<h3 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h3><p>阅读这本书的契机，是一次与一位敬重的朋友的闲谈中，他偶然提及了他对于社会心理学的研究。在此之前，我从未听说过有社会心理学这门学科，但对于心理学，我是一直有着浓厚的兴趣的。于是我下载了几本知名的社会心理学的著作到我的 ipad 中，但是学习生活的繁忙，使得我很少能抽出时间阅读。利用这次假期和开学的这段时间，我阅读了这本足足有 400 页的著作。虽然这是一本学术著作，但阅读的过程却十分有趣。作者举了大量生动有趣的例子，使书中的道理变得浅显易懂。通过阅读这本书，在了解了这么多社会性格的同时，我也更加了解自己。人创造了社会，人无法脱离社会生存，因而要了解社会，最终使自己融入社会，完成自我的社会化，我想这大概是我这个外行涉猎这门科学的意义所在吧。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="jiezi19971225.cn/2018/12/05/汇编与栈帧/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="jiezi19971225">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Jiez19971225‘s Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/05/汇编与栈帧/" itemprop="url">汇编与栈帧1</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-05T13:34:50+08:00">
-                2018-12-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/汇编/" itemprop="url" rel="index">
-                    <span itemprop="name">汇编</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-         <span class="post-time">
-	   &nbsp; | &nbsp;
-           <span class="post-meta-item-icon">
-             <i class="fa fa-bar-chart"></i>
-           </span>
-           <span class="post-meta-item-text">字数统计:</span>
-           <span class="post-count">674(字)</span>
-
-         </span>
-
-      <span class="post-time">
-	   &nbsp; | &nbsp;
-           <span class="post-meta-item-icon">
-             <i class="fa fa-clock-o"></i>
-           </span>
-           <span class="post-meta-item-text">阅读时长:</span>
-           <span class="post-count">3(分)</span>
-
-         </span>
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>转自:</p>
-<ul>
-<li><a href="https://www.cnblogs.com/dormant/p/5059644.html" target="_blank" rel="noopener">汇编与栈帧学习（一）</a></li>
-<li><a href="https://www.cnblogs.com/dormant/p/5079894.html" target="_blank" rel="noopener">esp 和 ebp 详解</a></li>
-<li><a href="https://blog.csdn.net/striver1205/article/details/25695437" target="_blank" rel="noopener">Push, Pop, call, leave 和 Ret 指令图解</a></li>
-</ul>
-<p>参考以上博文的内容，写了一个简单的程序，说明一下汇编调用过程</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 源程序 test1.c</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> c = a + b;</span><br><span class="line">    <span class="keyword">return</span> c;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> sum = add(a, b);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 我的环境为64位linux系统，需要加上-m32指定以32位方式编译</span></span><br><span class="line">$ gcc -m32  -g test1.c</span><br><span class="line">$ gdb a.out</span><br><span class="line">(gdb) b main</span><br><span class="line">Breakpoint <span class="number">1</span> at <span class="number">0x80483f7</span>: file test1.c, line <span class="number">8.</span></span><br><span class="line">(gdb) b add</span><br><span class="line">Breakpoint <span class="number">2</span> at <span class="number">0x80483e1</span>: file test1.c, line <span class="number">3.</span></span><br><span class="line">(gdb) r</span><br><span class="line">Breakpoint <span class="number">1</span>, main () at test1.c:<span class="number">8</span></span><br><span class="line"><span class="number">8</span>         <span class="keyword">int</span> a = <span class="number">-1</span>;</span><br><span class="line">(gdb) disas main</span><br><span class="line">Dump of assembler code <span class="keyword">for</span> function main:</span><br><span class="line"><span class="number">0x080483f1</span> &lt;+<span class="number">0</span>&gt;:     push   %ebp <span class="comment">// ebp寄存器存储当前main栈帧栈底, 将ebp入栈，esp减去4字节</span></span><br><span class="line"><span class="number">0x080483f2</span> &lt;+<span class="number">1</span>&gt;:     mov    %esp,%ebp <span class="comment">// 把esp的数值赋给ebp</span></span><br><span class="line"><span class="number">0x080483f4</span> &lt;+<span class="number">3</span>&gt;:     sub    $<span class="number">0x10</span>,%esp <span class="comment">// 把esp减去16个字节</span></span><br><span class="line">=&gt; <span class="number">0x080483f7</span> &lt;+<span class="number">6</span>&gt;:     movl   $<span class="number">0xffffffff</span>,<span class="number">-0xc</span>(%ebp) <span class="comment">// ebp减去12字节的位置保存直接数-1</span></span><br><span class="line"><span class="number">0x080483fe</span> &lt;+<span class="number">13</span>&gt;:    movl   $<span class="number">0x0</span>,<span class="number">-0x8</span>(%ebp) <span class="comment">// ebp减去8字节的位置保存直接数0</span></span><br><span class="line"><span class="number">0x08048405</span> &lt;+<span class="number">20</span>&gt;:    pushl  <span class="number">-0x8</span>(%ebp) <span class="comment">// ebp减去8字节的位置的值（b的数值）入栈 同时esp减去4字节</span></span><br><span class="line"><span class="number">0x08048408</span> &lt;+<span class="number">23</span>&gt;:    pushl  <span class="number">-0xc</span>(%ebp) <span class="comment">// ebp减去12字节的位置的值入栈（a的数值） 同时esp减去4字节 说明参数是按照从右向左的顺序入栈的</span></span><br><span class="line"><span class="number">0x0804840b</span> &lt;+<span class="number">26</span>&gt;:    call   <span class="number">0x80483db</span> &lt;add&gt; <span class="comment">// 调用add函数 call指令将返回地址0x0804840b压入栈顶，esp减去4字节，然后程序跳转到add函数的起始地址</span></span><br><span class="line"><span class="number">0x08048410</span> &lt;+<span class="number">31</span>&gt;:    add    $<span class="number">0x8</span>,%esp <span class="comment">// esp加上8 清除局部变量占用的空间</span></span><br><span class="line"><span class="number">0x08048413</span> &lt;+<span class="number">34</span>&gt;:    mov    %eax,<span class="number">-0x4</span>(%ebp)</span><br><span class="line"><span class="number">0x08048416</span> &lt;+<span class="number">37</span>&gt;:    mov    $<span class="number">0x0</span>,%eax</span><br><span class="line"><span class="number">0x0804841b</span> &lt;+<span class="number">42</span>&gt;:    leave</span><br><span class="line"><span class="number">0x0804841c</span> &lt;+<span class="number">43</span>&gt;:    ret</span><br><span class="line">End of assembler dump.</span><br><span class="line">(gdb) p $esp</span><br><span class="line">$<span class="number">1</span> = (<span class="keyword">void</span> *) <span class="number">0xffffcc68</span></span><br><span class="line">(gdb) p $ebp</span><br><span class="line">$<span class="number">2</span> = (<span class="keyword">void</span> *) <span class="number">0xffffcc78</span></span><br><span class="line">(gdb) disas add</span><br><span class="line">Dump of assembler code <span class="keyword">for</span> function add:</span><br><span class="line"><span class="number">0x080483db</span> &lt;+<span class="number">0</span>&gt;:     push   %ebp <span class="comment">// ebp寄存器存储当前main栈帧栈底, 将ebp入栈，esp减去4字节</span></span><br><span class="line"><span class="number">0x080483dc</span> &lt;+<span class="number">1</span>&gt;:     mov    %esp,%ebp <span class="comment">// 把esp的数值赋给ebp</span></span><br><span class="line"><span class="number">0x080483de</span> &lt;+<span class="number">3</span>&gt;:     sub    $<span class="number">0x10</span>,%esp <span class="comment">// 把esp减去16个字节</span></span><br><span class="line">=&gt; <span class="number">0x080483e1</span> &lt;+<span class="number">6</span>&gt;:     mov    <span class="number">0x8</span>(%ebp),%edx <span class="comment">// ebp加上8个字节的位置的值 存入寄存器edx</span></span><br><span class="line"><span class="number">0x080483e4</span> &lt;+<span class="number">9</span>&gt;:     mov    <span class="number">0xc</span>(%ebp),%eax <span class="comment">// // ebp加上12个字节的位置的值 存入寄存器eax</span></span><br><span class="line"><span class="number">0x080483e7</span> &lt;+<span class="number">12</span>&gt;:    add    %edx,%eax <span class="comment">// edx的数值加上eax的数值存入eax</span></span><br><span class="line"><span class="number">0x080483e9</span> &lt;+<span class="number">14</span>&gt;:    mov    %eax,<span class="number">-0x4</span>(%ebp) <span class="comment">// ebx减去4字节的位置保存eax的值</span></span><br><span class="line"><span class="number">0x080483ec</span> &lt;+<span class="number">17</span>&gt;:    mov    <span class="number">-0x4</span>(%ebp),%eax <span class="comment">//</span></span><br><span class="line"><span class="number">0x080483ef</span> &lt;+<span class="number">20</span>&gt;:    leave <span class="comment">// LEAVE指令是将ebp的数值赋给esp，然后popl ebp， 即esp加上4字节</span></span><br><span class="line"><span class="number">0x080483f0</span> &lt;+<span class="number">21</span>&gt;:    ret <span class="comment">// RET指令则是将栈顶的返回地址弹出到EIP，esp+4 然后按照EIP此时指示的指令地址继续执行程序</span></span><br><span class="line">(gdb) p $ebp</span><br><span class="line">$<span class="number">6</span> = (<span class="keyword">void</span> *) <span class="number">0xffffcc58</span></span><br><span class="line">(gdb) p $esp</span><br><span class="line">$<span class="number">5</span> = (<span class="keyword">void</span> *) <span class="number">0xffffcc48</span></span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="jiezi19971225.cn/2018/11/30/计算机网络学习笔记1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="jiezi19971225">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Jiez19971225‘s Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/11/30/计算机网络学习笔记1/" itemprop="url">计算机网络学习笔记1-概述</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-30T06:23:24+08:00">
-                2018-11-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/计算机网络/" itemprop="url" rel="index">
-                    <span itemprop="name">计算机网络</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-         <span class="post-time">
-	   &nbsp; | &nbsp;
-           <span class="post-meta-item-icon">
-             <i class="fa fa-bar-chart"></i>
-           </span>
-           <span class="post-meta-item-text">字数统计:</span>
-           <span class="post-count">1.5k(字)</span>
-
-         </span>
-
-      <span class="post-time">
-	   &nbsp; | &nbsp;
-           <span class="post-meta-item-icon">
-             <i class="fa fa-clock-o"></i>
-           </span>
-           <span class="post-meta-item-text">阅读时长:</span>
-           <span class="post-count">5(分)</span>
-
-         </span>
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="互联网的组成"><a href="#互联网的组成" class="headerlink" title="互联网的组成"></a>互联网的组成</h3><ul>
-<li>对等连接 即 p2p（peer to peer），是指两台主机在通信时并不区分哪一个是服务请求方哪一个是服务提供方。只要两台主机都运行了对等连接软件（p2p 软件），他们就可以进行对等，平等连接通信，这时，双方下载对方已经存储在硬盘中的共享文档。对等连接工作方式可以支持大量对等用户同事工作</li>
-<li>在互联网的信息起特殊作用的是路由器，它是一种专用计算机，是实现分组交换（packet switching）的关键构建，其任务是转发收到的分组。</li>
-<li>电路交换的一个重要特点是，在通话的全部时间内，通话的两个用户始终占用端到端的通信资源。使用电路交换来传送计算机数据时，传输效率往往很低，因为计算机数据是突发地出现在传输线路上的，真正用来传送数据的时间很短，被用户占用的通信线路资源在大部分时间都是空闲的。</li>
-<li>分组交换采用存储转发技术，路由器收到一个分组，先暂时存储一下，检查其首部，查找转发表，按照首部中的目的地址，找到合适的接口转发出去。</li>
-<li>边缘部分 由所有连接在因特网上的主机组成，由用户直接使用，用来运行各种网络应用，为用户直接提供各种网络服务</li>
-<li>核心部分 由大量网络和连接这些网络的路由器组成，这部分是为边缘部分提供服务的</li>
-</ul>
-<h3 id="计算机网络的性能"><a href="#计算机网络的性能" class="headerlink" title="计算机网络的性能"></a>计算机网络的性能</h3><ul>
-<li>速率 指的是数据的传送速度，单位是 bit/s</li>
-<li>带宽 在计算机网络中，表示网络中某通道传送数据的能力，表示在单位时间内网络中某信道所能通过的“最高数据率”，单位是 bit/s</li>
-<li>吞吐量 表示在单位时间内通过某个网络（或者信道，接口）的实际的数据量 额定速度 1Gbit/s 的以太网，实际拓扑两可能只是 100Mbit/s</li>
-<li>时延（delay 或者 latency）是指数据（一个报文或分组，甚至比特）从网络（或者链路）的一个端传送到另一端所需的时间。<ul>
-<li>发送时延 是主机或路由器发送数据帧所需要的时间<br>发送时延 = 数据帧长度（bit）/ 发送速率（bit/s）</li>
-<li>传播时延 是电磁波在信道中传播一定的距离需要花费的时间<br>传播时延长 = 信道长度（m）/ 电磁波在信道上的传播速率（m/s）<br>电磁波在自由空间的传播速率是光速，在光纤中速率约为 2.0 * 10^5km/s，1000km 长的光纤线路的传播时延大约为 5ms</li>
-<li>处理时延 主机或路由器在收到分组时要花费一定的时间进行处理造成的时延</li>
-<li>排队时延 分组在经过网络传输时，要经过许多路由器，分组进入路由器后，要先在输入队列中排队等待处理</li>
-<li>时延带宽积 又称为以比特为单位的链路长度<br>时延带宽积 = 传播时延 * 带宽</li>
-<li>往返时间 RTT 即数据双向交互一次所需要的时间</li>
-<li>利用率 有信道利用率和网络利用率两种。信道或网络利用率过高会产生非常大的时延。</li>
-</ul>
-</li>
-<li>OSI（open system interconnection）开放系统互联标准，只是法律上的国际标准，TCP/IP 是实际上的国际标准<br>OSI 的七层模型包括应用层，表示层，会话层，运输层，网络层，数据链路层，物理层<br>TCP/IP 的四层模型包括应用层（TELNET，FTP，SMTP），传输层（TCP/UDP），网际层（IP），网络接口层<br>在学习计算机网络原理时，采取这种的办法，采用一种五层协议，包括应用层，运输层，网络层，数据链路层，物理层<ul>
-<li>应用层 任务是通过应用程序间的交互来完成特定网络应用。应用层协议定义的是应用进程间通信和交互的规则，对于不同的网络应用需要有不同的应用层协议，包括 HTTP 协议，域名系统 DNS，SMTP，应用层交互的数据单元称为报文</li>
-<li>运输层 任务是负责向两台主机中进程之间的通信提供通用的数据传输服务，主要使用两种协议<br>传输控制协议 TCP（Transmission Control Protocol），提供面向连接的，可靠的数据传输服务，其数据传输的单位是报文段（segment）<br>用户数据包协议 UDP（User Datagram Protocol），提供无连接的，尽最大努力的数据传输服务，不保证可靠性，传输的单位是用户数据报</li>
-<li>网络层 负责为分组交换网上的不同主机提供通信服务。在发送数据是，网络层把运输层产生的报文或用户数据报封装成分组或包进行传送。在 TCP/IP 体系中，网络层使用 IP 协议，因此分组也叫做 IP 数据报，或简称数据报。</li>
-<li>数据链路层 将网络层交下来的 IP 数据报组装成数据帧（framing），在两个相邻节点的链路上传送帧。每一帧包括数据和必要的控制信息（同步信息，地址信息，差错控制）。控制信息能使接受端能检测到所收到的帧有无差错，如果有差错，数据链路层就简单的丢弃这个出了差错的帧，如果有需要改正的数据在传输中出现了差错，就要采用可靠传输协议来纠错</li>
-<li>物理层 在物理层上所传数据的单位是比特</li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="jiezi19971225.cn/2018/11/25/oj运维笔记-持续更新/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="jiezi19971225">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Jiez19971225‘s Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/11/25/oj运维笔记-持续更新/" itemprop="url">oj运维笔记-持续更新</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-25T13:59:10+08:00">
-                2018-11-25
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/OJ运维/" itemprop="url" rel="index">
-                    <span itemprop="name">OJ运维</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-         <span class="post-time">
-	   &nbsp; | &nbsp;
-           <span class="post-meta-item-icon">
-             <i class="fa fa-bar-chart"></i>
-           </span>
-           <span class="post-meta-item-text">字数统计:</span>
-           <span class="post-count">601(字)</span>
-
-         </span>
-
-      <span class="post-time">
-	   &nbsp; | &nbsp;
-           <span class="post-meta-item-icon">
-             <i class="fa fa-clock-o"></i>
-           </span>
-           <span class="post-meta-item-text">阅读时长:</span>
-           <span class="post-count">2(分)</span>
-
-         </span>
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>接到协会老师的任务，我负责了学校 oj 的开发和运维工作，这篇博客记录我在运维过程中遇到的一些问题和解决办法。</p>
-<ul>
-<li>重启容器 找不到 java，vi 等命令 使用 update update-alternatives —config 配置 java javac vi 等</li>
-<li>java 遇到　 OpenJDK 64-Bit Server VM warning: Can’t detect initial thread stack location - find_vma failed 　错误原因是 chroot 系统中，需要挂载/proc，只需要执行以下语句即可<br>mount -t proc none /proc</li>
-<li><p>php 下载 excel 文件 nginx 报错 502<br>首先查看 nginx 日志，发现在站点配置文件中没有设置输出日志，在站点配置文件末尾加入<br>error_log logs/errors.log error;<br>输入命令 nginx -t 发现报错<br>nginx: [emerg] open() “/usr/share/nginx/logs/errors.log” failed (2: No such file or directory)<br>使用 touch 创建日志文件，查看日志文件发现<br>*4 upstream sent too big header while reading response header from upstream<br>百度之后，说是 header 过大的问题，在 nginx.conf 的 http 段加入以下配置<br>proxy_buffer_size 128k;<br>proxy_buffers 32 32k;<br>proxy_busy_buffers_size 128k;</p>
-<pre><code>  fastcgi_buffer_size 128k;
-  fastcgi_buffers 4 256k;
-  fastcgi_busy_buffers_size 256k;
-</code></pre><p>问题搞定！</p>
-<ul>
-<li>手动执行 judge_client<br>judge_client 1000 1 /home/judge/hustoj_core debug</li>
-</ul>
-</li>
-<li><p>当 v-if 与 v-for 一起使用时，v-for 具有比 v-if 更高的优先级</p>
-</li>
-<li>supervisor 的使用 运行命令 supervisorctl 然后参照配置文件的写法运行命令</li>
-<li>docker-compose 要注意 services 不能重名，即使是在不同的目录下，如果 services 重名，会覆盖之前的容器，建议使用项目名+容器名进行命名</li>
-</ul>
-<h3 id="压力测试"><a href="#压力测试" class="headerlink" title="压力测试"></a>压力测试</h3><p>因为使用 redis 缓存了问题数据，我想要测试一下有没有带来性能上提升<br>首先我尝试的是 postman 的 runner，但是测试之后发现并没有什么区别。后来了解到 postman 的 runner 是串行的。<br>又看到 jMeter 这个工具，但是它在 linux 下没有 GUI，配置又很繁琐，直接劝退。<br>之后又看到 linux 下几款 命令行压力测试工具，最终选择使用 ab。</p>
-<h3 id="ab-的使用"><a href="#ab-的使用" class="headerlink" title="ab 的使用"></a>ab 的使用</h3><p>使用很简单，最基础的设置，请求 10000 次，并发数量 1000</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ab -n 10000 -c 1000 http://localhost:8080/api/problem/1</span><br></pre></td></tr></table></figure>
-<h3 id="socket-Too-many-open-files-24-的解决办法"><a href="#socket-Too-many-open-files-24-的解决办法" class="headerlink" title="socket: Too many open files (24)的解决办法"></a>socket: Too many open files (24)的解决办法</h3><p>打开的文件太多了，超过了系统限制</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ulimit -n 204800</span><br></pre></td></tr></table></figure>
-<h3 id="redigo"><a href="#redigo" class="headerlink" title="redigo"></a>redigo</h3><p>文献 系统优点</p>
-<h3 id="nginx"><a href="#nginx" class="headerlink" title="nginx"></a>nginx</h3><p>nginx容器配置反向代理，无法使用 localhost 访问主机，可以使用宿主机 docker 0 的网卡 ip 代替</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span>
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2620,7 +2455,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">40</span>
+                  <span class="site-state-item-count">45</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
