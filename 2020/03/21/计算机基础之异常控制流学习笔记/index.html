@@ -93,7 +93,7 @@
 <meta property="og:image" content="http://www.jiezi19971225.cn/2020/03/21/计算机基础之异常控制流学习笔记/虚拟地址空间映像.png">
 <meta property="og:image" content="http://www.jiezi19971225.cn/2020/03/21/计算机基础之异常控制流学习笔记/中断处理过程.png">
 <meta property="og:image" content="http://www.jiezi19971225.cn/2020/03/21/计算机基础之异常控制流学习笔记/外部中断的处理过程.png">
-<meta property="og:updated_time" content="2020-04-01T07:44:19.955Z">
+<meta property="og:updated_time" content="2020-04-06T14:29:59.830Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="计算机基础之异常控制流学习笔记">
 <meta name="twitter:description" content="正常控制流正常控制流包含两种顺序  按照指令存放的顺序执行，新的 PC 数值为当前指令地址加上指令长度 跳转到由于转移类指令指出的转移目标地址处执行，新的 PC 数值为转移目标地址  进程与进程上下文的切换进程的概念进程是资源分配的最小单位，每个应用程序在运行时均有自己的存储空间，用来存储自己的程序代码和数据，包括只读区（代码和只读数据），可读可写数据区（初始化数据和未初始化数据），动态的堆区和">
@@ -451,7 +451,7 @@
 <p>故障</p>
 <p><strong>故障</strong>是在引起故障的指令被启动后但未结束执行时 CPU 检测到的一类与指令执行相关的意外事件。这种意外事件有些可以回复，有些不能回复。如指令译码出现的非法操作码；取指令或者取数据时发生页故障，执行触发操作时发现除数为 0.</p>
 <p>对于像溢出和非法操作码等这类故障，因为无法通过异常处理程序回复，会调用内核的 abort 例程，以中止发生故障的当前进程。</p>
-<p>对于页故障。cpu 在指令执行过程中需要访问存储器，首先进行地址转换，在查页表进行地址转换时，判断相应页表项中的有效位是否是 1，并且确定是否地址越界或访问越权，如果检测到有效位部位 1 或者地址月结或者访问越权，都会产生页故障异常。页故障异常包含多种不同情况：处理程序首先检测是否发生地址越界或访问越权，如果是的话，故障不可恢复，否则是缺陷故障，可通过从磁盘读入页面来恢复。Linux 中不可恢复的访存故障（地址越界和访问越权）都称为<strong>段故障</strong>。</p>
+<p>对于页故障。cpu 在指令执行过程中需要访问存储器，首先进行地址转换，在查页表进行地址转换时，判断相应页表项中的有效位是否是 1，并且确定是否地址越界或访问越权，如果检测到有效位不为 1 或者地址越界或者访问越权，都会产生页故障异常。页故障异常包含多种不同情况：处理程序首先检测是否发生地址越界或访问越权，如果是的话，故障不可恢复，否则是缺陷故障，可通过从磁盘读入页面来恢复。Linux 中不可恢复的访存故障（地址越界和访问越权）都称为<strong>段故障</strong>。</p>
 <p>陷阱</p>
 <p><strong>陷阱</strong>也成为自陷或者陷入，与故障等其他异常事件不同，是预先安排的一种异常事件，就像预先设定的陷阱一样，当执行到陷阱指令，CPU 就调出特定的程序进行相应的处理，处理结束后返回到陷阱指令的下一条指令执行。</p>
 <p>陷阱的重要作之一是在用户程序和内核之间提供一个像过程调用一样的接口，这个接口称为<strong>系统调用</strong>。操作系统给每个服务编一个号，称为系统调用号，每个服务功能通过一个对应的<strong>系统调用服务例程</strong>提供。如在 linux 中就提供了创建子线程（fork），读文件（read），加载并且运行新程序（execve）等服务功能。</p>
@@ -607,7 +607,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-count">46</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -618,7 +618,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-count">22</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -629,7 +629,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-count">42</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

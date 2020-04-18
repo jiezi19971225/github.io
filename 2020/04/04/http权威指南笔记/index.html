@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Jiez19971225‘s Blog">
 <meta property="og:description" content="记录一下自己不太清楚的知识点 第二章 URL 与资源URLurl 的语法 \://\:\&amp;lt;password&amp;gt;@\:\/\;\?\#\ 基础 URL HTML 标记\，可以设定基础 URL URL 编码机制 urlencode 通过转义表示不安全的字符 包含一个百分号(%)，后面跟着两个表示字符 ASCII 码的十六进制数 第三章 HTTP 报文报文的组成组成 对报文进行描述的其实航 包含属性">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-04-04T14:38:28.531Z">
+<meta property="og:updated_time" content="2020-04-06T09:15:37.460Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="http权威指南">
 <meta name="twitter:description" content="记录一下自己不太清楚的知识点 第二章 URL 与资源URLurl 的语法 \://\:\&amp;lt;password&amp;gt;@\:\/\;\?\#\ 基础 URL HTML 标记\，可以设定基础 URL URL 编码机制 urlencode 通过转义表示不安全的字符 包含一个百分号(%)，后面跟着两个表示字符 ASCII 码的十六进制数 第三章 HTTP 报文报文的组成组成 对报文进行描述的其实航 包含属性">
@@ -371,7 +371,7 @@
              <i class="fa fa-bar-chart"></i>
            </span>
            <span class="post-meta-item-text">字数统计:</span>
-           <span class="post-count">1.3k(字)</span>
+           <span class="post-count">1.8k(字)</span>
 
          </span>
 
@@ -381,7 +381,7 @@
              <i class="fa fa-clock-o"></i>
            </span>
            <span class="post-meta-item-text">阅读时长:</span>
-           <span class="post-count">5(分)</span>
+           <span class="post-count">6(分)</span>
 
          </span>
 
@@ -430,6 +430,18 @@
 <p>HTTP1.1 会使用管道优化，将一连串请求放入管道中，但是对于 POST 这个样非幂等的请求不应该放在管道中</p>
 <h3 id="代理和网关的区别"><a href="#代理和网关的区别" class="headerlink" title="代理和网关的区别"></a>代理和网关的区别</h3><p>严格来说,代理连接的是两个或多个使用相同协议的应用程序,而网关连接的则是两个或多个使用不同协议的端点。网关扮演的是“协议转换器”的角色,即使客户端和服务器使用的是不同的协议,客户端也可以通过它完成与服务器之间的事务处理。</p>
 <h3 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h3><p>缓存有两种，强缓存和协商缓存<br>强缓存使用 Expired 和 Cache Control 字段，不需要向服务器通信<br>协商缓存需要携带协商字段与服务器通信，如果服务器返回 304 NOT Modified 信息，就使用缓存中的资源，并在相应中插入新鲜度信息<br>no-store 不缓存<br>no-cache 在与服务器进行新鲜度验证前不使用缓存</p>
+<h4 id="代理缓存"><a href="#代理缓存" class="headerlink" title="代理缓存"></a>代理缓存</h4><h5 id="为什么要有代理缓存"><a href="#为什么要有代理缓存" class="headerlink" title="为什么要有代理缓存"></a>为什么要有代理缓存</h5><p>对于源服务器，它是有缓存的，如 Redis，Memcache。但对于 HTTP 缓存来说，如果每次客户端缓存失效都从源服务器获取，那么给源服务器的压力是很大的。<br>由此引入了<strong>缓存代理</strong>机制，让代理服务器接管一部分的服务端 HTTP 缓存。客户端缓存过期后就近到代理服务器缓存中获取，代理缓存过期了才请求源服务器。</p>
+<p>缓存代理的控制分为两部分，一部分是源服务器的控制，一部分是客户端的控制。</p>
+<h5 id="源服务器的缓存控制"><a href="#源服务器的缓存控制" class="headerlink" title="源服务器的缓存控制"></a>源服务器的缓存控制</h5><h6 id="private-和-public"><a href="#private-和-public" class="headerlink" title="private 和 public"></a>private 和 public</h6><p>在源服务器的响应头中，会加上 Cache-Control 字段进行缓存的控制，它的值中可以加入 private 或 public 表示是否允许代理服务器缓存。public 表示允许。</p>
+<h6 id="proxy-revalidate"><a href="#proxy-revalidate" class="headerlink" title="proxy-revalidate"></a>proxy-revalidate</h6><p>must-revalidate 的意思是<strong>客户端</strong>缓存过期就去源服务器获取，而<strong>proxy-revalidate</strong>表示<strong>代理服务器</strong>的缓存过期后到源服务器获取</p>
+<p>前者使用范围主体更广，后者不应用于用户代理的本地缓存，应用在缓存服务器上</p>
+<h6 id="s-maxage"><a href="#s-maxage" class="headerlink" title="s-maxage"></a>s-maxage</h6><p>s 是 share 的意思，限定了缓存在代理服务器中可以存放多久，和限制客户端缓存时间的 max-age 并不冲突</p>
+<h5 id="客户端的缓存控制"><a href="#客户端的缓存控制" class="headerlink" title="客户端的缓存控制"></a>客户端的缓存控制</h5><h6 id="客户端宽容设置"><a href="#客户端宽容设置" class="headerlink" title="客户端宽容设置"></a>客户端宽容设置</h6><p>在客户端的请求中，可以加入这两个字段，来对代理服务器上的缓存进行宽容和限制操作</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">max-stale:5</span><br></pre></td></tr></table></figure>
+<p>表示客户端到代理服务器上拿缓存的时候，只要过期时间在 5s 之内，依然可以从代理中获取</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">min-fresh:5</span><br></pre></td></tr></table></figure>
+<p>表示客户端到代理服务器上拿缓存的时候，一定要在过期前 5s 之前的时间内</p>
+<h6 id="only-if-cached"><a href="#only-if-cached" class="headerlink" title="only-if-cached"></a>only-if-cached</h6><p>表示客户端只会接受代理缓存，而不会接受源服务器的响应，如果代理缓存无效，则直接返回 504</p>
 <h3 id="安全"><a href="#安全" class="headerlink" title="安全"></a>安全</h3><p>CSRF Cross Site Request Forgery<br>点击劫持 设置 X-FRAME-OPTIONS</p>
 <h3 id="cookie"><a href="#cookie" class="headerlink" title="cookie"></a>cookie</h3><ul>
 <li>cookie 的域名属性</li>
@@ -566,7 +578,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-count">46</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -577,7 +589,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-count">22</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -588,7 +600,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-count">42</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -621,7 +633,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#第二章-URL-与资源"><span class="nav-number">1.</span> <span class="nav-text">第二章 URL 与资源</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#URL"><span class="nav-number">1.1.</span> <span class="nav-text">URL</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第三章-HTTP-报文"><span class="nav-number">2.</span> <span class="nav-text">第三章 HTTP 报文</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#报文的组成"><span class="nav-number">2.1.</span> <span class="nav-text">报文的组成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#状态码"><span class="nav-number">2.2.</span> <span class="nav-text">状态码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Keep-Alive"><span class="nav-number">2.3.</span> <span class="nav-text">Keep-Alive</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代理和网关的区别"><span class="nav-number">2.4.</span> <span class="nav-text">代理和网关的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存"><span class="nav-number">2.5.</span> <span class="nav-text">缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安全"><span class="nav-number">2.6.</span> <span class="nav-text">安全</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cookie"><span class="nav-number">2.7.</span> <span class="nav-text">cookie</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#附录"><span class="nav-number">3.</span> <span class="nav-text">附录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP-首部参考"><span class="nav-number">3.1.</span> <span class="nav-text">HTTP 首部参考</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#第二章-URL-与资源"><span class="nav-number">1.</span> <span class="nav-text">第二章 URL 与资源</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#URL"><span class="nav-number">1.1.</span> <span class="nav-text">URL</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第三章-HTTP-报文"><span class="nav-number">2.</span> <span class="nav-text">第三章 HTTP 报文</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#报文的组成"><span class="nav-number">2.1.</span> <span class="nav-text">报文的组成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#状态码"><span class="nav-number">2.2.</span> <span class="nav-text">状态码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Keep-Alive"><span class="nav-number">2.3.</span> <span class="nav-text">Keep-Alive</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代理和网关的区别"><span class="nav-number">2.4.</span> <span class="nav-text">代理和网关的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存"><span class="nav-number">2.5.</span> <span class="nav-text">缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#代理缓存"><span class="nav-number">2.5.1.</span> <span class="nav-text">代理缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#为什么要有代理缓存"><span class="nav-number">2.5.1.1.</span> <span class="nav-text">为什么要有代理缓存</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#源服务器的缓存控制"><span class="nav-number">2.5.1.2.</span> <span class="nav-text">源服务器的缓存控制</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#private-和-public"><span class="nav-number">2.5.1.2.1.</span> <span class="nav-text">private 和 public</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#proxy-revalidate"><span class="nav-number">2.5.1.2.2.</span> <span class="nav-text">proxy-revalidate</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#s-maxage"><span class="nav-number">2.5.1.2.3.</span> <span class="nav-text">s-maxage</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#客户端的缓存控制"><span class="nav-number">2.5.1.3.</span> <span class="nav-text">客户端的缓存控制</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#客户端宽容设置"><span class="nav-number">2.5.1.3.1.</span> <span class="nav-text">客户端宽容设置</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#only-if-cached"><span class="nav-number">2.5.1.3.2.</span> <span class="nav-text">only-if-cached</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安全"><span class="nav-number">2.6.</span> <span class="nav-text">安全</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cookie"><span class="nav-number">2.7.</span> <span class="nav-text">cookie</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#附录"><span class="nav-number">3.</span> <span class="nav-text">附录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP-首部参考"><span class="nav-number">3.1.</span> <span class="nav-text">HTTP 首部参考</span></a></li></ol></li></ol></div>
             
 
           </div>

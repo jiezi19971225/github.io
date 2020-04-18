@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="记录一下从 Sass 官网学习到的 Sass 的一些高级应用。 属性嵌套有些 CSS 属性遵循相同的命名空间 (namespace)，比如 font-family, font-size, font-weight 都以 font 作为属性的命名空间。为了便于管理这样的属性，同时也为了避免了重复输入，Sass 允许将属性嵌套在命名空间中，例如： 1234567.funky &amp;#123;  font:">
+<meta name="description" content="记录一下从 Sass 官网学习到的 Sass 的一些高级应用。 语法特殊函数CSS 定义了许多函数，一些在 sass 中工作的很好，他们被解析为函数调用，然后转换为普通传递 css 函数。但是有一些例外，他们被解析为 Sass 脚本表达式。所有特殊的函数调用返回 unquoted 字符串 url他可以接受 quoted 或者 unquoted 的 URL，当他接受一个有效的 unquoted UR">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Sass学习">
 <meta property="og:url" content="http://www.jiezi19971225.cn/2019/09/16/Sass学习/index.html">
 <meta property="og:site_name" content="Jiez19971225‘s Blog">
-<meta property="og:description" content="记录一下从 Sass 官网学习到的 Sass 的一些高级应用。 属性嵌套有些 CSS 属性遵循相同的命名空间 (namespace)，比如 font-family, font-size, font-weight 都以 font 作为属性的命名空间。为了便于管理这样的属性，同时也为了避免了重复输入，Sass 允许将属性嵌套在命名空间中，例如： 1234567.funky &amp;#123;  font:">
+<meta property="og:description" content="记录一下从 Sass 官网学习到的 Sass 的一些高级应用。 语法特殊函数CSS 定义了许多函数，一些在 sass 中工作的很好，他们被解析为函数调用，然后转换为普通传递 css 函数。但是有一些例外，他们被解析为 Sass 脚本表达式。所有特殊的函数调用返回 unquoted 字符串 url他可以接受 quoted 或者 unquoted 的 URL，当他接受一个有效的 unquoted UR">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-03-23T15:23:40.037Z">
+<meta property="og:updated_time" content="2020-04-14T05:20:32.335Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Sass学习">
-<meta name="twitter:description" content="记录一下从 Sass 官网学习到的 Sass 的一些高级应用。 属性嵌套有些 CSS 属性遵循相同的命名空间 (namespace)，比如 font-family, font-size, font-weight 都以 font 作为属性的命名空间。为了便于管理这样的属性，同时也为了避免了重复输入，Sass 允许将属性嵌套在命名空间中，例如： 1234567.funky &amp;#123;  font:">
+<meta name="twitter:description" content="记录一下从 Sass 官网学习到的 Sass 的一些高级应用。 语法特殊函数CSS 定义了许多函数，一些在 sass 中工作的很好，他们被解析为函数调用，然后转换为普通传递 css 函数。但是有一些例外，他们被解析为 Sass 脚本表达式。所有特殊的函数调用返回 unquoted 字符串 url他可以接受 quoted 或者 unquoted 的 URL，当他接受一个有效的 unquoted UR">
 
 
 
@@ -348,7 +348,7 @@
              <i class="fa fa-bar-chart"></i>
            </span>
            <span class="post-meta-item-text">字数统计:</span>
-           <span class="post-count">600(字)</span>
+           <span class="post-count">813(字)</span>
 
          </span>
 
@@ -358,7 +358,7 @@
              <i class="fa fa-clock-o"></i>
            </span>
            <span class="post-meta-item-text">阅读时长:</span>
-           <span class="post-count">2(分)</span>
+           <span class="post-count">3(分)</span>
 
          </span>
 
@@ -382,6 +382,10 @@
 
       
         <p>记录一下从 Sass 官网学习到的 Sass 的一些高级应用。</p>
+<h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><h3 id="特殊函数"><a href="#特殊函数" class="headerlink" title="特殊函数"></a>特殊函数</h3><p>CSS 定义了许多函数，一些在 sass 中工作的很好，他们被解析为函数调用，然后转换为普通传递 css 函数。但是有一些例外，他们被解析为 Sass 脚本表达式。所有特殊的函数调用返回 unquoted 字符串</p>
+<h4 id="url"><a href="#url" class="headerlink" title="url"></a>url</h4><p>他可以接受 quoted 或者 unquoted 的 URL，当他接受一个有效的 unquoted URL 的时候，Sass 按照原样解析它，如果它包含变量或函数调用，它被解析为一个普通的 CSS 函数调用。</p>
+<h2 id="at-rules"><a href="#at-rules" class="headerlink" title="at-rules"></a>at-rules</h2><p>use 是 scss 模块化语法，未来将代替 import，导入的文件必须以_开头</p>
+<p>forward 可以传递模块，但是在本文件中无法使用，要使用还需要额外使用 use 加载，不用担心的是模块只会被加载一次</p>
 <h2 id="属性嵌套"><a href="#属性嵌套" class="headerlink" title="属性嵌套"></a>属性嵌套</h2><p>有些 CSS 属性遵循相同的命名空间 (namespace)，比如 font-family, font-size, font-weight 都以 font 作为属性的命名空间。为了便于管理这样的属性，同时也为了避免了重复输入，Sass 允许将属性嵌套在命名空间中，例如：</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.funky</span> &#123;</span><br><span class="line">  <span class="attribute">font</span>: &#123;</span><br><span class="line">    family: fantasy;</span><br><span class="line">    <span class="attribute">size</span>: <span class="number">30em</span>;</span><br><span class="line">    <span class="attribute">weight</span>: bold;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h2><p>变量支持块级作用域，嵌套规则内定义的变量只能在嵌套规则内使用（局部变量），不在嵌套规则内定义的变量则可在任何地方使用（全局变量）。将局部变量转换为全局变量可以添加 !global 声明</p>
@@ -521,7 +525,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-count">46</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -532,7 +536,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-count">22</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -543,7 +547,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-count">42</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -576,7 +580,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#属性嵌套"><span class="nav-number">1.</span> <span class="nav-text">属性嵌套</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#变量"><span class="nav-number">2.</span> <span class="nav-text">变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#extend"><span class="nav-number">3.</span> <span class="nav-text">@extend</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#变量默认值"><span class="nav-number">4.</span> <span class="nav-text">变量默认值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内置函数"><span class="nav-number">5.</span> <span class="nav-text">内置函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#普通-CSS-函数"><span class="nav-number">5.1.</span> <span class="nav-text">普通 CSS 函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数值函数"><span class="nav-number">5.2.</span> <span class="nav-text">数值函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串函数"><span class="nav-number">5.3.</span> <span class="nav-text">字符串函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#颜色函数"><span class="nav-number">5.4.</span> <span class="nav-text">颜色函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#列表函数"><span class="nav-number">6.</span> <span class="nav-text">列表函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#映射函数"><span class="nav-number">7.</span> <span class="nav-text">映射函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#选择器函数"><span class="nav-number">8.</span> <span class="nav-text">选择器函数</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#语法"><span class="nav-number">1.</span> <span class="nav-text">语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#特殊函数"><span class="nav-number">1.1.</span> <span class="nav-text">特殊函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#url"><span class="nav-number">1.1.1.</span> <span class="nav-text">url</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#at-rules"><span class="nav-number">2.</span> <span class="nav-text">at-rules</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#属性嵌套"><span class="nav-number">3.</span> <span class="nav-text">属性嵌套</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#变量"><span class="nav-number">4.</span> <span class="nav-text">变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#extend"><span class="nav-number">5.</span> <span class="nav-text">@extend</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#变量默认值"><span class="nav-number">6.</span> <span class="nav-text">变量默认值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内置函数"><span class="nav-number">7.</span> <span class="nav-text">内置函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#普通-CSS-函数"><span class="nav-number">7.1.</span> <span class="nav-text">普通 CSS 函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数值函数"><span class="nav-number">7.2.</span> <span class="nav-text">数值函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串函数"><span class="nav-number">7.3.</span> <span class="nav-text">字符串函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#颜色函数"><span class="nav-number">7.4.</span> <span class="nav-text">颜色函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#列表函数"><span class="nav-number">8.</span> <span class="nav-text">列表函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#映射函数"><span class="nav-number">9.</span> <span class="nav-text">映射函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#选择器函数"><span class="nav-number">10.</span> <span class="nav-text">选择器函数</span></a></li></ol></div>
             
 
           </div>
