@@ -294,6 +294,401 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/04/18/oracle复习考点/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/04/18/oracle复习考点/" itemprop="url">oracle复习考点</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-18T23:45:14+08:00">
+                2020-04-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+         <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-bar-chart"></i>
+           </span>
+           <span class="post-meta-item-text">字数统计:</span>
+           <span class="post-count">1k(字)</span>
+
+         </span>
+
+      <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-clock-o"></i>
+           </span>
+           <span class="post-meta-item-text">阅读时长:</span>
+           <span class="post-count">4(分)</span>
+
+         </span>
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>大三数据库考试前记得考点，没啥营养</p>
+<h2 id="起步"><a href="#起步" class="headerlink" title="起步"></a>起步</h2><ul>
+<li>修改密码 alter user identified by 123456;</li>
+<li>解锁用户 alter user scott account unlock;</li>
+<li>用户登录 connect 用户名/密码</li>
+<li>修改 sqlplus 默认命令提示符 set sqlprompt jieziSQL&gt;</li>
+</ul>
+<h2 id="sqlplus-基本命令"><a href="#sqlplus-基本命令" class="headerlink" title="sqlplus 基本命令"></a>sqlplus 基本命令</h2><ul>
+<li>show user 显示当前用户</li>
+<li>select * from tab 当前用户下的表和视图</li>
+<li>set linesize 150 设置行宽</li>
+<li>col ename for[mat] a10 设置列宽</li>
+<li>set pagesize 30 设置页大小</li>
+<li>set newpage 5 设置一页中空行的数量</li>
+<li>define 定义变量</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">lj&gt;define var = "test";</span><br><span class="line">lj&gt;define var;</span><br><span class="line">DEFINE VAR	       = "test" (CHAR)</span><br></pre></td></tr></table></figure>
+<p>save,get,/,start,@</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> myemp;</span><br><span class="line">save o1;    // 保存到o1.sql</span><br><span class="line">get o1; // 显示o1.sql</span><br><span class="line">/   // 执行上一条sql命令</span><br><span class="line"><span class="keyword">start</span> o1;  // 执行方式1</span><br><span class="line">@o1 // 执行方式2</span><br></pre></td></tr></table></figure>
+<p>numformat<br>有如下占位符<br><em> 9 对应数字存在则显示，如果位数不足会显示乱码，如 56 在 999 掩码下会乱码
+</em> 0 对应数字不存在补 0<br><em> $ 添加美元符号
+</em> S 强制显示符号，正数会显示+ * , 对应位置添加,</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span> numformat $<span class="number">999</span>,<span class="number">999</span>,<span class="number">999</span>,<span class="number">999.00</span></span><br></pre></td></tr></table></figure>
+<p>desc</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">desc dba_tablespaces;</span><br><span class="line">// 在查询过程中使用</span><br><span class="line"> <span class="keyword">select</span> empno,ename,</span><br><span class="line"> <span class="comment">#desc job</span></span><br><span class="line"> job <span class="keyword">from</span> emp;</span><br></pre></td></tr></table></figure>
+<p>spool<br>spool filename [create | replace | append] 可使用简写 cre 新建 rep 替换 app 追加<br>spool out | off 关闭 spool 输出</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">lj&gt;spool /home/jiezi19971225/result app;</span><br><span class="line">lj&gt;select * from emp;</span><br><span class="line">lj&gt;spool off;</span><br></pre></td></tr></table></figure>
+<p>ed[it] filename<br>上一条执行的 SQL 或者 PL/SQL 执行完毕后，可以用该命令编辑<br>col[umn]</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">lj&gt; col ename heading 姓名;</span><br><span class="line">lj&gt; col comm null empty; // 该列null值显示为设定的字符串</span><br><span class="line">lj&gt;col sal off;</span><br><span class="line">lj&gt;col job justify [left|center|right];</span><br><span class="line">lj&gt;col job [print|noprint]; // 控制是否显示该列</span><br><span class="line">lj&gt;col job [wrapped|word_wrapped]; // 按照长度、单词折行</span><br></pre></td></tr></table></figure>
+<p>ttitle 和 btitle</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">lj&gt;ttitle left 我是表头标题  // 参数可选left center right col n(在第n列打印)  skip n (跳到下一行开始的第几行) bold 以黑体打印 可以使用变量</span><br><span class="line">lj&gt;btitle left 我是表尾标题</span><br><span class="line">lj&gt;btitle [on|off] 切换显示</span><br><span class="line"></span><br><span class="line">// 使用变量</span><br><span class="line">lj&gt;define varT='table header'</span><br><span class="line">lj&gt;ttitle left varT</span><br></pre></td></tr></table></figure>
+<p>设置空白行数为 4</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span> <span class="keyword">new</span> page <span class="number">4</span></span><br></pre></td></tr></table></figure>
+<h2 id="用户管理与权限分配"><a href="#用户管理与权限分配" class="headerlink" title="用户管理与权限分配"></a>用户管理与权限分配</h2><h3 id="用户相关"><a href="#用户相关" class="headerlink" title="用户相关"></a>用户相关</h3><p>创建用户</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">user</span> user_name [<span class="keyword">identified</span> <span class="keyword">by</span> pass_word | <span class="keyword">identified</span> exeternally]</span><br><span class="line"><span class="keyword">default</span> <span class="keyword">tablespace</span> uses</span><br><span class="line"><span class="keyword">temporary</span> tablespaces temp</span><br><span class="line"><span class="keyword">quota</span> <span class="number">10</span>m <span class="keyword">on</span> tbsp_1;   // 置顶用户在tbsp_1表空间最多可使用的大小为10MB</span><br></pre></td></tr></table></figure>
+<p>删除用户</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> <span class="keyword">user</span> user_name [<span class="keyword">cascade</span>]; // 如果用户包含数据库对象必须加cascade</span><br></pre></td></tr></table></figure>
+<h3 id="权限管理"><a href="#权限管理" class="headerlink" title="权限管理"></a>权限管理</h3><p>如果不知道权限，可以 select * from system_privilege_map where privilege_name = ? 进行模糊查找</p>
+<h2 id="概要文件"><a href="#概要文件" class="headerlink" title="概要文件"></a>概要文件</h2><p>概要文件：<br>是一个命名的资源限制的集合。系统资源的使用、口令的限制。<br>创建：</p>
+<p>create profile 概要文件名 limit<br>sessions_per_user : 限制用户当前会话的数量<br>cpu_per_session： 限制一个会话使用的 cpu 时间<br>cpu_per_call ：限制一个 sql 语句使用的 cpu 时间<br>logical_reads_per_session：限制每个会话读取的数据库数据块数，包括从内存和磁盘读取的总和<br>logical_reads_per_call：限制 sql 语句读取的数据库数据块数，包括从内存和磁盘读取的总和<br>private_sga ：sga 中私有区域的大小<br>connect_time ：指定一个会话连接到数据库的最大时间<br>idle_time default：指定一个会话可以连续空闲的最长时间，单位：分钟<br>composite_limit：设置用户对系统资源的综合消耗。由： cpu_per_session、logical_reads_per_session、private_sga、connect_time 综合决定<br>failed_login_attempts: 最大错误登录次数<br>password_lock_time:登录失败后账户被锁天数<br>password_life_time:密码有效天数<br>password_grace_time：用户密码被中止前多少天提醒用户修改密码<br>password_reuse_time：用户修改密码后多少天，用户才可以再次使用原来的密码<br>password_reuse_max：密码被重新使用后，可修改的次数<br>password_verify_function：密码复杂度审计函数</p>
+<p>修改：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">alter</span> profile 概要文件名 <span class="keyword">limit</span> </span><br><span class="line"><span class="keyword">sessions_per_user</span> <span class="number">20</span></span><br><span class="line">failed_login_attemps <span class="number">3</span>;</span><br></pre></td></tr></table></figure>
+<p>删除：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> profile 概要文件名；</span><br></pre></td></tr></table></figure>
+<p>说明：<br>一个用户所使用的概要文件被删除，则此用户使用默认的概要文件。<br>使某个用户使用某个用户配置文件<br>aler user 用户名 profile 概要文件名;<br>要使上面的限制生效，需要修改初始化参数 resource_limit<br>alter system set resource_limit=true;(11g)</p>
+<h2 id="权限相关"><a href="#权限相关" class="headerlink" title="权限相关"></a>权限相关</h2><p>创建用户</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">user</span> jiezi19971225 <span class="keyword">identified</span> <span class="keyword">by</span> <span class="number">123456</span>;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/04/18/reactRouter学习/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/04/18/reactRouter学习/" itemprop="url">reactRouter学习</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-18T23:41:25+08:00">
+                2020-04-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/前端/" itemprop="url" rel="index">
+                    <span itemprop="name">前端</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+         <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-bar-chart"></i>
+           </span>
+           <span class="post-meta-item-text">字数统计:</span>
+           <span class="post-count">614(字)</span>
+
+         </span>
+
+      <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-clock-o"></i>
+           </span>
+           <span class="post-meta-item-text">阅读时长:</span>
+           <span class="post-count">2(分)</span>
+
+         </span>
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>记录一下学习 React 全家桶中的 router-router</p>
+<h2 id="examples"><a href="#examples" class="headerlink" title="examples"></a>examples</h2><h3 id="路由参数"><a href="#路由参数" class="headerlink" title="路由参数"></a>路由参数</h3><p>通过 hooks 获取</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> &#123; id &#125; = useParams();</span><br></pre></td></tr></table></figure>
+<h3 id="Route"><a href="#Route" class="headerlink" title="Route"></a>Route</h3><h4 id="route-props"><a href="#route-props" class="headerlink" title="route props"></a>route props</h4><p>所有渲染方式会传递以下三种 props</p>
+<ul>
+<li>match</li>
+<li>location</li>
+<li>history<br>会在 props 接受这三个 props</li>
+</ul>
+<h5 id="component"><a href="#component" class="headerlink" title="component"></a>component</h5><p>当你使用 component 时，router 使用 React.CreateElement 根据传递的 component 创建一个新的 React element 。这意味着如果你提供了一个内联的函数给 component 属性，你会在每次 render 的时候都创建这个组件，这会导致旧组件的 unmount 和 新组建的 mount</p>
+<p>其背后的原理在于，react 在比较组件状态以便决定如何更新 dom 节点时，首先要比较组件的 type 和 key。在使用<code>&lt;Route component={() =&gt; (&lt;Bar idx={this.state.idx}/&gt;)}/&gt;</code>时，由于调用了 React.createElement，组件的 type 不是 Bar 这个类，而是一个匿名函数。App 组件每次 render 时都生成一个新的匿名函数，导致生成的组件的 type 总是不相同，所以会产生重复的 unmounting 和 mounting。</p>
+<h5 id="render"><a href="#render" class="headerlink" title="render"></a>render</h5><p>允许方便的内联渲染，避免不必要的重新挂载。当路由匹配的时候，这个函数会被调用。函数可以访问所有的 props。</p>
+<p>\<route component\> 优先级高于 \<route render\></route></route></p>
+<h5 id="children"><a href="#children" class="headerlink" title="children"></a>children</h5><p>有时你需要渲染渲染子组件，不管路由是否匹配。这种情况下，可以使用 children 。</p>
+<h4 id="exact"><a href="#exact" class="headerlink" title="exact"></a>exact</h4><p>当为 true，进行精确匹配。</p>
+<h4 id="strict"><a href="#strict" class="headerlink" title="strict"></a>strict</h4><p>当为 true，路径中的 slash 也必须精确匹配。</p>
+<h4 id="sensitive"><a href="#sensitive" class="headerlink" title="sensitive"></a>sensitive</h4><p>当为 true，大小写敏感。</p>
+<h3 id="history-是可变对象"><a href="#history-是可变对象" class="headerlink" title="history 是可变对象"></a>history 是可变对象</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Comp</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  componentDidUpdate(prevProps) &#123;</span><br><span class="line">    <span class="comment">// will be true</span></span><br><span class="line">    <span class="keyword">const</span> locationChanged = <span class="keyword">this</span>.props.location !== prevProps.location;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// INCORRECT, will *always* be false because history is mutable.</span></span><br><span class="line">    <span class="keyword">const</span> locationChanged =</span><br><span class="line">      <span class="keyword">this</span>.props.history.location !== prevProps.history.location;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&lt;Route component=&#123;Comp&#125; /&gt;;</span><br></pre></td></tr></table></figure>
+<h3 id="Link"><a href="#Link" class="headerlink" title="Link"></a>Link</h3><h4 id="to"><a href="#to" class="headerlink" title="to"></a>to</h4><p>可以是一个路径字符串，也可以是一个对象</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    pathname:<span class="string">'xxx'</span>,</span><br><span class="line">    search:<span class="string">'xxx'</span>,</span><br><span class="line">    hash:<span class="string">'xxx'</span>,</span><br><span class="line">    state:<span class="string">'xxx'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>也可以是一个函数，传递当前的 location，返回一个字符串或者对象</p>
+<h4 id="replace"><a href="#replace" class="headerlink" title="replace"></a>replace</h4><p>当为 true，替换历史栈中的当前记录，而不是添加一条记录</p>
+<h3 id="NavLink"><a href="#NavLink" class="headerlink" title="NavLink"></a>NavLink</h3><h4 id="activeClassName"><a href="#activeClassName" class="headerlink" title="activeClassName"></a>activeClassName</h4><p>默认的类名是 active，这将会被连接到 className 属性后</p>
+<h4 id="link-exact"><a href="#link-exact" class="headerlink" title="link-exact"></a>link-exact</h4><p>当为 true，activeClassName 和 activeStyle 只会在精确匹配时生效</p>
+<h4 id="link-strict"><a href="#link-strict" class="headerlink" title="link-strict"></a>link-strict</h4><p>结合 Route 的 strict，会跳转到严格匹配的路由</p>
+<h4 id="isActive"><a href="#isActive" class="headerlink" title="isActive"></a>isActive</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;NavLink</span><br><span class="line">  to=<span class="string">"/events/123"</span></span><br><span class="line">  isActive=&#123;(match, location) =&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span> (!match) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// only consider an event active if its event id is an odd number</span></span><br><span class="line">    <span class="keyword">const</span> eventID = <span class="built_in">parseInt</span>(match.params.eventID);</span><br><span class="line">    <span class="keyword">return</span> !<span class="built_in">isNaN</span>(eventID) &amp;&amp; eventID % <span class="number">2</span> === <span class="number">1</span>;</span><br><span class="line">  &#125;&#125;</span><br><span class="line">&gt;</span><br><span class="line">  Event <span class="number">123</span></span><br><span class="line">&lt;<span class="regexp">/NavLink&gt;</span></span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/04/18/试用vue3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1441,6 +1836,28 @@
           </span>
 
           
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/前端/" itemprop="url" rel="index">
+                    <span itemprop="name">前端</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -1455,7 +1872,7 @@
              <i class="fa fa-bar-chart"></i>
            </span>
            <span class="post-meta-item-text">字数统计:</span>
-           <span class="post-count">3.7k(字)</span>
+           <span class="post-count">3.8k(字)</span>
 
          </span>
 
@@ -1465,7 +1882,7 @@
              <i class="fa fa-clock-o"></i>
            </span>
            <span class="post-meta-item-text">阅读时长:</span>
-           <span class="post-count">14(分)</span>
+           <span class="post-count">15(分)</span>
 
          </span>
 
@@ -1625,6 +2042,7 @@
 <h4 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h4><p>谨慎分配 state，为了避免不必要的 render，可以将状态下放到更低层级的组件</p>
 <h4 id="合并状态更新"><a href="#合并状态更新" class="headerlink" title="合并状态更新"></a>合并状态更新</h4><h4 id="使用-PureComponent-和-React-memo-避免不必要的-render-调用"><a href="#使用-PureComponent-和-React-memo-避免不必要的-render-调用" class="headerlink" title="使用 PureComponent 和 React.memo 避免不必要的 render 调用"></a>使用 PureComponent 和 React.memo 避免不必要的 render 调用</h4><p>避免组件不必要的渲染的方法有：React.memo 包裹的函数式组件，继承自 React.PureComponent 的 class 组件。</p>
 <h5 id="浅比较"><a href="#浅比较" class="headerlink" title="浅比较"></a>浅比较</h5><p>用 PureComponent 或者 React.memo 修饰的组件，每次更新的时候都对 props 和 state 进行一次浅比较。如果有对象，且对象引用变化，就会触发重渲染。由于函数也是引用类型，如果传递的是箭头函数（匿名函数），组件也会在父组件重新渲染的时候重新渲染。</p>
+<h3 id="useMemo"><a href="#useMemo" class="headerlink" title="useMemo"></a>useMemo</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Example</span>(<span class="params">props</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> [count, setCount] = useState(<span class="number">0</span>);</span><br><span class="line">  <span class="keyword">const</span> [foo] = useState(<span class="string">"foo"</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> main = useMemo(</span><br><span class="line">    () =&gt; (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;Item key=&#123;<span class="number">1</span>&#125; x=&#123;<span class="number">1</span>&#125; foo=&#123;foo&#125; /&gt;</span><br><span class="line">        &lt;Item key=&#123;<span class="number">2</span>&#125; x=&#123;<span class="number">2</span>&#125; foo=&#123;foo&#125; /&gt;</span><br><span class="line">        &lt;Item key=&#123;<span class="number">3</span>&#125; x=&#123;<span class="number">3</span>&#125; foo=&#123;foo&#125; /&gt;</span><br><span class="line">        &lt;Item key=&#123;<span class="number">4</span>&#125; x=&#123;<span class="number">4</span>&#125; foo=&#123;foo&#125; /&gt;</span><br><span class="line">        &lt;Item key=&#123;<span class="number">5</span>&#125; x=&#123;<span class="number">5</span>&#125; foo=&#123;foo&#125; /&gt;</span><br><span class="line">      &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    ),</span></span><br><span class="line"><span class="regexp">    [foo]</span></span><br><span class="line"><span class="regexp">  );</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">  return (</span></span><br><span class="line"><span class="regexp">    &lt;div&gt;</span></span><br><span class="line"><span class="regexp">      &lt;p&gt;&#123;count&#125;&lt;/</span>p&gt;</span><br><span class="line">      &lt;button onClick=&#123;() =&gt; setCount(count + <span class="number">1</span>)&#125;&gt;setCount&lt;<span class="regexp">/button&gt;</span></span><br><span class="line"><span class="regexp">      &#123;main&#125;</span></span><br><span class="line"><span class="regexp">    &lt;/</span>div&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
           
         
@@ -2039,509 +2457,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/03/24/编译原理之有穷自动机/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="jiezi19971225">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Jiez19971225‘s Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/24/编译原理之有穷自动机/" itemprop="url">有穷自动机</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-24T10:53:25+08:00">
-                2020-03-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/编译原理/" itemprop="url" rel="index">
-                    <span itemprop="name">编译原理</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-         <span class="post-time">
-	   &nbsp; | &nbsp;
-           <span class="post-meta-item-icon">
-             <i class="fa fa-bar-chart"></i>
-           </span>
-           <span class="post-meta-item-text">字数统计:</span>
-           <span class="post-count">1.5k(字)</span>
-
-         </span>
-
-      <span class="post-time">
-	   &nbsp; | &nbsp;
-           <span class="post-meta-item-icon">
-             <i class="fa fa-clock-o"></i>
-           </span>
-           <span class="post-meta-item-text">阅读时长:</span>
-           <span class="post-count">6(分)</span>
-
-         </span>
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>（以下内容摘自龙书）</p>
-<p>有穷自动机是一般化的状态转换图，它可以是确定的或不确定的，其中不确定的含义是，对于某个输入符号，在同一个状态上存在不止一种转换。</p>
-<p>下文以 DFA 指代确定的有穷自动机，NFA 指代不确定的有穷自动机。</p>
-<p>DFA 和 NFA 都能且仅能识别正规集，即它们能够识别正规表达式所表示的语言。DFA 导出的识别器比 NFA 导出的识别器快得多，但是 DFA 可能比与之等价的 NFA 大得多。</p>
-<h2 id="NFA"><a href="#NFA" class="headerlink" title="NFA"></a>NFA</h2><p>NFA 是由以下几个部分组成的数学模型：</p>
-<ul>
-<li>一个状态的有穷集合 S</li>
-<li>一个输入符合集合$\Sigma$,即输入符号字母表</li>
-<li>一个转换函数 move，它把状态和符号组成的二元组映射到状态集合</li>
-<li>状态 $s_0$ 是唯一的开始或初始状态</li>
-<li>状态集合 F 是接受（或中止）状态集合</li>
-</ul>
-<p>NFA 可以用带标记的有向图表示，称为转换图，其节点是状态，有标记的边是转化函数。</p>
-<img src="/2020/03/24/编译原理之有穷自动机/NFA.png" title="NFA">
-<img src="/2020/03/24/编译原理之有穷自动机/NFA2.png" title="NFA2">
-<h2 id="DFA"><a href="#DFA" class="headerlink" title="DFA"></a>DFA</h2><p>DFA 是 NFA 的特例</p>
-<ul>
-<li>没有一个状态具有$\epsilon$转换</li>
-<li>对每个状态 s 和输入符号 a，最多只有一条标记为 a 的边离开</li>
-</ul>
-<p>确定的有穷自动机在任何状态下，对任一输入符号，最多只有一个转换。如果用转换表表示 DFA 的转换函数，那么表中的每个表项最多只有一个状态。因而，很容易确定 DFA 是否接受某输入字符串，因为从开始状态起，最多只有一条到达接受状态的路径可由这个符号串标记。</p>
-<h2 id="NFA-转为-DFA"><a href="#NFA-转为-DFA" class="headerlink" title="NFA 转为 DFA"></a>NFA 转为 DFA</h2><p>子集构造算法，在 NFA 的转换表中，每个表项是一个状态集，在 DFA 的转化表中，每个表项只有一个状态。从 NFA 变换到 DFA 的基本思想是让 DFA 的每个状态对应 NFA 的一个状态集。DFA 用它的状态去记住 NFA 在读输入符号后到达的所有状态。</p>
-<img src="/2020/03/24/编译原理之有穷自动机/NFA转DFA.png" title="NFA转DFA">
-<p>定义三种操作</p>
-<ul>
-<li>$\epsilon-closure(s)$ 从 NFA 状态 s 只经过$\epsilon$转换可以到达的 NFA 状态集</li>
-<li>$\epsilon-closure(T)$ 从 T 中的状态只经过$\epsilon$转换可以到达的 NFA 状态集</li>
-<li>move(T,a) 从 T 中的状态 S 经过输入符号 a 上的转换可以到达的 NFA 状态集</li>
-</ul>
-<p>子集构造的步骤伪码如下，其中 Dstates 是 D 的状态集合，Dtran 是 D 的转换表</p>
-<p>初始时，$\epsilon-closure(s)$是 Dstates 中唯一的状态且未被标记</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">while Dstates 中存在一个未标记的状态T</span><br><span class="line">    标记T</span><br><span class="line">    for 每个输入符号a</span><br><span class="line">        U = epsilon-closure(move(T,a))</span><br><span class="line">        if U 不在 Dstates中</span><br><span class="line">            将U作为一个未标记的状态添加到Dstates中</span><br><span class="line">        Dtran[T,a] = U</span><br></pre></td></tr></table></figure>
-<p>开始状态 A = $\epsilon-closure(s)$ = {0，1，2，4，7}，根据算法流程，先标记 A</p>
-<p>然后计算 $\epsilon-closure(move(A,a))$，在状态 A 上只有 2 和 7 有 a 上的转换，得到状态 B={1,2,3,4,6,7,8},Dtran[A,a] = B</p>
-<p>状态 A 中只有状态 4 对于输入 b 有一个转换，得到状态 C={1,2,4,5,6,7},Dtran[A,b]=C</p>
-<p>然后对没被标记的状态 B 和状态 C 继续这个过程</p>
-<p>状态 B 的 a 转换 得到的状态仍然是 B， Dtran[B,a] = B</p>
-<p>状态 B 中在 8 上的 b 的转换可以得到新的状态 D={1,2,4,5,6,7,9} Dtran[B,b] = D。这里的计算详细解释一下，{1,2,3,4,6,7,8} 经过 b 转换后的集合是 {5,9}，然后再计算 $\epsilon-closure({5,8})$ 得到 {1,2,4,5,6,7,9}</p>
-<p>状态 C 的 a 转换可以得到的状态 {1,2,3,4,6,7,8}，即状态 B，Dtran[C,a] = B</p>
-<p>状态 C 的 b 转换可以得到的状态 {1,2,4,5,6,7}，即状态 C 自身，Dtran[C,b] = C</p>
-<p>之后的过程省略，可以得到的五个状态集合是</p>
-<p>A = {0,1,2,4,7}<br>B = {1,2,3,4,6,7,8}<br>C = {1,2,4,5,6,7}<br>D = {1,2,4,5,6,7,9}<br>E = {1,2,4,5,6,7,10}</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>状态</th>
-<th>a</th>
-<th>b</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>A</td>
-<td>B</td>
-<td>C</td>
-</tr>
-<tr>
-<td>B</td>
-<td>B</td>
-<td>D</td>
-</tr>
-<tr>
-<td>C</td>
-<td>B</td>
-<td>C</td>
-</tr>
-<tr>
-<td>D</td>
-<td>B</td>
-<td>E</td>
-</tr>
-<tr>
-<td>E</td>
-<td>B</td>
-<td>C</td>
-</tr>
-</tbody>
-</table>
-</div>
-<img src="/2020/03/24/编译原理之有穷自动机/子集构造法结果.png" title="子集构造法结果">
-<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>接下来用编程语言实现一个简单的 DFA</p>
-<img src="/2020/03/24/编译原理之有穷自动机/要实现的DFA.png" title="要实现的DFA">
-<p>功能要求：输入一个单行无空格的字符串（以“#”号结束），如果该字符串是一个合法的输入，则显示“接受”，否则显示“不接受”。</p>
-<p>分析该 DFA 的五元组信息如下</p>
-<ul>
-<li>一个状态的有穷集合 S = {0,1,2,3}</li>
-<li>一个输入符合集合$\Sigma$ = {a,b}</li>
-<li>一个转换函数 move，它把状态和符号组成的二元组映射到状态集合<ul>
-<li>move(0,a) = 1</li>
-<li>move(0,b) = 0</li>
-<li>move(1,a) = 1</li>
-<li>move(1,b) = 2</li>
-<li>move(2,a) = 1</li>
-<li>move(2,b) = 3</li>
-<li>move(3,a) = 1</li>
-<li>move(3,b) = 0</li>
-</ul>
-</li>
-<li>状态 $s_0$ 是唯一的开始或初始状态 = 0</li>
-<li>状态集合 F 是接受（或中止）状态集合 = {3}</li>
-</ul>
-<p>根据如下信息就可以开始编码了</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="built_in">string</span> str;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dfa</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">bool</span> ok = <span class="literal">true</span>; <span class="comment">// 是否合法</span></span><br><span class="line">    <span class="keyword">int</span> pos = <span class="number">0</span>;    <span class="comment">// 当前扫描位置</span></span><br><span class="line">    <span class="keyword">int</span> state = <span class="number">0</span>;  <span class="comment">// 当前状态</span></span><br><span class="line">    <span class="keyword">while</span> (str[pos] != <span class="string">'#'</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">char</span> next = str[pos];</span><br><span class="line">        ++pos;</span><br><span class="line">        <span class="keyword">if</span> (state == <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (next == <span class="string">'a'</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                state = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (next == <span class="string">'b'</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                state = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                ok = <span class="literal">false</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (state == <span class="number">1</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (next == <span class="string">'a'</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                state = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (next == <span class="string">'b'</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                state = <span class="number">2</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                ok = <span class="literal">false</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (state == <span class="number">2</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (next == <span class="string">'a'</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                state = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (next == <span class="string">'b'</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                state = <span class="number">3</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                ok = <span class="literal">false</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (state == <span class="number">3</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (next == <span class="string">'a'</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                state = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (next == <span class="string">'b'</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                state = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                ok = <span class="literal">false</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (state != <span class="number">3</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        ok = <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (ok)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"接受"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"不接受"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (<span class="built_in">cin</span> &gt;&gt; str)</span><br><span class="line">    &#123;</span><br><span class="line">        dfa();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>输入：<br>abbab#<br>abb#<br>输出：<br>不接受<br>接受</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/03/21/计算机基础之异常控制流学习笔记/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="jiezi19971225">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Jiez19971225‘s Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/21/计算机基础之异常控制流学习笔记/" itemprop="url">计算机基础之异常控制流学习笔记</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-21T22:04:59+08:00">
-                2020-03-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/计算机系统基础/" itemprop="url" rel="index">
-                    <span itemprop="name">计算机系统基础</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-         <span class="post-time">
-	   &nbsp; | &nbsp;
-           <span class="post-meta-item-icon">
-             <i class="fa fa-bar-chart"></i>
-           </span>
-           <span class="post-meta-item-text">字数统计:</span>
-           <span class="post-count">4.1k(字)</span>
-
-         </span>
-
-      <span class="post-time">
-	   &nbsp; | &nbsp;
-           <span class="post-meta-item-icon">
-             <i class="fa fa-clock-o"></i>
-           </span>
-           <span class="post-meta-item-text">阅读时长:</span>
-           <span class="post-count">13(分)</span>
-
-         </span>
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <img src="/2020/03/21/计算机基础之异常控制流学习笔记/思维导图.png" title="思维导图">
-<h2 id="正常控制流"><a href="#正常控制流" class="headerlink" title="正常控制流"></a>正常控制流</h2><p>正常控制流包含两种顺序</p>
-<ul>
-<li>按照指令存放的顺序执行，新的 PC 数值为当前指令地址加上指令长度</li>
-<li>跳转到由于转移类指令指出的转移目标地址处执行，新的 PC 数值为转移目标地址</li>
-</ul>
-<h2 id="进程与进程上下文的切换"><a href="#进程与进程上下文的切换" class="headerlink" title="进程与进程上下文的切换"></a>进程与进程上下文的切换</h2><h3 id="进程的概念"><a href="#进程的概念" class="headerlink" title="进程的概念"></a>进程的概念</h3><p>进程是资源分配的最小单位，每个应用程序在运行时均有自己的存储空间，用来存储自己的程序代码和数据，包括只读区（代码和只读数据），可读可写数据区（初始化数据和未初始化数据），动态的堆区和栈区</p>
-<p>进程的引入为程序提供了以下两方面的抽象。一个独立的逻辑控制流和一个私有的虚拟内存地址。每个进程拥有一个独立的逻辑，使得程序员以为程序似在执行过程中独占处理器。一个私有的虚拟地址空间，使得程序员以为程序在执行过程中独占存储器。</p>
-<p>为了实现以上两方面的抽象，操作系统必须提供一整套管理机制，包括处理器调度、进程上下文切换、虚拟存储管理等。</p>
-<h3 id="逻辑控制流"><a href="#逻辑控制流" class="headerlink" title="逻辑控制流"></a>逻辑控制流</h3><p>一个可执行目标文件被加载并启动执行后，就成为一个进程。他们代码段中的每一条指令都有一个确定的地址，在这些指令的执行过程中，会形成一个指令执行的地址序列，对于确定的输入数据，其指令的地址序列也是确定的。这个确定的指令执行地址序列被称为进程的<strong>逻辑控制流</strong>。</p>
-<p>对于一个具有单核处理器的系统，如果有多个进程运行，这些进程会轮流使用处理器，处理器的<strong>物理控制流</strong>是由多个逻辑控制流组成。<br><img src="/2020/03/21/计算机基础之异常控制流学习笔记/多个逻辑控制流.png" title="多个逻辑控制流"></p>
-<p>图中可以看出有些进程的逻辑控制流在时间上有交错，通常把这种不同进程的逻辑控制流在时间上交错或者重叠称为<strong>并发</strong>。而<strong>并行</strong>则是并发执行的一个特例，我们称两个进程是并行的，是指他们并发的运行在不同的处理器或者处理器核中。</p>
-<p>连续执行同一个进程的时间段称为时间片，每个时间片结束时，通过进程的上下文切换，换一个新的进程到处理器上执行，开始一个新的时间片，这个过程称为<strong>时间片轮转处理器调度</strong>。</p>
-<h3 id="进程的上下文切换"><a href="#进程的上下文切换" class="headerlink" title="进程的上下文切换"></a>进程的上下文切换</h3><p>实现不同进程中指令交替执行的机制称为<strong>进程的上下文切换</strong>。</p>
-<p>进程的物理实体（代码和数据）和支持进程运行的环境合称为<strong>进程的上下文</strong>，可以细分为</p>
-<ul>
-<li>由用户进程的程序块，数据块，运行时的堆和用户栈等组成的用户空间信息被称为<strong>用户级上下文</strong>。</li>
-<li>进程表示信息，进程现场信息，进程控制信息和系统内核堆栈组成的<strong>内核空间信息</strong>被称为<strong>系统级上下文</strong>。</li>
-<li>处理器中各个寄存器的内存被称为<strong>寄存器上下文</strong>。</li>
-</ul>
-<p>用户级上下文和系统级上下文地址空间一起构成了一个进程的整个存储器映像。进程控制信息包含各种内核数据结构，如有关进程信息的进程表，页表，文件表等。<br><img src="/2020/03/21/计算机基础之异常控制流学习笔记/进程的存储映像.png" title="进程的存储映像"></p>
-<p>上下文切换发生在操作系统调度一个新进程到处理器上运行，他需要完成以下三件事</p>
-<ul>
-<li>将当前进程的寄存器上下文保存到当前进程的系统级上下文的现场信息中</li>
-<li>将新进程系统上下文中的现场信息作为新的寄存器上下文恢复到处理器的各个寄存器中</li>
-<li>将控制转移到新进程执行</li>
-</ul>
-<p>一个重要的上下文信息是 PC，当前进程被打断的断点处的 PC 作为寄存器上下文的一部分被保存在进程现场信息中。</p>
-<h3 id="进程的私有地址空间"><a href="#进程的私有地址空间" class="headerlink" title="进程的私有地址空间"></a>进程的私有地址空间</h3><img src="/2020/03/21/计算机基础之异常控制流学习笔记/虚拟地址空间映像.png" title="虚拟地址空间映像">
-<p>整个虚拟地址空间分为两大部分。<strong>内核虚拟存储空间</strong>（简称内核空间）和<strong>进程虚拟内存空间</strong>（简称用户空间）。在采用虚拟存储机制的系统中，每个程序的可执行目标文件在装入时都被映射到同样的虚拟地址空间上，即所有用户进程的虚拟地址空间是一致的，只是在相应的制度区域和可读写数据区域中映射的信息不同而已。</p>
-<p>linux 将用户空间对应的进程虚拟存储空间组织成若干“区域”的集合，<br>内核为每个进程维护了一个进程描述符，记录或者指向内核运行该进程所需要的所有信息，如进程 pid，指向用户栈的指针，可执行目标文件的文件名，程序计数器 PC 等。</p>
-<h3 id="程序的加载和运行"><a href="#程序的加载和运行" class="headerlink" title="程序的加载和运行"></a>程序的加载和运行</h3><p>当启动一个可以行目标文件执行时，首先会通过某种方式调出常驻内存的一个称为加载器的操作系统程序来处理。在 UNIX/Linux 系统中，可以通过 execve() 函数来启动加载器，其作用是在当前进程的上下文中加载并且运行一个新程序。</p>
-<h2 id="异常和中断"><a href="#异常和中断" class="headerlink" title="异常和中断"></a>异常和中断</h2><p>除了时间片到，当前进程的执行被新进程打断，还有用户按下 CTRL+C，当前执行执行中发生了不能使指令执行的意外事件，IO 设备完成了系统交给的任务需要进一步处理，这些特殊事件统称为<strong>异常</strong>或者<strong>中断</strong>。<br>当发生异常或者终端，正在执行进程的逻辑控制流被打断，CPU 转到具体的特殊处理事件的内核程序去执行。他与上下文切换有一个明显的不同：上下文切换后 CPU 执行另一个用户进程，但是，中断或异常处理程序执行的代码不是一个进程，而是一个<strong>内核控制路径</strong>，它代表异常或终端发生时正在运行的当前进程在内核态执行的一个独立的指令序列。作为一个内核控制路径，他比进程更轻，其上下文信息比一个进程的上下文信息少得多。</p>
-<h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p>异常是在 CPU 内部执行时发生的，中断是 CPU 外部的 IO 设备向 CPU 发出的请求，通常称异常为<strong>内部异常</strong>，而称中断为<strong>外部中断</strong>。</p>
-<img src="/2020/03/21/计算机基础之异常控制流学习笔记/中断处理过程.png" title="中断处理过程">
-<p>大致处理流程如下：当 CPU 在执行当前程序或任务的第 i 条指令时检测到一个异常事件，或者在执行第 i 条指令后发现有一个中断请求信息，CPU 会打断当前用户进程，然后转到相应的异常或中断处理程序去执行。如果该处理程序能解决相应问题，则在该处理程序的最后，CPU 通过执行“异常/中断返回指令”回到被打断的用户进程的第 i 条指令或第 i+1 条指令继续执行。若异常或中断处理程序发现是不可恢复的知名错误，则中止用户进程。通常情况下，对于异常和中断事件的具体处理过程全部由操作系统（可能包括驱动程序）软件来完成。</p>
-<h3 id="异常的分类"><a href="#异常的分类" class="headerlink" title="异常的分类"></a>异常的分类</h3><p>intel 将内部异常分为三类</p>
-<p>故障</p>
-<p><strong>故障</strong>是在引起故障的指令被启动后但未结束执行时 CPU 检测到的一类与指令执行相关的意外事件。这种意外事件有些可以回复，有些不能回复。如指令译码出现的非法操作码；取指令或者取数据时发生页故障，执行触发操作时发现除数为 0.</p>
-<p>对于像溢出和非法操作码等这类故障，因为无法通过异常处理程序回复，会调用内核的 abort 例程，以中止发生故障的当前进程。</p>
-<p>对于页故障。cpu 在指令执行过程中需要访问存储器，首先进行地址转换，在查页表进行地址转换时，判断相应页表项中的有效位是否是 1，并且确定是否地址越界或访问越权，如果检测到有效位不为 1 或者地址越界或者访问越权，都会产生页故障异常。页故障异常包含多种不同情况：处理程序首先检测是否发生地址越界或访问越权，如果是的话，故障不可恢复，否则是缺陷故障，可通过从磁盘读入页面来恢复。Linux 中不可恢复的访存故障（地址越界和访问越权）都称为<strong>段故障</strong>。</p>
-<p>陷阱</p>
-<p><strong>陷阱</strong>也成为自陷或者陷入，与故障等其他异常事件不同，是预先安排的一种异常事件，就像预先设定的陷阱一样，当执行到陷阱指令，CPU 就调出特定的程序进行相应的处理，处理结束后返回到陷阱指令的下一条指令执行。</p>
-<p>陷阱的重要作之一是在用户程序和内核之间提供一个像过程调用一样的接口，这个接口称为<strong>系统调用</strong>。操作系统给每个服务编一个号，称为系统调用号，每个服务功能通过一个对应的<strong>系统调用服务例程</strong>提供。如在 linux 中就提供了创建子线程（fork），读文件（read），加载并且运行新程序（execve）等服务功能。</p>
-<p>用于程序调试的<strong>断点设置</strong>也是一种陷阱指令。</p>
-<p>在 IA-32 中，陷阱指令引擎的异常称为编程异常，这些指令包括 INT n，int 3，into（溢出检查），bound（地址越界检查）,通常将 INT n 称为软中断指令，该指令引起的异常通常也称为<strong>软中断</strong>。在 IA-32/Linux 中可以使用快速系统调用指令 sysenter 或者软中断指令 int $0x80 进行系统调用。</p>
-<p>终止</p>
-<p>如果在执行指令的过程中发生了严重错误，如控制器出现问题，访问 DRAM 或者 SRAM 时发生校验错误等，则程序无法继续执行，只好终止发生问题的进程。</p>
-<h3 id="中断的分类"><a href="#中断的分类" class="headerlink" title="中断的分类"></a>中断的分类</h3><p><strong>中断</strong> 是由外部 IO 设备请求处理器进行的一种信号。他不是由当前执行的指令引起的，外部 IO 设备通过特定的<strong>中断请求信号线</strong>向 CPU 提出中断申请。CPU 在执行指令过程中，每执行一条指令就查看中断请求引脚，如果中断请求引脚的信号有效，则进入中断响应周期。在<strong>中断响应周期</strong>中，CPU 先将当前 PC 值和当前机器状态保存到栈中，并设置成为<strong>关中断</strong>状态，然后从数据总线读取<strong>中断类型号</strong>，根据中断类型号跳转到对应的中断服务程序执行。中断响应过程由硬件完成，而中断服务程序执行具体的中断处理工作，中断处理完成后，再回到被打断程序的断点处继续执行。</p>
-<img src="/2020/03/21/计算机基础之异常控制流学习笔记/外部中断的处理过程.png" title="外部中断的处理过程">
-<p>可屏蔽中断</p>
-<p>是指通过<strong>可屏蔽中断请求线</strong>INTR 向 CPU 进行请求的中断，主要来自 IO 设备的中断请求。CPU 可以通过在中断控制器中设置相应的屏蔽字来屏蔽他或者不屏蔽他。若一个 IO 设备的中断请求被屏蔽，他的中断请求信号不会被送到 CPU。</p>
-<p>不可屏蔽中断</p>
-<p>通常是非常紧急的硬件故障，通过专门的<strong>不可屏蔽中断请求线</strong>NMI 向 CPU 发出中断请求。</p>
-<h3 id="异常和中断的响应过程"><a href="#异常和中断的响应过程" class="headerlink" title="异常和中断的响应过程"></a>异常和中断的响应过程</h3><p>CPU 从检测到异常或中断事件，到调出响应的异常或中断处理程序开始执行，整个过程称为<strong>异常和中断的响应</strong>。主要分为以下三个步骤：</p>
-<ul>
-<li>保护断点和程序状态</li>
-<li>关中断</li>
-<li>识别异常和中断事件并转到响应处理程序执行</li>
-</ul>
-<p>保护断点和程序状态</p>
-<p>对于不同的异常事件，其返回地址不同。如却也故障异常的断点是发生页故障的当前指令的地址。陷阱的断点是陷阱指令后面一条指令的地址。</p>
-<p>为了能够支持异常或者中断的嵌套处理，大多数处理器将断点保存到栈中，如 IA-32 处理器的断点被保存到栈中，如果系统不支持桥套处理，则可以将断点保存到特定寄存器中。MIPS 处理器用 EPC 寄存器专门存放断点，其 CPU 用于中断的开销较小。</p>
-<p>被中断时源程序状态（如产生的各种标志信息，允许自陷标志等）都必须保存起来。每个正在运行程序的状态信息存放在一个专门的寄存器中，这些专门寄存器统称为<strong>程序状态字寄存器</strong>（PSWR），存放在 PSWR 中的信息称为<strong>程序状态字</strong>。</p>
-<p>关中断</p>
-<p>应有一种机制来禁止在处理异常或中断时再响应新的异常或中断，通常通过设置<strong>中断允许位</strong>来实现。</p>
-<p>识别异常和中断事件并转到响应处理程序执行</p>
-<p>在调出异常和中断你处理程序之前，必须知道发生了什么异常或者那个 IO 设备发出了中断请求。一般来说，内部异常事件和外部中断源的识别方式不同，大多数处理器会将二者分开来处理。</p>
-<p>内部异常事件的识别很简单，只要 CPU 在执行期间把检测到的事件对应的异常类型或者表示异常类型的信息记录到特定的内部寄存器中即可。</p>
-<p>外部中断源的识别比较复杂，只能通过在每条指令执行完成后，取下条指令之前去查询是否有中断请求。通常 CPU 通过采样对应的中断请求引脚来进行查询。但是到底是那个 IO 设备发出的请求，还需要进一步识别。</p>
-<p>异常中断的识别可以采用软件识别和硬件识别两种方式。</p>
-<p>软件识别是指，CPU 中设置一个原因寄存器，该寄存器中有一些标识异常原因或终端类型的标志信息。操作系统使用一个统一的异常或中断查询程序，按一定的优先级顺序查询原因寄存器，先查询到的先处理。MIPS 采用软件识别方式</p>
-<p>硬件识别方式称为<strong>向量中断方式</strong>，这种方式下，异常或中断处理程序的首地址称为<strong>中断向量</strong>，所有中断向量存放在一个表中，称为<strong>中断向量表</strong>。每个异常和中断都被设定一个<strong>中断类型号</strong>，中断向量存放的位置与对应的中断类型号相关。可以根据类型号快速找到对应的处理程序。IA-32 中的异常和中断识别就采用这种方式。</p>
-<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>BIOS（Basic Input/Output System）是基本输入/输出系统的简称</p>
-<p>Intel 从奔二处理器开始，引入了指令 sysenter 和 sysexit，sysenter 被称为<strong>快速系统调用指令</strong>，他提供了从用户态到内核态的快速切换方式。</p>
-<p>页的大小是 4kb，当对于页起始地址的发起第一次访问时，会发生缺页异常。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2592,7 +2507,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">46</span>
+                  <span class="site-state-item-count">48</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2614,7 +2529,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-count">43</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
