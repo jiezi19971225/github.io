@@ -294,6 +294,394 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/06/27/jenkins自动构建部署前端镜像/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/06/27/jenkins自动构建部署前端镜像/" itemprop="url">jenkins自动构建部署前端镜像</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-27T12:14:24+08:00">
+                2020-06-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/运维/" itemprop="url" rel="index">
+                    <span itemprop="name">运维</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+         <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-bar-chart"></i>
+           </span>
+           <span class="post-meta-item-text">字数统计:</span>
+           <span class="post-count">380(字)</span>
+
+         </span>
+
+      <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-clock-o"></i>
+           </span>
+           <span class="post-meta-item-text">阅读时长:</span>
+           <span class="post-count">1(分)</span>
+
+         </span>
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>目标，实现 OJ 前端代码自动打包构建镜像到腾讯云，远程 ssh 登录学校主机自动部署镜像</p>
+<p>尝试了一下在 docker 中安装 jenkins，遇到了无法解决的坑，还是在 windows 下安装吧。</p>
+<h2 id="jenkins-插件下载加速"><a href="#jenkins-插件下载加速" class="headerlink" title="jenkins 插件下载加速"></a>jenkins 插件下载加速</h2><p>修改 jenkins_home 里 updates 中 default.json 文件,之后访问 /restart 路径 重启 jenkins 后生效</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed -i <span class="string">'s/http:\/\/updates.jenkins-ci.org\/download/https:\/\/mirrors.tuna.tsinghua.edu.cn\/jenkins/g'</span> default.json &amp;&amp; sed -i <span class="string">'s/http:\/\/www.google.com/https:\/\/www.baidu.com/g'</span> default.json</span><br></pre></td></tr></table></figure>
+<h2 id="无法执行-shell-脚本"><a href="#无法执行-shell-脚本" class="headerlink" title="无法执行 shell 脚本"></a>无法执行 shell 脚本</h2><p>Manage Jenkins&gt;Configuration System<br>将 shell 设置为 git 安装目录 下 bin/sh.exe 的路径</p>
+<h2 id="node-环境"><a href="#node-环境" class="headerlink" title="node 环境"></a>node 环境</h2><p>下载 jenkinsNode 插件后，直接设置为本机的 node 安装目录<br><img src="/2020/06/27/jenkins自动构建部署前端镜像/nodejs配置.png" title="nodejs配置"></p>
+<h2 id="配置-publish-over-ssh"><a href="#配置-publish-over-ssh" class="headerlink" title="配置 publish over ssh"></a>配置 publish over ssh</h2><p>首先安装 Publish Over SSH 插件</p>
+<p>报错 invalid private key<br>这是生成的 key 格式不同，插件不认新的 openssh 的格式，需要将私钥转回老格式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-----BEGIN RSA PRIVATE KEY-----</span><br></pre></td></tr></table></figure>
+<p>老格式文件的开头是这样的</p>
+<h2 id="构建配置"><a href="#构建配置" class="headerlink" title="构建配置"></a>构建配置</h2><p>选择自由软件，配置 github 仓库地址，选择构建环境为设置的 nodejs 环境</p>
+<h3 id="构建脚本"><a href="#构建脚本" class="headerlink" title="构建脚本"></a>构建脚本</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> FE &amp;&amp; yarn &amp;&amp; yarn build</span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> FE &amp;&amp; docker build -t ccr.ccs.tencentyun.com/jiezi19971225/ahpuoj-fe .</span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker login --username=xxxxxx --password=xxxxxx ccr.ccs.tencentyun.com &amp;&amp; docker tag ccr.ccs.tencentyun.com/jiezi19971225/ahpuoj-fe ccr.ccs.tencentyun.com/jiezi19971225/ahpuoj-fe:<span class="variable">$BUILD_NUMBER</span> &amp;&amp; docker push ccr.ccs.tencentyun.com/jiezi19971225/ahpuoj-fe</span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker rmi ccr.ccs.tencentyun.com/jiezi19971225/ahpuoj-fe:<span class="variable">$BUILD_NUMBER</span></span><br><span class="line">docker rmi ccr.ccs.tencentyun.com/jiezi19971225/ahpuoj-fe</span><br></pre></td></tr></table></figure>
+<h3 id="构建后操作"><a href="#构建后操作" class="headerlink" title="构建后操作"></a>构建后操作</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /home/ahpuoj/ahpuojv2docker/compose</span><br><span class="line">docker-compose pull fe</span><br><span class="line">docker-compose up -d fe</span><br></pre></td></tr></table></figure>
+<h2 id="it-works"><a href="#it-works" class="headerlink" title="it works"></a>it works</h2><img src="/2020/06/27/jenkins自动构建部署前端镜像/itWorks.png" title="itWorks">
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/06/25/设计模式之美学习笔记1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/06/25/设计模式之美学习笔记1/" itemprop="url">设计模式之美学习笔记1</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-25T09:04:17+08:00">
+                2020-06-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/设计模式/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+         <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-bar-chart"></i>
+           </span>
+           <span class="post-meta-item-text">字数统计:</span>
+           <span class="post-count">2.8k(字)</span>
+
+         </span>
+
+      <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-clock-o"></i>
+           </span>
+           <span class="post-meta-item-text">阅读时长:</span>
+           <span class="post-count">10(分)</span>
+
+         </span>
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="面向对象"><a href="#面向对象" class="headerlink" title="面向对象"></a>面向对象</h2><h3 id="封装、抽象、继承、多态"><a href="#封装、抽象、继承、多态" class="headerlink" title="封装、抽象、继承、多态"></a>封装、抽象、继承、多态</h3><p>面向对象的关键是其四大特性</p>
+<h4 id="封装-Encapsulation"><a href="#封装-Encapsulation" class="headerlink" title="封装 Encapsulation"></a>封装 Encapsulation</h4><p>也叫作信息隐藏或者数据访问保护。类通过暴露有限的访问接口，授权外部仅能通过类提供的方式（或者叫函数）来访问内部信息或者数据。<br>课程中提供的代码是 java，我用 ts 重新实现了一遍，当做是练习 ts 的熟练度了</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> id = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">class</span> Wallet &#123;</span><br><span class="line">  <span class="keyword">private</span> id: <span class="built_in">number</span>;</span><br><span class="line">  <span class="keyword">private</span> createTime: <span class="built_in">Date</span>;</span><br><span class="line">  <span class="keyword">private</span> balance: <span class="built_in">number</span>;</span><br><span class="line">  <span class="keyword">private</span> balanceLastModifiedTime: <span class="built_in">Date</span>;</span><br><span class="line">  <span class="keyword">constructor</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">this</span>.id = id += <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">this</span>.createTime = <span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">    <span class="keyword">this</span>.balance = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">this</span>.balanceLastModifiedTime = <span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> getId(): <span class="built_in">number</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.id;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> getCreateTime(): <span class="built_in">Date</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.createTime;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> getBalance(): <span class="built_in">number</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.balance;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> getBalanceLastModifiedTime(): <span class="built_in">Date</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.balanceLastModifiedTime;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> increaseBalance(amount: <span class="built_in">number</span>): <span class="built_in">void</span> &#123;</span><br><span class="line">    <span class="keyword">this</span>.balance += amount;</span><br><span class="line">    <span class="keyword">this</span>.balanceLastModifiedTime = <span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> decreaseBalance(amount: <span class="built_in">number</span>): <span class="built_in">void</span> &#123;</span><br><span class="line">    <span class="keyword">this</span>.balance -= amount;</span><br><span class="line">    <span class="keyword">this</span>.balanceLastModifiedTime = <span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对于封装这个特性，需要编程语言本身提供访问权限控制的语法机制来支持。</p>
+<p>之所以这样设计，是因为从业务的角度来说，id、createTime 在创建钱包的时候就确定好了，之后不应该再被改动，所有只提供 get 方法，这两个属性的初始化设置，对于调用者也是透明的，所以不提供用构造参数的方式进行外部赋值。</p>
+<p>对于钱包余额 balance 这个属性，从业务的角度来说，只能增或者减，不会被重新设置。所在 Wallet 类中，只暴露了 increaseBalance() 和 decreaseBalance() 方法，并没有暴露 set 方法。alanceLastModifiedTime 这个属性，它完全是跟 balance 这个属性的修改操作绑定在一起的。只有在 balance 修改的时候，这个属性才会被修改，所以其相关的操作，都封装在 increaseBalance() 和 decreaseBalance() 方法中了</p>
+<p><strong>封装可以解决这些问题</strong></p>
+<p>如果对类中的属性访问不做控制，类的属性可能在代码的各个角落被随意修改，影响代码的可读性和可维护性<br>类通过有效的方法暴露必要的操作，也可以提高类的易用性</p>
+<h4 id="抽象-Abstraction"><a href="#抽象-Abstraction" class="headerlink" title="抽象 Abstraction"></a>抽象 Abstraction</h4><p>隐藏方法的具体实现，让调用者只需要关心方法提供了哪些功能，并不需要知道这些功能是如何实现的</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> Picture &#123;</span><br><span class="line">  id: <span class="built_in">string</span>;</span><br><span class="line">  blob: Blob;</span><br><span class="line">  metaInfo: <span class="built_in">Object</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">interface</span> IPictureStorage &#123;</span><br><span class="line">  savePicture(pic: Picture): <span class="built_in">void</span>;</span><br><span class="line">  getPicture(id: <span class="built_in">string</span>): Picture;</span><br><span class="line">  deletePicture(id: <span class="built_in">string</span>): <span class="built_in">void</span>;</span><br><span class="line">  midifyMetaInfo(id: <span class="built_in">string</span>, metaInfo: <span class="built_in">Object</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> PictureStorage <span class="keyword">implements</span> IPictureStorage &#123;</span><br><span class="line">  savePicture(pic: Picture): <span class="built_in">void</span> &#123;&#125;</span><br><span class="line">  getPicture(id: <span class="built_in">string</span>): Picture &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      id: <span class="string">"1"</span>,</span><br><span class="line">      blob: <span class="keyword">new</span> Blob(),</span><br><span class="line">      metaInfo: &#123;&#125;,</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">  deletePicture(id: <span class="built_in">string</span>): <span class="built_in">void</span> &#123;&#125;</span><br><span class="line">  midifyMetaInfo(id: <span class="built_in">string</span>, metaInfo: <span class="built_in">Object</span>) &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>抽象这个特性非常用以实现，不需要编程语言提供特殊的语法机制来支持，只需要提供“函数”这一非常基础的语法机制，函数本身就是一种抽象。</p>
+<p>相较于课程中代码，为了简化代码，有所改动。调用者在使用图片存储功能时，只需要了解 IPictureStorage 暴露了哪些方法就可以了，不需要查看 PictureStorage 里面的具体实现。</p>
+<p><strong>抽象可以解决这些问题</strong></p>
+<p>只关注功能点，不关注实现，很多设计原则体现了抽象的设计思想，如基于接口而非实现编程，开闭原则，代码解耦。我们在定义方法的时候，也要有抽象思维，不要再方法定义中，暴露太多的细节。如 getAliyunPictureUrl() 就不好，如果某一天讲图片存储地址改变了，那么函数命名也要改变，相反，应该叫做 getPictureUrl()，即便内部存储方式修改了，我们也不需要修改命名</p>
+<h4 id="继承-Inheritance"><a href="#继承-Inheritance" class="headerlink" title="继承 Inheritance"></a>继承 Inheritance</h4><p>上升一个思维层面，去思考继承这一特性，可以这么理解：我们代码中有一个猫类，有一个哺乳动物类。猫属于哺乳动物，从人类认知的角度上来说，是一种 is-a 关系。我们通过继承来关联两个类，反应真实世界中的这种关系，非常符合人类的认知，而且，从设计的角度来说，也有一种结构美感。</p>
+<p>度使用继承，继承层次过深过复杂，就会导致代码可读性、可维护性变差。我们应当 “多用组合少用继承”</p>
+<h4 id="多态-Polymorphism"><a href="#多态-Polymorphism" class="headerlink" title="多态 Polymorphism"></a>多态 Polymorphism</h4><p>子类可以替换父类，在实际的代码运行过程中，调用子类的方法实现</p>
+<p>这里就没有改写课程中的代码，换了一个更浅显的例子</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> Animal &#123;</span><br><span class="line">  bark(): <span class="built_in">void</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"animal bark"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> Dog <span class="keyword">extends</span> Animal &#123;</span><br><span class="line">  bark(): <span class="built_in">void</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"dog wang wang"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> Cat <span class="keyword">extends</span> Animal &#123;</span><br><span class="line">  bark(): <span class="built_in">void</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"cat miao miao"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">PlayWith</span>(<span class="params">ani: Animal</span>): <span class="title">void</span> </span>&#123;</span><br><span class="line">  <span class="comment">// do something</span></span><br><span class="line">  ani.bark();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> dog = <span class="keyword">new</span> Dog();</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> cat = <span class="keyword">new</span> Cat();</span><br><span class="line"></span><br><span class="line">PlayWith(dog);</span><br><span class="line">PlayWith(cat);</span><br></pre></td></tr></table></figure>
+<p>多态需要编程语言拥有一下特殊语法机制</p>
+<ul>
+<li>编程语言要支持父类对象可以引用子类对象</li>
+<li>第二个语法机制是编程语言要支持继承</li>
+<li>第三个语法机制是编程语言要支持子类可以重写（override）父类中的方法</li>
+</ul>
+<p>多态除了利用 继承加方法重写的方式来实现外，还有两种比较常见的实现方式，一个是利用接口类语法，另一个是 duck-typing 语法。</p>
+<h5 id="接口类"><a href="#接口类" class="headerlink" title="接口类"></a>接口类</h5><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> CanBark &#123;</span><br><span class="line">  bark(): <span class="built_in">void</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> Tiger <span class="keyword">implements</span> CanBark &#123;</span><br><span class="line">  bark(): <span class="built_in">void</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"老虎吼"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> Lion <span class="keyword">implements</span> CanBark &#123;</span><br><span class="line">  bark(): <span class="built_in">void</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"狮子吼"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">LookAt</span>(<span class="params">ani: CanBark</span>) </span>&#123;</span><br><span class="line">  ani.bark();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> tiger = <span class="keyword">new</span> Tiger();</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> lion = <span class="keyword">new</span> Lion();</span><br><span class="line"></span><br><span class="line">LookAt(tiger);</span><br><span class="line"></span><br><span class="line">LookAt(lion);</span><br></pre></td></tr></table></figure>
+<h5 id="duck-typing"><a href="#duck-typing" class="headerlink" title="duck-typing"></a>duck-typing</h5><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> CanBark &#123;</span><br><span class="line">  bark(): <span class="built_in">void</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> tiger = &#123;</span><br><span class="line">  bark(): <span class="built_in">void</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"老虎吼"</span>);</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> lion = &#123;</span><br><span class="line">  bark(): <span class="built_in">void</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"狮子吼"</span>);</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">LookAt</span>(<span class="params">ani: CanBark</span>) </span>&#123;</span><br><span class="line">  ani.bark();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">LookAt(tiger);</span><br><span class="line"></span><br><span class="line">LookAt(lion);</span><br></pre></td></tr></table></figure>
+<p>多态能提高代码的可扩展性和复用性，也是很多设计模式、设计原则、编程技巧的代码实现基础，比如策略模式、基于接口而非实现编程、依赖倒置原则、里式替换原则、利用多态去掉冗长的 if-else 语句等等。</p>
+<h4 id="抽象类与接口"><a href="#抽象类与接口" class="headerlink" title="抽象类与接口"></a>抽象类与接口</h4><p>抽象类是对成员变量和方法的抽象，是一种 is-a 关系，是为了解决代码复用问题。接口仅仅是对方法的抽象，是一种 has-a 关系，表示具有某一组行为特性，是为了解决解耦问题，隔离接口和具体的实现，提高代码的扩展性。</p>
+<h4 id="基于接口而非基于实现编程"><a href="#基于接口而非基于实现编程" class="headerlink" title="基于接口而非基于实现编程"></a>基于接口而非基于实现编程</h4><p><strong>越抽象、越顶层、越脱离具体某一实现的设计，越能提高代码的灵活性，越能应对未来的需求变化。好的代码设计，不仅能应对当下的需求，而且在将来需求发生变化的时候，仍然能够在不破坏原有代码设计的情况下灵活应对。</strong></p>
+<p>假设我们的系统中有很多涉及图片处理和存储的业务逻辑。图片经过处理之后被上传到阿里云上。为了代码复用，我们封装了图片存储相关的代码逻辑，提供了一个统一的 AliyunImageStore 类，供整个系统来使用。</p>
+<p>整个上传流程包含三个步骤：创建 bucket（你可以简单理解为存储目录）、生成 access token 访问凭证、携带 access token 上传图片到指定的 bucket 中。代码实现非常简单，类中的几个方法定义得都很干净，用起来也很清晰，乍看起来没有太大问题，完全能满足我们将图片存储在阿里云的业务需求。</p>
+<p>而有一天，我们要将图片改为上传到私有云，首先，AliyunImageStore 类中有些函数命名暴露了实现细节，比如，uploadToAliyun() 和 downloadFromAliyun()。<br>其次，将图片存储到阿里云的流程，跟存储到私有云的流程，可能并不是完全一致的。比如，阿里云的图片上传和下载的过程中，需要生产 access token，而私有云不需要 access token。</p>
+<p>而要解决这些问题，编写代码的时候，要遵从 “基于接口而非实现编程”的原则</p>
+<ul>
+<li>函数的命名不能暴露任何实现细节。比如，前面提到的 uploadToAliyun() 就不符合要求，应该改为去掉 aliyun 这样的字眼，改为更加抽象的命名方式，比如：upload()。</li>
+<li>封装具体的实现细节。比如，跟阿里云相关的特殊上传（或下载）流程不应该暴露给调用者。我们对上传（或下载）流程进行封装，对外提供一个包裹所有上传（或下载）细节的方法，给调用者使用。</li>
+<li>为实现类定义抽象的接口。具体的实现类都依赖统一的接口定义，遵从一致的上传功能协议。使用者依赖接口，而不是具体的实现类来编程。</li>
+</ul>
+<p>在定义接口的时候，不要暴露任何实现细节。接口的定义只表明做什么，而不是怎么做。而且，在设计接口的时候，我们要多思考一下，这样的接口设计是否足够通用，是否能够做到在替换具体的接口实现的时候，不需要任何接口定义的改动。</p>
+<h5 id="课后习题"><a href="#课后习题" class="headerlink" title="课后习题"></a>课后习题</h5><p>在项目中很多地方，我们都是通过下面第 8 行的方式来使用接口的。这就会产生一个问题，那就是，如果我们要替换图片存储方式，还是需要修改很多类似第 8 行那样的代码。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ImageProcessingJob</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String BUCKET_NAME = <span class="string">"ai_images_bucket"</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">process</span><span class="params">()</span> </span>&#123; Image image = ...;</span><br><span class="line">    ImageStore imageStore = <span class="keyword">new</span> PrivateImageStore(<span class="comment">/*省略构造函数*/</span>);</span><br><span class="line">    imagestore.upload(image, BUCKET_NAME);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>看了评论区的答案，一种比较好的解决方式是使用工厂方法+配置文件</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ImageStore imageStore = ImageStoreFactory.newInstance(SOTRE_TYPE_CONFIG);</span><br></pre></td></tr></table></figure>
+<h4 id="多用组合-少用继承"><a href="#多用组合-少用继承" class="headerlink" title="多用组合 少用继承"></a>多用组合 少用继承</h4><p>继承最大的问题就在于：继承层次过深、继承关系过于复杂会影响到代码的可读性和可维护性。我们可以利用组合（composition）、接口、委托（delegation）三个技术手段，一块儿来解决继承存在的问题。</p>
+<p>接口只声明方法，不定义实现。也就是说，每个会下蛋的鸟都要实现一遍 layEgg() 方法，并且实现逻辑是一样的，这就会导致代码重复的问题。那这个问题又该如何解决呢？</p>
+<p>我们可以针对三个接口再定义三个实现类，它们分别是：实现了 fly() 方法的 FlyAbility 类、实现了 tweet() 方法的 TweetAbility 类、实现了 layEgg() 方法的 EggLayAbility 类。然后，通过组合和委托技术来消除代码重复。具体的代码实现如下所示：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> Flyable &#123;</span><br><span class="line">  fly(): <span class="built_in">void</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> FlyAbility <span class="keyword">implements</span> Flyable &#123;</span><br><span class="line">  fly() &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"fly"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">interface</span> Tweetable &#123;</span><br><span class="line">  tweet(): <span class="built_in">void</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> TweetAbility <span class="keyword">implements</span> Tweetable &#123;</span><br><span class="line">  tweet() &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"tweet"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">interface</span> Egglayable &#123;</span><br><span class="line">  egglay(): <span class="built_in">void</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> EgglayAbility <span class="keyword">implements</span> Egglayable &#123;</span><br><span class="line">  egglay() &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"egglay"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> Ostrich <span class="keyword">implements</span> TweetAbility, EgglayAbility &#123;</span><br><span class="line">  <span class="keyword">private</span> tweetAbility = <span class="keyword">new</span> TweetAbility();</span><br><span class="line">  <span class="keyword">private</span> egglayAbility = <span class="keyword">new</span> EgglayAbility();</span><br><span class="line">  <span class="keyword">public</span> tweet(): <span class="built_in">void</span> &#123;</span><br><span class="line">    <span class="keyword">this</span>.tweetAbility.tweet();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> egglay(): <span class="built_in">void</span> &#123;</span><br><span class="line">    <span class="keyword">this</span>.egglayAbility.egglay();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/04/18/oracle复习考点/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2078,385 +2466,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/03/24/AC自动机/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="jiezi19971225">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Jiez19971225‘s Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/24/AC自动机/" itemprop="url">AC自动机</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-24T12:35:17+08:00">
-                2020-03-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/算法/" itemprop="url" rel="index">
-                    <span itemprop="name">算法</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-         <span class="post-time">
-	   &nbsp; | &nbsp;
-           <span class="post-meta-item-icon">
-             <i class="fa fa-bar-chart"></i>
-           </span>
-           <span class="post-meta-item-text">字数统计:</span>
-           <span class="post-count">1.7k(字)</span>
-
-         </span>
-
-      <span class="post-time">
-	   &nbsp; | &nbsp;
-           <span class="post-meta-item-icon">
-             <i class="fa fa-clock-o"></i>
-           </span>
-           <span class="post-meta-item-text">阅读时长:</span>
-           <span class="post-count">8(分)</span>
-
-         </span>
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>因为看编译原理的有穷自动机，想到了以前一直不懂的这玩意。既然都叫自动机，就一块研究了吧。</p>
-<p>AC 自动机是一种实现多模式匹配的字符串匹配算法。</p>
-<h2 id="前置技能-Trie-树（字典树）"><a href="#前置技能-Trie-树（字典树）" class="headerlink" title="前置技能 Trie 树（字典树）"></a>前置技能 Trie 树（字典树）</h2><p>字典树是一颗树，能迅速匹配字典中的字符串。<br>它具有以下基本性质。</p>
-<ul>
-<li>根节点不包括字符串，除根节点外每一个节点都只包含一个字符。</li>
-<li>从根节点到某一节点，路径上经过的字符连接起来，为该节点对应的字符串。</li>
-<li>每个节点的所有子节点包含的字符都不相同</li>
-</ul>
-<p>他的节点结构如下，其中 exist 标记当前节点是否是单词的结尾。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">node</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    node *next[<span class="number">26</span>];</span><br><span class="line">    <span class="keyword">bool</span> exist;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>以下是使用指针方式的构建代码,比较易懂</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">trie</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">node</span></span></span><br><span class="line"><span class="class">    &#123;</span></span><br><span class="line">        node *next[<span class="number">26</span>];</span><br><span class="line">        <span class="keyword">bool</span> exist;</span><br><span class="line">        node()</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">memset</span>(next, <span class="number">0</span>, <span class="keyword">sizeof</span>(next));</span><br><span class="line">            exist = <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    node *root;</span><br><span class="line">    trie()</span><br><span class="line">    &#123;</span><br><span class="line">        root = <span class="keyword">new</span> node();</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">insert</span><span class="params">(<span class="built_in">string</span> word)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        node *cur = root;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; word.length(); ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">int</span> num = word[i] - <span class="string">'a'</span>;</span><br><span class="line">            <span class="keyword">if</span> (!cur-&gt;next[num])</span><br><span class="line">            &#123;</span><br><span class="line">                cur-&gt;next[num] = <span class="keyword">new</span> node();</span><br><span class="line">                cur = cur-&gt;next[num];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                cur = cur-&gt;next[num];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        cur-&gt;exist = <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">find</span><span class="params">(<span class="built_in">string</span> word)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        node *cur = root;</span><br><span class="line">        <span class="keyword">bool</span> ok = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; word.length(); ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">int</span> num = word[i] - <span class="string">'a'</span>;</span><br><span class="line">            <span class="keyword">if</span> (!cur-&gt;next[num])</span><br><span class="line">            &#123;</span><br><span class="line">                ok = <span class="literal">false</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            cur = cur-&gt;next[num];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (!cur-&gt;exist)</span><br><span class="line">        &#123;</span><br><span class="line">            ok = <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ok;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">main()</span><br><span class="line">&#123;</span><br><span class="line">    trie t;</span><br><span class="line">    t.insert(<span class="string">"hello"</span>);</span><br><span class="line">    t.insert(<span class="string">"world"</span>);</span><br><span class="line">    t.insert(<span class="string">"i"</span>);</span><br><span class="line">    t.insert(<span class="string">"am"</span>);</span><br><span class="line">    t.insert(<span class="string">"a"</span>);</span><br><span class="line">    t.insert(<span class="string">"lvjie"</span>);</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; t.find(<span class="string">"lvjie"</span>) &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; t.find(<span class="string">"lvji"</span>) &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; t.find(<span class="string">"i"</span>) &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; t.find(<span class="string">"a"</span>) &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<img src="/2020/03/24/AC自动机/字典树.png" title="字典树">
-<h2 id="利用字典树暴力求解多模式匹配"><a href="#利用字典树暴力求解多模式匹配" class="headerlink" title="利用字典树暴力求解多模式匹配"></a>利用字典树暴力求解多模式匹配</h2><p>很容易想到，从字符串的每一个字符开始，跑 Trie 的匹配算法，这样的时间复杂度是 O(len(T) * maxD(Trie)) 即字符串长度乘以字典树的深度</p>
-<h2 id="KMP-的思想很重要"><a href="#KMP-的思想很重要" class="headerlink" title="KMP 的思想很重要"></a>KMP 的思想很重要</h2><p>显然，匹配失败并不需要在下一位置从 Trie 根节点开始匹配，而是应该找当前匹配的最长后缀。</p>
-<p>这里引入 fail 指针的概念，表示从该节点取前缀，在字典树中找到该前缀中后缀最长的节点。<br>以下摘自洛谷日报</p>
-<ul>
-<li>共同点-两者同样是在失配的时候用于跳转的指针。</li>
-<li>不同点-KMP 要求的是最长相同真前后缀，而 AC 自动机只需要相同后缀即可。</li>
-<li>因为 KMP 只对一个模式串做匹配，而 AC 自动机要对多个模式串做匹配。</li>
-<li>有可能 fail 指针指向的结点对应着另一个模式串，两者前缀不同。</li>
-<li>也就是说，AC 自动机在对匹配串做逐位匹配时，同一位上可能匹配多个模式串。</li>
-<li>因此 fail 指针会在字典树上的结点来回穿梭，而不像 KMP 在线性结构上跳转。</li>
-</ul>
-<p>构建基础思想</p>
-<ul>
-<li>构建一个节点的 fail 指针，需要找它的父节点的 fail 指针，所以构建过程应该是一个对树 BFS 的过程</li>
-<li>使用队列进行 BFS，每次取队首的节点，设为当前节点 cur，（该节点的 fail 指针已经构建），遍历它所有边，现假设有以字符 x 连接的子节点 child<ul>
-<li>找当前节点 cur 的 fail 指针指向的节点是否也有以字符 x 连接的子节点，如果有，令 child 的 fail 指针指向该子节点</li>
-<li>如果没有，则令 cur = cur.fail，循环这个过程，直到 cur 指向 -1</li>
-</ul>
-</li>
-</ul>
-<p>查询思想</p>
-<p>构建了 ac 自动机这种结构，它的基础应用就是给你一个字符串，让你统计在这个串中出现了多少统计的单词，而这个求解过程是在 O(N) 的复杂度下完成的</p>
-<p>方法很简单，维护两个指针 cur 和 pos，分别指向字典树的节点和字符串遍历位置</p>
-<p>对于每个位置 pos</p>
-<ul>
-<li>如果当前 cur = -1，说明该字符位置无法匹配任何模式串，则令 cur = 0， pos++</li>
-<li>如果当前 cur 位置的 cnt 计数不为 0，则将从该点及从该点可跳转的后缀纳入统计</li>
-<li>判断当前节点有否有以字符 str[pos]连接的子节点，如果有 pos++，cur 移动到该子节点的位置</li>
-<li>否则，cur 指向 cur 节点的 fail 指针的位置</li>
-</ul>
-<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>以下为 luogu P3808 的代码</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">1e4</span> + <span class="number">7</span>;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">aho</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">int</span> size;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">node</span></span></span><br><span class="line"><span class="class">    &#123;</span></span><br><span class="line">        <span class="keyword">int</span> next[<span class="number">26</span>];</span><br><span class="line">        <span class="keyword">int</span> fail, cnt;</span><br><span class="line">        node()</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">memset</span>(next, <span class="number">0</span>, <span class="keyword">sizeof</span>(next));</span><br><span class="line">            fail = cnt = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; treeNode[maxn];</span><br><span class="line">    <span class="built_in">queue</span>&lt;<span class="keyword">int</span>&gt; q;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">while</span> (!q.empty())</span><br><span class="line">        &#123;</span><br><span class="line">            q.pop();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; maxn; ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">memset</span>(treeNode[i].next, <span class="number">0</span>, <span class="keyword">sizeof</span>(treeNode[i].next));</span><br><span class="line">            treeNode[i].fail = treeNode[i].cnt = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        size = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">insert</span><span class="params">(<span class="built_in">string</span> s)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> cur = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; s.length(); ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">int</span> num = s[i] - <span class="string">'a'</span>;</span><br><span class="line">            <span class="keyword">if</span> (!treeNode[cur].next[num])</span><br><span class="line">            &#123;</span><br><span class="line">                treeNode[cur].next[num] = ++size;</span><br><span class="line">            &#125;</span><br><span class="line">            cur = treeNode[cur].next[num];</span><br><span class="line">        &#125;</span><br><span class="line">        treeNode[cur].cnt++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">build</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        treeNode[<span class="number">0</span>].fail = <span class="number">-1</span>;</span><br><span class="line">        <span class="built_in">queue</span>&lt;<span class="keyword">int</span>&gt; q;</span><br><span class="line">        q.push(<span class="number">0</span>);</span><br><span class="line">        <span class="keyword">while</span> (!q.empty())</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">int</span> top = q.front();</span><br><span class="line">            q.pop();</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">26</span>; ++i)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span> (treeNode[top].next[i])</span><br><span class="line">                &#123;</span><br><span class="line">                    q.push(treeNode[top].next[i]);</span><br><span class="line">                    <span class="keyword">if</span> (top == <span class="number">0</span>)</span><br><span class="line">                    &#123;</span><br><span class="line">                        treeNode[treeNode[top].next[i]].fail = <span class="number">0</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">else</span></span><br><span class="line">                    &#123;</span><br><span class="line"></span><br><span class="line">                        <span class="keyword">int</span> v = treeNode[top].fail;</span><br><span class="line">                        <span class="keyword">while</span> (v != <span class="number">-1</span>)</span><br><span class="line">                        &#123;</span><br><span class="line"></span><br><span class="line">                            <span class="keyword">if</span> (treeNode[v].next[i])</span><br><span class="line">                            &#123;</span><br><span class="line">                                treeNode[treeNode[top].next[i]].fail = treeNode[v].next[i];</span><br><span class="line">                                <span class="keyword">break</span>;</span><br><span class="line">                            &#125;</span><br><span class="line">                            <span class="keyword">else</span></span><br><span class="line">                            &#123;</span><br><span class="line">                                v = treeNode[v].fail;</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line">                        <span class="keyword">if</span> (v == <span class="number">-1</span>)</span><br><span class="line">                        &#123;</span><br><span class="line">                            treeNode[treeNode[top].next[i]].fail = <span class="number">0</span>;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">getNow</span><span class="params">(<span class="keyword">int</span> cur)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> ret = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (cur != <span class="number">-1</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            ret += treeNode[cur].cnt;</span><br><span class="line">            treeNode[cur].cnt = <span class="number">0</span>;</span><br><span class="line">            cur = treeNode[cur].fail;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="built_in">string</span> target)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> pos = <span class="number">0</span>, cur = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (pos &lt; target.length())</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (treeNode[cur].cnt)</span><br><span class="line">            &#123;</span><br><span class="line">                res += getNow(cur);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">int</span> num = target[pos] - <span class="string">'a'</span>;</span><br><span class="line">            <span class="keyword">if</span> (cur == <span class="number">-1</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                ++pos;</span><br><span class="line">                cur = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (treeNode[cur].next[num])</span><br><span class="line">            &#123;</span><br><span class="line">                ++pos;</span><br><span class="line">                cur = treeNode[cur].next[num];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                cur = treeNode[cur].fail;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (treeNode[cur].cnt)</span><br><span class="line">        &#123;</span><br><span class="line">            res += getNow(cur);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 用来检查构建的字典树和fail指针的指向</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">check</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> cur = <span class="number">0</span>;</span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">pair</span></span></span><br><span class="line"><span class="class">        &#123;</span></span><br><span class="line">            <span class="keyword">int</span> v;</span><br><span class="line">            <span class="built_in">string</span> word;</span><br><span class="line">            pair(<span class="keyword">int</span> v, <span class="built_in">string</span> word) : v(v), word(word)&#123;&#125;;</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="built_in">queue</span>&lt;pair&gt; q;</span><br><span class="line">        q.push(pair(<span class="number">0</span>, <span class="string">""</span>));</span><br><span class="line">        <span class="keyword">while</span> (!q.empty())</span><br><span class="line">        &#123;</span><br><span class="line">            pair top = q.front();</span><br><span class="line">            q.pop();</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">26</span>; ++i)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span> (treeNode[top.v].next[i])</span><br><span class="line">                &#123;</span><br><span class="line"></span><br><span class="line">                    <span class="built_in">string</span> word = top.word + <span class="keyword">char</span>(<span class="string">'a'</span> + i);</span><br><span class="line">                    q.push(pair(treeNode[top.v].next[i], word));</span><br><span class="line">                    <span class="built_in">cout</span> &lt;&lt; <span class="string">"开始输出节点信息"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">                    <span class="built_in">cout</span> &lt;&lt; <span class="string">"当前节点为编号"</span> &lt;&lt; treeNode[top.v].next[i] &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">                    <span class="built_in">cout</span> &lt;&lt; <span class="string">"word="</span> &lt;&lt; word &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">                    <span class="built_in">cout</span> &lt;&lt; <span class="string">"cnt="</span> &lt;&lt; treeNode[treeNode[top.v].next[i]].cnt &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">                    <span class="built_in">cout</span> &lt;&lt; <span class="string">"fail="</span> &lt;&lt; treeNode[treeNode[top.v].next[i]].fail &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">                    <span class="built_in">cout</span> &lt;&lt; <span class="string">"节点信息输出完毕"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    freopen(<span class="string">"3808.in"</span>, <span class="string">"r"</span>, <span class="built_in">stdin</span>);</span><br><span class="line">    <span class="keyword">int</span> n;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; n;</span><br><span class="line">    aho a;</span><br><span class="line">    a.init();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">string</span> t;</span><br><span class="line">        <span class="built_in">cin</span> &gt;&gt; t;</span><br><span class="line">        a.insert(t);</span><br><span class="line">    &#125;</span><br><span class="line">    a.build();</span><br><span class="line">    <span class="comment">// a.check();</span></span><br><span class="line">    <span class="built_in">string</span> target;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; target;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; a.find(target);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/03/24/kmp算法/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="jiezi19971225">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Jiez19971225‘s Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/24/kmp算法/" itemprop="url">kmp算法</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-24T11:01:11+08:00">
-                2020-03-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/算法/" itemprop="url" rel="index">
-                    <span itemprop="name">算法</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-         <span class="post-time">
-	   &nbsp; | &nbsp;
-           <span class="post-meta-item-icon">
-             <i class="fa fa-bar-chart"></i>
-           </span>
-           <span class="post-meta-item-text">字数统计:</span>
-           <span class="post-count">635(字)</span>
-
-         </span>
-
-      <span class="post-time">
-	   &nbsp; | &nbsp;
-           <span class="post-meta-item-icon">
-             <i class="fa fa-clock-o"></i>
-           </span>
-           <span class="post-meta-item-text">阅读时长:</span>
-           <span class="post-count">2(分)</span>
-
-         </span>
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>推荐 B 站一个 UP 的视频，讲的非常容易理解 <a href="https://www.bilibili.com/video/BV1iJ411a7Kb?p=3" target="_blank" rel="noopener">链接</a></p>
-<h2 id="暴力匹配思路"><a href="#暴力匹配思路" class="headerlink" title="暴力匹配思路"></a>暴力匹配思路</h2><p>设模式串为 sp，要匹配的目标字符串为 st</p>
-<p>扫一遍 st，每次从 st 当前位置开始匹配 sp，这样做浪费了大量时间，之前匹配过程得到信息没有被有效利用。</p>
-<h2 id="KMP-算法"><a href="#KMP-算法" class="headerlink" title="KMP 算法"></a>KMP 算法</h2><h3 id="最大公共前后缀"><a href="#最大公共前后缀" class="headerlink" title="最大公共前后缀"></a>最大公共前后缀</h3><p>KMP 中为了有效利用之前已获得的信息，使用了最大公共前后缀。<br>前后缀的概念我们都知道，而公共前后缀是指该位置的前缀与后缀相同的部分。应当注意，前缀是不能包含当前位置的，而后缀不能包含第 1 个位置。<br>举个例子，ABCDABC 中，C 位置的最大公共前后缀是 ABC。<br>我们计算 AAAAB 的最大公共前后缀，使用 presuf 数组保存最大公共前后缀的长度<br>则 presuf = [0,1,2,3,0]</p>
-<h3 id="KMP-算法流程"><a href="#KMP-算法流程" class="headerlink" title="KMP 算法流程"></a>KMP 算法流程</h3><h4 id="构造最大前后缀数组"><a href="#构造最大前后缀数组" class="headerlink" title="构造最大前后缀数组"></a>构造最大前后缀数组</h4><p>首先构造 presuf 数组，构造的流程如下</p>
-<p>为了方便算法编写，令 presuf[0] = -1 作为边界，最大公共前后缀从 1 下标开始记录。<br>令 j 表示当前指针位置，可以理解为后缀指针，t 表示前缀指针位置。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">t = presuf[0] = -1</span><br><span class="line">m = sp.length()</span><br><span class="line">while j &lt; m-1</span><br><span class="line">    // 当前位置前后缀匹配，更新 presuf 数组</span><br><span class="line">    if t &lt; 0 || sp[j] == sp[t]</span><br><span class="line">        presuf[++j] = ++ t</span><br><span class="line">    // 当前不匹配，则应该缩小前缀的范围</span><br><span class="line">    else</span><br><span class="line">        t = presuf[t];</span><br></pre></td></tr></table></figure>
-<img src="/2020/03/24/kmp算法/构造过程.png" title="构造过程">
-<h4 id="匹配流程"><a href="#匹配流程" class="headerlink" title="匹配流程"></a>匹配流程</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">i = 0</span><br><span class="line">j = 0</span><br><span class="line">m = st.length()</span><br><span class="line">while j &lt; m</span><br><span class="line">    if i &lt; 0 || sp[i] == st[i]</span><br><span class="line">        ++i,++j</span><br><span class="line">        if i == sp.length()</span><br><span class="line">            // 得到结果</span><br><span class="line">    else</span><br><span class="line">        // 这一步也很好理解，和构造过程是一样</span><br><span class="line">        i = presuf[i]</span><br></pre></td></tr></table></figure>
-<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>为了便于理解，变量名都是用了更具意义的缩写</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">10005</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">string</span> st = <span class="string">"AAAAAAAAB"</span>;</span><br><span class="line">    <span class="built_in">string</span> sp = <span class="string">"AAAAB"</span>;</span><br><span class="line">    <span class="keyword">int</span> presuf[maxn];</span><br><span class="line">    <span class="built_in">memset</span>(presuf, <span class="number">0</span>, <span class="keyword">sizeof</span>(presuf));</span><br><span class="line">    <span class="comment">// 构造过程</span></span><br><span class="line">    <span class="keyword">int</span> prep = presuf[<span class="number">0</span>] = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">int</span> sufp = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (sufp &lt; sp.size())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (prep &lt; <span class="number">0</span> || sp[prep] == sp[sufp])</span><br><span class="line">        &#123;</span><br><span class="line">            presuf[++sufp] = ++prep;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            prep = presuf[prep];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 匹配过程</span></span><br><span class="line">    <span class="keyword">int</span> stp = <span class="number">0</span>, spp = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> res = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">while</span> (stp &lt; st.size())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (spp &lt; <span class="number">0</span> || st[stp] == sp[spp])</span><br><span class="line">        &#123;</span><br><span class="line">            ++spp, ++stp;</span><br><span class="line">            <span class="keyword">if</span> (spp == sp.length())</span><br><span class="line">            &#123;</span><br><span class="line">                res = stp;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            spp = presuf[spp];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><p>KMP 算法的应用，判定一棵二叉树是否是另一颗二叉树的子树，如果这棵树的序列化字符串是另一棵树序列化字符串的子串，则可以判定。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2507,7 +2516,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">48</span>
+                  <span class="site-state-item-count">50</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2518,7 +2527,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-count">23</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -2529,7 +2538,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">43</span>
+                  <span class="site-state-item-count">45</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -3088,5 +3097,5 @@
 
   
 
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"live2d-widget-model-koharu"},"display":{"position":"left","width":75,"height":225},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</body>
 </html>

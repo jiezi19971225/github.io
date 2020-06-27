@@ -294,6 +294,385 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/03/24/AC自动机/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/24/AC自动机/" itemprop="url">AC自动机</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-24T12:35:17+08:00">
+                2020-03-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+         <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-bar-chart"></i>
+           </span>
+           <span class="post-meta-item-text">字数统计:</span>
+           <span class="post-count">1.7k(字)</span>
+
+         </span>
+
+      <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-clock-o"></i>
+           </span>
+           <span class="post-meta-item-text">阅读时长:</span>
+           <span class="post-count">8(分)</span>
+
+         </span>
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>因为看编译原理的有穷自动机，想到了以前一直不懂的这玩意。既然都叫自动机，就一块研究了吧。</p>
+<p>AC 自动机是一种实现多模式匹配的字符串匹配算法。</p>
+<h2 id="前置技能-Trie-树（字典树）"><a href="#前置技能-Trie-树（字典树）" class="headerlink" title="前置技能 Trie 树（字典树）"></a>前置技能 Trie 树（字典树）</h2><p>字典树是一颗树，能迅速匹配字典中的字符串。<br>它具有以下基本性质。</p>
+<ul>
+<li>根节点不包括字符串，除根节点外每一个节点都只包含一个字符。</li>
+<li>从根节点到某一节点，路径上经过的字符连接起来，为该节点对应的字符串。</li>
+<li>每个节点的所有子节点包含的字符都不相同</li>
+</ul>
+<p>他的节点结构如下，其中 exist 标记当前节点是否是单词的结尾。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">node</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    node *next[<span class="number">26</span>];</span><br><span class="line">    <span class="keyword">bool</span> exist;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以下是使用指针方式的构建代码,比较易懂</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">trie</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">node</span></span></span><br><span class="line"><span class="class">    &#123;</span></span><br><span class="line">        node *next[<span class="number">26</span>];</span><br><span class="line">        <span class="keyword">bool</span> exist;</span><br><span class="line">        node()</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">memset</span>(next, <span class="number">0</span>, <span class="keyword">sizeof</span>(next));</span><br><span class="line">            exist = <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    node *root;</span><br><span class="line">    trie()</span><br><span class="line">    &#123;</span><br><span class="line">        root = <span class="keyword">new</span> node();</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">insert</span><span class="params">(<span class="built_in">string</span> word)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        node *cur = root;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; word.length(); ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">int</span> num = word[i] - <span class="string">'a'</span>;</span><br><span class="line">            <span class="keyword">if</span> (!cur-&gt;next[num])</span><br><span class="line">            &#123;</span><br><span class="line">                cur-&gt;next[num] = <span class="keyword">new</span> node();</span><br><span class="line">                cur = cur-&gt;next[num];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                cur = cur-&gt;next[num];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        cur-&gt;exist = <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">find</span><span class="params">(<span class="built_in">string</span> word)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        node *cur = root;</span><br><span class="line">        <span class="keyword">bool</span> ok = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; word.length(); ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">int</span> num = word[i] - <span class="string">'a'</span>;</span><br><span class="line">            <span class="keyword">if</span> (!cur-&gt;next[num])</span><br><span class="line">            &#123;</span><br><span class="line">                ok = <span class="literal">false</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            cur = cur-&gt;next[num];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (!cur-&gt;exist)</span><br><span class="line">        &#123;</span><br><span class="line">            ok = <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ok;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">main()</span><br><span class="line">&#123;</span><br><span class="line">    trie t;</span><br><span class="line">    t.insert(<span class="string">"hello"</span>);</span><br><span class="line">    t.insert(<span class="string">"world"</span>);</span><br><span class="line">    t.insert(<span class="string">"i"</span>);</span><br><span class="line">    t.insert(<span class="string">"am"</span>);</span><br><span class="line">    t.insert(<span class="string">"a"</span>);</span><br><span class="line">    t.insert(<span class="string">"lvjie"</span>);</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; t.find(<span class="string">"lvjie"</span>) &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; t.find(<span class="string">"lvji"</span>) &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; t.find(<span class="string">"i"</span>) &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; t.find(<span class="string">"a"</span>) &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<img src="/2020/03/24/AC自动机/字典树.png" title="字典树">
+<h2 id="利用字典树暴力求解多模式匹配"><a href="#利用字典树暴力求解多模式匹配" class="headerlink" title="利用字典树暴力求解多模式匹配"></a>利用字典树暴力求解多模式匹配</h2><p>很容易想到，从字符串的每一个字符开始，跑 Trie 的匹配算法，这样的时间复杂度是 O(len(T) * maxD(Trie)) 即字符串长度乘以字典树的深度</p>
+<h2 id="KMP-的思想很重要"><a href="#KMP-的思想很重要" class="headerlink" title="KMP 的思想很重要"></a>KMP 的思想很重要</h2><p>显然，匹配失败并不需要在下一位置从 Trie 根节点开始匹配，而是应该找当前匹配的最长后缀。</p>
+<p>这里引入 fail 指针的概念，表示从该节点取前缀，在字典树中找到该前缀中后缀最长的节点。<br>以下摘自洛谷日报</p>
+<ul>
+<li>共同点-两者同样是在失配的时候用于跳转的指针。</li>
+<li>不同点-KMP 要求的是最长相同真前后缀，而 AC 自动机只需要相同后缀即可。</li>
+<li>因为 KMP 只对一个模式串做匹配，而 AC 自动机要对多个模式串做匹配。</li>
+<li>有可能 fail 指针指向的结点对应着另一个模式串，两者前缀不同。</li>
+<li>也就是说，AC 自动机在对匹配串做逐位匹配时，同一位上可能匹配多个模式串。</li>
+<li>因此 fail 指针会在字典树上的结点来回穿梭，而不像 KMP 在线性结构上跳转。</li>
+</ul>
+<p>构建基础思想</p>
+<ul>
+<li>构建一个节点的 fail 指针，需要找它的父节点的 fail 指针，所以构建过程应该是一个对树 BFS 的过程</li>
+<li>使用队列进行 BFS，每次取队首的节点，设为当前节点 cur，（该节点的 fail 指针已经构建），遍历它所有边，现假设有以字符 x 连接的子节点 child<ul>
+<li>找当前节点 cur 的 fail 指针指向的节点是否也有以字符 x 连接的子节点，如果有，令 child 的 fail 指针指向该子节点</li>
+<li>如果没有，则令 cur = cur.fail，循环这个过程，直到 cur 指向 -1</li>
+</ul>
+</li>
+</ul>
+<p>查询思想</p>
+<p>构建了 ac 自动机这种结构，它的基础应用就是给你一个字符串，让你统计在这个串中出现了多少统计的单词，而这个求解过程是在 O(N) 的复杂度下完成的</p>
+<p>方法很简单，维护两个指针 cur 和 pos，分别指向字典树的节点和字符串遍历位置</p>
+<p>对于每个位置 pos</p>
+<ul>
+<li>如果当前 cur = -1，说明该字符位置无法匹配任何模式串，则令 cur = 0， pos++</li>
+<li>如果当前 cur 位置的 cnt 计数不为 0，则将从该点及从该点可跳转的后缀纳入统计</li>
+<li>判断当前节点有否有以字符 str[pos]连接的子节点，如果有 pos++，cur 移动到该子节点的位置</li>
+<li>否则，cur 指向 cur 节点的 fail 指针的位置</li>
+</ul>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>以下为 luogu P3808 的代码</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">1e4</span> + <span class="number">7</span>;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">aho</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">int</span> size;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">node</span></span></span><br><span class="line"><span class="class">    &#123;</span></span><br><span class="line">        <span class="keyword">int</span> next[<span class="number">26</span>];</span><br><span class="line">        <span class="keyword">int</span> fail, cnt;</span><br><span class="line">        node()</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">memset</span>(next, <span class="number">0</span>, <span class="keyword">sizeof</span>(next));</span><br><span class="line">            fail = cnt = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; treeNode[maxn];</span><br><span class="line">    <span class="built_in">queue</span>&lt;<span class="keyword">int</span>&gt; q;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">while</span> (!q.empty())</span><br><span class="line">        &#123;</span><br><span class="line">            q.pop();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; maxn; ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">memset</span>(treeNode[i].next, <span class="number">0</span>, <span class="keyword">sizeof</span>(treeNode[i].next));</span><br><span class="line">            treeNode[i].fail = treeNode[i].cnt = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        size = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">insert</span><span class="params">(<span class="built_in">string</span> s)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> cur = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; s.length(); ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">int</span> num = s[i] - <span class="string">'a'</span>;</span><br><span class="line">            <span class="keyword">if</span> (!treeNode[cur].next[num])</span><br><span class="line">            &#123;</span><br><span class="line">                treeNode[cur].next[num] = ++size;</span><br><span class="line">            &#125;</span><br><span class="line">            cur = treeNode[cur].next[num];</span><br><span class="line">        &#125;</span><br><span class="line">        treeNode[cur].cnt++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">build</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        treeNode[<span class="number">0</span>].fail = <span class="number">-1</span>;</span><br><span class="line">        <span class="built_in">queue</span>&lt;<span class="keyword">int</span>&gt; q;</span><br><span class="line">        q.push(<span class="number">0</span>);</span><br><span class="line">        <span class="keyword">while</span> (!q.empty())</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">int</span> top = q.front();</span><br><span class="line">            q.pop();</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">26</span>; ++i)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span> (treeNode[top].next[i])</span><br><span class="line">                &#123;</span><br><span class="line">                    q.push(treeNode[top].next[i]);</span><br><span class="line">                    <span class="keyword">if</span> (top == <span class="number">0</span>)</span><br><span class="line">                    &#123;</span><br><span class="line">                        treeNode[treeNode[top].next[i]].fail = <span class="number">0</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">else</span></span><br><span class="line">                    &#123;</span><br><span class="line"></span><br><span class="line">                        <span class="keyword">int</span> v = treeNode[top].fail;</span><br><span class="line">                        <span class="keyword">while</span> (v != <span class="number">-1</span>)</span><br><span class="line">                        &#123;</span><br><span class="line"></span><br><span class="line">                            <span class="keyword">if</span> (treeNode[v].next[i])</span><br><span class="line">                            &#123;</span><br><span class="line">                                treeNode[treeNode[top].next[i]].fail = treeNode[v].next[i];</span><br><span class="line">                                <span class="keyword">break</span>;</span><br><span class="line">                            &#125;</span><br><span class="line">                            <span class="keyword">else</span></span><br><span class="line">                            &#123;</span><br><span class="line">                                v = treeNode[v].fail;</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line">                        <span class="keyword">if</span> (v == <span class="number">-1</span>)</span><br><span class="line">                        &#123;</span><br><span class="line">                            treeNode[treeNode[top].next[i]].fail = <span class="number">0</span>;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">getNow</span><span class="params">(<span class="keyword">int</span> cur)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> ret = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (cur != <span class="number">-1</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            ret += treeNode[cur].cnt;</span><br><span class="line">            treeNode[cur].cnt = <span class="number">0</span>;</span><br><span class="line">            cur = treeNode[cur].fail;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="built_in">string</span> target)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> pos = <span class="number">0</span>, cur = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (pos &lt; target.length())</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (treeNode[cur].cnt)</span><br><span class="line">            &#123;</span><br><span class="line">                res += getNow(cur);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">int</span> num = target[pos] - <span class="string">'a'</span>;</span><br><span class="line">            <span class="keyword">if</span> (cur == <span class="number">-1</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                ++pos;</span><br><span class="line">                cur = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (treeNode[cur].next[num])</span><br><span class="line">            &#123;</span><br><span class="line">                ++pos;</span><br><span class="line">                cur = treeNode[cur].next[num];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                cur = treeNode[cur].fail;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (treeNode[cur].cnt)</span><br><span class="line">        &#123;</span><br><span class="line">            res += getNow(cur);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 用来检查构建的字典树和fail指针的指向</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">check</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> cur = <span class="number">0</span>;</span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">pair</span></span></span><br><span class="line"><span class="class">        &#123;</span></span><br><span class="line">            <span class="keyword">int</span> v;</span><br><span class="line">            <span class="built_in">string</span> word;</span><br><span class="line">            pair(<span class="keyword">int</span> v, <span class="built_in">string</span> word) : v(v), word(word)&#123;&#125;;</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="built_in">queue</span>&lt;pair&gt; q;</span><br><span class="line">        q.push(pair(<span class="number">0</span>, <span class="string">""</span>));</span><br><span class="line">        <span class="keyword">while</span> (!q.empty())</span><br><span class="line">        &#123;</span><br><span class="line">            pair top = q.front();</span><br><span class="line">            q.pop();</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">26</span>; ++i)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span> (treeNode[top.v].next[i])</span><br><span class="line">                &#123;</span><br><span class="line"></span><br><span class="line">                    <span class="built_in">string</span> word = top.word + <span class="keyword">char</span>(<span class="string">'a'</span> + i);</span><br><span class="line">                    q.push(pair(treeNode[top.v].next[i], word));</span><br><span class="line">                    <span class="built_in">cout</span> &lt;&lt; <span class="string">"开始输出节点信息"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">                    <span class="built_in">cout</span> &lt;&lt; <span class="string">"当前节点为编号"</span> &lt;&lt; treeNode[top.v].next[i] &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">                    <span class="built_in">cout</span> &lt;&lt; <span class="string">"word="</span> &lt;&lt; word &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">                    <span class="built_in">cout</span> &lt;&lt; <span class="string">"cnt="</span> &lt;&lt; treeNode[treeNode[top.v].next[i]].cnt &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">                    <span class="built_in">cout</span> &lt;&lt; <span class="string">"fail="</span> &lt;&lt; treeNode[treeNode[top.v].next[i]].fail &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">                    <span class="built_in">cout</span> &lt;&lt; <span class="string">"节点信息输出完毕"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    freopen(<span class="string">"3808.in"</span>, <span class="string">"r"</span>, <span class="built_in">stdin</span>);</span><br><span class="line">    <span class="keyword">int</span> n;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; n;</span><br><span class="line">    aho a;</span><br><span class="line">    a.init();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">string</span> t;</span><br><span class="line">        <span class="built_in">cin</span> &gt;&gt; t;</span><br><span class="line">        a.insert(t);</span><br><span class="line">    &#125;</span><br><span class="line">    a.build();</span><br><span class="line">    <span class="comment">// a.check();</span></span><br><span class="line">    <span class="built_in">string</span> target;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; target;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; a.find(target);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/03/24/kmp算法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/24/kmp算法/" itemprop="url">kmp算法</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-24T11:01:11+08:00">
+                2020-03-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+         <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-bar-chart"></i>
+           </span>
+           <span class="post-meta-item-text">字数统计:</span>
+           <span class="post-count">635(字)</span>
+
+         </span>
+
+      <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-clock-o"></i>
+           </span>
+           <span class="post-meta-item-text">阅读时长:</span>
+           <span class="post-count">2(分)</span>
+
+         </span>
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>推荐 B 站一个 UP 的视频，讲的非常容易理解 <a href="https://www.bilibili.com/video/BV1iJ411a7Kb?p=3" target="_blank" rel="noopener">链接</a></p>
+<h2 id="暴力匹配思路"><a href="#暴力匹配思路" class="headerlink" title="暴力匹配思路"></a>暴力匹配思路</h2><p>设模式串为 sp，要匹配的目标字符串为 st</p>
+<p>扫一遍 st，每次从 st 当前位置开始匹配 sp，这样做浪费了大量时间，之前匹配过程得到信息没有被有效利用。</p>
+<h2 id="KMP-算法"><a href="#KMP-算法" class="headerlink" title="KMP 算法"></a>KMP 算法</h2><h3 id="最大公共前后缀"><a href="#最大公共前后缀" class="headerlink" title="最大公共前后缀"></a>最大公共前后缀</h3><p>KMP 中为了有效利用之前已获得的信息，使用了最大公共前后缀。<br>前后缀的概念我们都知道，而公共前后缀是指该位置的前缀与后缀相同的部分。应当注意，前缀是不能包含当前位置的，而后缀不能包含第 1 个位置。<br>举个例子，ABCDABC 中，C 位置的最大公共前后缀是 ABC。<br>我们计算 AAAAB 的最大公共前后缀，使用 presuf 数组保存最大公共前后缀的长度<br>则 presuf = [0,1,2,3,0]</p>
+<h3 id="KMP-算法流程"><a href="#KMP-算法流程" class="headerlink" title="KMP 算法流程"></a>KMP 算法流程</h3><h4 id="构造最大前后缀数组"><a href="#构造最大前后缀数组" class="headerlink" title="构造最大前后缀数组"></a>构造最大前后缀数组</h4><p>首先构造 presuf 数组，构造的流程如下</p>
+<p>为了方便算法编写，令 presuf[0] = -1 作为边界，最大公共前后缀从 1 下标开始记录。<br>令 j 表示当前指针位置，可以理解为后缀指针，t 表示前缀指针位置。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">t = presuf[0] = -1</span><br><span class="line">m = sp.length()</span><br><span class="line">while j &lt; m-1</span><br><span class="line">    // 当前位置前后缀匹配，更新 presuf 数组</span><br><span class="line">    if t &lt; 0 || sp[j] == sp[t]</span><br><span class="line">        presuf[++j] = ++ t</span><br><span class="line">    // 当前不匹配，则应该缩小前缀的范围</span><br><span class="line">    else</span><br><span class="line">        t = presuf[t];</span><br></pre></td></tr></table></figure>
+<img src="/2020/03/24/kmp算法/构造过程.png" title="构造过程">
+<h4 id="匹配流程"><a href="#匹配流程" class="headerlink" title="匹配流程"></a>匹配流程</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">i = 0</span><br><span class="line">j = 0</span><br><span class="line">m = st.length()</span><br><span class="line">while j &lt; m</span><br><span class="line">    if i &lt; 0 || sp[i] == st[i]</span><br><span class="line">        ++i,++j</span><br><span class="line">        if i == sp.length()</span><br><span class="line">            // 得到结果</span><br><span class="line">    else</span><br><span class="line">        // 这一步也很好理解，和构造过程是一样</span><br><span class="line">        i = presuf[i]</span><br></pre></td></tr></table></figure>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>为了便于理解，变量名都是用了更具意义的缩写</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">10005</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">string</span> st = <span class="string">"AAAAAAAAB"</span>;</span><br><span class="line">    <span class="built_in">string</span> sp = <span class="string">"AAAAB"</span>;</span><br><span class="line">    <span class="keyword">int</span> presuf[maxn];</span><br><span class="line">    <span class="built_in">memset</span>(presuf, <span class="number">0</span>, <span class="keyword">sizeof</span>(presuf));</span><br><span class="line">    <span class="comment">// 构造过程</span></span><br><span class="line">    <span class="keyword">int</span> prep = presuf[<span class="number">0</span>] = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">int</span> sufp = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (sufp &lt; sp.size())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (prep &lt; <span class="number">0</span> || sp[prep] == sp[sufp])</span><br><span class="line">        &#123;</span><br><span class="line">            presuf[++sufp] = ++prep;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            prep = presuf[prep];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 匹配过程</span></span><br><span class="line">    <span class="keyword">int</span> stp = <span class="number">0</span>, spp = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> res = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">while</span> (stp &lt; st.size())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (spp &lt; <span class="number">0</span> || st[stp] == sp[spp])</span><br><span class="line">        &#123;</span><br><span class="line">            ++spp, ++stp;</span><br><span class="line">            <span class="keyword">if</span> (spp == sp.length())</span><br><span class="line">            &#123;</span><br><span class="line">                res = stp;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            spp = presuf[spp];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><p>KMP 算法的应用，判定一棵二叉树是否是另一颗二叉树的子树，如果这棵树的序列化字符串是另一棵树序列化字符串的子串，则可以判定。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/03/24/编译原理之有穷自动机/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1236,9 +1615,11 @@
 </ul>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.ell</span> &#123;</span><br><span class="line">  <span class="attribute">text-overflow</span>: ellipsis;</span><br><span class="line">  <span class="attribute">white-space</span>: nowrap;</span><br><span class="line">  <span class="attribute">overflow</span>: hidden;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="scrollbar"><a href="#scrollbar" class="headerlink" title="scrollbar"></a>scrollbar</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">我们平时开发中只用下面 3 个属性:</span><br><span class="line"><span class="selector-pseudo">::-webkit-scrollbar</span> &#123;</span><br><span class="line">  <span class="comment">/* 血槽宽度 */</span></span><br><span class="line">  <span class="attribute">width</span>: <span class="number">8px</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">8px</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-pseudo">::-webkit-scrollbar-thumb</span> &#123;</span><br><span class="line">  <span class="comment">/* 拖动条 */</span></span><br><span class="line">  <span class="attribute">background-color</span>: <span class="built_in">rgba</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0.3</span>);</span><br><span class="line">  <span class="attribute">border-radius</span>: <span class="number">6px</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-pseudo">::-webkit-scrollbar-track</span> &#123;</span><br><span class="line">  <span class="comment">/* 背景槽 */</span></span><br><span class="line">  <span class="attribute">background-color</span>: <span class="number">#ddd</span>;</span><br><span class="line">  <span class="attribute">border-radius</span>: <span class="number">6px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="chapter7-css-层叠规则"><a href="#chapter7-css-层叠规则" class="headerlink" title="chapter7 css 层叠规则"></a>chapter7 css 层叠规则</h2><ul>
+<h2 id="chapter7-css-层叠规则"><a href="#chapter7-css-层叠规则" class="headerlink" title="chapter7 css 层叠规则"></a>chapter7 css 层叠规则</h2><p>!!!z-index 仅可以在定位元素上生效</p>
+<ul>
 <li>background/border 是装饰属性，浮动和块用作布局，而内联元素作为内容，自然在上面显示</li>
 </ul>
+<h3 id="层叠顺序"><a href="#层叠顺序" class="headerlink" title="层叠顺序"></a>层叠顺序</h3><p>层叠上下文 background/border<br>负 z-index<br>block 块状水平盒子<br>float 浮动盒子<br>inline/inline-block 水平盒子<br>z-index:auto/z-index:0<br>正 index</p>
 <h3 id="层叠上下文"><a href="#层叠上下文" class="headerlink" title="层叠上下文"></a>层叠上下文</h3><h4 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h4><ul>
 <li>页面根元素称为根层叠上下文</li>
 <li>z-index 为数值的定位元素是传统层叠上下文</li>
@@ -1249,7 +1630,7 @@
 <li>mix-blend-mode 不是 normal</li>
 </ul>
 </li>
-<li><p>定位元素会层叠在普通元素的上面的原因是元素一旦称为定位元素， 其 z-index 就会自动生效，此时其 z-index 就是默认的 auto，也就是 0 级别。</p>
+<li><p>定位元素会层叠在普通元素的上面的原因是元素一旦成为定位元素， 其 z-index 就会自动生效，此时其 z-index 就是默认的 auto，也就是 0 级别。</p>
 </li>
 <li><p>opacity 动画问题，当 opacity 不为 1 的时候，其具有层叠上下文 z-index:auto，导致其显示于文字之上，解决方法是设置文字的 z-index 为正数值</p>
 </li>
@@ -1978,504 +2359,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2019/09/04/webpack爬坑之路/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="jiezi19971225">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Jiez19971225‘s Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/09/04/webpack爬坑之路/" itemprop="url">webpack爬坑之路</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-04T00:52:50+08:00">
-                2019-09-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/前端/" itemprop="url" rel="index">
-                    <span itemprop="name">前端</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-         <span class="post-time">
-	   &nbsp; | &nbsp;
-           <span class="post-meta-item-icon">
-             <i class="fa fa-bar-chart"></i>
-           </span>
-           <span class="post-meta-item-text">字数统计:</span>
-           <span class="post-count">2k(字)</span>
-
-         </span>
-
-      <span class="post-time">
-	   &nbsp; | &nbsp;
-           <span class="post-meta-item-icon">
-             <i class="fa fa-clock-o"></i>
-           </span>
-           <span class="post-meta-item-text">阅读时长:</span>
-           <span class="post-count">7(分)</span>
-
-         </span>
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="项目缓存问题"><a href="#项目缓存问题" class="headerlink" title="项目缓存问题"></a>项目缓存问题</h3><p>当项目上线新版本的时候，用户浏览器可能仍然使用的是之前 html 和 js 文件的缓存。通过以下几个方法可以解决这个问题。</p>
-<ul>
-<li>文件命名使用哈希值，这样当发布新版本就会请求新版本的资源文件。vue-cli 中默认有这个功能，webpack 在每次构建的时候都会生成 hash，contenthash，chunkhash 三个哈希值<ul>
-<li>hash 这是工程级别的，即每次修改任何一个文件，所有文件名的 hash 至都将改变。所以一旦修改了任何一个文件，整个项目的文件缓存都将失效。</li>
-<li>chunkhash 根据不同的入口文件(Entry)进行依赖文件解析、构建对应的 chunk，生成对应的哈希值。在生产环境里把一些公共库和程序入口文件区分开，单独打包构建，接着我们采用 chunkhash 的方式生成哈希值，那么只要我们不改动公共库的代码，就可以保证其哈希值不会受影响。并且 webpack4 中支持了异步 import 功能，chunkhash 也作用于此。</li>
-<li>contenthash 一般来说，样式是作为模块 import 到 js 文件中，他们的 chunkhash 是一致的，这导致只要对应的 css 或者 js 改变，chunkhash 就会改变。而 contenthash 是针对文件内容级别的，只有自身模块的内容变了，hash 值才改变</li>
-</ul>
-</li>
-<li>html 加上</li>
-</ul>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">meta</span></span></span><br><span class="line"><span class="tag">  <span class="attr">http-equiv</span>=<span class="string">"cache-control"</span></span></span><br><span class="line"><span class="tag">  <span class="attr">content</span>=<span class="string">"no-cache, no-store, must-revalidate"</span></span></span><br><span class="line"><span class="tag">/&gt;</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>配置 nginx，禁止 html 入口文件的缓存</li>
-</ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">location = <span class="regexp">/index.html &#123;</span></span><br><span class="line"><span class="regexp">    add_header Cache-Control "no-cache, no-store";</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp">location = /</span>admin_index.html &#123;</span><br><span class="line">    add_header Cache-Control <span class="string">"no-cache, no-store"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>使用 HtmlWebpackPlugin 插件，一个典型的配置如下</li>
-</ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> HtmlWebpackPlugin(&#123;</span><br><span class="line">    filename: <span class="string">'admin_index.html'</span>,</span><br><span class="line">    template: <span class="string">'web-admin/admin_index.html'</span>,</span><br><span class="line">    inject: <span class="literal">true</span>,</span><br><span class="line">    hash: <span class="literal">false</span>,</span><br><span class="line">    chunks: [<span class="string">'adminApp'</span>, <span class="string">'vendor~adminApp'</span>, <span class="string">'vendor~adminApp~userApp'</span>],  <span class="comment">// 这个数组是html要引入的打包生成的chunk文件，chunkname 在 webpack 打包输出信息中</span></span><br><span class="line">    minify: &#123;</span><br><span class="line">        removeComments: <span class="literal">true</span>,</span><br><span class="line">        collapseWhitespace: <span class="literal">true</span>,</span><br><span class="line">        removeAttributeQuotes: <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;),</span><br></pre></td></tr></table></figure>
-
-<p>图中最右边一列就是资源的 chunkname</p>
-<h3 id="MiniCssExtractPlugin"><a href="#MiniCssExtractPlugin" class="headerlink" title="MiniCssExtractPlugin"></a>MiniCssExtractPlugin</h3><p>之前项目使用的是 ExtractTextPlugin 对 css 进行抽出并打包，然而 ExtractTextPlugin 在 4.0 版本后不再支持对 css 进行打包 (会在生成的 css 文件末尾附加 webpack 运行时的代码)，后学习得知现在应使用 MiniCssExtractPlugin 对 css 进行抽离</p>
-<h3 id="CleanWebpackPlugin"><a href="#CleanWebpackPlugin" class="headerlink" title="CleanWebpackPlugin"></a>CleanWebpackPlugin</h3><p>这个插件的作用是每次构建的时候，清理重复构建的文件，因为使用哈希方式构建的时候，文件名不同，更改的文件不会直接替换。个人感觉使用 rm -rf dist/* 清理也可以 当然这可以避免你神志不清时误把整个项目文件删了</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> CleanWebpackPlugin([<span class="string">"dist"</span>]);</span><br></pre></td></tr></table></figure>
-<h3 id="optimization-splitChunks"><a href="#optimization-splitChunks" class="headerlink" title="optimization.splitChunks"></a>optimization.splitChunks</h3><p>非常实用的功能，抽出代码中的公共组件到独立的文件，举个例子</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">cacheGroups: &#123;</span><br><span class="line">    vendor: &#123;</span><br><span class="line">        test: <span class="regexp">/node_modules/</span>,</span><br><span class="line">        chunks: <span class="string">"initial"</span>,</span><br><span class="line">        <span class="comment">// name:"vendor",</span></span><br><span class="line">        priority: <span class="number">10</span>,</span><br><span class="line">        enforce: <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>如果没有 name 属性，a 入口文件引用了 vue 和 axios， b 入口文件引用了 react 和 axios，那么 webpack 就会把 axios 单独抽离出来为独立的 chunk，同时 vue 和 react 在各自的独立 chunk 中<br>而如果有 name 属性，那么所有依赖文件都会打包到命名的 chunk 文件中，这个原理同样适用于 CSS 的打包。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">optimization: &#123;</span><br><span class="line">  splitChunks: &#123;</span><br><span class="line">    chunks: <span class="string">"all"</span>,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>可以将 node_modules 中代码单独打包一个 chunk 最终输出</p>
-<p>/<em><br>通过 js 代码让文件打包成单独 chunk
-</em>/</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span>(<span class="comment">/*webpackChunkName:'test',webpackPrefetc:true*/</span>,<span class="string">"./test"</span>)</span><br><span class="line">  .then(<span class="function"><span class="params">module</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 返回 es6 module</span></span><br><span class="line">  &#125;)</span><br><span class="line">  .catch(<span class="function"><span class="params">()</span> =&gt;</span> &#123;&#125;);</span><br></pre></td></tr></table></figure>
-<p>懒加载 当文件需要时才加载<br>预加载 prefetch 会在使用之前，提前加载 js 文件，等其他资源加载完毕了，再偷偷加载<br>正常加载认为是并行加载</p>
-<h3 id="OptimizeCssAssetsPlugin"><a href="#OptimizeCssAssetsPlugin" class="headerlink" title="OptimizeCssAssetsPlugin"></a>OptimizeCssAssetsPlugin</h3><p>我在打包时发现 node_modules 中的 css 文件无法被压缩。css loader 中的 minimize 选项早已被废弃，尝试使用了这个插件后解决了问题。</p>
-<p>今天的收获就这么多，感觉自己又犯了本末倒置的错误，在不懂的情况下强行试图解决问题，白白浪费了很多时间，乃至于怀疑人生道：“为什么是这样，为什么不生效。”，好在最后解决了问题。这几天不干别的了，先搞懂 webpack 再说。</p>
-<h3 id="devserver"><a href="#devserver" class="headerlink" title="devserver"></a>devserver</h3><ul>
-<li>proxy<br>代理的只能是本地 如果本身请求的目的地址已经指定不是本地，那么这个请求不会被 webpack 代理</li>
-<li>HMR<ul>
-<li>样式文件 可以使用 因为 style-loader 内部实现了 HMR</li>
-<li>js 文件 默认不能使用 HMR 功能</li>
-<li>html 文件不能热更新 将 html 文件 加入 entry 这样会重新加载页面 不需要作 HMR 功能</li>
-</ul>
-</li>
-</ul>
-<h3 id="sourcemap"><a href="#sourcemap" class="headerlink" title="sourcemap"></a>sourcemap</h3><p>source-map 外部 错误代码的准确信息访问到源代码的准确位置<br>inline-source-map 内联 只生成一个 sourcemap<br>hidden-source-map 外联 错误代码错误原因，但是没有错误位置，不能追踪源代码错误，只能提示到构建后代码的错误位置<br>eval-source-map 内联 每一个文件都生成对应的 source-map，都在 eval 错误代码准确信息，和源代码的错误位置<br>nosources-source-map 外部 错误代码准确信息，但是没有任何源代码信息<br>cheap-source-map 外部 错误代码准确信息和源代码的错误位置 只能精确到行<br>cheap-module-source-map 外部 错误代码准确信息 和 源代码错误位置<br>module 会将 loader 的 source map 加入</p>
-<p>开发环境:速度快，调试更友好<br>速度快(eval&gt;inline&gt;cheap)<br>eval-cheap-source-map<br>eval-source-map<br>调试更友好<br>source-map<br>cheap-moudule-source-map<br>cheap-source-map</p>
-<p>eval-cheap-source-map</p>
-<ul>
-<li>内联和外部的区别 1. 外部生成了文件，内联没有 2. 内联构建速度更快</li>
-</ul>
-<p>开发环境：速度快，调试更友好<br>eval&gt;inline&gt;cheap<br>source-map<br>cheap-module-source-map<br>cheap-source-map<br>eval-source-map / eval-cheap-moudule-source-map</p>
-<p>生产环境：源代码要不要隐藏？调试友好程度<br>内联会让代码变大，所以再生产环境不用内联<br>nosources-source-map 全部隐藏<br>hidden-source-map 只隐藏代码，会提示构建代码错误信息</p>
-<h3 id="babel-loader"><a href="#babel-loader" class="headerlink" title="babel-loader"></a>babel-loader</h3><p>babel 缓存 cacheDirectory: true</p>
-<h3 id="tree-shakin-去除无用代码"><a href="#tree-shakin-去除无用代码" class="headerlink" title="tree shakin 去除无用代码"></a>tree shakin 去除无用代码</h3><ul>
-<li><p>必须使用 ES6 模块化</p>
-</li>
-<li><p>开启 production 环境</p>
-</li>
-<li><p>在 package.json 中配置 “sideEffects”:false 所有的代码都没有副作用，都可以进行 tree shaking 可能会把 css/ @bable/polyfill 文件干掉</p>
-</li>
-<li>定义 nodejs 环境变量：决定使用 browserslist 的哪个环境 process.env.NODE_ENV = ‘production’</li>
-</ul>
-<h3 id="PWA"><a href="#PWA" class="headerlink" title="PWA"></a>PWA</h3><p>workbox-&gt;workbox-webpack-plugin</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> WorkboxWebpackPlugin.GenerateSW &#123;</span><br><span class="line">  <span class="comment">// 生成 serverworker.js</span></span><br><span class="line">  clientClaim: <span class="literal">true</span>,</span><br><span class="line">  skipWaiting:<span class="literal">true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>eslint 不认识 window,navigator 全局变量，需要修改</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">env: &#123;</span><br><span class="line">  browser: <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="多进程打包-thread-loader"><a href="#多进程打包-thread-loader" class="headerlink" title="多进程打包 thread-loader"></a>多进程打包 thread-loader</h3><p>开启多进程打包，进程启动大概 600ms，进程通信也有开销<br>多用在 babel-loader</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  loader:<span class="string">'thread-loader'</span>,</span><br><span class="line">  options:&#123;</span><br><span class="line">    workers:<span class="number">2</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="externals-忽略打包"><a href="#externals-忽略打包" class="headerlink" title="externals 忽略打包"></a>externals 忽略打包</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">externals: &#123;</span><br><span class="line">  <span class="comment">// 忽略库名 -- npm 包名</span></span><br><span class="line">  jQuery: <span class="string">"jQuery"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="dll"><a href="#dll" class="headerlink" title="dll"></a>dll</h3><p>打包 dll</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; resolve &#125; = <span class="built_in">require</span>(<span class="string">"path"</span>);</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  entry: &#123;</span><br><span class="line">    jquery: [<span class="string">"jquery"</span>]</span><br><span class="line">  &#125;,</span><br><span class="line">  output: &#123;</span><br><span class="line">    filename: <span class="string">"[name].js"</span>,</span><br><span class="line">    path: resolve(__dirname, <span class="string">"dll"</span>),</span><br><span class="line">    library: <span class="string">"[name]_[hash]"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  plugins: [</span><br><span class="line">    <span class="comment">// 打包生成一个 manifest.json --&gt; 提供和jquery映射</span></span><br><span class="line">    <span class="keyword">new</span> webpack.DLLPlugin(&#123;</span><br><span class="line">      name: <span class="string">"[name]_[hash]"</span>,</span><br><span class="line">      path: resolve(__dirname, <span class="string">"dll/manifest.json"</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">  ]</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>定义 dll</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> webpack.DLLReferencePlugin(&#123;</span><br><span class="line">  manifest: resolve(__dirname, <span class="string">"dll/manifest.json"</span>)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p>引用 dll</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> AddAssetHtmlWebpackPlugin(&#123;</span><br><span class="line">  filepath: resolve(__dirname, <span class="string">"dll/jquery.js"</span>)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<h3 id="配置详解"><a href="#配置详解" class="headerlink" title="配置详解"></a>配置详解</h3><ul>
-<li><p>module</p>
-<ul>
-<li>enforce:’pre’, // 优先执行</li>
-<li>enforce:’post’, // 延后执行</li>
-</ul>
-</li>
-<li><p>resolve 解析模块的规则</p>
-<ul>
-<li>alias 配置解析模块的别名</li>
-<li>extensions:[‘.js’,’json’] 配置省略文件路径的后缀名</li>
-<li>modules:[resolve(__dirname,’../../node_modules’),’node_modules’] 解析模块去找哪个目录</li>
-</ul>
-</li>
-<li><p>optimization</p>
-</li>
-</ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">optimization: &#123;</span><br><span class="line">  <span class="comment">// 将当前模块记录的其他模块的hash单独打包为一个文件 runtime 一定要加上 保证未改动模块缓存不失效</span></span><br><span class="line">  runtimeChunk: &#123;</span><br><span class="line">    name: <span class="function"><span class="params">entrypoint</span> =&gt;</span> <span class="string">`runtime-<span class="subst">$&#123;entrypoint.name&#125;</span>`</span>;</span><br><span class="line">  &#125;,</span><br><span class="line">  minimize:&#123;</span><br><span class="line">    <span class="comment">// 配置生产环境的压缩方案: js和css</span></span><br><span class="line">    <span class="keyword">new</span> TerserWebpackPlugin(&#123;</span><br><span class="line">      <span class="comment">// 开启缓存</span></span><br><span class="line">      cache:<span class="literal">true</span>,</span><br><span class="line">      <span class="comment">// 开启多进程打包</span></span><br><span class="line">      parallel:<span class="literal">true</span>,</span><br><span class="line">      <span class="comment">// 启动source-map</span></span><br><span class="line">      sourceMap:<span class="literal">true</span></span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2019/09/02/树状数组/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="jiezi19971225">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Jiez19971225‘s Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/09/02/树状数组/" itemprop="url">树状数组</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-02T23:38:50+08:00">
-                2019-09-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/算法/" itemprop="url" rel="index">
-                    <span itemprop="name">算法</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-         <span class="post-time">
-	   &nbsp; | &nbsp;
-           <span class="post-meta-item-icon">
-             <i class="fa fa-bar-chart"></i>
-           </span>
-           <span class="post-meta-item-text">字数统计:</span>
-           <span class="post-count">796(字)</span>
-
-         </span>
-
-      <span class="post-time">
-	   &nbsp; | &nbsp;
-           <span class="post-meta-item-icon">
-             <i class="fa fa-clock-o"></i>
-           </span>
-           <span class="post-meta-item-text">阅读时长:</span>
-           <span class="post-count">3(分)</span>
-
-         </span>
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="核心"><a href="#核心" class="headerlink" title="核心"></a>核心</h2><p>树状数组是一种用来解决区间单点更新，区间求和问题的简单数据结构。其核心思想在于二进制特殊性质。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">lowbit</span><span class="params">(<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x &amp; (-x);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="lowbit"><a href="#lowbit" class="headerlink" title="lowbit"></a>lowbit</h2><p>lowbit 函数的作用是取得 x 最右边一个 1 对应的数值。 如果 x 的二进制可以表示为 00010010，那么 lowbit 的结果为 2。怎么做到的呢？-x 的补码是 x 按位取反加 1，0010 变成 1101 +1 = 1110 ，-x 从右数第一个 1 的位置对应 x 从右数第一个 x 的位置，其他均取反。<br>如此便可以取得所要得到的数。<br>得到了这个数又有什么用呢。可以看下表</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>普通数组 a</th>
-<th>树状数组 c</th>
-<th>解释</th>
-<th>二进制</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>1</td>
-<td>a[1]</td>
-<td>0001</td>
-</tr>
-<tr>
-<td>2</td>
-<td>3</td>
-<td>a[1]+a[2]</td>
-<td>0010</td>
-</tr>
-<tr>
-<td>3</td>
-<td>3</td>
-<td>a[3]</td>
-<td>0011</td>
-</tr>
-<tr>
-<td>4</td>
-<td>10</td>
-<td>a[1]+a[2]+a[3]+a[4]</td>
-<td>0100</td>
-</tr>
-<tr>
-<td>5</td>
-<td>5</td>
-<td>a[5]</td>
-<td>0101</td>
-</tr>
-<tr>
-<td>6</td>
-<td>11</td>
-<td>a[5]+a[6]</td>
-<td>0110</td>
-</tr>
-<tr>
-<td>7</td>
-<td>7</td>
-<td>a[7]</td>
-<td>0111</td>
-</tr>
-<tr>
-<td>8</td>
-<td>36</td>
-<td>a[1]+…+a[8]</td>
-<td>1000</td>
-</tr>
-<tr>
-<td>9</td>
-<td>9</td>
-<td>a[9]</td>
-<td>1001</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>对于一个位置，看它的二进制，这个位置保存的元素个数就是其二进制最右边 1 代表的大小，保存从去掉最右边 1 到加上最右边 1 的位置之间的数据（左开右闭）。<br>这样表述很不清楚，直接距离，看 c[6]位置，6 的二进制是 0110，去掉最右边 1 是 0100，即十进制的 4，它保存的是(4,6]之间的数据。</p>
-<p>那么对于求和操作，就变成了不断找右边的 1 的过程。</p>
-<p>对于更新操作，我们要同时更新其之后的父节点。<br>当我们修改 a[i]的值时，可以从 c[i]往根节点一路上溯，调整这条路上的所有 C[]即可，对于节点 i，父节点下标 p=i+lowbit(i)</p>
-<p>树状数组多用于求逆序对，原理是将序列按顺序插入树状数组时，每次统计比当前数小的元素数量 sum，则与当前数构成逆序的对数有 i-sum<br>可以离散化数据，我们不关心具体元素的数值，只关心其对应关系。</p>
-<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> ll;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">double</span> PI = <span class="built_in">acos</span>(<span class="number">-1.0</span>);</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">double</span> eps = <span class="number">1e-6</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> INF = <span class="number">0x3f3f3f3f</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">1e5</span> + <span class="number">7</span>;</span><br><span class="line"><span class="keyword">int</span> n;</span><br><span class="line"><span class="keyword">int</span> c[maxn];</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">lowbit</span><span class="params">(<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x &amp; (-x);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">update</span><span class="params">(<span class="keyword">int</span> i, <span class="keyword">int</span> v)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (i &lt; n)</span><br><span class="line">    &#123;</span><br><span class="line">        c[i] += v;</span><br><span class="line">        i += lowbit(i);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getsum</span><span class="params">(<span class="keyword">int</span> i)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (i &gt; <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        sum += c[i];</span><br><span class="line">        i -= lowbit(i);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    freopen(<span class="string">"data.in"</span>, <span class="string">"r"</span>, <span class="built_in">stdin</span>);</span><br><span class="line">    n = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">int</span> tmp;</span><br><span class="line">        <span class="built_in">cin</span> &gt;&gt; tmp;</span><br><span class="line">        update(i, tmp);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">10</span>; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; c[i] &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="扩展到二维"><a href="#扩展到二维" class="headerlink" title="扩展到二维"></a>扩展到二维</h2><p>问题：一个由数字构成的大矩阵，能进行两种操作</p>
-<ul>
-<li>对矩阵里的某个数加上一个整数（可正可负）</li>
-<li>查询某个子矩阵里所有数字的和,要求对每次查询，输出结果。</li>
-</ul>
-<p>一维树状数组很容易扩展到二维，在二维情况下:数组 A[][]的树状数组定义为：</p>
-<script type="math/tex; mode=display">C[x][y] = \Sigma a[i][j]</script><script type="math/tex; mode=display">x-lowbit(x) + 1 <= i <= x</script><script type="math/tex; mode=display">y-lowbit(y) + 1 <= j <= y</script><p>其相应的更新与求和操作也很容易类比出来，这里就不做说明了。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2526,7 +2409,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">48</span>
+                  <span class="site-state-item-count">50</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2537,7 +2420,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-count">23</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -2548,7 +2431,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">43</span>
+                  <span class="site-state-item-count">45</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -3107,5 +2990,5 @@
 
   
 
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"live2d-widget-model-koharu"},"display":{"position":"left","width":75,"height":225},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</body>
 </html>
