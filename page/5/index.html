@@ -294,6 +294,172 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2019/04/20/leetcodeP11-ContainerWithMostWater/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/04/20/leetcodeP11-ContainerWithMostWater/" itemprop="url">leetcodeP11-ContainerWithMostWater</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-20T19:39:45+08:00">
+                2019-04-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+         <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-bar-chart"></i>
+           </span>
+           <span class="post-meta-item-text">字数统计:</span>
+           <span class="post-count">403(字)</span>
+
+         </span>
+
+      <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-clock-o"></i>
+           </span>
+           <span class="post-meta-item-text">阅读时长:</span>
+           <span class="post-count">1(分)</span>
+
+         </span>
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>这道题以前做过，但是忘记怎么做的了。第一次交了一个双重循环的暴力。查看题解一下就明白了正确的贪心算法。</p>
+<h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h3><p>给你 N 个非负的正整数 a1,a2,a3,…an，每个代表了坐标轴上的一个点(i，ai)。n 条垂直的线连接点和 x 轴，要求找出两条线，让它们和 x 轴组成的容器的容积最大。</p>
+<h3 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h3><p>正解是用两点逼近的算法。首先容器的高度是由最短的那条线决定的。<br>维护一个变量记录最大容积。记录所取的两端的端点位置，每次计算当前情况的容积，并更新最大容积。之后更新较短的那条线的端点位置(一定是更新较短的端点位置，否则容积一定小于当前容积，因为只有宽度减小)，更新方法为向另一端的方向遍历直到遇到一条比当前线高度高的线（比当前线高度低的线组成的容积一定小于当前情况的容积）。</p>
+<p>以下是代码</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">maxArea</span><span class="params">(height []<span class="keyword">int</span>)</span> <span class="title">int</span></span> &#123;</span><br><span class="line">    left, right := <span class="number">0</span>, <span class="built_in">len</span>(height)<span class="number">-1</span></span><br><span class="line">    res := <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> left &lt; right &#123;</span><br><span class="line">        minHeight := <span class="number">0</span></span><br><span class="line">        <span class="keyword">if</span> height[left] &lt; height[right] &#123;</span><br><span class="line">            minHeight = height[left]</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            minHeight = height[right]</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        newArea := (right - left) * minHeight</span><br><span class="line">        <span class="keyword">if</span> newArea &gt; res &#123;</span><br><span class="line">            res = newArea</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> height[left] &lt; height[right] &#123;</span><br><span class="line">            newLeft := left + <span class="number">1</span></span><br><span class="line">            <span class="keyword">for</span> newLeft &lt; right &amp;&amp; height[newLeft] &lt; height[left] &#123;</span><br><span class="line">                newLeft = newLeft + <span class="number">1</span></span><br><span class="line">            &#125;</span><br><span class="line">            left = newLeft</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            newRight := right - <span class="number">1</span></span><br><span class="line">            <span class="keyword">for</span> newRight &gt; left &amp;&amp; height[newRight] &lt; height[right] &#123;</span><br><span class="line">                newRight = newRight - <span class="number">1</span></span><br><span class="line">            &#125;</span><br><span class="line">            right = newRight</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2019/04/05/docker学习笔记/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2466,197 +2632,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2018/11/25/oj运维笔记-持续更新/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="jiezi19971225">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Jiez19971225‘s Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/11/25/oj运维笔记-持续更新/" itemprop="url">oj运维笔记-持续更新</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-25T13:59:10+08:00">
-                2018-11-25
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/OJ运维/" itemprop="url" rel="index">
-                    <span itemprop="name">OJ运维</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-         <span class="post-time">
-	   &nbsp; | &nbsp;
-           <span class="post-meta-item-icon">
-             <i class="fa fa-bar-chart"></i>
-           </span>
-           <span class="post-meta-item-text">字数统计:</span>
-           <span class="post-count">601(字)</span>
-
-         </span>
-
-      <span class="post-time">
-	   &nbsp; | &nbsp;
-           <span class="post-meta-item-icon">
-             <i class="fa fa-clock-o"></i>
-           </span>
-           <span class="post-meta-item-text">阅读时长:</span>
-           <span class="post-count">2(分)</span>
-
-         </span>
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>接到协会老师的任务，我负责了学校 oj 的开发和运维工作，这篇博客记录我在运维过程中遇到的一些问题和解决办法。</p>
-<ul>
-<li>重启容器 找不到 java，vi 等命令 使用 update update-alternatives —config 配置 java javac vi 等</li>
-<li>java 遇到　 OpenJDK 64-Bit Server VM warning: Can’t detect initial thread stack location - find_vma failed 　错误原因是 chroot 系统中，需要挂载/proc，只需要执行以下语句即可<br>mount -t proc none /proc</li>
-<li><p>php 下载 excel 文件 nginx 报错 502<br>首先查看 nginx 日志，发现在站点配置文件中没有设置输出日志，在站点配置文件末尾加入<br>error_log logs/errors.log error;<br>输入命令 nginx -t 发现报错<br>nginx: [emerg] open() “/usr/share/nginx/logs/errors.log” failed (2: No such file or directory)<br>使用 touch 创建日志文件，查看日志文件发现<br>*4 upstream sent too big header while reading response header from upstream<br>百度之后，说是 header 过大的问题，在 nginx.conf 的 http 段加入以下配置<br>proxy_buffer_size 128k;<br>proxy_buffers 32 32k;<br>proxy_busy_buffers_size 128k;</p>
-<pre><code>  fastcgi_buffer_size 128k;
-  fastcgi_buffers 4 256k;
-  fastcgi_busy_buffers_size 256k;
-</code></pre><p>问题搞定！</p>
-<ul>
-<li>手动执行 judge_client<br>judge_client 1000 1 /home/judge/hustoj_core debug</li>
-</ul>
-</li>
-<li><p>当 v-if 与 v-for 一起使用时，v-for 具有比 v-if 更高的优先级</p>
-</li>
-<li>supervisor 的使用 运行命令 supervisorctl 然后参照配置文件的写法运行命令</li>
-<li>docker-compose 要注意 services 不能重名，即使是在不同的目录下，如果 services 重名，会覆盖之前的容器，建议使用项目名+容器名进行命名</li>
-</ul>
-<h3 id="压力测试"><a href="#压力测试" class="headerlink" title="压力测试"></a>压力测试</h3><p>因为使用 redis 缓存了问题数据，我想要测试一下有没有带来性能上提升<br>首先我尝试的是 postman 的 runner，但是测试之后发现并没有什么区别。后来了解到 postman 的 runner 是串行的。<br>又看到 jMeter 这个工具，但是它在 linux 下没有 GUI，配置又很繁琐，直接劝退。<br>之后又看到 linux 下几款 命令行压力测试工具，最终选择使用 ab。</p>
-<h3 id="ab-的使用"><a href="#ab-的使用" class="headerlink" title="ab 的使用"></a>ab 的使用</h3><p>使用很简单，最基础的设置，请求 10000 次，并发数量 1000</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ab -n 10000 -c 1000 http://localhost:8080/api/problem/1</span><br></pre></td></tr></table></figure>
-<h3 id="socket-Too-many-open-files-24-的解决办法"><a href="#socket-Too-many-open-files-24-的解决办法" class="headerlink" title="socket: Too many open files (24)的解决办法"></a>socket: Too many open files (24)的解决办法</h3><p>打开的文件太多了，超过了系统限制</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ulimit -n 204800</span><br></pre></td></tr></table></figure>
-<h3 id="redigo"><a href="#redigo" class="headerlink" title="redigo"></a>redigo</h3><p>文献 系统优点</p>
-<h3 id="nginx"><a href="#nginx" class="headerlink" title="nginx"></a>nginx</h3><p>nginx容器配置反向代理，无法使用 localhost 访问主机，可以使用宿主机 docker 0 的网卡 ip 代替</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span>
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2702,7 +2682,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">50</span>
+                  <span class="site-state-item-count">51</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2713,7 +2693,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -2724,7 +2704,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-count">46</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
