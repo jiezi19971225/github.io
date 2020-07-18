@@ -89,7 +89,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://www.jiezi19971225.cn/2020/06/27/jenkins自动构建部署前端镜像/nodejs配置.png">
 <meta property="og:image" content="http://www.jiezi19971225.cn/2020/06/27/jenkins自动构建部署前端镜像/itWorks.png">
-<meta property="og:updated_time" content="2020-06-27T04:55:00.023Z">
+<meta property="og:updated_time" content="2020-07-18T16:12:53.698Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="jenkins自动构建部署前端镜像">
 <meta name="twitter:description" content="目标，实现 OJ 前端代码自动打包构建镜像到腾讯云，远程 ssh 登录学校主机自动部署镜像 尝试了一下在 docker 中安装 jenkins，遇到了无法解决的坑，还是在 windows 下安装吧。 jenkins 插件下载加速修改 jenkins_home 里 updates 中 default.json 文件,之后访问 /restart 路径 重启 jenkins 后生效 1sed -i &apos;s">
@@ -374,7 +374,7 @@
              <i class="fa fa-bar-chart"></i>
            </span>
            <span class="post-meta-item-text">字数统计:</span>
-           <span class="post-count">399(字)</span>
+           <span class="post-count">397(字)</span>
 
          </span>
 
@@ -418,10 +418,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-----BEGIN RSA PRIVATE KEY-----</span><br></pre></td></tr></table></figure>
 <p>老格式文件的开头是这样的</p>
 <h2 id="构建配置"><a href="#构建配置" class="headerlink" title="构建配置"></a>构建配置</h2><p>选择自由软件，配置 github 仓库地址，选择构建环境为设置的 nodejs 环境</p>
-<h3 id="构建脚本"><a href="#构建脚本" class="headerlink" title="构建脚本"></a>构建脚本</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> FE &amp;&amp; yarn &amp;&amp; yarn build</span><br></pre></td></tr></table></figure>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> FE &amp;&amp; docker build -t ccr.ccs.tencentyun.com/jiezi19971225/ahpuoj-fe .</span><br></pre></td></tr></table></figure>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker login --username=xxxxxx --password=xxxxxx ccr.ccs.tencentyun.com &amp;&amp; docker tag ccr.ccs.tencentyun.com/jiezi19971225/ahpuoj-fe ccr.ccs.tencentyun.com/jiezi19971225/ahpuoj-fe:<span class="variable">$BUILD_NUMBER</span> &amp;&amp; docker push ccr.ccs.tencentyun.com/jiezi19971225/ahpuoj-fe</span><br></pre></td></tr></table></figure>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker rmi ccr.ccs.tencentyun.com/jiezi19971225/ahpuoj-fe:<span class="variable">$BUILD_NUMBER</span></span><br><span class="line">docker rmi ccr.ccs.tencentyun.com/jiezi19971225/ahpuoj-fe</span><br></pre></td></tr></table></figure>
+<h3 id="构建脚本"><a href="#构建脚本" class="headerlink" title="构建脚本"></a>构建脚本</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> FE &amp;&amp; yarn &amp;&amp; yarn build</span><br><span class="line"><span class="built_in">cd</span> FE &amp;&amp; docker build -t ccr.ccs.tencentyun.com/jiezi19971225/ahpuoj-fe .</span><br><span class="line">docker login --username=xxxxxx --password=xxxxxx ccr.ccs.tencentyun.com &amp;&amp; docker tag ccr.ccs.tencentyun.com/jiezi19971225/ahpuoj-fe ccr.ccs.tencentyun.com/jiezi19971225/ahpuoj-fe:<span class="variable">$BUILD_NUMBER</span> &amp;&amp; docker push ccr.ccs.tencentyun.com/jiezi19971225/ahpuoj-fe</span><br><span class="line">docker rmi ccr.ccs.tencentyun.com/jiezi19971225/ahpuoj-fe:<span class="variable">$BUILD_NUMBER</span></span><br><span class="line">docker rmi ccr.ccs.tencentyun.com/jiezi19971225/ahpuoj-fe</span><br></pre></td></tr></table></figure>
 <h3 id="构建后操作"><a href="#构建后操作" class="headerlink" title="构建后操作"></a>构建后操作</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /home/ahpuoj/ahpuojv2docker/compose</span><br><span class="line">docker-compose pull fe</span><br><span class="line">docker-compose up -d fe</span><br><span class="line">// 这行命令用来删除老的镜像</span><br><span class="line">docker image prune -f --filter <span class="string">"dangling=true"</span></span><br></pre></td></tr></table></figure>
 <h2 id="it-works"><a href="#it-works" class="headerlink" title="it works"></a>it works</h2><img src="/2020/06/27/jenkins自动构建部署前端镜像/itWorks.png" title="itWorks">
 
@@ -464,7 +461,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2020/07/05/对于prop的sync修饰符的一次探究/" rel="prev" title="对于prop的sync修饰符的一次探究">
+              <a href="/2020/07/05/二次封装组件的一种比较好的方式/" rel="prev" title="对于prop的sync修饰符的一次探究">
                 对于prop的sync修饰符的一次探究 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -542,7 +539,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-count">53</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

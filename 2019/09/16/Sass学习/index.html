@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="Jiez19971225‘s Blog">
 <meta property="og:description" content="记录一下从 Sass 官网学习到的 Sass 的一些高级应用。 语法特殊函数CSS 定义了许多函数，一些在 sass 中工作的很好，他们被解析为函数调用，然后转换为普通传递 css 函数。但是有一些例外，他们被解析为 Sass 脚本表达式。所有特殊的函数调用返回 unquoted 字符串 url他可以接受 quoted 或者 unquoted 的 URL，当他接受一个有效的 unquoted UR">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-04-14T05:20:32.335Z">
+<meta property="og:updated_time" content="2020-07-18T16:45:58.621Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Sass学习">
 <meta name="twitter:description" content="记录一下从 Sass 官网学习到的 Sass 的一些高级应用。 语法特殊函数CSS 定义了许多函数，一些在 sass 中工作的很好，他们被解析为函数调用，然后转换为普通传递 css 函数。但是有一些例外，他们被解析为 Sass 脚本表达式。所有特殊的函数调用返回 unquoted 字符串 url他可以接受 quoted 或者 unquoted 的 URL，当他接受一个有效的 unquoted UR">
@@ -348,7 +348,7 @@
              <i class="fa fa-bar-chart"></i>
            </span>
            <span class="post-meta-item-text">字数统计:</span>
-           <span class="post-count">813(字)</span>
+           <span class="post-count">802(字)</span>
 
          </span>
 
@@ -401,16 +401,9 @@
 <h3 id="字符串函数"><a href="#字符串函数" class="headerlink" title="字符串函数"></a>字符串函数</h3><p>quote($string) //=&gt; string 加上双引号, unquote 去掉双引号</p>
 <p>str-index,str-insert,str-length,str-slice,to-upper-case,to-lower-case 顾名思义</p>
 <p>unique-id() //=&gt; string 生成随机字符串</p>
-<h3 id="颜色函数"><a href="#颜色函数" class="headerlink" title="颜色函数"></a>颜色函数</h3><p>adjust-color($color,<br>  $red: null, $green: null, $blue: null,<br>$hue: null, $saturation: null, $lightness: null,<br>  $alpha: null) //=&gt; color 综合调整</p>
-<p>adjust-hue($color, $degrees) //=&gt; color 色调调整</p>
-<p>alpha($color)<br>opacity($color) //=&gt; number 返回 alpha 通道的数值</p>
-<p>blue,red,green,hue,saturation,lightness,aplha 用法类似</p>
-<p>change-color($color,<br>  $red: null, $green: null, $blue: null,<br>$hue: null, $saturation: null, $lightness: null,<br>  $alpha: null) //=&gt; color 调整颜色参数的某一项数值</p>
-<p>complement($color) 返回补色</p>
+<h3 id="颜色函数"><a href="#颜色函数" class="headerlink" title="颜色函数"></a>颜色函数</h3><figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// color 综合调整</span></span><br><span class="line">adjust-<span class="attribute">color</span>(<span class="variable">$color</span>,<span class="variable">$red</span>: null, <span class="variable">$green</span>: null, <span class="variable">$blue</span>: null,<span class="variable">$hue</span>: null, <span class="variable">$saturation</span>: null, <span class="variable">$lightness</span>: null,<span class="variable">$alpha</span>: null)</span><br><span class="line">// color 色调调整</span><br><span class="line">adjust-hue(<span class="variable">$color</span>, <span class="variable">$degrees</span>)</span><br><span class="line">alpha(<span class="variable">$color</span>)</span><br><span class="line">opacity(<span class="variable">$color</span>)</span><br><span class="line"></span><br><span class="line">// blue,red,green,hue,saturation,lightness,aplha 用法类似</span><br><span class="line"></span><br><span class="line">//color 调整颜色参数的某一项数值</span><br><span class="line">change-color(<span class="variable">$color</span>,<span class="variable">$red</span>: null, <span class="variable">$green</span>: null, <span class="variable">$blue</span>: null,<span class="variable">$hue</span>: null, <span class="variable">$saturation</span>: null, <span class="variable">$lightness</span>: null,<span class="variable">$alpha</span>: null)</span><br><span class="line">// 返回补色</span><br><span class="line">complement(<span class="variable">$color</span>)</span><br></pre></td></tr></table></figure>
 <p>太多了就不罗列了 详见官方文档 <a href="https://sass-lang.com/documentation/functions/color" target="_blank" rel="noopener">sass 颜色函数</a></p>
-<h2 id="列表函数"><a href="#列表函数" class="headerlink" title="列表函数"></a>列表函数</h2><p>append,index,length,nth,set-nth 顾名思义</p>
-<p>join($list1, $list2, $separator: auto, $bracketed: auto) //=&gt; list 合并两个列表</p>
-<p>list-separator($list) //=&gt; unquoted string 返回列表的分隔符</p>
+<h2 id="列表函数"><a href="#列表函数" class="headerlink" title="列表函数"></a>列表函数</h2><figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">append,index,length,nth,set-nth 这些函数顾名思义</span><br><span class="line"><span class="comment">// 合并两个列表</span></span><br><span class="line">join(<span class="variable">$list1</span>, <span class="variable">$list2</span>, <span class="variable">$separator</span>: auto, <span class="variable">$bracketed</span>: auto)</span><br><span class="line">// unquoted string 返回列表的分隔符</span><br><span class="line">list-separator(<span class="variable">$list</span>)</span><br></pre></td></tr></table></figure>
 <h2 id="映射函数"><a href="#映射函数" class="headerlink" title="映射函数"></a>映射函数</h2><p>略</p>
 <h2 id="选择器函数"><a href="#选择器函数" class="headerlink" title="选择器函数"></a>选择器函数</h2><p>实用性不大，略过</p>
 
@@ -525,7 +518,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-count">53</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

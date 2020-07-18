@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Jiez19971225‘s Blog">
 <meta property="og:description" content="项目缓存问题当项目上线新版本的时候，用户浏览器可能仍然使用的是之前 html 和 js 文件的缓存。通过以下几个方法可以解决这个问题。  文件命名使用哈希值，这样当发布新版本就会请求新版本的资源文件。vue-cli 中默认有这个功能，webpack 在每次构建的时候都会生成 hash，contenthash，chunkhash 三个哈希值 hash 这是工程级别的，即每次修改任何一个文件，所有文件">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-03-24T15:19:27.562Z">
+<meta property="og:updated_time" content="2020-07-18T16:53:22.429Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="webpack爬坑之路">
 <meta name="twitter:description" content="项目缓存问题当项目上线新版本的时候，用户浏览器可能仍然使用的是之前 html 和 js 文件的缓存。通过以下几个方法可以解决这个问题。  文件命名使用哈希值，这样当发布新版本就会请求新版本的资源文件。vue-cli 中默认有这个功能，webpack 在每次构建的时候都会生成 hash，contenthash，chunkhash 三个哈希值 hash 这是工程级别的，即每次修改任何一个文件，所有文件">
@@ -371,7 +371,7 @@
              <i class="fa fa-bar-chart"></i>
            </span>
            <span class="post-meta-item-text">字数统计:</span>
-           <span class="post-count">2k(字)</span>
+           <span class="post-count">1.9k(字)</span>
 
          </span>
 
@@ -433,12 +433,10 @@
 <p>如果没有 name 属性，a 入口文件引用了 vue 和 axios， b 入口文件引用了 react 和 axios，那么 webpack 就会把 axios 单独抽离出来为独立的 chunk，同时 vue 和 react 在各自的独立 chunk 中<br>而如果有 name 属性，那么所有依赖文件都会打包到命名的 chunk 文件中，这个原理同样适用于 CSS 的打包。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">optimization: &#123;</span><br><span class="line">  splitChunks: &#123;</span><br><span class="line">    chunks: <span class="string">"all"</span>,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>可以将 node_modules 中代码单独打包一个 chunk 最终输出</p>
-<p>/<em><br>通过 js 代码让文件打包成单独 chunk
-</em>/</p>
+<p>通过 js 代码让文件打包成单独 chunk</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span>(<span class="comment">/*webpackChunkName:'test',webpackPrefetc:true*/</span>,<span class="string">"./test"</span>)</span><br><span class="line">  .then(<span class="function"><span class="params">module</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 返回 es6 module</span></span><br><span class="line">  &#125;)</span><br><span class="line">  .catch(<span class="function"><span class="params">()</span> =&gt;</span> &#123;&#125;);</span><br></pre></td></tr></table></figure>
 <p>懒加载 当文件需要时才加载<br>预加载 prefetch 会在使用之前，提前加载 js 文件，等其他资源加载完毕了，再偷偷加载<br>正常加载认为是并行加载</p>
 <h3 id="OptimizeCssAssetsPlugin"><a href="#OptimizeCssAssetsPlugin" class="headerlink" title="OptimizeCssAssetsPlugin"></a>OptimizeCssAssetsPlugin</h3><p>我在打包时发现 node_modules 中的 css 文件无法被压缩。css loader 中的 minimize 选项早已被废弃，尝试使用了这个插件后解决了问题。</p>
-<p>今天的收获就这么多，感觉自己又犯了本末倒置的错误，在不懂的情况下强行试图解决问题，白白浪费了很多时间，乃至于怀疑人生道：“为什么是这样，为什么不生效。”，好在最后解决了问题。这几天不干别的了，先搞懂 webpack 再说。</p>
 <h3 id="devserver"><a href="#devserver" class="headerlink" title="devserver"></a>devserver</h3><ul>
 <li>proxy<br>代理的只能是本地 如果本身请求的目的地址已经指定不是本地，那么这个请求不会被 webpack 代理</li>
 <li>HMR<ul>
@@ -448,7 +446,47 @@
 </ul>
 </li>
 </ul>
-<h3 id="sourcemap"><a href="#sourcemap" class="headerlink" title="sourcemap"></a>sourcemap</h3><p>source-map 外部 错误代码的准确信息访问到源代码的准确位置<br>inline-source-map 内联 只生成一个 sourcemap<br>hidden-source-map 外联 错误代码错误原因，但是没有错误位置，不能追踪源代码错误，只能提示到构建后代码的错误位置<br>eval-source-map 内联 每一个文件都生成对应的 source-map，都在 eval 错误代码准确信息，和源代码的错误位置<br>nosources-source-map 外部 错误代码准确信息，但是没有任何源代码信息<br>cheap-source-map 外部 错误代码准确信息和源代码的错误位置 只能精确到行<br>cheap-module-source-map 外部 错误代码准确信息 和 源代码错误位置<br>module 会将 loader 的 source map 加入</p>
+<h3 id="sourcemap"><a href="#sourcemap" class="headerlink" title="sourcemap"></a>sourcemap</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>source-map</td>
+<td>外部 错误代码的准确信息访问到源代码的准确位置</td>
+</tr>
+<tr>
+<td>inline-source-map</td>
+<td>内联 只生成一个 sourcemap</td>
+</tr>
+<tr>
+<td>hidden-source-map</td>
+<td>外联 错误代码错误原因，但是没有错误位置，不能追踪源代码错误，只能提示到构建后代码的错误位置</td>
+</tr>
+<tr>
+<td>eval-source-map</td>
+<td>内联 每一个文件都生成对应的 source-map，都在 eval 错误代码准确信息，和源代码的错误位置</td>
+</tr>
+<tr>
+<td>nosources-source-map</td>
+<td>外部 错误代码准确信息，但是没有任何源代码信息</td>
+</tr>
+<tr>
+<td>cheap-source-map</td>
+<td>外部 错误代码准确信息和源代码的错误位置 只能精确到行</td>
+</tr>
+<tr>
+<td>cheap-module-source-map</td>
+<td>外部 错误代码准确信息 和 源代码错误位置</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>module 会将 loader 的 source map 加入</p>
 <p>开发环境:速度快，调试更友好<br>速度快(eval&gt;inline&gt;cheap)<br>eval-cheap-source-map<br>eval-source-map<br>调试更友好<br>source-map<br>cheap-moudule-source-map<br>cheap-source-map</p>
 <p>eval-cheap-source-map</p>
 <ul>
@@ -474,11 +512,11 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  loader:<span class="string">'thread-loader'</span>,</span><br><span class="line">  options:&#123;</span><br><span class="line">    workers:<span class="number">2</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="externals-忽略打包"><a href="#externals-忽略打包" class="headerlink" title="externals 忽略打包"></a>externals 忽略打包</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">externals: &#123;</span><br><span class="line">  <span class="comment">// 忽略库名 -- npm 包名</span></span><br><span class="line">  jQuery: <span class="string">"jQuery"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="dll"><a href="#dll" class="headerlink" title="dll"></a>dll</h3><p>打包 dll</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; resolve &#125; = <span class="built_in">require</span>(<span class="string">"path"</span>);</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  entry: &#123;</span><br><span class="line">    jquery: [<span class="string">"jquery"</span>]</span><br><span class="line">  &#125;,</span><br><span class="line">  output: &#123;</span><br><span class="line">    filename: <span class="string">"[name].js"</span>,</span><br><span class="line">    path: resolve(__dirname, <span class="string">"dll"</span>),</span><br><span class="line">    library: <span class="string">"[name]_[hash]"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  plugins: [</span><br><span class="line">    <span class="comment">// 打包生成一个 manifest.json --&gt; 提供和jquery映射</span></span><br><span class="line">    <span class="keyword">new</span> webpack.DLLPlugin(&#123;</span><br><span class="line">      name: <span class="string">"[name]_[hash]"</span>,</span><br><span class="line">      path: resolve(__dirname, <span class="string">"dll/manifest.json"</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">  ]</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; resolve &#125; = <span class="built_in">require</span>(<span class="string">"path"</span>);</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  entry: &#123;</span><br><span class="line">    jquery: [<span class="string">"jquery"</span>],</span><br><span class="line">  &#125;,</span><br><span class="line">  output: &#123;</span><br><span class="line">    filename: <span class="string">"[name].js"</span>,</span><br><span class="line">    path: resolve(__dirname, <span class="string">"dll"</span>),</span><br><span class="line">    library: <span class="string">"[name]_[hash]"</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  plugins: [</span><br><span class="line">    <span class="comment">// 打包生成一个 manifest.json --&gt; 提供和jquery映射</span></span><br><span class="line">    <span class="keyword">new</span> webpack.DLLPlugin(&#123;</span><br><span class="line">      name: <span class="string">"[name]_[hash]"</span>,</span><br><span class="line">      path: resolve(__dirname, <span class="string">"dll/manifest.json"</span>),</span><br><span class="line">    &#125;),</span><br><span class="line">  ],</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <p>定义 dll</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> webpack.DLLReferencePlugin(&#123;</span><br><span class="line">  manifest: resolve(__dirname, <span class="string">"dll/manifest.json"</span>)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> webpack.DLLReferencePlugin(&#123;</span><br><span class="line">  manifest: resolve(__dirname, <span class="string">"dll/manifest.json"</span>),</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 <p>引用 dll</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> AddAssetHtmlWebpackPlugin(&#123;</span><br><span class="line">  filepath: resolve(__dirname, <span class="string">"dll/jquery.js"</span>)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> AddAssetHtmlWebpackPlugin(&#123;</span><br><span class="line">  filepath: resolve(__dirname, <span class="string">"dll/jquery.js"</span>),</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 <h3 id="配置详解"><a href="#配置详解" class="headerlink" title="配置详解"></a>配置详解</h3><ul>
 <li><p>module</p>
 <ul>
@@ -615,7 +653,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-count">53</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

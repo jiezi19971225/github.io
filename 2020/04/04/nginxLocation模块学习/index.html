@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="uri 匹配规则location 规则类型这部分内容来自详细解析 nginx uri 如何匹配 location 规则  = exact uri  完全匹配规则，要求 url 和规则完全相同 123location ~ /api/v1 &amp;#123;    ....&amp;#125;  ~ case-sensitive regex  区分大小写的正则表达式匹配规则 123location ~ /api/v">
+<meta name="description" content="uri 匹配规则location 规则类型这部分内容来自详细解析 nginx uri 如何匹配 location 规则 = exact uri完全匹配规则，要求 url 和规则完全相同 123location ~ /api/v1 &amp;#123;    ....&amp;#125; ~ case-sensitive regex区分大小写的正则表达式匹配规则 123location ~ /api/v1 &amp;#12">
 <meta name="keywords" content="nginx">
 <meta property="og:type" content="article">
 <meta property="og:title" content="nginxLocation模块学习">
 <meta property="og:url" content="http://www.jiezi19971225.cn/2020/04/04/nginxLocation模块学习/index.html">
 <meta property="og:site_name" content="Jiez19971225‘s Blog">
-<meta property="og:description" content="uri 匹配规则location 规则类型这部分内容来自详细解析 nginx uri 如何匹配 location 规则  = exact uri  完全匹配规则，要求 url 和规则完全相同 123location ~ /api/v1 &amp;#123;    ....&amp;#125;  ~ case-sensitive regex  区分大小写的正则表达式匹配规则 123location ~ /api/v">
+<meta property="og:description" content="uri 匹配规则location 规则类型这部分内容来自详细解析 nginx uri 如何匹配 location 规则 = exact uri完全匹配规则，要求 url 和规则完全相同 123location ~ /api/v1 &amp;#123;    ....&amp;#125; ~ case-sensitive regex区分大小写的正则表达式匹配规则 123location ~ /api/v1 &amp;#12">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-04-04T14:48:54.087Z">
+<meta property="og:updated_time" content="2020-07-18T16:20:08.261Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="nginxLocation模块学习">
-<meta name="twitter:description" content="uri 匹配规则location 规则类型这部分内容来自详细解析 nginx uri 如何匹配 location 规则  = exact uri  完全匹配规则，要求 url 和规则完全相同 123location ~ /api/v1 &amp;#123;    ....&amp;#125;  ~ case-sensitive regex  区分大小写的正则表达式匹配规则 123location ~ /api/v">
+<meta name="twitter:description" content="uri 匹配规则location 规则类型这部分内容来自详细解析 nginx uri 如何匹配 location 规则 = exact uri完全匹配规则，要求 url 和规则完全相同 123location ~ /api/v1 &amp;#123;    ....&amp;#125; ~ case-sensitive regex区分大小写的正则表达式匹配规则 123location ~ /api/v1 &amp;#12">
 
 
 
@@ -405,30 +405,15 @@
 
       
         <h3 id="uri-匹配规则"><a href="#uri-匹配规则" class="headerlink" title="uri 匹配规则"></a>uri 匹配规则</h3><h4 id="location-规则类型"><a href="#location-规则类型" class="headerlink" title="location 规则类型"></a>location 规则类型</h4><p>这部分内容来自<a href="https://www.cnblogs.com/dreamanddead/p/how-uri-match-location-rule-in-nginx.html" target="_blank" rel="noopener">详细解析 nginx uri 如何匹配 location 规则</a></p>
-<ul>
-<li>= exact uri</li>
-</ul>
-<p>完全匹配规则，要求 url 和规则完全相同</p>
+<h5 id="exact-uri"><a href="#exact-uri" class="headerlink" title="= exact uri"></a>= exact uri</h5><p>完全匹配规则，要求 url 和规则完全相同</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">location ~ /api/v1 &#123;</span><br><span class="line">    ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>~ case-sensitive regex</li>
-</ul>
-<p>区分大小写的正则表达式匹配规则</p>
+<h5 id="case-sensitive-regex"><a href="#case-sensitive-regex" class="headerlink" title="~ case-sensitive regex"></a>~ case-sensitive regex</h5><p>区分大小写的正则表达式匹配规则</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">location ~ /api/v1 &#123;</span><br><span class="line">    ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>~* case-insensitive regex</li>
-</ul>
-<p>不区分大小写的正则表达式匹配规则</p>
+<h5 id="case-insensitive-regex"><a href="#case-insensitive-regex" class="headerlink" title="~* case-insensitive regex"></a>~* case-insensitive regex</h5><p>不区分大小写的正则表达式匹配规则</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">location ~ /api/v1 &#123;</span><br><span class="line">    ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>~* case-insensitive regex</li>
-</ul>
-<p>不大小写的正则表达式匹配规则</p>
+<h5 id="case-insensitive-regex-1"><a href="#case-insensitive-regex-1" class="headerlink" title="~* case-insensitive regex"></a>~* case-insensitive regex</h5><p>不大小写的正则表达式匹配规则</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">location ~ /api/v1 &#123;</span><br><span class="line">    ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>^～ disable regex prefix</li>
-</ul>
-<p>匹配流程与 prefix 规则相同，有一点区别在于，如果最长匹配是当前规则，则之后不进行 正则表达式 规则的搜索。</p>
+<h5 id="～-disable-regex-prefix"><a href="#～-disable-regex-prefix" class="headerlink" title="^～ disable regex prefix"></a>^～ disable regex prefix</h5><p>匹配流程与 prefix 规则相同，有一点区别在于，如果最长匹配是当前规则，则之后不进行 正则表达式 规则的搜索。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">location ~ /api/v1 &#123;</span><br><span class="line">    ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h4 id="uri-如何选择-location"><a href="#uri-如何选择-location" class="headerlink" title="uri 如何选择 location"></a>uri 如何选择 location</h4><ol>
 <li>如果存在 exact uri 规则与 uri 匹配，至步骤 6</li>
@@ -449,7 +434,7 @@
 <li>匹配失败，返回 404，结束</li>
 <li>选择当前规则，使用其配置，结束</li>
 </ol>
-<h4 id="try-files-解析"><a href="#try-files-解析" class="headerlink" title="try_files 解析"></a>try_files 解析</h4><p>$uri 指代访问的 uri 资源，”$uri/“语法可以用来检测一个目录的存在，如果没有找到，一个内置的重定向将请求重定向到最后一个参数<br>最后一个参数可以指向一个命名的 location</p>
+<h4 id="try-files-解析"><a href="#try-files-解析" class="headerlink" title="try_files 解析"></a>try_files 解析</h4><p><code>$uri</code> 指代访问的 uri 资源，<code>$uri/</code>语法可以用来检测一个目录的存在，如果没有找到，一个内置的重定向将请求重定向到最后一个参数<br>最后一个参数可以指向一个命名的 location</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">location / &#123;</span><br><span class="line">    try_files $uri $uri/ index.html $uri.html =404;</span><br><span class="line">&#125;</span><br><span class="line">location / &#123;</span><br><span class="line">    try_files /system/maintenance.html</span><br><span class="line">              $uri $uri/index.html $uri.html</span><br><span class="line">              @mongrel;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">location @mongrel &#123;</span><br><span class="line">    proxy_pass http://mongrel;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
       
@@ -569,7 +554,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-count">53</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -624,7 +609,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#uri-匹配规则"><span class="nav-number">1.</span> <span class="nav-text">uri 匹配规则</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#location-规则类型"><span class="nav-number">1.1.</span> <span class="nav-text">location 规则类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#uri-如何选择-location"><span class="nav-number">1.2.</span> <span class="nav-text">uri 如何选择 location</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#try-files-解析"><span class="nav-number">1.3.</span> <span class="nav-text">try_files 解析</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#uri-匹配规则"><span class="nav-number">1.</span> <span class="nav-text">uri 匹配规则</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#location-规则类型"><span class="nav-number">1.1.</span> <span class="nav-text">location 规则类型</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#exact-uri"><span class="nav-number">1.1.1.</span> <span class="nav-text">= exact uri</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#case-sensitive-regex"><span class="nav-number">1.1.2.</span> <span class="nav-text">~ case-sensitive regex</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#case-insensitive-regex"><span class="nav-number">1.1.3.</span> <span class="nav-text">~* case-insensitive regex</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#case-insensitive-regex-1"><span class="nav-number">1.1.4.</span> <span class="nav-text">~* case-insensitive regex</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#～-disable-regex-prefix"><span class="nav-number">1.1.5.</span> <span class="nav-text">^～ disable regex prefix</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#uri-如何选择-location"><span class="nav-number">1.2.</span> <span class="nav-text">uri 如何选择 location</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#try-files-解析"><span class="nav-number">1.3.</span> <span class="nav-text">try_files 解析</span></a></li></ol></li></ol></div>
             
 
           </div>

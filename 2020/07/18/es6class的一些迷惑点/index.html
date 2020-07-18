@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="今天在看 ts 的装饰器文档的时候，对于类装饰器的一节的官方示例感到非常迷惑 类装饰器接受一个参数，为类的 constructor，你可以观察，修改或者替换它。如果类装饰器返回了一个值，他会用提供的类的构造函数替换类的声明 123456function classDecorator&amp;lt;T extends &amp;#123;new(...args:any[]):&amp;#123;&amp;#125;&amp;#125;&amp;g">
+<meta name="description" content="今天在看 ts 的装饰器文档的时候，对于类装饰器的一节的官方示例感到非常迷惑 类装饰器接受一个参数，为类的 constructor，你可以观察，修改或者替换它。如果类装饰器返回了一个值，他会用提供的类的构造函数替换类的声明 12345678function classDecorator&amp;lt;T extends &amp;#123; new (...args: any[]): &amp;#123;&amp;#125; &amp;">
 <meta name="keywords" content="es6">
 <meta property="og:type" content="article">
 <meta property="og:title" content="es6class的一些迷惑点">
 <meta property="og:url" content="http://www.jiezi19971225.cn/2020/07/18/es6class的一些迷惑点/index.html">
 <meta property="og:site_name" content="Jiez19971225‘s Blog">
-<meta property="og:description" content="今天在看 ts 的装饰器文档的时候，对于类装饰器的一节的官方示例感到非常迷惑 类装饰器接受一个参数，为类的 constructor，你可以观察，修改或者替换它。如果类装饰器返回了一个值，他会用提供的类的构造函数替换类的声明 123456function classDecorator&amp;lt;T extends &amp;#123;new(...args:any[]):&amp;#123;&amp;#125;&amp;#125;&amp;g">
+<meta property="og:description" content="今天在看 ts 的装饰器文档的时候，对于类装饰器的一节的官方示例感到非常迷惑 类装饰器接受一个参数，为类的 constructor，你可以观察，修改或者替换它。如果类装饰器返回了一个值，他会用提供的类的构造函数替换类的声明 12345678function classDecorator&amp;lt;T extends &amp;#123; new (...args: any[]): &amp;#123;&amp;#125; &amp;">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-07-18T08:55:13.196Z">
+<meta property="og:updated_time" content="2020-07-18T16:09:56.946Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="es6class的一些迷惑点">
-<meta name="twitter:description" content="今天在看 ts 的装饰器文档的时候，对于类装饰器的一节的官方示例感到非常迷惑 类装饰器接受一个参数，为类的 constructor，你可以观察，修改或者替换它。如果类装饰器返回了一个值，他会用提供的类的构造函数替换类的声明 123456function classDecorator&amp;lt;T extends &amp;#123;new(...args:any[]):&amp;#123;&amp;#125;&amp;#125;&amp;g">
+<meta name="twitter:description" content="今天在看 ts 的装饰器文档的时候，对于类装饰器的一节的官方示例感到非常迷惑 类装饰器接受一个参数，为类的 constructor，你可以观察，修改或者替换它。如果类装饰器返回了一个值，他会用提供的类的构造函数替换类的声明 12345678function classDecorator&amp;lt;T extends &amp;#123; new (...args: any[]): &amp;#123;&amp;#125; &amp;">
 
 
 
@@ -371,7 +371,7 @@
              <i class="fa fa-bar-chart"></i>
            </span>
            <span class="post-meta-item-text">字数统计:</span>
-           <span class="post-count">422(字)</span>
+           <span class="post-count">423(字)</span>
 
          </span>
 
@@ -406,13 +406,14 @@
       
         <p>今天在看 ts 的装饰器文档的时候，对于类装饰器的一节的官方示例感到非常迷惑</p>
 <p>类装饰器接受一个参数，为类的 constructor，你可以观察，修改或者替换它。如果类装饰器返回了一个值，他会用提供的类的构造函数替换类的声明</p>
-<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">classDecorator</span>&lt;<span class="title">T</span> <span class="title">extends</span> </span>&#123;<span class="keyword">new</span>(...args:<span class="built_in">any</span>[]):&#123;&#125;&#125;&gt;(<span class="keyword">constructor</span>:T) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">class</span> <span class="keyword">extends</span> <span class="keyword">constructor</span> &#123;</span><br><span class="line">        newProperty = <span class="string">"new property"</span>;</span><br><span class="line">        hello = <span class="string">"override"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>最让我迷惑的是 <strong>return class extends constructor</strong>，为什么可以继承构造函数？要求的返回值是构造函数，但是这里返回的是一个类的声明？</p>
-<p>说到底还是自己对于 es6 的 class 理解不够透彻。我又去看了一下阮一峰的es6入门的 class 章节，上面说明 ES6 的 class 只是 es5 对象原型写法的语法糖。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point</span> </span>&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typeof</span> Point <span class="comment">// "function"</span></span><br><span class="line">Point === Point.prototype.constructor <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">classDecorator</span>&lt;<span class="title">T</span> <span class="title">extends</span> </span>&#123; <span class="keyword">new</span> (...args: <span class="built_in">any</span>[]): &#123;&#125; &#125;&gt;(</span><br><span class="line">  <span class="keyword">constructor</span>: T</span><br><span class="line">) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">class</span> <span class="keyword">extends</span> <span class="keyword">constructor</span> &#123;</span><br><span class="line">    newProperty = <span class="string">"new property"</span>;</span><br><span class="line">    hello = <span class="string">"override"</span>;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最让我迷惑的是 <strong><code>return class extends constructor</code></strong>，为什么可以继承构造函数？要求的返回值是构造函数，但是这里返回的是一个类的声明？</p>
+<p>说到底还是自己对于 es6 的 class 理解不够透彻。我又去看了一下阮一峰的 es6 入门的 class 章节，上面说明 ES6 的 class 只是 es5 对象原型写法的语法糖。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point</span> </span>&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typeof</span> Point; <span class="comment">// "function"</span></span><br><span class="line">Point === Point.prototype.constructor; <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
 <p>看到这里，感觉到就豁然开朗了。类名变量实际上就是类的构造函数，extends 类名变量 和 extends 构造函数的写法实质上是等价。</p>
 <p>es6 类声明语法的返回值也是类的构造函数，所以返回匿名类的语法也可以理解了。</p>
-<p>同时因为继承的是构造函数，所以 extends 的可以是一个构造函数<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">A</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">&#125;</span><br><span class="line">A.prototype.test = <span class="number">1</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> <span class="keyword">extends</span> <span class="title">A</span></span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">new</span> B().test)</span><br><span class="line"><span class="comment">// 输出1</span></span><br></pre></td></tr></table></figure></p>
+<p>同时因为继承的是构造函数，所以 extends 的可以是一个构造函数</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">A</span>(<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line">A.prototype.test = <span class="number">1</span>;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> <span class="keyword">extends</span> <span class="title">A</span> </span>&#123;&#125;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">new</span> B().test);</span><br><span class="line"><span class="comment">// 输出1</span></span><br></pre></td></tr></table></figure>
 <p>需要注意的一点是，要获取类的构造函数，应该使用 类名.prototype.constructor，我一直以为是 类名.constructor。类名变量是构造函数，实际上构造函数的 constructor 是函数原型对象的 constructor。</p>
 
       
@@ -444,7 +445,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/07/05/对于prop的sync修饰符的一次探究/" rel="next" title="对于prop的sync修饰符的一次探究">
+              <a href="/2020/07/05/二次封装组件的一种比较好的方式/" rel="next" title="对于prop的sync修饰符的一次探究">
                 <i class="fa fa-chevron-left"></i> 对于prop的sync修饰符的一次探究
               </a>
             
@@ -519,7 +520,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-count">53</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

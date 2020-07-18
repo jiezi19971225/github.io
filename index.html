@@ -372,7 +372,7 @@
              <i class="fa fa-bar-chart"></i>
            </span>
            <span class="post-meta-item-text">字数统计:</span>
-           <span class="post-count">422(字)</span>
+           <span class="post-count">423(字)</span>
 
          </span>
 
@@ -409,13 +409,14 @@
           
             <p>今天在看 ts 的装饰器文档的时候，对于类装饰器的一节的官方示例感到非常迷惑</p>
 <p>类装饰器接受一个参数，为类的 constructor，你可以观察，修改或者替换它。如果类装饰器返回了一个值，他会用提供的类的构造函数替换类的声明</p>
-<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">classDecorator</span>&lt;<span class="title">T</span> <span class="title">extends</span> </span>&#123;<span class="keyword">new</span>(...args:<span class="built_in">any</span>[]):&#123;&#125;&#125;&gt;(<span class="keyword">constructor</span>:T) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">class</span> <span class="keyword">extends</span> <span class="keyword">constructor</span> &#123;</span><br><span class="line">        newProperty = <span class="string">"new property"</span>;</span><br><span class="line">        hello = <span class="string">"override"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>最让我迷惑的是 <strong>return class extends constructor</strong>，为什么可以继承构造函数？要求的返回值是构造函数，但是这里返回的是一个类的声明？</p>
-<p>说到底还是自己对于 es6 的 class 理解不够透彻。我又去看了一下阮一峰的es6入门的 class 章节，上面说明 ES6 的 class 只是 es5 对象原型写法的语法糖。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point</span> </span>&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typeof</span> Point <span class="comment">// "function"</span></span><br><span class="line">Point === Point.prototype.constructor <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">classDecorator</span>&lt;<span class="title">T</span> <span class="title">extends</span> </span>&#123; <span class="keyword">new</span> (...args: <span class="built_in">any</span>[]): &#123;&#125; &#125;&gt;(</span><br><span class="line">  <span class="keyword">constructor</span>: T</span><br><span class="line">) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">class</span> <span class="keyword">extends</span> <span class="keyword">constructor</span> &#123;</span><br><span class="line">    newProperty = <span class="string">"new property"</span>;</span><br><span class="line">    hello = <span class="string">"override"</span>;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最让我迷惑的是 <strong><code>return class extends constructor</code></strong>，为什么可以继承构造函数？要求的返回值是构造函数，但是这里返回的是一个类的声明？</p>
+<p>说到底还是自己对于 es6 的 class 理解不够透彻。我又去看了一下阮一峰的 es6 入门的 class 章节，上面说明 ES6 的 class 只是 es5 对象原型写法的语法糖。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point</span> </span>&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typeof</span> Point; <span class="comment">// "function"</span></span><br><span class="line">Point === Point.prototype.constructor; <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
 <p>看到这里，感觉到就豁然开朗了。类名变量实际上就是类的构造函数，extends 类名变量 和 extends 构造函数的写法实质上是等价。</p>
 <p>es6 类声明语法的返回值也是类的构造函数，所以返回匿名类的语法也可以理解了。</p>
-<p>同时因为继承的是构造函数，所以 extends 的可以是一个构造函数<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">A</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">&#125;</span><br><span class="line">A.prototype.test = <span class="number">1</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> <span class="keyword">extends</span> <span class="title">A</span></span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">new</span> B().test)</span><br><span class="line"><span class="comment">// 输出1</span></span><br></pre></td></tr></table></figure></p>
+<p>同时因为继承的是构造函数，所以 extends 的可以是一个构造函数</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">A</span>(<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line">A.prototype.test = <span class="number">1</span>;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> <span class="keyword">extends</span> <span class="title">A</span> </span>&#123;&#125;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">new</span> B().test);</span><br><span class="line"><span class="comment">// 输出1</span></span><br></pre></td></tr></table></figure>
 <p>需要注意的一点是，要获取类的构造函数，应该使用 类名.prototype.constructor，我一直以为是 类名.constructor。类名变量是构造函数，实际上构造函数的 constructor 是函数原型对象的 constructor。</p>
 
           
@@ -465,7 +466,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/07/05/对于prop的sync修饰符的一次探究/">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/07/05/二次封装组件的一种比较好的方式/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="jiezi19971225">
@@ -484,7 +485,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/07/05/对于prop的sync修饰符的一次探究/" itemprop="url">对于prop的sync修饰符的一次探究</a></h1>
+                <a class="post-title-link" href="/2020/07/05/二次封装组件的一种比较好的方式/" itemprop="url">对于prop的sync修饰符的一次探究</a></h1>
         
 
         <div class="post-meta">
@@ -584,9 +585,9 @@
 <p>封装的组件</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;a-upload :fileList.sync=&quot;files&quot; @change=&quot;handleChange&quot; /&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">exprot default &#123;</span><br><span class="line">    props:&#123;</span><br><span class="line">        fileList:&#123;</span><br><span class="line">            type:Array,</span><br><span class="line">            default:[]</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    data:&#123;</span><br><span class="line">        files:[]</span><br><span class="line">    &#125;,</span><br><span class="line">    watch:&#123;</span><br><span class="line">        fileList(val)&#123;</span><br><span class="line">            this.files = val</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    methods:&#123;</span><br><span class="line">        handleChange(&#123; file, fileList &#125;) &#123;</span><br><span class="line">            // 进行一些处理</span><br><span class="line">            this.$emit(&quot;update:fileList&quot;,fileList)</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
 <p>现在看起来，这样封装稍微有一点绕，外层调用的 fileList 和封装组件的 files 属性双向绑定，封装组件的 files 又和 a-upload fileList 双向绑定。但是它确实是能工作的，当上传文件后，a-upload 的 fileList 改变了，同时触发 change 事件，handleChange 更新了最外层调用处的 fileList，然后 watch 检测到更新，更新封装组件的 files。</p>
-<p>在某处调用的文件上传需要用到更多 a-upload 的 prop 属性进行设置，如果在封装组件上自己手动传递这些属性，太麻烦了，于是想到用 v-bind=\$props 进行属性传递，这样做可以把在调用处传递的 prop 全部传给 a-upload。这样的话，fileList 属性也没必要在封装组件里显示传给 a-uplaod,因为 \$props 里已经包含了。</p>
-<p>对于一般的 props 传递，我还可以理解，但是加上了 .sync 修饰符，也可以用 v-bind=$props 的方式传递吗？我想要实现的是 a-upload 的 fileList 透过封装组件直接和调用处进行双向绑定。</p>
-<p>我想了一下，之前看过 .sync 的原理是其实是一个语法糖，在这里相当于在调用处添加了 “update:fileList” 的事件监听。我们知道，vue 的 $emit 只能触发父组件的自定义事件，我想要知道 a-upload 触发双向绑定，更新的是调用处的 fileList 还是封装组件的 fileList。</p>
+<p>在某处调用的文件上传需要用到更多 a-upload 的 prop 属性进行设置，如果在封装组件上自己手动传递这些属性，太麻烦了，于是想到用 <code>v-bind=$props</code> 进行属性传递，这样做可以把在调用处传递的 prop 全部传给 a-upload。这样的话，fileList 属性也没必要在封装组件里显示传给 a-uplaod,因为 <code>$props</code> 里已经包含了。</p>
+<p>对于一般的 props 传递，我还可以理解，但是加上了 .sync 修饰符，也可以用 <code>v-bind=$props</code> 的方式传递吗？我想要实现的是 a-upload 的 fileList 透过封装组件直接和调用处进行双向绑定。</p>
+<p>我想了一下，之前看过 .sync 的原理是其实是一个语法糖，在这里相当于在调用处添加了 “update:fileList” 的事件监听。我们知道，vue 的 <code>$emit</code> 只能触发父组件的自定义事件，我想要知道 a-upload 触发双向绑定机制时，更新的是调用处的 fileList 还是封装组件的 fileList。</p>
 <h2 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h2><p>我感觉应该更新的调用处，为了搞清楚，我写了一个简单的 demo 进行验证。</p>
 <p>调用处</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div id=&quot;app&quot;&gt;</span><br><span class="line">    &lt;son :syncVal.sync=&quot;syncVal&quot;&gt;&lt;/son&gt;</span><br><span class="line">    &lt;button @click=&quot;showSyncVal&quot; @test=&quot;test&quot;&gt;syncVal&lt;/button&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">import son from &quot;./components/son.vue&quot;;</span><br><span class="line"></span><br><span class="line">export default &#123;</span><br><span class="line">  name: &quot;App&quot;,</span><br><span class="line">  components: &#123;</span><br><span class="line">    son,</span><br><span class="line">  &#125;,</span><br><span class="line">  data() &#123;</span><br><span class="line">    return &#123;</span><br><span class="line">      a: 1,</span><br><span class="line">      syncVal: 5,</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;,</span><br><span class="line">  methods: &#123;</span><br><span class="line">    showSyncVal() &#123;</span><br><span class="line">      alert(this.syncVal);</span><br><span class="line">    &#125;,</span><br><span class="line">    test() &#123;</span><br><span class="line">      console.log(&quot;test&quot;, &quot;a=&quot; + this.a);</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
@@ -599,11 +600,11 @@
 <p>props 为啥是空的？点开以后，发现实际是有 syncVal 值的，右边有这样的说明 value below was evaluated just now</p>
 <p>查了一下，stackoverflow 有一个回答是：</p>
 <p>通过 console.log 检查对象以异步方式进行。控制台同步接收对对象的引用，但是直到它被展开后才显示对象的属性(在某些情况下，这取决于浏览器以及在日志发生时是否打开了开发工具)。如果在控制台中检查对象之前对其进行了修改，则显示的数据将具有更新后的值。</p>
-<p>也就是说，如果想要打印程序运行时的引用类型的值，需要用 JSON.parse(JSON.stringify(obj)) 来处理一下。</p>
-<p>好吧跑题了，也算是了解了一个小知识点。</p>
+<p>也就是说，如果想要打印程序运行时的引用类型的值，需要用 <code>JSON.parse(JSON.stringify(obj))</code> 来处理一下。</p>
+<p>也算是了解了一个小知识点。</p>
 <h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>点击 setSync，显示的值成功更新为 10，打印输出 test a=1，说明我想的是对的，触发的是调用处的监听函数，上下文也是调用处。</p>
-<p>这个自定义事件是 son 组件接收到的，然后触发绑定的处理函数，其实我比较疑惑的就是经过 v-on=$listeners 的传递，这个处理函数的上下文是否绑定了，现在看来 vue 已经处理好这些了。</p>
-<h3 id="2020-7-7-更新"><a href="#2020-7-7-更新" class="headerlink" title="2020.7.7 更新"></a>2020.7.7 更新</h3><p>发现之前理解的还是不够透彻，v-bind=\$props 是把当前组件的 props 传递下去，如果在当前组件的 props 没有定义接受的属性，\$props 里是没有的。所以如果想要实现我想要的效果，正确的做法是使用 v-bind=\$attrs，并且在组件中定义 inheritAttrs 属性为 false，同时所有希望传递的 props 都不要在 props 中定义，如果想要访问传递的 prop，可以使用\$attrs.xxx。</p>
+<p>这个自定义事件是 son 组件接收到的，然后触发绑定的处理函数，其实我比较疑惑的就是经过 <code>v-on=$listeners</code> 的传递，这个处理函数的上下文是否绑定了，现在看来 vue 已经处理好这些了。</p>
+<h3 id="2020-7-7-更新"><a href="#2020-7-7-更新" class="headerlink" title="2020.7.7 更新"></a>2020.7.7 更新</h3><p>发现之前理解的还是不够透彻，<code>v-bind=$props</code> 是把当前组件的 props 传递下去，如果在当前组件的 props 没有定义接受的属性，<code>$props</code> 里是没有的。所以如果想要实现我想要的效果，正确的做法是使用 <code>v-bind=$attrs</code>，并且在组件中定义 inheritAttrs 属性为 false，同时所有希望传递的 props 都不要在 props 中定义，如果想要访问传递的 prop，可以使用<code>$attrs.xxx</code>。</p>
 
           
         
@@ -730,7 +731,7 @@
              <i class="fa fa-bar-chart"></i>
            </span>
            <span class="post-meta-item-text">字数统计:</span>
-           <span class="post-count">399(字)</span>
+           <span class="post-count">397(字)</span>
 
          </span>
 
@@ -776,10 +777,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-----BEGIN RSA PRIVATE KEY-----</span><br></pre></td></tr></table></figure>
 <p>老格式文件的开头是这样的</p>
 <h2 id="构建配置"><a href="#构建配置" class="headerlink" title="构建配置"></a>构建配置</h2><p>选择自由软件，配置 github 仓库地址，选择构建环境为设置的 nodejs 环境</p>
-<h3 id="构建脚本"><a href="#构建脚本" class="headerlink" title="构建脚本"></a>构建脚本</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> FE &amp;&amp; yarn &amp;&amp; yarn build</span><br></pre></td></tr></table></figure>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> FE &amp;&amp; docker build -t ccr.ccs.tencentyun.com/jiezi19971225/ahpuoj-fe .</span><br></pre></td></tr></table></figure>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker login --username=xxxxxx --password=xxxxxx ccr.ccs.tencentyun.com &amp;&amp; docker tag ccr.ccs.tencentyun.com/jiezi19971225/ahpuoj-fe ccr.ccs.tencentyun.com/jiezi19971225/ahpuoj-fe:<span class="variable">$BUILD_NUMBER</span> &amp;&amp; docker push ccr.ccs.tencentyun.com/jiezi19971225/ahpuoj-fe</span><br></pre></td></tr></table></figure>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker rmi ccr.ccs.tencentyun.com/jiezi19971225/ahpuoj-fe:<span class="variable">$BUILD_NUMBER</span></span><br><span class="line">docker rmi ccr.ccs.tencentyun.com/jiezi19971225/ahpuoj-fe</span><br></pre></td></tr></table></figure>
+<h3 id="构建脚本"><a href="#构建脚本" class="headerlink" title="构建脚本"></a>构建脚本</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> FE &amp;&amp; yarn &amp;&amp; yarn build</span><br><span class="line"><span class="built_in">cd</span> FE &amp;&amp; docker build -t ccr.ccs.tencentyun.com/jiezi19971225/ahpuoj-fe .</span><br><span class="line">docker login --username=xxxxxx --password=xxxxxx ccr.ccs.tencentyun.com &amp;&amp; docker tag ccr.ccs.tencentyun.com/jiezi19971225/ahpuoj-fe ccr.ccs.tencentyun.com/jiezi19971225/ahpuoj-fe:<span class="variable">$BUILD_NUMBER</span> &amp;&amp; docker push ccr.ccs.tencentyun.com/jiezi19971225/ahpuoj-fe</span><br><span class="line">docker rmi ccr.ccs.tencentyun.com/jiezi19971225/ahpuoj-fe:<span class="variable">$BUILD_NUMBER</span></span><br><span class="line">docker rmi ccr.ccs.tencentyun.com/jiezi19971225/ahpuoj-fe</span><br></pre></td></tr></table></figure>
 <h3 id="构建后操作"><a href="#构建后操作" class="headerlink" title="构建后操作"></a>构建后操作</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /home/ahpuoj/ahpuojv2docker/compose</span><br><span class="line">docker-compose pull fe</span><br><span class="line">docker-compose up -d fe</span><br><span class="line">// 这行命令用来删除老的镜像</span><br><span class="line">docker image prune -f --filter <span class="string">"dangling=true"</span></span><br></pre></td></tr></table></figure>
 <h2 id="it-works"><a href="#it-works" class="headerlink" title="it works"></a>it works</h2><img src="/2020/06/27/jenkins自动构建部署前端镜像/itWorks.png" title="itWorks">
 
@@ -1326,7 +1324,7 @@
              <i class="fa fa-bar-chart"></i>
            </span>
            <span class="post-meta-item-text">字数统计:</span>
-           <span class="post-count">614(字)</span>
+           <span class="post-count">622(字)</span>
 
          </span>
 
@@ -1373,7 +1371,7 @@
 <h5 id="component"><a href="#component" class="headerlink" title="component"></a>component</h5><p>当你使用 component 时，router 使用 React.CreateElement 根据传递的 component 创建一个新的 React element 。这意味着如果你提供了一个内联的函数给 component 属性，你会在每次 render 的时候都创建这个组件，这会导致旧组件的 unmount 和 新组建的 mount</p>
 <p>其背后的原理在于，react 在比较组件状态以便决定如何更新 dom 节点时，首先要比较组件的 type 和 key。在使用<code>&lt;Route component={() =&gt; (&lt;Bar idx={this.state.idx}/&gt;)}/&gt;</code>时，由于调用了 React.createElement，组件的 type 不是 Bar 这个类，而是一个匿名函数。App 组件每次 render 时都生成一个新的匿名函数，导致生成的组件的 type 总是不相同，所以会产生重复的 unmounting 和 mounting。</p>
 <h5 id="render"><a href="#render" class="headerlink" title="render"></a>render</h5><p>允许方便的内联渲染，避免不必要的重新挂载。当路由匹配的时候，这个函数会被调用。函数可以访问所有的 props。</p>
-<p>\<route component\> 优先级高于 \<route render\></route></route></p>
+<p><code>&lt;Route component&gt;</code> 优先级高于 <code>&lt;Route render&gt;</code></p>
 <h5 id="children"><a href="#children" class="headerlink" title="children"></a>children</h5><p>有时你需要渲染渲染子组件，不管路由是否匹配。这种情况下，可以使用 children 。</p>
 <h4 id="exact"><a href="#exact" class="headerlink" title="exact"></a>exact</h4><p>当为 true，进行精确匹配。</p>
 <h4 id="strict"><a href="#strict" class="headerlink" title="strict"></a>strict</h4><p>当为 true，路径中的 slash 也必须精确匹配。</p>
@@ -2051,30 +2049,15 @@
         
           
             <h3 id="uri-匹配规则"><a href="#uri-匹配规则" class="headerlink" title="uri 匹配规则"></a>uri 匹配规则</h3><h4 id="location-规则类型"><a href="#location-规则类型" class="headerlink" title="location 规则类型"></a>location 规则类型</h4><p>这部分内容来自<a href="https://www.cnblogs.com/dreamanddead/p/how-uri-match-location-rule-in-nginx.html" target="_blank" rel="noopener">详细解析 nginx uri 如何匹配 location 规则</a></p>
-<ul>
-<li>= exact uri</li>
-</ul>
-<p>完全匹配规则，要求 url 和规则完全相同</p>
+<h5 id="exact-uri"><a href="#exact-uri" class="headerlink" title="= exact uri"></a>= exact uri</h5><p>完全匹配规则，要求 url 和规则完全相同</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">location ~ /api/v1 &#123;</span><br><span class="line">    ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>~ case-sensitive regex</li>
-</ul>
-<p>区分大小写的正则表达式匹配规则</p>
+<h5 id="case-sensitive-regex"><a href="#case-sensitive-regex" class="headerlink" title="~ case-sensitive regex"></a>~ case-sensitive regex</h5><p>区分大小写的正则表达式匹配规则</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">location ~ /api/v1 &#123;</span><br><span class="line">    ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>~* case-insensitive regex</li>
-</ul>
-<p>不区分大小写的正则表达式匹配规则</p>
+<h5 id="case-insensitive-regex"><a href="#case-insensitive-regex" class="headerlink" title="~* case-insensitive regex"></a>~* case-insensitive regex</h5><p>不区分大小写的正则表达式匹配规则</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">location ~ /api/v1 &#123;</span><br><span class="line">    ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>~* case-insensitive regex</li>
-</ul>
-<p>不大小写的正则表达式匹配规则</p>
+<h5 id="case-insensitive-regex-1"><a href="#case-insensitive-regex-1" class="headerlink" title="~* case-insensitive regex"></a>~* case-insensitive regex</h5><p>不大小写的正则表达式匹配规则</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">location ~ /api/v1 &#123;</span><br><span class="line">    ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>^～ disable regex prefix</li>
-</ul>
-<p>匹配流程与 prefix 规则相同，有一点区别在于，如果最长匹配是当前规则，则之后不进行 正则表达式 规则的搜索。</p>
+<h5 id="～-disable-regex-prefix"><a href="#～-disable-regex-prefix" class="headerlink" title="^～ disable regex prefix"></a>^～ disable regex prefix</h5><p>匹配流程与 prefix 规则相同，有一点区别在于，如果最长匹配是当前规则，则之后不进行 正则表达式 规则的搜索。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">location ~ /api/v1 &#123;</span><br><span class="line">    ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h4 id="uri-如何选择-location"><a href="#uri-如何选择-location" class="headerlink" title="uri 如何选择 location"></a>uri 如何选择 location</h4><ol>
 <li>如果存在 exact uri 规则与 uri 匹配，至步骤 6</li>
@@ -2095,7 +2078,7 @@
 <li>匹配失败，返回 404，结束</li>
 <li>选择当前规则，使用其配置，结束</li>
 </ol>
-<h4 id="try-files-解析"><a href="#try-files-解析" class="headerlink" title="try_files 解析"></a>try_files 解析</h4><p>$uri 指代访问的 uri 资源，”$uri/“语法可以用来检测一个目录的存在，如果没有找到，一个内置的重定向将请求重定向到最后一个参数<br>最后一个参数可以指向一个命名的 location</p>
+<h4 id="try-files-解析"><a href="#try-files-解析" class="headerlink" title="try_files 解析"></a>try_files 解析</h4><p><code>$uri</code> 指代访问的 uri 资源，<code>$uri/</code>语法可以用来检测一个目录的存在，如果没有找到，一个内置的重定向将请求重定向到最后一个参数<br>最后一个参数可以指向一个命名的 location</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">location / &#123;</span><br><span class="line">    try_files $uri $uri/ index.html $uri.html =404;</span><br><span class="line">&#125;</span><br><span class="line">location / &#123;</span><br><span class="line">    try_files /system/maintenance.html</span><br><span class="line">              $uri $uri/index.html $uri.html</span><br><span class="line">              @mongrel;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">location @mongrel &#123;</span><br><span class="line">    proxy_pass http://mongrel;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
           
@@ -2360,7 +2343,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-count">53</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

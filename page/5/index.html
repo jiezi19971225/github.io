@@ -294,6 +294,183 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2019/05/11/图论基础之图中找环/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/05/11/图论基础之图中找环/" itemprop="url">图论基础之图中找环</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-11T18:35:20+08:00">
+                2019-05-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+         <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-bar-chart"></i>
+           </span>
+           <span class="post-meta-item-text">字数统计:</span>
+           <span class="post-count">1.3k(字)</span>
+
+         </span>
+
+      <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-clock-o"></i>
+           </span>
+           <span class="post-meta-item-text">阅读时长:</span>
+           <span class="post-count">6(分)</span>
+
+         </span>
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>对于有向图而言 可以使用拓扑排序的方式找出图中的环</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">1e5</span>+<span class="number">7</span>;</span><br><span class="line"><span class="keyword">int</span> n;</span><br><span class="line"><span class="keyword">int</span> du[maxn];<span class="comment">//入度</span></span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; gra[<span class="number">10</span>];</span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; res;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">addedge</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">    du[b]++;</span><br><span class="line">    gra[a].push_back(b);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">topo</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="built_in">queue</span>&lt;<span class="keyword">int</span>&gt; q;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(du[i] == <span class="number">0</span>)&#123;</span><br><span class="line">            q.push(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span>(!q.empty())&#123;</span><br><span class="line">        <span class="keyword">int</span> temp = q.front();</span><br><span class="line">        q.pop();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; gra[temp].size(); i++)&#123;</span><br><span class="line">            <span class="keyword">int</span> to = gra[temp][i];</span><br><span class="line">            du[to]--;</span><br><span class="line">            <span class="keyword">if</span>(!du[to])&#123;</span><br><span class="line">                q.push(i);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="built_in">cin</span>&gt;&gt;n;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)&#123;</span><br><span class="line">        <span class="keyword">int</span> a,b;</span><br><span class="line">        <span class="built_in">cin</span>&gt;&gt;a&gt;&gt;b;</span><br><span class="line">        addedge(a,b);</span><br><span class="line">    &#125;</span><br><span class="line">    topo();</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(du[i])&#123;</span><br><span class="line">            <span class="built_in">cout</span>&lt;&lt;i&lt;&lt;<span class="string">' '</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对于无向图 可以采用并查集的方式，在读边的时候，如果两个顶点在同一个集合中，说明构成了环，这时令这两个顶点作为起点和终点，深搜一下输出路径即可</p>
+<p>蓝桥杯 2017 国赛 c++b 组 t4 找环</p>
+<p>题意：</p>
+<p>编号为 1 到 n 的 n 个点，以及 n-1 条边构成一棵树。现在在树上加上一条边，这样就构成了一个含环的图了。请你找出该环上的结点，从小到大输出这些结点编号。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">1e+7</span>;</span><br><span class="line"><span class="keyword">int</span> n;</span><br><span class="line"><span class="keyword">int</span> p[maxn];</span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; gra[<span class="number">10</span>];</span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; res;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">init</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="built_in">memset</span>(p,<span class="number">0</span>,<span class="keyword">sizeof</span>(p));</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)&#123;</span><br><span class="line">        p[i] = i;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> x)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> p[x]==x?x:p[x]=find(p[x]);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">unit</span><span class="params">(<span class="keyword">int</span> x,<span class="keyword">int</span> y)</span></span>&#123;</span><br><span class="line">    p[x] = y;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">addedge</span><span class="params">(<span class="keyword">int</span> x,<span class="keyword">int</span> y)</span></span>&#123;</span><br><span class="line">    gra[x].push_back(y);</span><br><span class="line">    gra[y].push_back(x);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">int</span> s,e;</span><br><span class="line"><span class="keyword">int</span> vis[maxn];</span><br><span class="line"><span class="keyword">int</span> path[maxn];</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> x)</span></span>&#123;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;x&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; gra[x].size(); i++)&#123;</span><br><span class="line">        <span class="keyword">int</span> to = gra[x][i];</span><br><span class="line">        <span class="keyword">if</span>(!vis[to])&#123;</span><br><span class="line">            path[to] = x;<span class="comment">// 记录路径</span></span><br><span class="line">            vis[to] = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span>(to == e)&#123;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            dfs(to);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    freopen(<span class="string">"in.txt"</span>,<span class="string">"r"</span>,<span class="built_in">stdin</span>);</span><br><span class="line">    <span class="built_in">cin</span>&gt;&gt;n;</span><br><span class="line">    init();</span><br><span class="line">    <span class="built_in">memset</span>(vis,<span class="number">0</span>,<span class="keyword">sizeof</span>(vis));</span><br><span class="line">    <span class="built_in">memset</span>(path,<span class="number">0</span>,<span class="keyword">sizeof</span>(path));</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)&#123;</span><br><span class="line">        <span class="keyword">int</span> a,b;</span><br><span class="line">        <span class="built_in">cin</span>&gt;&gt;a&gt;&gt;b;</span><br><span class="line">        <span class="keyword">int</span> aa = find(a),bb = find(b);</span><br><span class="line">        <span class="keyword">if</span>(aa!=bb)&#123;</span><br><span class="line">            unit(a,b);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;<span class="comment">// 说明构成了环</span></span><br><span class="line">            s = a,e = b;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        addedge(a,b);</span><br><span class="line">    &#125;</span><br><span class="line">    vis[s] = <span class="number">1</span>;</span><br><span class="line">    dfs(s);</span><br><span class="line">    <span class="keyword">int</span> temp = e;</span><br><span class="line">    res.push_back(temp);</span><br><span class="line">    <span class="keyword">while</span>(path[temp])&#123;</span><br><span class="line">        res.push_back(path[temp]);</span><br><span class="line">        temp = path[temp];</span><br><span class="line">    &#125;</span><br><span class="line">    sort(res.begin(),res.end());</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; res.size(); i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(i&gt;<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="built_in">cout</span>&lt;&lt;<span class="string">' '</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;res[i];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>另外还可以采用深搜的方式，首先需要了解</p>
+<p>在图的遍历中，往往设置了一个标记数组 vis 来记录顶点是否被访问过。但有些时候需要改变 vis 值的意义。令 vis 具有 3 种值并表示 3 种不同含义</p>
+<p>vis = 0,表示该顶点没没有被访问<br>vis = 1,表示该顶点已经被访问，但其子孙后代还没被访问完，也就没从该点返回<br>vis = 2,，表示该顶点已经被访问，其子孙后代也已经访问完，也已经从该顶点返回<br>可以 vis 的 3 种值表示的是一种顺序关系和时间关系</p>
+<p>《算法导论》334 页有这 4 种边的准确定义</p>
+<img src="/2019/05/11/图论基础之图中找环/边的定义.png" title="边的定义">
+<p>DFS 过程中，对于一条边 u-&gt;v<br>vis[v] = 0,说明 v 还没被访问，v 是首次被发现，u-&gt;v 是一条树边<br>vis[v] = 1,说明 v 已经被访问，但其子孙后代还没有被访问完（正在访问中），而 u 又指向 v，说明 u 就是 v 的子孙后代，u-&gt;v 是一条后向边，因此后向边又称返祖边，<br>vis[v] = 2,说明 v 已经被访问，其子孙后代也已经全部访问完，u-&gt;v 这条边可能是一条横叉边，或者前向边</p>
+<p>注意：树边，后向边，前向边，都有祖先，后裔的关系，但横叉边没有，u-&gt;v 为横叉边，说明在这棵 DFS 树中，它们不是祖先后裔的关系它们可能是兄弟关系，堂兄弟关系，甚至更远的关系，如果是 dfs 森林的话，u 和 v 甚至可以在不同的树上</p>
+<p>对于无向图而言，只存在树边和返祖边，当发现一条返祖边时，说明找到了环，这时输出所有 vis[i] = 1 的节点即可</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">1e5</span>+<span class="number">7</span>;</span><br><span class="line"><span class="keyword">int</span> vis[maxn];</span><br><span class="line"><span class="keyword">int</span> n;</span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; gra[<span class="number">10</span>];</span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; res;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">addedge</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">    gra[a].push_back(b);</span><br><span class="line">    gra[b].push_back(a);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">int</span> flag = <span class="number">0</span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">findp</span><span class="params">()</span></span>&#123;  <span class="comment">// 找环</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(vis[i] == <span class="number">1</span>)&#123;</span><br><span class="line">            res.push_back(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> x,<span class="keyword">int</span> p)</span></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; gra[x].size(); i++)&#123;</span><br><span class="line">        <span class="keyword">int</span> to = gra[x][i];</span><br><span class="line">        <span class="keyword">if</span>(!vis[to])&#123;</span><br><span class="line">            vis[to] = <span class="number">1</span>;</span><br><span class="line">            dfs(to,x);</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(to!= p &amp;&amp; vis[to])&#123;</span><br><span class="line">            <span class="keyword">if</span>(!flag)&#123;</span><br><span class="line">                flag = <span class="number">1</span>;</span><br><span class="line">                findp();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    vis[x] = <span class="number">2</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="built_in">cin</span>&gt;&gt;n;</span><br><span class="line">    <span class="built_in">memset</span>(vis,<span class="number">0</span>,<span class="keyword">sizeof</span>(vis));</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)&#123;</span><br><span class="line">        <span class="keyword">int</span> a,b;</span><br><span class="line">        <span class="built_in">cin</span>&gt;&gt;a&gt;&gt;b;</span><br><span class="line">        addedge(a,b);</span><br><span class="line">    &#125;</span><br><span class="line">    vis[<span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line">    dfs(<span class="number">1</span>,<span class="number">0</span>);</span><br><span class="line">    sort(res.begin(),res.end());</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; res.size(); i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(i&gt;<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="built_in">cout</span>&lt;&lt;<span class="string">' '</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;res[i];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2019/04/22/傻逼记录（一）/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2433,175 +2610,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2018/12/05/汇编与栈帧/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="jiezi19971225">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Jiez19971225‘s Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/05/汇编与栈帧/" itemprop="url">汇编与栈帧1</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-05T13:34:50+08:00">
-                2018-12-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/汇编/" itemprop="url" rel="index">
-                    <span itemprop="name">汇编</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-         <span class="post-time">
-	   &nbsp; | &nbsp;
-           <span class="post-meta-item-icon">
-             <i class="fa fa-bar-chart"></i>
-           </span>
-           <span class="post-meta-item-text">字数统计:</span>
-           <span class="post-count">674(字)</span>
-
-         </span>
-
-      <span class="post-time">
-	   &nbsp; | &nbsp;
-           <span class="post-meta-item-icon">
-             <i class="fa fa-clock-o"></i>
-           </span>
-           <span class="post-meta-item-text">阅读时长:</span>
-           <span class="post-count">3(分)</span>
-
-         </span>
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>转自:</p>
-<ul>
-<li><a href="https://www.cnblogs.com/dormant/p/5059644.html" target="_blank" rel="noopener">汇编与栈帧学习（一）</a></li>
-<li><a href="https://www.cnblogs.com/dormant/p/5079894.html" target="_blank" rel="noopener">esp 和 ebp 详解</a></li>
-<li><a href="https://blog.csdn.net/striver1205/article/details/25695437" target="_blank" rel="noopener">Push, Pop, call, leave 和 Ret 指令图解</a></li>
-</ul>
-<p>参考以上博文的内容，写了一个简单的程序，说明一下汇编调用过程</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 源程序 test1.c</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> c = a + b;</span><br><span class="line">    <span class="keyword">return</span> c;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> sum = add(a, b);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 我的环境为64位linux系统，需要加上-m32指定以32位方式编译</span></span><br><span class="line">$ gcc -m32  -g test1.c</span><br><span class="line">$ gdb a.out</span><br><span class="line">(gdb) b main</span><br><span class="line">Breakpoint <span class="number">1</span> at <span class="number">0x80483f7</span>: file test1.c, line <span class="number">8.</span></span><br><span class="line">(gdb) b add</span><br><span class="line">Breakpoint <span class="number">2</span> at <span class="number">0x80483e1</span>: file test1.c, line <span class="number">3.</span></span><br><span class="line">(gdb) r</span><br><span class="line">Breakpoint <span class="number">1</span>, main () at test1.c:<span class="number">8</span></span><br><span class="line"><span class="number">8</span>         <span class="keyword">int</span> a = <span class="number">-1</span>;</span><br><span class="line">(gdb) disas main</span><br><span class="line">Dump of assembler code <span class="keyword">for</span> function main:</span><br><span class="line"><span class="number">0x080483f1</span> &lt;+<span class="number">0</span>&gt;:     push   %ebp <span class="comment">// ebp寄存器存储当前main栈帧栈底, 将ebp入栈，esp减去4字节</span></span><br><span class="line"><span class="number">0x080483f2</span> &lt;+<span class="number">1</span>&gt;:     mov    %esp,%ebp <span class="comment">// 把esp的数值赋给ebp</span></span><br><span class="line"><span class="number">0x080483f4</span> &lt;+<span class="number">3</span>&gt;:     sub    $<span class="number">0x10</span>,%esp <span class="comment">// 把esp减去16个字节</span></span><br><span class="line">=&gt; <span class="number">0x080483f7</span> &lt;+<span class="number">6</span>&gt;:     movl   $<span class="number">0xffffffff</span>,<span class="number">-0xc</span>(%ebp) <span class="comment">// ebp减去12字节的位置保存直接数-1</span></span><br><span class="line"><span class="number">0x080483fe</span> &lt;+<span class="number">13</span>&gt;:    movl   $<span class="number">0x0</span>,<span class="number">-0x8</span>(%ebp) <span class="comment">// ebp减去8字节的位置保存直接数0</span></span><br><span class="line"><span class="number">0x08048405</span> &lt;+<span class="number">20</span>&gt;:    pushl  <span class="number">-0x8</span>(%ebp) <span class="comment">// ebp减去8字节的位置的值（b的数值）入栈 同时esp减去4字节</span></span><br><span class="line"><span class="number">0x08048408</span> &lt;+<span class="number">23</span>&gt;:    pushl  <span class="number">-0xc</span>(%ebp) <span class="comment">// ebp减去12字节的位置的值入栈（a的数值） 同时esp减去4字节 说明参数是按照从右向左的顺序入栈的</span></span><br><span class="line"><span class="number">0x0804840b</span> &lt;+<span class="number">26</span>&gt;:    call   <span class="number">0x80483db</span> &lt;add&gt; <span class="comment">// 调用add函数 call指令将返回地址0x0804840b压入栈顶，esp减去4字节，然后程序跳转到add函数的起始地址</span></span><br><span class="line"><span class="number">0x08048410</span> &lt;+<span class="number">31</span>&gt;:    add    $<span class="number">0x8</span>,%esp <span class="comment">// esp加上8 清除局部变量占用的空间</span></span><br><span class="line"><span class="number">0x08048413</span> &lt;+<span class="number">34</span>&gt;:    mov    %eax,<span class="number">-0x4</span>(%ebp)</span><br><span class="line"><span class="number">0x08048416</span> &lt;+<span class="number">37</span>&gt;:    mov    $<span class="number">0x0</span>,%eax</span><br><span class="line"><span class="number">0x0804841b</span> &lt;+<span class="number">42</span>&gt;:    leave</span><br><span class="line"><span class="number">0x0804841c</span> &lt;+<span class="number">43</span>&gt;:    ret</span><br><span class="line">End of assembler dump.</span><br><span class="line">(gdb) p $esp</span><br><span class="line">$<span class="number">1</span> = (<span class="keyword">void</span> *) <span class="number">0xffffcc68</span></span><br><span class="line">(gdb) p $ebp</span><br><span class="line">$<span class="number">2</span> = (<span class="keyword">void</span> *) <span class="number">0xffffcc78</span></span><br><span class="line">(gdb) disas add</span><br><span class="line">Dump of assembler code <span class="keyword">for</span> function add:</span><br><span class="line"><span class="number">0x080483db</span> &lt;+<span class="number">0</span>&gt;:     push   %ebp <span class="comment">// ebp寄存器存储当前main栈帧栈底, 将ebp入栈，esp减去4字节</span></span><br><span class="line"><span class="number">0x080483dc</span> &lt;+<span class="number">1</span>&gt;:     mov    %esp,%ebp <span class="comment">// 把esp的数值赋给ebp</span></span><br><span class="line"><span class="number">0x080483de</span> &lt;+<span class="number">3</span>&gt;:     sub    $<span class="number">0x10</span>,%esp <span class="comment">// 把esp减去16个字节</span></span><br><span class="line">=&gt; <span class="number">0x080483e1</span> &lt;+<span class="number">6</span>&gt;:     mov    <span class="number">0x8</span>(%ebp),%edx <span class="comment">// ebp加上8个字节的位置的值 存入寄存器edx</span></span><br><span class="line"><span class="number">0x080483e4</span> &lt;+<span class="number">9</span>&gt;:     mov    <span class="number">0xc</span>(%ebp),%eax <span class="comment">// // ebp加上12个字节的位置的值 存入寄存器eax</span></span><br><span class="line"><span class="number">0x080483e7</span> &lt;+<span class="number">12</span>&gt;:    add    %edx,%eax <span class="comment">// edx的数值加上eax的数值存入eax</span></span><br><span class="line"><span class="number">0x080483e9</span> &lt;+<span class="number">14</span>&gt;:    mov    %eax,<span class="number">-0x4</span>(%ebp) <span class="comment">// ebx减去4字节的位置保存eax的值</span></span><br><span class="line"><span class="number">0x080483ec</span> &lt;+<span class="number">17</span>&gt;:    mov    <span class="number">-0x4</span>(%ebp),%eax <span class="comment">//</span></span><br><span class="line"><span class="number">0x080483ef</span> &lt;+<span class="number">20</span>&gt;:    leave <span class="comment">// LEAVE指令是将ebp的数值赋给esp，然后popl ebp， 即esp加上4字节</span></span><br><span class="line"><span class="number">0x080483f0</span> &lt;+<span class="number">21</span>&gt;:    ret <span class="comment">// RET指令则是将栈顶的返回地址弹出到EIP，esp+4 然后按照EIP此时指示的指令地址继续执行程序</span></span><br><span class="line">(gdb) p $ebp</span><br><span class="line">$<span class="number">6</span> = (<span class="keyword">void</span> *) <span class="number">0xffffcc58</span></span><br><span class="line">(gdb) p $esp</span><br><span class="line">$<span class="number">5</span> = (<span class="keyword">void</span> *) <span class="number">0xffffcc48</span></span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2652,7 +2660,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-count">53</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

@@ -2,30 +2,128 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.jiezi19971225.cn/2019/08/03/es6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/</loc>
+    
+    <lastmod>2020-07-18T17:24:13.395Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.jiezi19971225.cn/2019/06/06/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
+    
+    <lastmod>2020-07-18T17:24:11.860Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.jiezi19971225.cn/2019/08/03/%E5%9D%97%E6%A0%BC%E5%BC%8F%E5%8C%96%E4%B8%8A%E4%B8%8B%E6%96%87/</loc>
+    
+    <lastmod>2020-07-18T17:19:48.884Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.jiezi19971225.cn/2019/08/05/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript%E4%B8%8A%E5%8D%B7%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
+    
+    <lastmod>2020-07-18T17:01:30.874Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.jiezi19971225.cn/2019/08/16/es6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02/</loc>
+    
+    <lastmod>2020-07-18T17:00:42.701Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.jiezi19971225.cn/2019/08/31/vue-cli%E5%AD%A6%E4%B9%A0%E5%92%8Cdebug%E9%85%8D%E7%BD%AE/</loc>
+    
+    <lastmod>2020-07-18T16:58:47.976Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.jiezi19971225.cn/2019/09/04/webpack%E7%88%AC%E5%9D%91%E4%B9%8B%E8%B7%AF/</loc>
+    
+    <lastmod>2020-07-18T16:53:22.429Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.jiezi19971225.cn/2019/09/16/git%E5%AD%A6%E4%B9%A0/</loc>
+    
+    <lastmod>2020-07-18T16:46:16.319Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.jiezi19971225.cn/2019/09/16/Sass%E5%AD%A6%E4%B9%A0/</loc>
+    
+    <lastmod>2020-07-18T16:45:58.621Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.jiezi19971225.cn/2020/02/22/css%E4%B8%96%E7%95%8C%E7%AC%94%E8%AE%B0/</loc>
+    
+    <lastmod>2020-07-18T16:42:27.266Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://www.jiezi19971225.cn/2020/03/30/react%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/</loc>
     
-    <lastmod>2020-07-18T10:56:56.977Z</lastmod>
+    <lastmod>2020-07-18T16:36:23.563Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://www.jiezi19971225.cn/2020/07/18/es6class%E7%9A%84%E4%B8%80%E4%BA%9B%E8%BF%B7%E6%83%91%E7%82%B9/</loc>
+    <loc>http://www.jiezi19971225.cn/2020/04/04/http%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/</loc>
     
-    <lastmod>2020-07-18T08:55:13.196Z</lastmod>
+    <lastmod>2020-07-18T16:22:29.200Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://www.jiezi19971225.cn/2020/07/05/%E5%AF%B9%E4%BA%8Eprop%E7%9A%84sync%E4%BF%AE%E9%A5%B0%E7%AC%A6%E7%9A%84%E4%B8%80%E6%AC%A1%E6%8E%A2%E7%A9%B6/</loc>
+    <loc>http://www.jiezi19971225.cn/2020/04/04/nginxLocation%E6%A8%A1%E5%9D%97%E5%AD%A6%E4%B9%A0/</loc>
     
-    <lastmod>2020-07-13T14:43:38.617Z</lastmod>
+    <lastmod>2020-07-18T16:20:08.261Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.jiezi19971225.cn/about/index.html</loc>
+    
+    <lastmod>2020-07-18T16:18:22.942Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.jiezi19971225.cn/2020/04/18/reactRouter%E5%AD%A6%E4%B9%A0/</loc>
+    
+    <lastmod>2020-07-18T16:15:32.279Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://www.jiezi19971225.cn/2020/06/27/jenkins%E8%87%AA%E5%8A%A8%E6%9E%84%E5%BB%BA%E9%83%A8%E7%BD%B2%E5%89%8D%E7%AB%AF%E9%95%9C%E5%83%8F/</loc>
     
-    <lastmod>2020-06-27T04:55:00.023Z</lastmod>
+    <lastmod>2020-07-18T16:12:53.698Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.jiezi19971225.cn/2020/07/18/es6class%E7%9A%84%E4%B8%80%E4%BA%9B%E8%BF%B7%E6%83%91%E7%82%B9/</loc>
+    
+    <lastmod>2020-07-18T16:09:56.946Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.jiezi19971225.cn/2020/07/05/%E4%BA%8C%E6%AC%A1%E5%B0%81%E8%A3%85%E7%BB%84%E4%BB%B6%E7%9A%84%E4%B8%80%E7%A7%8D%E6%AF%94%E8%BE%83%E5%A5%BD%E7%9A%84%E6%96%B9%E5%BC%8F/</loc>
+    
+    <lastmod>2020-07-18T14:34:28.691Z</lastmod>
     
   </url>
   
@@ -33,20 +131,6 @@
     <loc>http://www.jiezi19971225.cn/2020/06/25/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E7%BE%8E%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/</loc>
     
     <lastmod>2020-06-25T07:31:27.864Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.jiezi19971225.cn/2020/02/22/css%E4%B8%96%E7%95%8C%E7%AC%94%E8%AE%B0/</loc>
-    
-    <lastmod>2020-06-23T15:02:34.562Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.jiezi19971225.cn/2020/04/18/reactRouter%E5%AD%A6%E4%B9%A0/</loc>
-    
-    <lastmod>2020-06-21T03:50:16.947Z</lastmod>
     
   </url>
   
@@ -65,23 +149,9 @@
   </url>
   
   <url>
-    <loc>http://www.jiezi19971225.cn/2019/09/16/Sass%E5%AD%A6%E4%B9%A0/</loc>
-    
-    <lastmod>2020-04-14T05:20:32.335Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://www.jiezi19971225.cn/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
     
     <lastmod>2020-04-06T14:29:59.830Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.jiezi19971225.cn/2020/04/04/http%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/</loc>
-    
-    <lastmod>2020-04-06T09:15:37.460Z</lastmod>
     
   </url>
   
@@ -96,13 +166,6 @@
     <loc>http://www.jiezi19971225.cn/2020/04/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA%E4%B8%8E%E5%A4%84%E7%90%86/</loc>
     
     <lastmod>2020-04-04T14:50:27.410Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.jiezi19971225.cn/2020/04/04/nginxLocation%E6%A8%A1%E5%9D%97%E5%AD%A6%E4%B9%A0/</loc>
-    
-    <lastmod>2020-04-04T14:48:54.087Z</lastmod>
     
   </url>
   
@@ -149,20 +212,6 @@
   </url>
   
   <url>
-    <loc>http://www.jiezi19971225.cn/2019/09/04/webpack%E7%88%AC%E5%9D%91%E4%B9%8B%E8%B7%AF/</loc>
-    
-    <lastmod>2020-03-24T15:19:27.562Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.jiezi19971225.cn/2019/08/31/vue-cli%E5%AD%A6%E4%B9%A0%E5%92%8Cdebug%E9%85%8D%E7%BD%AE/</loc>
-    
-    <lastmod>2020-03-24T13:58:37.599Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://www.jiezi19971225.cn/2020/03/24/kmp%E7%AE%97%E6%B3%95/</loc>
     
     <lastmod>2020-03-24T06:36:03.388Z</lastmod>
@@ -184,27 +233,6 @@
   </url>
   
   <url>
-    <loc>http://www.jiezi19971225.cn/2019/09/16/git%E5%AD%A6%E4%B9%A0/</loc>
-    
-    <lastmod>2020-03-23T15:24:54.396Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.jiezi19971225.cn/2019/08/05/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript%E4%B8%8A%E5%8D%B7%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
-    
-    <lastmod>2020-03-23T15:04:11.109Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.jiezi19971225.cn/2019/06/06/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
-    
-    <lastmod>2020-03-23T15:03:05.195Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://www.jiezi19971225.cn/2018/12/05/%E6%B1%87%E7%BC%96%E4%B8%8E%E6%A0%88%E5%B8%A7/</loc>
     
     <lastmod>2020-03-23T15:01:10.843Z</lastmod>
@@ -215,13 +243,6 @@
     <loc>http://www.jiezi19971225.cn/2019/05/26/%E7%BA%A6%E6%95%B0%E4%B8%AA%E6%95%B0%E5%85%AC%E5%BC%8F/</loc>
     
     <lastmod>2020-03-23T15:00:02.972Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.jiezi19971225.cn/about/index.html</loc>
-    
-    <lastmod>2020-03-23T12:54:57.403Z</lastmod>
     
   </url>
   
@@ -261,13 +282,6 @@
   </url>
   
   <url>
-    <loc>http://www.jiezi19971225.cn/2019/08/03/es6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/</loc>
-    
-    <lastmod>2020-03-17T03:25:19.621Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://www.jiezi19971225.cn/2019/03/07/%E8%AE%B0%E4%BD%BF%E7%94%A8docker-compose%E5%AF%B9OJ%E7%B3%BB%E7%BB%9F%E9%83%A8%E7%BD%B2%E4%BC%98%E5%8C%96%E9%87%8D%E6%9E%84/</loc>
     
     <lastmod>2020-03-17T03:20:37.926Z</lastmod>
@@ -299,13 +313,6 @@
     <loc>http://www.jiezi19971225.cn/2018/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/</loc>
     
     <lastmod>2020-02-22T13:36:28.002Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.jiezi19971225.cn/2019/08/16/es6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02/</loc>
-    
-    <lastmod>2020-02-22T13:35:52.108Z</lastmod>
     
   </url>
   

@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Jiez19971225‘s Blog">
 <meta property="og:description" content="chapter3 流，元素与基本尺寸外在盒子与内在盒子-外在盒子负责元素是可以一行显示,还是只能换行显示;内在盒子负责宽高、内容呈现什么的。内在盒子专业的名称是“容器盒子”。y 属性值是 inline-block 的元素既能和图文一行显示,又能直接设置 width/height。 width:auto 的四种表现  充分利用可用空间，即 fill-available， 4 。比方说,&amp;lt;div">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-06-23T15:02:34.562Z">
+<meta property="og:updated_time" content="2020-07-18T16:42:27.266Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="css世界笔记">
 <meta name="twitter:description" content="chapter3 流，元素与基本尺寸外在盒子与内在盒子-外在盒子负责元素是可以一行显示,还是只能换行显示;内在盒子负责宽高、内容呈现什么的。内在盒子专业的名称是“容器盒子”。y 属性值是 inline-block 的元素既能和图文一行显示,又能直接设置 width/height。 width:auto 的四种表现  充分利用可用空间，即 fill-available， 4 。比方说,&amp;lt;div">
@@ -407,7 +407,7 @@
         <h2 id="chapter3-流，元素与基本尺寸"><a href="#chapter3-流，元素与基本尺寸" class="headerlink" title="chapter3 流，元素与基本尺寸"></a>chapter3 流，元素与基本尺寸</h2><p>外在盒子与内在盒子-外在盒子负责元素是可以一行显示,还是只能换行显示;内在盒子负责宽高、内容呈现什么的。内在盒子专业的名称是“容器盒子”。y 属性值是 inline-block 的元素既能和图文一行显示,又能直接设置 width/height。</p>
 <p>width:auto 的四种表现</p>
 <ul>
-<li>充分利用可用空间，即 fill-available， 4 。比方说,&lt;div&gt;、 &lt;p&gt;这些元素的宽度默认是 100% 于父级容器的。</li>
+<li>充分利用可用空间，即 fill-available， 4 。比方说,<code>&lt;div&gt;</code>;、 <code>&lt;p&gt;</code>;这些元素的宽度默认是 100% 于父级容器的。</li>
 <li>收缩与包裹。典型代表就是浮动、绝对定位、inline-block 元素或 table 元素,<br>英文称为 shrink-to-fit,可简单理解为“包裹性”。CSS3 中的 fit-content 指的就是这种宽度表现。</li>
 <li>收缩到最小。这个最容易出现在 table-layout 为 auto 的表格中,</li>
 <li>超出容器限制。除非有明确的 width 相关设置,否则上面 3 种情况尺寸都不会主动<br>超过父级容器宽度的,但是存在一些特殊情况。例如,内容很长的连续的英文和数字,或者内联<br>元素被设置了 white-space:nowarp。</li>
@@ -432,12 +432,12 @@
 <p>max-*初始值是 none，min-*初始值是 auto</p>
 <p>数值变化无动画，需要设置初始值为 0</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.box</span> &#123;</span><br><span class="line">  <span class="attribute">min-height</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">transition</span>: min-height <span class="number">0.3s</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.box</span><span class="selector-pseudo">:hover</span> &#123;</span><br><span class="line">  <span class="attribute">min-height</span>: <span class="number">300px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>max-*会覆盖 !important 的 width/height</p>
+<p><code>max-*</code>会覆盖 !important 的 width/height</p>
 <p>::selection 选择器匹配被用户选取的选取是部分。即对选中文本的操作。<br>只能向 ::selection 选择器应用少量 CSS 属性：color、background、cursor 以及 outline。</p>
-<h2 id="chapter4-盒尺寸四大家族"><a href="#chapter4-盒尺寸四大家族" class="headerlink" title="chapter4 盒尺寸四大家族"></a>chapter4 盒尺寸四大家族</h2><h3 id="content-与替换元素"><a href="#content-与替换元素" class="headerlink" title="content 与替换元素"></a>content 与替换元素</h3><p>&lt;img&gt;、&lt;object&gt;、&lt;video&gt;、&lt;iframe&gt;或者表单元素&lt;textarea&gt;和&lt;input&gt;都是典型的替换元素</p>
+<h2 id="chapter4-盒尺寸四大家族"><a href="#chapter4-盒尺寸四大家族" class="headerlink" title="chapter4 盒尺寸四大家族"></a>chapter4 盒尺寸四大家族</h2><h3 id="content-与替换元素"><a href="#content-与替换元素" class="headerlink" title="content 与替换元素"></a>content 与替换元素</h3><p><code>&lt;img&gt;</code>、<code>&lt;object&gt;</code>、<code>&lt;video&gt;</code>、<code>&lt;iframe&gt;</code>或者表单元素<code>&lt;textarea&gt;</code>和<code>&lt;input&gt;</code>都是典型的替换元素</p>
 <p>vertical-align 在替换元素的基线定义为元素的下边缘</p>
-<p>&lt;select&gt; 也是替换元素</p>
-<p>&lt;input&gt;和&lt;button&gt;按钮的区别在钮默认的 white-space 值不一样,前者是 pre,后者是 normal</p>
+<p><code>&lt;select&gt;</code> 也是替换元素</p>
+<p><code>&lt;input&gt;</code>和<code>&lt;button&gt;</code>按钮的区别在钮默认的 white-space 值不一样,前者是 pre,后者是 normal</p>
 <p>透明图片占位的替代方法</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">img</span> &#123;</span><br><span class="line">  <span class="attribute">visibility</span>: hidden;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-tag">img</span><span class="selector-attr">[src]</span> &#123;</span><br><span class="line">  <span class="attribute">visibility</span>: visible;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>对于 Firefox 浏览器,src 缺省的\<img\>不是替换元素,而是一个普通的内联元素,所以使用的就不是替换元素的尺寸规则,而是类似\<span\>的内联元素尺寸规则,宽高会无效。因此可以在 CSS 重置时加上下面一条</span\></img\></p>
@@ -516,7 +516,7 @@
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.father</span><span class="selector-pseudo">:after</span> &#123;</span><br><span class="line">  <span class="attribute">content</span>: <span class="string">""</span>;</span><br><span class="line">  <span class="attribute">display</span>: table;</span><br><span class="line">  <span class="attribute">clear</span>: both;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="bfc"><a href="#bfc" class="headerlink" title="bfc"></a>bfc</h3><ul>
 <li>那什么时候会触发 BFC 呢?常见的情况如下:<ul>
-<li>&lt;html&gt;根元素;</li>
+<li><code>&lt;html&gt;</code>根元素;</li>
 <li>float 的值不为 none;</li>
 <li>overflow 的值为 auto、scroll 或 hidden;</li>
 <li>display 的值为 table-cell、table-caption 和 inline-block 中的任何一个</li>
@@ -672,7 +672,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-count">53</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

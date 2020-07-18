@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Jiez19971225‘s Blog">
 <meta property="og:description" content="开发浏览器兼容性如果有依赖需要 polyfill，你有几种选择：  如果该依赖基于一个目标环境不支持的 ES 版本撰写: 将其添加到 vue.config.js 中的 transpileDependencies 选项。这会为该依赖同时开启语法语法转换和根据使用情况检测 polyfill。 如果该依赖交付了 ES5 代码并显式地列出了需要的 polyfill: 你可以使用 @vue/babel-pr">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-03-24T13:58:37.599Z">
+<meta property="og:updated_time" content="2020-07-18T16:58:47.976Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="vue-cli学习和debug配置">
 <meta name="twitter:description" content="开发浏览器兼容性如果有依赖需要 polyfill，你有几种选择：  如果该依赖基于一个目标环境不支持的 ES 版本撰写: 将其添加到 vue.config.js 中的 transpileDependencies 选项。这会为该依赖同时开启语法语法转换和根据使用情况检测 polyfill。 如果该依赖交付了 ES5 代码并显式地列出了需要的 polyfill: 你可以使用 @vue/babel-pr">
@@ -371,7 +371,7 @@
              <i class="fa fa-bar-chart"></i>
            </span>
            <span class="post-meta-item-text">字数统计:</span>
-           <span class="post-count">923(字)</span>
+           <span class="post-count">924(字)</span>
 
          </span>
 
@@ -418,7 +418,7 @@
 <li>test 模式用于 vue-cli-service test:unit<br>可以通过传递 —mode 选项参数为命令行覆写默认的模式</li>
 <li>“dev-build”: “vue-cli-service build —mode development”</li>
 </ul>
-<p>只有以 <em>VUEAPP</em> 开头的变量会被 webpack.DefinePlugin 静态嵌入到客户端侧的包中。你可以在应用的代码中这样访问它们：</p>
+<p>只有以 VUE_APP 开头的变量会被 webpack.DefinePlugin 静态嵌入到客户端侧的包中。你可以在应用的代码中这样访问它们：</p>
 <ul>
 <li>console.log(process.env.VUE<em>APP_SECRET)<br>除了 VUE_APP</em>* 变量之外，在你的应用代码中始终可用的还有两个特殊的变量：</li>
 <li>NODE_ENV - 会是 “development”、”production” 或 “test” 中的一个。具体的值取决于应用运行的模式。</li>
@@ -426,7 +426,7 @@
 </ul>
 <h4 id="静态资源处理"><a href="#静态资源处理" class="headerlink" title="静态资源处理"></a>静态资源处理</h4><h5 id="URL-转换规则"><a href="#URL-转换规则" class="headerlink" title="URL 转换规则"></a>URL 转换规则</h5><p>如果 URL 是一个绝对路径 (例如 /images/foo.png)，它将会被保留不变。<br>如果 URL 以 . 开头，它会作为一个相对模块请求被解释且基于你的文件系统中的目录结构进行解析。<br>如果 URL 以 ~ 开头，其后的任何内容都会作为一个模块请求被解析。这意味着你甚至可以引用 Node 模块中的资源：</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">"~some-npm-package/foo.png"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
-<p>如果 URL 以 @ 开头，它也会作为一个模块请求被解析。它的用处在于 Vue CLI 默认会设置一个指向 \<projectroot\>/src 的别名 @。(仅作用于模版中)</projectroot\></p>
+<p>如果 URL 以 @ 开头，它也会作为一个模块请求被解析。它的用处在于 Vue CLI 默认会设置一个指向 projectRoot/src 的别名 @。(仅作用于模版中)</p>
 <h3 id="Debug-配置"><a href="#Debug-配置" class="headerlink" title="Debug 配置"></a>Debug 配置</h3><p>效果：在 vscode 中的终端输出 Chrome 的控制台信息，可以在 vscode 中进行断点调试<br>首先需要安装插件 Debugger for Chrome<br>新增 Debug 配置项</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">        <span class="string">"name"</span>: <span class="string">"attach to chrome"</span>,</span><br><span class="line">        <span class="string">"type"</span>: <span class="string">"chrome"</span>,</span><br><span class="line">        <span class="string">"request"</span>: <span class="string">"attach"</span>,</span><br><span class="line">        <span class="string">"port"</span>: <span class="number">9222</span>,</span><br><span class="line">        <span class="string">"address"</span>: <span class="string">"localhost"</span>,</span><br><span class="line">        <span class="string">"url"</span>: <span class="string">"http://localhost:8080"</span>,</span><br><span class="line">        <span class="string">"webRoot"</span>: <span class="string">"$&#123;workspaceFolder&#125;/src"</span>,    <span class="comment">// 这个webRoot应该是指webpack打包js文件的目录</span></span><br><span class="line">        <span class="string">"sourceMaps"</span>: <span class="literal">true</span>,</span><br><span class="line">        <span class="string">"sourceMapPathOverrides"</span>: &#123;</span><br><span class="line">            <span class="string">"webpack:///src/*"</span>: <span class="string">"$&#123;webRoot&#125;/*"</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 <p>启动 chrome，附加启动参数</p>
@@ -551,7 +551,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-count">53</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

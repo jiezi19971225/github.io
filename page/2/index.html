@@ -382,7 +382,7 @@
              <i class="fa fa-clock-o"></i>
            </span>
            <span class="post-meta-item-text">阅读时长:</span>
-           <span class="post-count">6(分)</span>
+           <span class="post-count">7(分)</span>
 
          </span>
 
@@ -408,8 +408,8 @@
         
           
             <p>记录一下自己不太清楚的知识点</p>
-<h2 id="第二章-URL-与资源"><a href="#第二章-URL-与资源" class="headerlink" title="第二章 URL 与资源"></a>第二章 URL 与资源</h2><h3 id="URL"><a href="#URL" class="headerlink" title="URL"></a>URL</h3><p>url 的语法 \<scheme\>://\<user\>:\&lt;password>@\<host\>:\<port\>/\<path\>;\<params\>?\<query\>#\<frag\></frag\></query\></params\></path\></port\></host\></user\></scheme\></p>
-<p>基础 URL HTML 标记\<base\>，可以设定基础 URL</base\></p>
+<h2 id="第二章-URL-与资源"><a href="#第二章-URL-与资源" class="headerlink" title="第二章 URL 与资源"></a>第二章 URL 与资源</h2><h3 id="URL"><a href="#URL" class="headerlink" title="URL"></a>URL</h3><p>url 的语法 <code>&lt;scheme&gt;://&lt;user&gt;:&lt;password&gt;@&lt;host&gt;:&lt;port&gt;/&lt;path&gt;;&lt;params&gt;?&lt;query&gt;#&lt;frag&gt;</code></p>
+<p>基础 URL HTML 标记<code>&lt;BASE&gt;</code>，可以设定基础 URL</p>
 <p>URL 编码机制 urlencode 通过转义表示不安全的字符 包含一个百分号(%)，后面跟着两个表示字符 ASCII 码的十六进制数</p>
 <h2 id="第三章-HTTP-报文"><a href="#第三章-HTTP-报文" class="headerlink" title="第三章 HTTP 报文"></a>第三章 HTTP 报文</h2><h3 id="报文的组成"><a href="#报文的组成" class="headerlink" title="报文的组成"></a>报文的组成</h3><p>组成 对报文进行描述的其实航 包含属性的首部块 可选的包含数据的主题 body<br>一般只有 PUT 和 POST 方法包含 body<br>PUT 方法的语义是让服务器用请求的主体部分来创建一个由所请求的 URL 命名的新文档，如果那个 URL 已经存在的话，就用这个主题来替代它</p>
 <p>Http 协议中的 Header 与 Body。Header 的每行最后要加\r\n。Header 与 Body 之间要用\r\n 隔开。Body 后无需加\r\n。</p>
@@ -446,16 +446,11 @@
 <p>表示客户端到代理服务器上拿缓存的时候，一定要在过期前 5s 之前的时间内</p>
 <h6 id="only-if-cached"><a href="#only-if-cached" class="headerlink" title="only-if-cached"></a>only-if-cached</h6><p>表示客户端只会接受代理缓存，而不会接受源服务器的响应，如果代理缓存无效，则直接返回 504</p>
 <h3 id="安全"><a href="#安全" class="headerlink" title="安全"></a>安全</h3><p>CSRF Cross Site Request Forgery<br>点击劫持 设置 X-FRAME-OPTIONS</p>
-<h3 id="cookie"><a href="#cookie" class="headerlink" title="cookie"></a>cookie</h3><ul>
-<li>cookie 的域名属性</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set-cookie: user=&quot;mary17&quot;; domain=&quot;airtravelbargains.com&quot;</span><br></pre></td></tr></table></figure>
+<h3 id="cookie"><a href="#cookie" class="headerlink" title="cookie"></a>cookie</h3><h4 id="cookie-的域名属性"><a href="#cookie-的域名属性" class="headerlink" title="cookie 的域名属性"></a>cookie 的域名属性</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set-cookie: user=&quot;mary17&quot;; domain=&quot;airtravelbargains.com&quot;</span><br></pre></td></tr></table></figure>
 <p>将 cookie user=”mary17” 发送给域 “.airtravelbargains.com” 中的所有站点:</p>
-<ul>
-<li>cookie 的路径属性<br>cookie 规范允许用户将 cookie 与部分 Web 站点关联起来</li>
-</ul>
+<h4 id="cookie-的路径属性"><a href="#cookie-的路径属性" class="headerlink" title="cookie 的路径属性"></a>cookie 的路径属性</h4><p>cookie 规范允许用户将 cookie 与部分 Web 站点关联起来</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set-cookie: pref=compact; domain=&quot;airtravelbargains.com&quot;; path=/autos/</span><br></pre></td></tr></table></figure>
-<p>如果用户访问 <a href="http://www.airtravelbargains.com/specials.html,就只会获得这个" target="_blank" rel="noopener">http://www.airtravelbargains.com/specials.html,就只会获得这个</a> cookie:<br>Cookie: user=”mary17”<br>但 如 果 访 问 <a href="http://www.airtravelbargains.com/autos/cheapo/index.html," target="_blank" rel="noopener">http://www.airtravelbargains.com/autos/cheapo/index.html,</a> 就 会 获 得 这<br>两个 cookie:<br>Cookie: user=”mary17”<br>Cookie: pref=compact<br>Cache-Control:no-cache=” Set-Cookie” 除了 cookie 以外是可以缓存的</p>
+<p>如果用户访问 <code>http://www.airtravelbargains.com/specials.html</code>,就只会获得这个 cookie:<br>Cookie: user=”mary17”<br>但 如 果 访 问 <code>http://www.airtravelbargains.com/autos/cheapo/index.html</code>, 就会获得这两个 cookie:<br>Cookie: user=”mary17”<br>Cookie: pref=compact<br>Cache-Control:no-cache=” Set-Cookie” 除了 cookie 以外是可以缓存的</p>
 <h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><h3 id="HTTP-首部参考"><a href="#HTTP-首部参考" class="headerlink" title="HTTP 首部参考"></a>HTTP 首部参考</h3><ul>
 <li>Accept</li>
 </ul>
@@ -589,7 +584,7 @@
              <i class="fa fa-bar-chart"></i>
            </span>
            <span class="post-meta-item-text">字数统计:</span>
-           <span class="post-count">3.8k(字)</span>
+           <span class="post-count">4k(字)</span>
 
          </span>
 
@@ -599,7 +594,7 @@
              <i class="fa fa-clock-o"></i>
            </span>
            <span class="post-meta-item-text">阅读时长:</span>
-           <span class="post-count">15(分)</span>
+           <span class="post-count">16(分)</span>
 
          </span>
 
@@ -709,9 +704,12 @@
 <li>返回 true -&gt; shouldComponentUpdate -&gt; 走上面的流程</li>
 <li>返回 false 不处理</li>
 </ul>
+<h4 id="销毁阶段"><a href="#销毁阶段" class="headerlink" title="销毁阶段"></a>销毁阶段</h4><p>componentWillUnmount<br>在这个生命周期勾子中清除定时器，防止内存泄漏</p>
 <img src="/2020/03/30/react基础学习/生命周期.png" title="生命周期">
-<h4 id="销毁阶段"><a href="#销毁阶段" class="headerlink" title="销毁阶段"></a>销毁阶段</h4><p>componentWillUnmount</p>
-<p>清除定时器，防止内存泄漏</p>
+<h4 id="react16-3-生命周期的变化"><a href="#react16-3-生命周期的变化" class="headerlink" title="react16.3 生命周期的变化"></a>react16.3 生命周期的变化</h4><p>我看的这个视频时 18 年的，在之后 react 的生命周期有一次大的变动，增加了 getDerivedStateFromProps 和 getSnapshotBeforeUpdate 这两个生命周期函数，同时 componentWillMount 和 componentWillReceiveProps 已经不推荐使用，将在未来的 react 版本中移除</p>
+<p>getDerivedStateFromProps</p>
+<p>这个生命周期会在每次 re-rendering 之前被调用<br><strong>意味着即使你的 props 没有任何变化，而是父 state 发生了变化，导致子组件发生了 re-render，这个生命周期函数依然会被调用</strong></p>
+<img src="/2020/03/30/react基础学习/生命周期新.png" title="生命周期新">
 <h3 id="PropTypes-类型检查"><a href="#PropTypes-类型检查" class="headerlink" title="PropTypes 类型检查"></a>PropTypes 类型检查</h3><ul>
 <li>array 数组</li>
 <li>bool 布尔值</li>
@@ -729,8 +727,7 @@
 <li>objectOf(PropTypes.number) 某种类型的对象</li>
 <li>shape 特定形式的对象</li>
 <li>.required 必填</li>
-<li>function(){return new Error()} 自定义验证器<!-- - create-react-app 使用命令 yarn run eject 暴露配置文件 -->
-</li>
+<li>function(){return new Error()} 自定义验证器</li>
 </ul>
 <h3 id="性能分析"><a href="#性能分析" class="headerlink" title="性能分析"></a>性能分析</h3><p>分析性能 react 可以直接使用 ?react_perf，然后使用 chrome 进行录制分析</p>
 <h3 id="避免重复渲染"><a href="#避免重复渲染" class="headerlink" title="避免重复渲染"></a>避免重复渲染</h3><p>重写 shouldComponentUpdate 减少重新渲染</p>
@@ -2005,7 +2002,7 @@
             <h2 id="chapter3-流，元素与基本尺寸"><a href="#chapter3-流，元素与基本尺寸" class="headerlink" title="chapter3 流，元素与基本尺寸"></a>chapter3 流，元素与基本尺寸</h2><p>外在盒子与内在盒子-外在盒子负责元素是可以一行显示,还是只能换行显示;内在盒子负责宽高、内容呈现什么的。内在盒子专业的名称是“容器盒子”。y 属性值是 inline-block 的元素既能和图文一行显示,又能直接设置 width/height。</p>
 <p>width:auto 的四种表现</p>
 <ul>
-<li>充分利用可用空间，即 fill-available， 4 。比方说,&lt;div&gt;、 &lt;p&gt;这些元素的宽度默认是 100% 于父级容器的。</li>
+<li>充分利用可用空间，即 fill-available， 4 。比方说,<code>&lt;div&gt;</code>;、 <code>&lt;p&gt;</code>;这些元素的宽度默认是 100% 于父级容器的。</li>
 <li>收缩与包裹。典型代表就是浮动、绝对定位、inline-block 元素或 table 元素,<br>英文称为 shrink-to-fit,可简单理解为“包裹性”。CSS3 中的 fit-content 指的就是这种宽度表现。</li>
 <li>收缩到最小。这个最容易出现在 table-layout 为 auto 的表格中,</li>
 <li>超出容器限制。除非有明确的 width 相关设置,否则上面 3 种情况尺寸都不会主动<br>超过父级容器宽度的,但是存在一些特殊情况。例如,内容很长的连续的英文和数字,或者内联<br>元素被设置了 white-space:nowarp。</li>
@@ -2030,12 +2027,12 @@
 <p>max-*初始值是 none，min-*初始值是 auto</p>
 <p>数值变化无动画，需要设置初始值为 0</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.box</span> &#123;</span><br><span class="line">  <span class="attribute">min-height</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">transition</span>: min-height <span class="number">0.3s</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.box</span><span class="selector-pseudo">:hover</span> &#123;</span><br><span class="line">  <span class="attribute">min-height</span>: <span class="number">300px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>max-*会覆盖 !important 的 width/height</p>
+<p><code>max-*</code>会覆盖 !important 的 width/height</p>
 <p>::selection 选择器匹配被用户选取的选取是部分。即对选中文本的操作。<br>只能向 ::selection 选择器应用少量 CSS 属性：color、background、cursor 以及 outline。</p>
-<h2 id="chapter4-盒尺寸四大家族"><a href="#chapter4-盒尺寸四大家族" class="headerlink" title="chapter4 盒尺寸四大家族"></a>chapter4 盒尺寸四大家族</h2><h3 id="content-与替换元素"><a href="#content-与替换元素" class="headerlink" title="content 与替换元素"></a>content 与替换元素</h3><p>&lt;img&gt;、&lt;object&gt;、&lt;video&gt;、&lt;iframe&gt;或者表单元素&lt;textarea&gt;和&lt;input&gt;都是典型的替换元素</p>
+<h2 id="chapter4-盒尺寸四大家族"><a href="#chapter4-盒尺寸四大家族" class="headerlink" title="chapter4 盒尺寸四大家族"></a>chapter4 盒尺寸四大家族</h2><h3 id="content-与替换元素"><a href="#content-与替换元素" class="headerlink" title="content 与替换元素"></a>content 与替换元素</h3><p><code>&lt;img&gt;</code>、<code>&lt;object&gt;</code>、<code>&lt;video&gt;</code>、<code>&lt;iframe&gt;</code>或者表单元素<code>&lt;textarea&gt;</code>和<code>&lt;input&gt;</code>都是典型的替换元素</p>
 <p>vertical-align 在替换元素的基线定义为元素的下边缘</p>
-<p>&lt;select&gt; 也是替换元素</p>
-<p>&lt;input&gt;和&lt;button&gt;按钮的区别在钮默认的 white-space 值不一样,前者是 pre,后者是 normal</p>
+<p><code>&lt;select&gt;</code> 也是替换元素</p>
+<p><code>&lt;input&gt;</code>和<code>&lt;button&gt;</code>按钮的区别在钮默认的 white-space 值不一样,前者是 pre,后者是 normal</p>
 <p>透明图片占位的替代方法</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">img</span> &#123;</span><br><span class="line">  <span class="attribute">visibility</span>: hidden;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-tag">img</span><span class="selector-attr">[src]</span> &#123;</span><br><span class="line">  <span class="attribute">visibility</span>: visible;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>对于 Firefox 浏览器,src 缺省的\<img\>不是替换元素,而是一个普通的内联元素,所以使用的就不是替换元素的尺寸规则,而是类似\<span\>的内联元素尺寸规则,宽高会无效。因此可以在 CSS 重置时加上下面一条</span\></img\></p>
@@ -2114,7 +2111,7 @@
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.father</span><span class="selector-pseudo">:after</span> &#123;</span><br><span class="line">  <span class="attribute">content</span>: <span class="string">""</span>;</span><br><span class="line">  <span class="attribute">display</span>: table;</span><br><span class="line">  <span class="attribute">clear</span>: both;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="bfc"><a href="#bfc" class="headerlink" title="bfc"></a>bfc</h3><ul>
 <li>那什么时候会触发 BFC 呢?常见的情况如下:<ul>
-<li>&lt;html&gt;根元素;</li>
+<li><code>&lt;html&gt;</code>根元素;</li>
 <li>float 的值不为 none;</li>
 <li>overflow 的值为 auto、scroll 或 hidden;</li>
 <li>display 的值为 table-cell、table-caption 和 inline-block 中的任何一个</li>
@@ -2256,7 +2253,7 @@
              <i class="fa fa-bar-chart"></i>
            </span>
            <span class="post-meta-item-text">字数统计:</span>
-           <span class="post-count">813(字)</span>
+           <span class="post-count">802(字)</span>
 
          </span>
 
@@ -2311,16 +2308,9 @@
 <h3 id="字符串函数"><a href="#字符串函数" class="headerlink" title="字符串函数"></a>字符串函数</h3><p>quote($string) //=&gt; string 加上双引号, unquote 去掉双引号</p>
 <p>str-index,str-insert,str-length,str-slice,to-upper-case,to-lower-case 顾名思义</p>
 <p>unique-id() //=&gt; string 生成随机字符串</p>
-<h3 id="颜色函数"><a href="#颜色函数" class="headerlink" title="颜色函数"></a>颜色函数</h3><p>adjust-color($color,<br>  $red: null, $green: null, $blue: null,<br>$hue: null, $saturation: null, $lightness: null,<br>  $alpha: null) //=&gt; color 综合调整</p>
-<p>adjust-hue($color, $degrees) //=&gt; color 色调调整</p>
-<p>alpha($color)<br>opacity($color) //=&gt; number 返回 alpha 通道的数值</p>
-<p>blue,red,green,hue,saturation,lightness,aplha 用法类似</p>
-<p>change-color($color,<br>  $red: null, $green: null, $blue: null,<br>$hue: null, $saturation: null, $lightness: null,<br>  $alpha: null) //=&gt; color 调整颜色参数的某一项数值</p>
-<p>complement($color) 返回补色</p>
+<h3 id="颜色函数"><a href="#颜色函数" class="headerlink" title="颜色函数"></a>颜色函数</h3><figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// color 综合调整</span></span><br><span class="line">adjust-<span class="attribute">color</span>(<span class="variable">$color</span>,<span class="variable">$red</span>: null, <span class="variable">$green</span>: null, <span class="variable">$blue</span>: null,<span class="variable">$hue</span>: null, <span class="variable">$saturation</span>: null, <span class="variable">$lightness</span>: null,<span class="variable">$alpha</span>: null)</span><br><span class="line">// color 色调调整</span><br><span class="line">adjust-hue(<span class="variable">$color</span>, <span class="variable">$degrees</span>)</span><br><span class="line">alpha(<span class="variable">$color</span>)</span><br><span class="line">opacity(<span class="variable">$color</span>)</span><br><span class="line"></span><br><span class="line">// blue,red,green,hue,saturation,lightness,aplha 用法类似</span><br><span class="line"></span><br><span class="line">//color 调整颜色参数的某一项数值</span><br><span class="line">change-color(<span class="variable">$color</span>,<span class="variable">$red</span>: null, <span class="variable">$green</span>: null, <span class="variable">$blue</span>: null,<span class="variable">$hue</span>: null, <span class="variable">$saturation</span>: null, <span class="variable">$lightness</span>: null,<span class="variable">$alpha</span>: null)</span><br><span class="line">// 返回补色</span><br><span class="line">complement(<span class="variable">$color</span>)</span><br></pre></td></tr></table></figure>
 <p>太多了就不罗列了 详见官方文档 <a href="https://sass-lang.com/documentation/functions/color" target="_blank" rel="noopener">sass 颜色函数</a></p>
-<h2 id="列表函数"><a href="#列表函数" class="headerlink" title="列表函数"></a>列表函数</h2><p>append,index,length,nth,set-nth 顾名思义</p>
-<p>join($list1, $list2, $separator: auto, $bracketed: auto) //=&gt; list 合并两个列表</p>
-<p>list-separator($list) //=&gt; unquoted string 返回列表的分隔符</p>
+<h2 id="列表函数"><a href="#列表函数" class="headerlink" title="列表函数"></a>列表函数</h2><figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">append,index,length,nth,set-nth 这些函数顾名思义</span><br><span class="line"><span class="comment">// 合并两个列表</span></span><br><span class="line">join(<span class="variable">$list1</span>, <span class="variable">$list2</span>, <span class="variable">$separator</span>: auto, <span class="variable">$bracketed</span>: auto)</span><br><span class="line">// unquoted string 返回列表的分隔符</span><br><span class="line">list-separator(<span class="variable">$list</span>)</span><br></pre></td></tr></table></figure>
 <h2 id="映射函数"><a href="#映射函数" class="headerlink" title="映射函数"></a>映射函数</h2><p>略</p>
 <h2 id="选择器函数"><a href="#选择器函数" class="headerlink" title="选择器函数"></a>选择器函数</h2><p>实用性不大，略过</p>
 
@@ -2493,7 +2483,7 @@
 <p>push 的时候，如果当前分支是一个本地创建的分支，需要指定远程仓库名和分支名，用 git push origin branch_name 的格式，而不能只用 git push；或者可以通过 git config 修改 push.default 来改变 push 时的行为逻辑。</p>
 <p>push 的时候之后上传当前分支，并不会上传 HEAD；远程仓库的 HEAD 是永远指向默认分支（即 master）的。</p>
 <h2 id="merge"><a href="#merge" class="headerlink" title="merge"></a>merge</h2><p>从目标 commit 和当前 commit （即 HEAD 所指向的 commit）分叉的位置起，把目标 commit 的路径上的所有 commit 的内容一并应用到当前 commit，然后自动生成一个新的 commit。</p>
-<h2 id="fast-forward"><a href="#fast-forward" class="headerlink" title="fast-forward"></a>fast-forward</h2><p>当你试图合并两个<br>分支时，如果顺着一个分支走下去能够到达另一个分支，那么 Git 在合并两者的时候，只会简单的将指针向前推进（指针右移），因为这种情况下的合并操作没有需要解决的分歧——这就叫做 “快进（fast-forward）</p>
+<h2 id="fast-forward"><a href="#fast-forward" class="headerlink" title="fast-forward"></a>fast-forward</h2><p>当你试图合并两个分支时，如果顺着一个分支走下去能够到达另一个分支，那么 Git 在合并两者的时候，只会简单的将指针向前推进（指针右移），因为这种情况下的合并操作没有需要解决的分歧——这就叫做 “快进（fast-forward）</p>
 <p>待填坑中</p>
 
           
@@ -2580,7 +2570,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-count">53</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
