@@ -294,6 +294,177 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/07/18/es6class的一些迷惑点/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/07/18/es6class的一些迷惑点/" itemprop="url">es6class的一些迷惑点</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-18T16:55:13+08:00">
+                2020-07-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+         <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-bar-chart"></i>
+           </span>
+           <span class="post-meta-item-text">字数统计:</span>
+           <span class="post-count">422(字)</span>
+
+         </span>
+
+      <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-clock-o"></i>
+           </span>
+           <span class="post-meta-item-text">阅读时长:</span>
+           <span class="post-count">1(分)</span>
+
+         </span>
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>今天在看 ts 的装饰器文档的时候，对于类装饰器的一节的官方示例感到非常迷惑</p>
+<p>类装饰器接受一个参数，为类的 constructor，你可以观察，修改或者替换它。如果类装饰器返回了一个值，他会用提供的类的构造函数替换类的声明</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">classDecorator</span>&lt;<span class="title">T</span> <span class="title">extends</span> </span>&#123;<span class="keyword">new</span>(...args:<span class="built_in">any</span>[]):&#123;&#125;&#125;&gt;(<span class="keyword">constructor</span>:T) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">class</span> <span class="keyword">extends</span> <span class="keyword">constructor</span> &#123;</span><br><span class="line">        newProperty = <span class="string">"new property"</span>;</span><br><span class="line">        hello = <span class="string">"override"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最让我迷惑的是 <strong>return class extends constructor</strong>，为什么可以继承构造函数？要求的返回值是构造函数，但是这里返回的是一个类的声明？</p>
+<p>说到底还是自己对于 es6 的 class 理解不够透彻。我又去看了一下阮一峰的es6入门的 class 章节，上面说明 ES6 的 class 只是 es5 对象原型写法的语法糖。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point</span> </span>&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typeof</span> Point <span class="comment">// "function"</span></span><br><span class="line">Point === Point.prototype.constructor <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+<p>看到这里，感觉到就豁然开朗了。类名变量实际上就是类的构造函数，extends 类名变量 和 extends 构造函数的写法实质上是等价。</p>
+<p>es6 类声明语法的返回值也是类的构造函数，所以返回匿名类的语法也可以理解了。</p>
+<p>同时因为继承的是构造函数，所以 extends 的可以是一个构造函数<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">A</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">&#125;</span><br><span class="line">A.prototype.test = <span class="number">1</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> <span class="keyword">extends</span> <span class="title">A</span></span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">new</span> B().test)</span><br><span class="line"><span class="comment">// 输出1</span></span><br></pre></td></tr></table></figure></p>
+<p>需要注意的一点是，要获取类的构造函数，应该使用 类名.prototype.constructor，我一直以为是 类名.constructor。类名变量是构造函数，实际上构造函数的 constructor 是函数原型对象的 constructor。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/07/05/对于prop的sync修饰符的一次探究/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2139,223 +2310,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/04/04/http权威指南笔记/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="jiezi19971225">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Jiez19971225‘s Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/04/04/http权威指南笔记/" itemprop="url">http权威指南</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-04T22:37:18+08:00">
-                2020-04-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/前端/" itemprop="url" rel="index">
-                    <span itemprop="name">前端</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-         <span class="post-time">
-	   &nbsp; | &nbsp;
-           <span class="post-meta-item-icon">
-             <i class="fa fa-bar-chart"></i>
-           </span>
-           <span class="post-meta-item-text">字数统计:</span>
-           <span class="post-count">1.8k(字)</span>
-
-         </span>
-
-      <span class="post-time">
-	   &nbsp; | &nbsp;
-           <span class="post-meta-item-icon">
-             <i class="fa fa-clock-o"></i>
-           </span>
-           <span class="post-meta-item-text">阅读时长:</span>
-           <span class="post-count">6(分)</span>
-
-         </span>
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>记录一下自己不太清楚的知识点</p>
-<h2 id="第二章-URL-与资源"><a href="#第二章-URL-与资源" class="headerlink" title="第二章 URL 与资源"></a>第二章 URL 与资源</h2><h3 id="URL"><a href="#URL" class="headerlink" title="URL"></a>URL</h3><p>url 的语法 \<scheme\>://\<user\>:\&lt;password>@\<host\>:\<port\>/\<path\>;\<params\>?\<query\>#\<frag\></frag\></query\></params\></path\></port\></host\></user\></scheme\></p>
-<p>基础 URL HTML 标记\<base\>，可以设定基础 URL</base\></p>
-<p>URL 编码机制 urlencode 通过转义表示不安全的字符 包含一个百分号(%)，后面跟着两个表示字符 ASCII 码的十六进制数</p>
-<h2 id="第三章-HTTP-报文"><a href="#第三章-HTTP-报文" class="headerlink" title="第三章 HTTP 报文"></a>第三章 HTTP 报文</h2><h3 id="报文的组成"><a href="#报文的组成" class="headerlink" title="报文的组成"></a>报文的组成</h3><p>组成 对报文进行描述的其实航 包含属性的首部块 可选的包含数据的主题 body<br>一般只有 PUT 和 POST 方法包含 body<br>PUT 方法的语义是让服务器用请求的主体部分来创建一个由所请求的 URL 命名的新文档，如果那个 URL 已经存在的话，就用这个主题来替代它</p>
-<p>Http 协议中的 Header 与 Body。Header 的每行最后要加\r\n。Header 与 Body 之间要用\r\n 隔开。Body 后无需加\r\n。</p>
-<p>ACSII 码中</p>
-<p>‘\n’ 10 换行</p>
-<p>‘\r’ 13 回车</p>
-<p>也可以表示为’\x0a’和’\x0d’.(16 进制)</p>
-<p>示例：HTTP 开始部分为 header，html 部分为 body。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK\r\n</span><br><span class="line">Content-Encoding: gzip\r\n</span><br><span class="line">Content-Type: text/xml\r\n</span><br><span class="line">Content-Length: 399\r\n</span><br><span class="line">Connection: keep-alive\r\n</span><br><span class="line">X-Varnish-Cache: HIT\r\n</span><br><span class="line">X-Varnish-Cache-Hits: 1241\r\n</span><br><span class="line">\r\n</span><br><span class="line">&lt;html.....&lt;/html&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="状态码"><a href="#状态码" class="headerlink" title="状态码"></a>状态码</h3><ul>
-<li>101 Switching Protocols</li>
-<li>300 Multiple Choices 请求一个实际指向多个资源的 URL</li>
-<li>301 Moved Permanently 响应的 Location 首部包含资源现在所处的 URL</li>
-<li>302 Found 响应的 Location 首部的 URL 来临时定位资源 HTTP 1.0</li>
-<li>303 See Other HTTP 1.1</li>
-<li>307 Temporary Redirect POST 不会转为 GET</li>
-</ul>
-<p>当 HTTP/1.0 客户端发起一个 POST 请求,并在响应中收到 302 重定向状态码时,它会接受 Location 首部的重定向 URL,并向那个 URL 发起一个 GET 请求(而不会像原始请求中那样发起 POST 请求)。<br>问题出在 HTTP/1.1。HTTP/1.1 规范使用 303 状态码来实现同样的行为(服务器发送 303 状态码来重定向客户端的 POST 请求,在它后面跟上一个 GET 请求)。<br>为了避开这个问题,HTTP/1.1 规范指出,对于 HTTP/1.1 客户端,用 307 状态码取代 302 状态码来进行临时重定向。这样服务器就可以将 302 状态码保留起来,为 HTTP/1.0 客户端使用了。</p>
-<h3 id="Keep-Alive"><a href="#Keep-Alive" class="headerlink" title="Keep-Alive"></a>Keep-Alive</h3><p>在 HTTP1.1 中默认开启，可以用 Connection:close 关闭，在 HTTP1.0 默认关闭，通过 Connection:keep-alive 开启</p>
-<p>哑代理问题，所谓哑代理，是不会处理 Keep-Alive 连接，而是直接将其转发的代理。<br>在网景的变通做法是,浏览器会向代理发送非标准的 Proxy-Connection 扩展首部,而不是官方支持的著名的 Connection 首部。如果代理是盲中继,它会将无意义的 Proxy-Connection 首部转发给 Web 服务器,服务器会忽略此首部,不会带<br>来任何问题。但如果代理是个聪明的代理(能够理解持久连接的握手动作),就用一个 Connection 首部取代无意义的 Proxy-Connection 首部,然后将其发送给服务器,以收到预期的效果。</p>
-<p>HTTP1.1 会使用管道优化，将一连串请求放入管道中，但是对于 POST 这个样非幂等的请求不应该放在管道中</p>
-<h3 id="代理和网关的区别"><a href="#代理和网关的区别" class="headerlink" title="代理和网关的区别"></a>代理和网关的区别</h3><p>严格来说,代理连接的是两个或多个使用相同协议的应用程序,而网关连接的则是两个或多个使用不同协议的端点。网关扮演的是“协议转换器”的角色,即使客户端和服务器使用的是不同的协议,客户端也可以通过它完成与服务器之间的事务处理。</p>
-<h3 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h3><p>缓存有两种，强缓存和协商缓存<br>强缓存使用 Expired 和 Cache Control 字段，不需要向服务器通信<br>协商缓存需要携带协商字段与服务器通信，如果服务器返回 304 NOT Modified 信息，就使用缓存中的资源，并在相应中插入新鲜度信息<br>no-store 不缓存<br>no-cache 在与服务器进行新鲜度验证前不使用缓存</p>
-<h4 id="代理缓存"><a href="#代理缓存" class="headerlink" title="代理缓存"></a>代理缓存</h4><h5 id="为什么要有代理缓存"><a href="#为什么要有代理缓存" class="headerlink" title="为什么要有代理缓存"></a>为什么要有代理缓存</h5><p>对于源服务器，它是有缓存的，如 Redis，Memcache。但对于 HTTP 缓存来说，如果每次客户端缓存失效都从源服务器获取，那么给源服务器的压力是很大的。<br>由此引入了<strong>缓存代理</strong>机制，让代理服务器接管一部分的服务端 HTTP 缓存。客户端缓存过期后就近到代理服务器缓存中获取，代理缓存过期了才请求源服务器。</p>
-<p>缓存代理的控制分为两部分，一部分是源服务器的控制，一部分是客户端的控制。</p>
-<h5 id="源服务器的缓存控制"><a href="#源服务器的缓存控制" class="headerlink" title="源服务器的缓存控制"></a>源服务器的缓存控制</h5><h6 id="private-和-public"><a href="#private-和-public" class="headerlink" title="private 和 public"></a>private 和 public</h6><p>在源服务器的响应头中，会加上 Cache-Control 字段进行缓存的控制，它的值中可以加入 private 或 public 表示是否允许代理服务器缓存。public 表示允许。</p>
-<h6 id="proxy-revalidate"><a href="#proxy-revalidate" class="headerlink" title="proxy-revalidate"></a>proxy-revalidate</h6><p>must-revalidate 的意思是<strong>客户端</strong>缓存过期就去源服务器获取，而<strong>proxy-revalidate</strong>表示<strong>代理服务器</strong>的缓存过期后到源服务器获取</p>
-<p>前者使用范围主体更广，后者不应用于用户代理的本地缓存，应用在缓存服务器上</p>
-<h6 id="s-maxage"><a href="#s-maxage" class="headerlink" title="s-maxage"></a>s-maxage</h6><p>s 是 share 的意思，限定了缓存在代理服务器中可以存放多久，和限制客户端缓存时间的 max-age 并不冲突</p>
-<h5 id="客户端的缓存控制"><a href="#客户端的缓存控制" class="headerlink" title="客户端的缓存控制"></a>客户端的缓存控制</h5><h6 id="客户端宽容设置"><a href="#客户端宽容设置" class="headerlink" title="客户端宽容设置"></a>客户端宽容设置</h6><p>在客户端的请求中，可以加入这两个字段，来对代理服务器上的缓存进行宽容和限制操作</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">max-stale:5</span><br></pre></td></tr></table></figure>
-<p>表示客户端到代理服务器上拿缓存的时候，只要过期时间在 5s 之内，依然可以从代理中获取</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">min-fresh:5</span><br></pre></td></tr></table></figure>
-<p>表示客户端到代理服务器上拿缓存的时候，一定要在过期前 5s 之前的时间内</p>
-<h6 id="only-if-cached"><a href="#only-if-cached" class="headerlink" title="only-if-cached"></a>only-if-cached</h6><p>表示客户端只会接受代理缓存，而不会接受源服务器的响应，如果代理缓存无效，则直接返回 504</p>
-<h3 id="安全"><a href="#安全" class="headerlink" title="安全"></a>安全</h3><p>CSRF Cross Site Request Forgery<br>点击劫持 设置 X-FRAME-OPTIONS</p>
-<h3 id="cookie"><a href="#cookie" class="headerlink" title="cookie"></a>cookie</h3><ul>
-<li>cookie 的域名属性</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set-cookie: user=&quot;mary17&quot;; domain=&quot;airtravelbargains.com&quot;</span><br></pre></td></tr></table></figure>
-<p>将 cookie user=”mary17” 发送给域 “.airtravelbargains.com” 中的所有站点:</p>
-<ul>
-<li>cookie 的路径属性<br>cookie 规范允许用户将 cookie 与部分 Web 站点关联起来</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set-cookie: pref=compact; domain=&quot;airtravelbargains.com&quot;; path=/autos/</span><br></pre></td></tr></table></figure>
-<p>如果用户访问 <a href="http://www.airtravelbargains.com/specials.html,就只会获得这个" target="_blank" rel="noopener">http://www.airtravelbargains.com/specials.html,就只会获得这个</a> cookie:<br>Cookie: user=”mary17”<br>但 如 果 访 问 <a href="http://www.airtravelbargains.com/autos/cheapo/index.html," target="_blank" rel="noopener">http://www.airtravelbargains.com/autos/cheapo/index.html,</a> 就 会 获 得 这<br>两个 cookie:<br>Cookie: user=”mary17”<br>Cookie: pref=compact<br>Cache-Control:no-cache=” Set-Cookie” 除了 cookie 以外是可以缓存的</p>
-<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><h3 id="HTTP-首部参考"><a href="#HTTP-首部参考" class="headerlink" title="HTTP 首部参考"></a>HTTP 首部参考</h3><ul>
-<li>Accept</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Accept */* 表示所有类型</span><br><span class="line">Accept: text/*, image/* 图片</span><br><span class="line">Accept: text/*, image/gif, image/jpeg; q=1 图片 q表示质量</span><br></pre></td></tr></table></figure>
-<ul>
-<li>Age HTTP/1.1 缓存必须在发送的每条响应中都包含一个 Age 首部</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2406,7 +2360,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">51</span>
+                  <span class="site-state-item-count">52</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2428,7 +2382,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">48</span>
+                  <span class="site-state-item-count">49</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

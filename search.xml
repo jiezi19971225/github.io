@@ -1,6 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>es6class的一些迷惑点</title>
+    <url>/2020/07/18/es6class%E7%9A%84%E4%B8%80%E4%BA%9B%E8%BF%B7%E6%83%91%E7%82%B9/</url>
+    <content><![CDATA[<p>今天在看 ts 的装饰器文档的时候，对于类装饰器的一节的官方示例感到非常迷惑</p>
+<p>类装饰器接受一个参数，为类的 constructor，你可以观察，修改或者替换它。如果类装饰器返回了一个值，他会用提供的类的构造函数替换类的声明</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">classDecorator</span>&lt;<span class="title">T</span> <span class="title">extends</span> </span>&#123;<span class="keyword">new</span>(...args:<span class="built_in">any</span>[]):&#123;&#125;&#125;&gt;(<span class="keyword">constructor</span>:T) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">class</span> <span class="keyword">extends</span> <span class="keyword">constructor</span> &#123;</span><br><span class="line">        newProperty = <span class="string">"new property"</span>;</span><br><span class="line">        hello = <span class="string">"override"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最让我迷惑的是 <strong>return class extends constructor</strong>，为什么可以继承构造函数？要求的返回值是构造函数，但是这里返回的是一个类的声明？</p>
+<p>说到底还是自己对于 es6 的 class 理解不够透彻。我又去看了一下阮一峰的es6入门的 class 章节，上面说明 ES6 的 class 只是 es5 对象原型写法的语法糖。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point</span> </span>&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typeof</span> Point <span class="comment">// "function"</span></span><br><span class="line">Point === Point.prototype.constructor <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+<p>看到这里，感觉到就豁然开朗了。类名变量实际上就是类的构造函数，extends 类名变量 和 extends 构造函数的写法实质上是等价。</p>
+<p>es6 类声明语法的返回值也是类的构造函数，所以返回匿名类的语法也可以理解了。</p>
+<p>同时因为继承的是构造函数，所以 extends 的可以是一个构造函数<br><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">A</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">&#125;</span><br><span class="line">A.prototype.test = <span class="number">1</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> <span class="keyword">extends</span> <span class="title">A</span></span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">new</span> B().test)</span><br><span class="line"><span class="comment">// 输出1</span></span><br></pre></td></tr></table></figure></p>
+<p>需要注意的一点是，要获取类的构造函数，应该使用 类名.prototype.constructor，我一直以为是 类名.constructor。类名变量是构造函数，实际上构造函数的 constructor 是函数原型对象的 constructor。</p>
+]]></content>
+      <categories>
+        <category>javascript</category>
+      </categories>
+      <tags>
+        <tag>es6</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>对于prop的sync修饰符的一次探究</title>
     <url>/2020/07/05/%E5%AF%B9%E4%BA%8Eprop%E7%9A%84sync%E4%BF%AE%E9%A5%B0%E7%AC%A6%E7%9A%84%E4%B8%80%E6%AC%A1%E6%8E%A2%E7%A9%B6/</url>
     <content><![CDATA[<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>业务中多处使用了 antd-vue 的文件上传组件，因此我封装了一个组件。关键的 fileList 属性我做了双向的绑定。</p>
