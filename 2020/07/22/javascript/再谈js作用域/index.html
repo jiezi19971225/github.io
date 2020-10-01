@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+<meta name="baidu-site-verification" content="5IfwMCE5hH">
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="javascript,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="缘起写这篇文章的契机，是最近有看 react 源码的想法。先是看了这篇文章 如何阅读大型前端开源项目的源码 学习了一波姿势，然后开始下载 react 工程鼓捣起来。源码打断点，构建 umd 代码，然后看函数调用栈，执行到这一步，看到了这个页面，发现都是我不熟悉的东西。比如这个 Scope，虽然大体知道是作用域，但是具体是按照什么规则得到的，就不是很清楚了。所以决定先搞清一下 js 的作用域问题。">
+<meta name="keywords" content="javascript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="再谈js作用域">
+<meta property="og:url" content="http://www.jiezi19971225.cn/2020/07/22/javascript/再谈js作用域/index.html">
+<meta property="og:site_name" content="Jiez19971225‘s Blog">
+<meta property="og:description" content="缘起写这篇文章的契机，是最近有看 react 源码的想法。先是看了这篇文章 如何阅读大型前端开源项目的源码 学习了一波姿势，然后开始下载 react 工程鼓捣起来。源码打断点，构建 umd 代码，然后看函数调用栈，执行到这一步，看到了这个页面，发现都是我不熟悉的东西。比如这个 Scope，虽然大体知道是作用域，但是具体是按照什么规则得到的，就不是很清楚了。所以决定先搞清一下 js 的作用域问题。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://www.jiezi19971225.cn/2020/07/22/javascript/再谈js作用域/这都啥玩意啊.png">
+<meta property="og:image" content="http://www.jiezi19971225.cn/2020/07/22/javascript/再谈js作用域/预编译1.png">
+<meta property="og:image" content="http://www.jiezi19971225.cn/2020/07/22/javascript/再谈js作用域/预编译2.png">
+<meta property="og:image" content="http://www.jiezi19971225.cn/2020/07/22/javascript/再谈js作用域/预编译3.png">
+<meta property="og:image" content="http://www.jiezi19971225.cn/2020/07/22/javascript/再谈js作用域/闭包1.png">
+<meta property="og:image" content="http://www.jiezi19971225.cn/2020/07/22/javascript/再谈js作用域/闭包2.png">
+<meta property="og:updated_time" content="2020-10-01T11:52:58.601Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="再谈js作用域">
+<meta name="twitter:description" content="缘起写这篇文章的契机，是最近有看 react 源码的想法。先是看了这篇文章 如何阅读大型前端开源项目的源码 学习了一波姿势，然后开始下载 react 工程鼓捣起来。源码打断点，构建 umd 代码，然后看函数调用栈，执行到这一步，看到了这个页面，发现都是我不熟悉的东西。比如这个 Scope，虽然大体知道是作用域，但是具体是按照什么规则得到的，就不是很清楚了。所以决定先搞清一下 js 的作用域问题。">
+<meta name="twitter:image" content="http://www.jiezi19971225.cn/2020/07/22/javascript/再谈js作用域/这都啥玩意啊.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.jiezi19971225.cn/2020/07/22/javascript/再谈js作用域/">
+
+
+
+
+
+  <title>再谈js作用域 | Jiez19971225‘s Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Jiez19971225‘s Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">做自己爱做的事</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/07/22/javascript/再谈js作用域/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">再谈js作用域</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-22T02:56:36+08:00">
+                2020-07-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+         <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-bar-chart"></i>
+           </span>
+           <span class="post-meta-item-text">字数统计:</span>
+           <span class="post-count">1.6k(字)</span>
+
+         </span>
+
+      <span class="post-time">
+	   &nbsp; | &nbsp;
+           <span class="post-meta-item-icon">
+             <i class="fa fa-clock-o"></i>
+           </span>
+           <span class="post-meta-item-text">阅读时长:</span>
+           <span class="post-count">5(分)</span>
+
+         </span>
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="缘起"><a href="#缘起" class="headerlink" title="缘起"></a>缘起</h2><p>写这篇文章的契机，是最近有看 react 源码的想法。先是看了这篇文章 <a href="https://juejin.im/post/5afe3735518825426539afce" target="_blank" rel="noopener">如何阅读大型前端开源项目的源码</a> 学习了一波姿势，然后开始下载 react 工程鼓捣起来。源码打断点，构建 umd 代码，然后看函数调用栈，执行到这一步，看到了这个页面，发现都是我不熟悉的东西。比如这个 Scope，虽然大体知道是作用域，但是具体是按照什么规则得到的，就不是很清楚了。所以决定先搞清一下 js 的作用域问题。</p>
+<img src="/2020/07/22/javascript/再谈js作用域/这都啥玩意啊.png" title="这都啥玩意啊">
+<p>js 的作用域，是一个老生常谈的问题了，也是面试常考的内容。以前也通过看 js 高程，你不知道的 js 这些书对此有过据较为深入的学习，刷一些面试题的时候也背了一些“标准答案”，但是时间一长，也忘掉大半了。现在要我真说道说道，大概是说不出个所以然来的。今天搜索相关信息时看到这个博客的一一系列博文讲的真不错 <a href="https://blog.csdn.net/q1056843325/category_9267514.html" target="_blank" rel="noopener">https://blog.csdn.net/q1056843325/category_9267514.html</a> ，自己对这一块其实挺欠缺的。纸上得来终觉浅，觉知此事要躬行。这次主要借鉴这位博主的文章内容，借助 Chrome 的开发者工具好好探究一下这个问题。</p>
+<h2 id="探究"><a href="#探究" class="headerlink" title="探究"></a>探究</h2><h3 id="预编译，变量提升与-let，const"><a href="#预编译，变量提升与-let，const" class="headerlink" title="预编译，变量提升与 let，const"></a>预编译，变量提升与 let，const</h3><p>脚本执行时，js 引擎会做下面三件事。</p>
+<ol>
+<li>语法分析 引擎检查代码是否包含低级语法错误</li>
+<li>预编译 在内存中开辟一些空间，存放变量与函数</li>
+<li>解释执行</li>
+</ol>
+<p>语法分析很简单，就是引擎检查你的代码有没有什么低级的语法错误<br>解释执行顾名思义便是执行代码了<br>预编译简单理解就是在内存中开辟一些空间，存放一些变量与函数</p>
+<h4 id="预编译的发生时间"><a href="#预编译的发生时间" class="headerlink" title="预编译的发生时间"></a>预编译的发生时间</h4><p>我之前也以为预编译主要就是做了变量提升这件工作，也就是在脚本解释执行前执行一次。但实际上，在函数执行前都会进行预编译。</p>
+<p>先看一下我之前理解的预编译，在 v8 引擎中时怎么做的。</p>
+<img src="/2020/07/22/javascript/再谈js作用域/预编译1.png" title="预编译1">
+<p>在脚本第一行执行前插入了 debugger 语句，这个时候预编译已经完成。我们看到 Scope 的 Global 作用域（浏览器中的 window 对象）中已经有了以下的属性，符合我们的认知，对于 let 声明的属性，预编译的时候是没有处理的。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  a:<span class="literal">undefined</span>,</span><br><span class="line">  b:ƒ b(y),</span><br><span class="line">  c: <span class="literal">undefined</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后继续执行，直到执行完了，我们看到 Scope 中多了一个 Script 的标签，其中保存了 aa 的值。这个按我的理解，也可以把它当作全局作用域，与 Global 不同的是，你没法在 window 对象上访问它。</p>
+<img src="/2020/07/22/javascript/再谈js作用域/预编译2.png" title="预编译2">
+<p>接下来就要执行函数了，在此之前，需要插入一点另外的知识</p>
+<p><strong>函数的 <code>[[Scope]]</code> 属性</strong><br>函数是特殊的可执行对象。既然是对象，就可以拥有属性。函数中存在这一个内部属性<code>[[Scope]]</code>（我们不能使用，供 js 引擎使用）函数被创建时，这个内部属性就会包含函数被创建的作用域中对象的集合。这个集合呈链式链接，被称为函数的作用域链。按照我的理解，这和词法作用域是一个概念。这个 <code>[[Scope]]</code>是会随着代码执行动态变化的。在这个例子中，b 函数的 <code>[[Scope]]</code> 一开始是没有 Script 的，在 let 声明执行后，Script 就被添加上了。</p>
+<p><strong>函数的执行环境</strong><br>在函数执行时，会创建一个叫做执行环境/执行上下文（execution context）的内部对象，它定义了一个函数执行时的环境。函数每次执行时的执行环境独一无二，多次调用函数就多次创建执行环境，并且函数执行完毕后，执行环境就会被销毁，执行环境有自己的作用域链，用于解析标识符。</p>
+<p><code>[[Scope]]</code>和执行期上下文虽然保存的都是作用域链，但不是同一个东西。<code>[[Scope]]</code>属性是函数创建时产生的，会一直存在,而执行上下文在函数执行时产生，函数执行结束便会销毁。</p>
+<p><strong>预编译发生在每次函数执行前这个创建执行上下文的过程</strong><br>预编译生成了下图中的 Local 作用域。而 Script 和 Global 作用域，则是函数属性 <code>[[Scope]]</code>的拷贝。<br><img src="/2020/07/22/javascript/再谈js作用域/预编译3.png" title="预编译3"></p>
+<p>这个博主的文章，里面多次提到了 AO 活动对象的概念，实际上这是 ES3 的说法了，还是以开发者工具的展现为准，这样更好理解一点。<br>至此，关于预编译的问题解决。</p>
+<p><strong>性能优化</strong></p>
+<p>js 引擎查找作用域链是为了解析标识符，变量在执行环境作用域链的位置越深，读写速度就越慢，因此应该多用局部变量（缓存）。</p>
+<h3 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h3><p>以前看过这样一个对于闭包的解释。当在一个函数中返回一个函数的时候，这个被返回的时候就可以保有当前函数作用域的变量的引用，这就形成了闭包。</p>
+<p>但这样的理解是不充分的。实际上，只要是在函数的作用域内定义了函数，这个被定义的函数就具有闭包作用域。</p>
+<img src="/2020/07/22/javascript/再谈js作用域/闭包1.png" title="闭包1">
+<p>因此闭包的一大用途，就是实现私有变量。我们知道函数如果返回一个对象，在对它进行构造调用时，结果返回的就是该对象。不过使用这种方式，this 赋值的属性和原型绑定就失效了。</p>
+<img src="/2020/07/22/javascript/再谈js作用域/闭包2.png" title="闭包2">
+<p>可以看到，当执行以这种方式返回的函数时，可以通过闭包的方式访问执行构造调用时的 Local 作用域。<br>再回想一下之前说过的，函数每次执行时的执行环境独一无二，多次调用函数就多次创建执行环境，和 settimeout 打印的经典问题，顿时感觉豁然开朗了啊。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/javascript/" rel="tag"># javascript</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/07/18/javascript/es6class的一些迷惑点/" rel="next" title="es6class的一些迷惑点">
+                <i class="fa fa-chevron-left"></i> es6class的一些迷惑点
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/10/01/java/javase/" rel="prev" title="java基础">
+                java基础 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">jiezi19971225</p>
+              <p class="site-description motion-element" itemprop="description">记录编程学习路上的点滴</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">65</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">50</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#缘起"><span class="nav-number">1.</span> <span class="nav-text">缘起</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#探究"><span class="nav-number">2.</span> <span class="nav-text">探究</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#预编译，变量提升与-let，const"><span class="nav-number">2.1.</span> <span class="nav-text">预编译，变量提升与 let，const</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#预编译的发生时间"><span class="nav-number">2.1.1.</span> <span class="nav-text">预编译的发生时间</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#闭包"><span class="nav-number">2.2.</span> <span class="nav-text">闭包</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jiezi19971225</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+  <div><img src="https://static.dy208.cn/o_1dfilp8ruo521thr1hvf18ji17soa.png">
+<a href="http://www.beian.miit.gov.cn/" style="color:#f72b07" target="_blank">皖ICP备17001385号-1</a></div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>
