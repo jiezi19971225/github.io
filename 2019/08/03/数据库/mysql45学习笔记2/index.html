@@ -382,7 +382,7 @@
       
 
       
-        <h4 id="order-by-是怎么工作的"><a href="#order-by-是怎么工作的" class="headerlink" title="order by 是怎么工作的"></a>order by 是怎么工作的</h4><ul>
+        <h4><span id="order-by-是怎么工作的">order by 是怎么工作的</span></h4><ul>
 <li>mysql 的外部排序采用归并排序，将排序数据分成多个保存到临时文件中，最后合并为一个大文件</li>
 <li>mysql 有两种排序方式 全字段排序和 rowid 排序，mysql 的设计思想是，如果内存够，就要多利用内存，尽量减少磁盘访问</li>
 <li>rc 模式下 for update 对所有行加了 X 锁 没有上 gap 锁 rr 模式下，也加了 X 锁</li>
@@ -562,7 +562,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#order-by-是怎么工作的"><span class="nav-number">1.</span> <span class="nav-text">order by 是怎么工作的</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#null"><span class="nav-number">1.</span> <span class="nav-text">order by 是怎么工作的</span></a></li></ol></div>
             
 
           </div>

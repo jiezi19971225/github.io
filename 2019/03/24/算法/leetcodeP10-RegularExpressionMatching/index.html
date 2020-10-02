@@ -405,8 +405,8 @@
 
       
         <p>这一题最开始想到模拟，也想到了匹配的贪婪问题，感觉题目可能不要求那么多，结果是 WA，看到讨论区 PO 出的一份代码，使用了动态规划，想了一下确实改用 DP，此题确有一定难度，在此记录一下解法。</p>
-<h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h3><p>给你一个字符串 s 和字符串 p，s 只包含英文小写字母，p 只包含英文小写字母和 ‘.’ 或 ‘*‘，实现一个支持元字符 ‘.’ 和 ‘*‘的正则匹配</p>
-<h3 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h3><p>设 dp[x][y]表示取字符串 s 前 x 个字符和模式串 p 前 y 个字符是否能够完全匹配，为一个 bool 值<br>初始状态 dp[0][0] = true，若 p 串以”a*b*c*“的形式开头，则 dp[0][2],dp[0][4],dp[0][6]也为 true，显示这种状态是匹配的<br>dp 的转移过程为<br>若 s[i-1] == p[j-1] || p[j-1] == ‘.’，dp[i][j] = dp[i][j] || dp[i-1][j-1]<br>若 p[j-1] == ‘*‘ ，方程至多可从一下三种状态转移</p>
+<h3><span id="题目描述">题目描述</span></h3><p>给你一个字符串 s 和字符串 p，s 只包含英文小写字母，p 只包含英文小写字母和 ‘.’ 或 ‘*‘，实现一个支持元字符 ‘.’ 和 ‘*‘的正则匹配</p>
+<h3><span id="解题思路">解题思路</span></h3><p>设 dp[x][y]表示取字符串 s 前 x 个字符和模式串 p 前 y 个字符是否能够完全匹配，为一个 bool 值<br>初始状态 dp[0][0] = true，若 p 串以”a*b*c*“的形式开头，则 dp[0][2],dp[0][4],dp[0][6]也为 true，显示这种状态是匹配的<br>dp 的转移过程为<br>若 s[i-1] == p[j-1] || p[j-1] == ‘.’，dp[i][j] = dp[i][j] || dp[i-1][j-1]<br>若 p[j-1] == ‘*‘ ，方程至多可从一下三种状态转移</p>
 <ul>
 <li>dp[i][j] = dp[i][j] || dp[i][j-2]，*可以匹配 0 个多个，因此总可以从该状态转移</li>
 <li>若 s[i-1] == p[j-2] || int(p[j-2]) == ‘.’，即匹配 “?*“形式，可采用贪婪与非贪婪策略<ul>
@@ -590,7 +590,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#题目描述"><span class="nav-number">1.</span> <span class="nav-text">题目描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题思路"><span class="nav-number">2.</span> <span class="nav-text">解题思路</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-number">1.</span> <span class="nav-text">题目描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-number">2.</span> <span class="nav-text">解题思路</span></a></li></ol></div>
             
 
           </div>

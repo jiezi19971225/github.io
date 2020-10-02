@@ -381,14 +381,14 @@
       
 
       
-        <h2 id="yarn-add"><a href="#yarn-add" class="headerlink" title="yarn add"></a>yarn add</h2><p>-E 选项明确指定版本<br>—audit 检查在已安装的包中所有已经的安全问题并输出</p>
-<h2 id="yarn-autoclean"><a href="#yarn-autoclean" class="headerlink" title="yarn autoclean"></a>yarn autoclean</h2><p>autoclean 命令通过从依赖项中删除不必要的文件和文件夹来释放空间。它减少了项目节点模块文件夹中的文件数量，这在直接将包签入版本控制的环境中非常有用。</p>
-<h2 id="yarn-bin"><a href="#yarn-bin" class="headerlink" title="yarn bin"></a>yarn bin</h2><p>输出 yarn 安装可执行文件的目录</p>
-<h2 id="yarn-cache"><a href="#yarn-cache" class="headerlink" title="yarn cache"></a>yarn cache</h2><p>可以管理下载的包缓存</p>
-<h2 id="yarn-create"><a href="#yarn-create" class="headerlink" title="yarn create"></a>yarn create</h2><p>是一个快捷指令</p>
+        <h2><span id="yarn-add">yarn add</span></h2><p>-E 选项明确指定版本<br>—audit 检查在已安装的包中所有已经的安全问题并输出</p>
+<h2><span id="yarn-autoclean">yarn autoclean</span></h2><p>autoclean 命令通过从依赖项中删除不必要的文件和文件夹来释放空间。它减少了项目节点模块文件夹中的文件数量，这在直接将包签入版本控制的环境中非常有用。</p>
+<h2><span id="yarn-bin">yarn bin</span></h2><p>输出 yarn 安装可执行文件的目录</p>
+<h2><span id="yarn-cache">yarn cache</span></h2><p>可以管理下载的包缓存</p>
+<h2><span id="yarn-create">yarn create</span></h2><p>是一个快捷指令</p>
 <p>yarn create react-app my-app 就相当于</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yarn global add create-react-app</span><br><span class="line">create-react-app my-app</span><br></pre></td></tr></table></figure>
-<h3 id="peerDependencies"><a href="#peerDependencies" class="headerlink" title="peerDependencies"></a>peerDependencies</h3><p>举个例子，项目中引入了 pakcageA，依赖 A 中的 package.json 中的 dependencies 中包含了 packageB，那么项目的目录结构是这样的</p>
+<h3><span id="peerdependencies">peerDependencies</span></h3><p>举个例子，项目中引入了 pakcageA，依赖 A 中的 package.json 中的 dependencies 中包含了 packageB，那么项目的目录结构是这样的</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">MyProject</span><br><span class="line">|- node_modules</span><br><span class="line">   |- PackageA</span><br><span class="line">      |- node_modules</span><br><span class="line">         |- PackageB</span><br></pre></td></tr></table></figure>
 <p>我们在项目中，可以直接通过下面语句引用 PackegeA，但是不能直接引用 PackageB。所以，为了解决这个问题，在 MyProject 项目 package.json 中我们必须直接声明对 PackageB 的依赖并安装。</p>
 <p>而如果是在 peerDependencies 声明的 packgeB 的话，得到的目录结构是</p>
@@ -560,7 +560,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#yarn-add"><span class="nav-number">1.</span> <span class="nav-text">yarn add</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#yarn-autoclean"><span class="nav-number">2.</span> <span class="nav-text">yarn autoclean</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#yarn-bin"><span class="nav-number">3.</span> <span class="nav-text">yarn bin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#yarn-cache"><span class="nav-number">4.</span> <span class="nav-text">yarn cache</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#yarn-create"><span class="nav-number">5.</span> <span class="nav-text">yarn create</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#peerDependencies"><span class="nav-number">5.1.</span> <span class="nav-text">peerDependencies</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-number">1.</span> <span class="nav-text">yarn add</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-number">2.</span> <span class="nav-text">yarn autoclean</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-number">3.</span> <span class="nav-text">yarn bin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-number">4.</span> <span class="nav-text">yarn cache</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-number">5.</span> <span class="nav-text">yarn create</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-number">5.1.</span> <span class="nav-text">peerDependencies</span></a></li></ol></li></ol></div>
             
 
           </div>

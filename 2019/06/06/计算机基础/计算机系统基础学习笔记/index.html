@@ -404,8 +404,8 @@
       
 
       
-        <h2 id="数字逻辑电路基础"><a href="#数字逻辑电路基础" class="headerlink" title="数字逻辑电路基础"></a>数字逻辑电路基础</h2><p>全加器 溢出标志的逻辑表达式 <script type="math/tex">OF=C_n \oplus C_(n-1)</script> 因为若为两个正数相加，最高位必然没有进位，而弱次高位有进位，则说明溢出 若为两个负数相加，最高位必然有进位，若次高位没有进位，则说明溢出</p>
-<h2 id="IEEE754-标准"><a href="#IEEE754-标准" class="headerlink" title="IEEE754 标准"></a>IEEE754 标准</h2><ul>
+        <h2><span id="数字逻辑电路基础">数字逻辑电路基础</span></h2><p>全加器 溢出标志的逻辑表达式 <script type="math/tex">OF=C_n \oplus C_(n-1)</script> 因为若为两个正数相加，最高位必然没有进位，而弱次高位有进位，则说明溢出 若为两个负数相加，最高位必然有进位，若次高位没有进位，则说明溢出</p>
+<h2><span id="ieee754-标准">IEEE754 标准</span></h2><ul>
 <li>32 位包括 1 位符号位 8 位阶码 23 位有效位</li>
 <li>64 位包括 1 位符号位 52 位有效位</li>
 <li>规格化尾数最高位总是 1，所以隐含表示，省略一位</li>
@@ -421,7 +421,7 @@
 </ul>
 </li>
 </ul>
-<h4 id="C-语言中涉及的运算"><a href="#C-语言中涉及的运算" class="headerlink" title="C 语言中涉及的运算"></a>C 语言中涉及的运算</h4><ul>
+<h4><span id="c-语言中涉及的运算">C 语言中涉及的运算</span></h4><ul>
 <li>无符号数 逻辑左（右）移动，有符号数 算数左（右）移动</li>
 <li>溢出标志 of，最高位和次高位的进位 Cn 异或 Cn-1， 当两个正数相加时，最高位不会进位，若次高位进位，则为溢出 ，当两个负数相加，最高位必然进位，若次高位不进位，则为溢出，正数加负数永远不会溢出</li>
 <li>乘法指令分有符号乘和无符号乘 若只取低 n 位 不考虑溢出 则可以只使用无符号乘 由程序员自行判断是否溢出</li>
@@ -430,10 +430,10 @@
 <li>对于正数 对商取 floor 对于负数 对商取 ceil</li>
 <li>编译器对于除数为 2 的倍数的除法运算使用移位优化，对于无符号数，带符号数正整数，移除的低位直接舍弃，对于带符号负整数，由于商取 ceil，需要现加上一个偏移量 2^k-1，然后再右移 k 位，低位截断</li>
 </ul>
-<h4 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h4><p>汇编结果是一个可重定位目标文件，其中包含的是不可读的二进制代码，必须用相应的工具软件来查看其内容</p>
+<h4><span id="编译">编译</span></h4><p>汇编结果是一个可重定位目标文件，其中包含的是不可读的二进制代码，必须用相应的工具软件来查看其内容</p>
 <p>生成的.o 文件可重定位的目标文件 程序中的地址尚未确定 通过链接后方可执行</p>
-<h4 id="磁盘驱动器"><a href="#磁盘驱动器" class="headerlink" title="磁盘驱动器"></a>磁盘驱动器</h4><p>柱面号就是磁道号</p>
-<h4 id="层次结构存储系统"><a href="#层次结构存储系统" class="headerlink" title="层次结构存储系统"></a>层次结构存储系统</h4><ul>
+<h4><span id="磁盘驱动器">磁盘驱动器</span></h4><p>柱面号就是磁道号</p>
+<h4><span id="层次结构存储系统">层次结构存储系统</span></h4><ul>
 <li>非易失存储器 Nonvolatile Memory 易失存储器 Volitile Memory</li>
 <li>SRAM 不采用地址引脚复用方式，DRAM 采用地址引脚复用方式</li>
 <li>内存位宽是 64bit DDR3 采用 8 位预读，若内部核心频率为 133.25MHZ，则每秒传送的数据次数为 133.25M*8 = 1066M 次，带宽为 1066 M*8B=8.5GB/S</li>
@@ -613,7 +613,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#数字逻辑电路基础"><span class="nav-number">1.</span> <span class="nav-text">数字逻辑电路基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IEEE754-标准"><span class="nav-number">2.</span> <span class="nav-text">IEEE754 标准</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#C-语言中涉及的运算"><span class="nav-number">2.0.1.</span> <span class="nav-text">C 语言中涉及的运算</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#编译"><span class="nav-number">2.0.2.</span> <span class="nav-text">编译</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#磁盘驱动器"><span class="nav-number">2.0.3.</span> <span class="nav-text">磁盘驱动器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#层次结构存储系统"><span class="nav-number">2.0.4.</span> <span class="nav-text">层次结构存储系统</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-number">1.</span> <span class="nav-text">数字逻辑电路基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-number">2.</span> <span class="nav-text">IEEE754 标准</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#null"><span class="nav-number">2.0.1.</span> <span class="nav-text">C 语言中涉及的运算</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#null"><span class="nav-number">2.0.2.</span> <span class="nav-text">编译</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#null"><span class="nav-number">2.0.3.</span> <span class="nav-text">磁盘驱动器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#null"><span class="nav-number">2.0.4.</span> <span class="nav-text">层次结构存储系统</span></a></li></ol></li></ol></div>
             
 
           </div>

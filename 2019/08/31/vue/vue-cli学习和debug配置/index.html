@@ -404,13 +404,13 @@
       
 
       
-        <h3 id="开发"><a href="#开发" class="headerlink" title="开发"></a>开发</h3><h4 id="浏览器兼容性"><a href="#浏览器兼容性" class="headerlink" title="浏览器兼容性"></a>浏览器兼容性</h4><p>如果有依赖需要 polyfill，你有几种选择：</p>
+        <h3><span id="开发">开发</span></h3><h4><span id="浏览器兼容性">浏览器兼容性</span></h4><p>如果有依赖需要 polyfill，你有几种选择：</p>
 <ul>
 <li>如果该依赖基于一个目标环境不支持的 ES 版本撰写: 将其添加到 vue.config.js 中的 transpileDependencies 选项。这会为该依赖同时开启语法语法转换和根据使用情况检测 polyfill。</li>
 <li>如果该依赖交付了 ES5 代码并显式地列出了需要的 polyfill: 你可以使用 @vue/babel-preset-app 的 polyfills 选项预包含所需要的 polyfill。注意 es6.promise 将被默认包含，因为现在的库依赖 Promise 是非常普遍的。</li>
 <li>如果该依赖交付 ES5 代码，但使用了 ES6+ 特性且没有显式地列出需要的 polyfill (例如 Vuetify)：请使用 useBuiltIns: ‘entry’ 然后在入口文件添加 import ‘@babel/polyfill’。这会根据 browserslist 目标导入所有 polyfill，这样你就不用再担心依赖的 polyfill 问题了，但是因为包含了一些没有用到的 polyfill 所以最终的包大小可能会增加。</li>
 </ul>
-<h4 id="环境变量和模式"><a href="#环境变量和模式" class="headerlink" title="环境变量和模式"></a>环境变量和模式</h4><p>你可以替换你的项目根目录中的下列文件来指定环境变量：<br>.env # 在所有的环境中被载入<br>.env.local # 在所有的环境中被载入，但会被 git 忽略<br>.env.[mode] # 只在指定的模式中被载入<br>.env.[mode].local # 只在指定的模式中被载入，但会被 git 忽略</p>
+<h4><span id="环境变量和模式">环境变量和模式</span></h4><p>你可以替换你的项目根目录中的下列文件来指定环境变量：<br>.env # 在所有的环境中被载入<br>.env.local # 在所有的环境中被载入，但会被 git 忽略<br>.env.[mode] # 只在指定的模式中被载入<br>.env.[mode].local # 只在指定的模式中被载入，但会被 git 忽略</p>
 <p>模式是 Vue CLI 项目中一个重要的概念，默认情况下，一个 Vue CLI 项目有三个模式：</p>
 <ul>
 <li>development 模式用于 vue-cli-service serve</li>
@@ -424,10 +424,10 @@
 <li>NODE_ENV - 会是 “development”、”production” 或 “test” 中的一个。具体的值取决于应用运行的模式。</li>
 <li>BASE_URL - 会和 vue.config.js 中的 publicPath 选项相符，即你的应用会部署到的基础路径。<br>所有解析出来的环境变量都可以在 public/index.html 中以 HTML 插值中介绍的方式使用。</li>
 </ul>
-<h4 id="静态资源处理"><a href="#静态资源处理" class="headerlink" title="静态资源处理"></a>静态资源处理</h4><h5 id="URL-转换规则"><a href="#URL-转换规则" class="headerlink" title="URL 转换规则"></a>URL 转换规则</h5><p>如果 URL 是一个绝对路径 (例如 /images/foo.png)，它将会被保留不变。<br>如果 URL 以 . 开头，它会作为一个相对模块请求被解释且基于你的文件系统中的目录结构进行解析。<br>如果 URL 以 ~ 开头，其后的任何内容都会作为一个模块请求被解析。这意味着你甚至可以引用 Node 模块中的资源：</p>
+<h4><span id="静态资源处理">静态资源处理</span></h4><h5><span id="url-转换规则">URL 转换规则</span></h5><p>如果 URL 是一个绝对路径 (例如 /images/foo.png)，它将会被保留不变。<br>如果 URL 以 . 开头，它会作为一个相对模块请求被解释且基于你的文件系统中的目录结构进行解析。<br>如果 URL 以 ~ 开头，其后的任何内容都会作为一个模块请求被解析。这意味着你甚至可以引用 Node 模块中的资源：</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">"~some-npm-package/foo.png"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
 <p>如果 URL 以 @ 开头，它也会作为一个模块请求被解析。它的用处在于 Vue CLI 默认会设置一个指向 projectRoot/src 的别名 @。(仅作用于模版中)</p>
-<h3 id="Debug-配置"><a href="#Debug-配置" class="headerlink" title="Debug 配置"></a>Debug 配置</h3><p>效果：在 vscode 中的终端输出 Chrome 的控制台信息，可以在 vscode 中进行断点调试<br>首先需要安装插件 Debugger for Chrome<br>新增 Debug 配置项</p>
+<h3><span id="debug-配置">Debug 配置</span></h3><p>效果：在 vscode 中的终端输出 Chrome 的控制台信息，可以在 vscode 中进行断点调试<br>首先需要安装插件 Debugger for Chrome<br>新增 Debug 配置项</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">        <span class="string">"name"</span>: <span class="string">"attach to chrome"</span>,</span><br><span class="line">        <span class="string">"type"</span>: <span class="string">"chrome"</span>,</span><br><span class="line">        <span class="string">"request"</span>: <span class="string">"attach"</span>,</span><br><span class="line">        <span class="string">"port"</span>: <span class="number">9222</span>,</span><br><span class="line">        <span class="string">"address"</span>: <span class="string">"localhost"</span>,</span><br><span class="line">        <span class="string">"url"</span>: <span class="string">"http://localhost:8080"</span>,</span><br><span class="line">        <span class="string">"webRoot"</span>: <span class="string">"$&#123;workspaceFolder&#125;/src"</span>,    <span class="comment">// 这个webRoot应该是指webpack打包js文件的目录</span></span><br><span class="line">        <span class="string">"sourceMaps"</span>: <span class="literal">true</span>,</span><br><span class="line">        <span class="string">"sourceMapPathOverrides"</span>: &#123;</span><br><span class="line">            <span class="string">"webpack:///src/*"</span>: <span class="string">"$&#123;webRoot&#125;/*"</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 <p>启动 chrome，附加启动参数</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">google-chrome-stable  --remote-debugging-port=<span class="number">9222</span></span><br></pre></td></tr></table></figure>
@@ -606,7 +606,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#开发"><span class="nav-number">1.</span> <span class="nav-text">开发</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#浏览器兼容性"><span class="nav-number">1.1.</span> <span class="nav-text">浏览器兼容性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#环境变量和模式"><span class="nav-number">1.2.</span> <span class="nav-text">环境变量和模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#静态资源处理"><span class="nav-number">1.3.</span> <span class="nav-text">静态资源处理</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#URL-转换规则"><span class="nav-number">1.3.1.</span> <span class="nav-text">URL 转换规则</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Debug-配置"><span class="nav-number">2.</span> <span class="nav-text">Debug 配置</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-number">1.</span> <span class="nav-text">开发</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#null"><span class="nav-number">1.1.</span> <span class="nav-text">浏览器兼容性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#null"><span class="nav-number">1.2.</span> <span class="nav-text">环境变量和模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#null"><span class="nav-number">1.3.</span> <span class="nav-text">静态资源处理</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#null"><span class="nav-number">1.3.1.</span> <span class="nav-text">URL 转换规则</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-number">2.</span> <span class="nav-text">Debug 配置</span></a></li></ol></div>
             
 
           </div>

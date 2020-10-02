@@ -405,13 +405,13 @@
 
       
         <p>大三数据库考试前记得考点，没啥营养</p>
-<h2 id="起步"><a href="#起步" class="headerlink" title="起步"></a>起步</h2><ul>
+<h2><span id="起步">起步</span></h2><ul>
 <li>修改密码 alter user identified by 123456;</li>
 <li>解锁用户 alter user scott account unlock;</li>
 <li>用户登录 connect 用户名/密码</li>
 <li>修改 sqlplus 默认命令提示符 set sqlprompt jieziSQL&gt;</li>
 </ul>
-<h2 id="sqlplus-基本命令"><a href="#sqlplus-基本命令" class="headerlink" title="sqlplus 基本命令"></a>sqlplus 基本命令</h2><ul>
+<h2><span id="sqlplus-基本命令">sqlplus 基本命令</span></h2><ul>
 <li>show user 显示当前用户</li>
 <li>select * from tab 当前用户下的表和视图</li>
 <li>set linesize 150 设置行宽</li>
@@ -437,19 +437,19 @@
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">lj&gt;ttitle left 我是表头标题  // 参数可选left center right col n(在第n列打印)  skip n (跳到下一行开始的第几行) bold 以黑体打印 可以使用变量</span><br><span class="line">lj&gt;btitle left 我是表尾标题</span><br><span class="line">lj&gt;btitle [on|off] 切换显示</span><br><span class="line"></span><br><span class="line">// 使用变量</span><br><span class="line">lj&gt;define varT='table header'</span><br><span class="line">lj&gt;ttitle left varT</span><br></pre></td></tr></table></figure>
 <p>设置空白行数为 4</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span> <span class="keyword">new</span> page <span class="number">4</span></span><br></pre></td></tr></table></figure>
-<h2 id="用户管理与权限分配"><a href="#用户管理与权限分配" class="headerlink" title="用户管理与权限分配"></a>用户管理与权限分配</h2><h3 id="用户相关"><a href="#用户相关" class="headerlink" title="用户相关"></a>用户相关</h3><p>创建用户</p>
+<h2><span id="用户管理与权限分配">用户管理与权限分配</span></h2><h3><span id="用户相关">用户相关</span></h3><p>创建用户</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">user</span> user_name [<span class="keyword">identified</span> <span class="keyword">by</span> pass_word | <span class="keyword">identified</span> exeternally]</span><br><span class="line"><span class="keyword">default</span> <span class="keyword">tablespace</span> uses</span><br><span class="line"><span class="keyword">temporary</span> tablespaces temp</span><br><span class="line"><span class="keyword">quota</span> <span class="number">10</span>m <span class="keyword">on</span> tbsp_1;   // 置顶用户在tbsp_1表空间最多可使用的大小为10MB</span><br></pre></td></tr></table></figure>
 <p>删除用户</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> <span class="keyword">user</span> user_name [<span class="keyword">cascade</span>]; // 如果用户包含数据库对象必须加cascade</span><br></pre></td></tr></table></figure>
-<h3 id="权限管理"><a href="#权限管理" class="headerlink" title="权限管理"></a>权限管理</h3><p>如果不知道权限，可以 select * from system_privilege_map where privilege_name = ? 进行模糊查找</p>
-<h2 id="概要文件"><a href="#概要文件" class="headerlink" title="概要文件"></a>概要文件</h2><p>概要文件：<br>是一个命名的资源限制的集合。系统资源的使用、口令的限制。<br>创建：</p>
+<h3><span id="权限管理">权限管理</span></h3><p>如果不知道权限，可以 select * from system_privilege_map where privilege_name = ? 进行模糊查找</p>
+<h2><span id="概要文件">概要文件</span></h2><p>概要文件：<br>是一个命名的资源限制的集合。系统资源的使用、口令的限制。<br>创建：</p>
 <p>create profile 概要文件名 limit<br>sessions_per_user : 限制用户当前会话的数量<br>cpu_per_session： 限制一个会话使用的 cpu 时间<br>cpu_per_call ：限制一个 sql 语句使用的 cpu 时间<br>logical_reads_per_session：限制每个会话读取的数据库数据块数，包括从内存和磁盘读取的总和<br>logical_reads_per_call：限制 sql 语句读取的数据库数据块数，包括从内存和磁盘读取的总和<br>private_sga ：sga 中私有区域的大小<br>connect_time ：指定一个会话连接到数据库的最大时间<br>idle_time default：指定一个会话可以连续空闲的最长时间，单位：分钟<br>composite_limit：设置用户对系统资源的综合消耗。由： cpu_per_session、logical_reads_per_session、private_sga、connect_time 综合决定<br>failed_login_attempts: 最大错误登录次数<br>password_lock_time:登录失败后账户被锁天数<br>password_life_time:密码有效天数<br>password_grace_time：用户密码被中止前多少天提醒用户修改密码<br>password_reuse_time：用户修改密码后多少天，用户才可以再次使用原来的密码<br>password_reuse_max：密码被重新使用后，可修改的次数<br>password_verify_function：密码复杂度审计函数</p>
 <p>修改：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">alter</span> profile 概要文件名 <span class="keyword">limit</span> </span><br><span class="line"><span class="keyword">sessions_per_user</span> <span class="number">20</span></span><br><span class="line">failed_login_attemps <span class="number">3</span>;</span><br></pre></td></tr></table></figure>
 <p>删除：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> profile 概要文件名；</span><br></pre></td></tr></table></figure>
 <p>说明：<br>一个用户所使用的概要文件被删除，则此用户使用默认的概要文件。<br>使某个用户使用某个用户配置文件<br>aler user 用户名 profile 概要文件名;<br>要使上面的限制生效，需要修改初始化参数 resource_limit<br>alter system set resource_limit=true;(11g)</p>
-<h2 id="权限相关"><a href="#权限相关" class="headerlink" title="权限相关"></a>权限相关</h2><p>创建用户</p>
+<h2><span id="权限相关">权限相关</span></h2><p>创建用户</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">user</span> jiezi19971225 <span class="keyword">identified</span> <span class="keyword">by</span> <span class="number">123456</span>;</span><br></pre></td></tr></table></figure>
 
       
@@ -624,7 +624,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#起步"><span class="nav-number">1.</span> <span class="nav-text">起步</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sqlplus-基本命令"><span class="nav-number">2.</span> <span class="nav-text">sqlplus 基本命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用户管理与权限分配"><span class="nav-number">3.</span> <span class="nav-text">用户管理与权限分配</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#用户相关"><span class="nav-number">3.1.</span> <span class="nav-text">用户相关</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#权限管理"><span class="nav-number">3.2.</span> <span class="nav-text">权限管理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#概要文件"><span class="nav-number">4.</span> <span class="nav-text">概要文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#权限相关"><span class="nav-number">5.</span> <span class="nav-text">权限相关</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-number">1.</span> <span class="nav-text">起步</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-number">2.</span> <span class="nav-text">sqlplus 基本命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-number">3.</span> <span class="nav-text">用户管理与权限分配</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-number">3.1.</span> <span class="nav-text">用户相关</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-number">3.2.</span> <span class="nav-text">权限管理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-number">4.</span> <span class="nav-text">概要文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-number">5.</span> <span class="nav-text">权限相关</span></a></li></ol></div>
             
 
           </div>

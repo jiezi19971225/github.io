@@ -404,11 +404,11 @@
       
 
       
-        <h2 id="一致性-要求和建议"><a href="#一致性-要求和建议" class="headerlink" title="一致性 要求和建议"></a>一致性 要求和建议</h2><p>CSS 渲染模型中不考虑替换元素的内容。</p>
+        <h2><span id="一致性-要求和建议">一致性 要求和建议</span></h2><p>CSS 渲染模型中不考虑替换元素的内容。</p>
 <p>在 CSS 2.1 中，只有替换元素才能具有内在维度。对于没有可靠分辨率信息的光栅图像，必须假设每个图像源像素的大小为 1 像素单位。</p>
 <p>HTML 的元素名是大小写不敏感的 但是在 XML 中是大小写敏感的</p>
 <p>0 长度单位后的单位是可选的</p>
-<h2 id="选择器"><a href="#选择器" class="headerlink" title="选择器"></a>选择器</h2><p>E[foo] 匹配设置了”foo”属性（无论值是什么）的 E 元素</p>
+<h2><span id="选择器">选择器</span></h2><p>E[foo] 匹配设置了”foo”属性（无论值是什么）的 E 元素</p>
 <p>E[foo=”warning”] 匹配所有”foo”属性值恰好是”wraning”的 E 元素</p>
 <p>E[foo~=”warning”] 匹配所有”foo”属性值为一列空格分隔的值，且其中之一恰好是”warning”的 E 元素</p>
 <p>E[lang|=”en”] 匹配所有”lang”属性值为一列以”en”开头（从左向右）用连字符分隔的值的 E 元素</p>
@@ -417,16 +417,16 @@
 <p>:first-line 伪元素对段落内容的第一个格式化行应用特殊样式(选择器”P:first-line”不会匹配任何真实 HTML 元素。它匹配一个（与 CSS 规范）一致的用户代理将在每个段落的开头插入的伪元素) :first-line 伪元素只能用于块容器元素</p>
 <p>:first-letter 伪元素必须选择一个块的第一行的第一个字母</p>
 <p>当:first-letter 和:first-line 伪元素被应用在一个具有使用:before 和:after 生成内容的元素，它们应用于元素包括生成的内容在内的首字母或首行</p>
-<h2 id="层叠和继承"><a href="#层叠和继承" class="headerlink" title="层叠和继承"></a>层叠和继承</h2><p>为了让用户代理能够避免为不支持的媒体类型检索资源，编写者可以指定带媒体依赖（media-dependent）的@import 规则。</p>
+<h2><span id="层叠和继承">层叠和继承</span></h2><p>为了让用户代理能够避免为不支持的媒体类型检索资源，编写者可以指定带媒体依赖（media-dependent）的@import 规则。</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@import</span> url(<span class="string">"fineprint.css"</span>) print;</span><br></pre></td></tr></table></figure>
 <p>用户样式表，简单来说就是浏览器的使用者自己编写的一份默认样式表，编写者样式表，是网页的编写者编写的样式表，第一次听说这种说法</p>
-<h2 id="视觉格式化模型"><a href="#视觉格式化模型" class="headerlink" title="视觉格式化模型"></a>视觉格式化模型</h2><p>Block-level 块级元素 包含以下类型 block list-item table list-item 会生成附加的盒子，相对于主盒子放置</p>
+<h2><span id="视觉格式化模型">视觉格式化模型</span></h2><p>Block-level 块级元素 包含以下类型 block list-item table list-item 会生成附加的盒子，相对于主盒子放置</p>
 <p>block container box 只包含块级元素或者内联块级元素，</p>
 <p>匿名块级盒子 当块级盒子同时包含内联的文本和块级元素时，我们认为这里有一个匿名的盒子包围了这些文本，如果一个块级盒子包含了块级盒子，我们强制让他只包含块级盒子</p>
 <p>以@开头的规则（At-rules）需要以分号来结尾</p>
 <p>CSS 2.1 用户代理必须忽略在块内或在除@cherset 或@import 规则之外的任何非忽略语句之后发生的任何“@import”规则。一下是非法的，解决方法是将样式的语法放在 At-rules 之后</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@import</span> <span class="string">"subs.css"</span>;</span><br><span class="line"><span class="selector-tag">h1</span> &#123;</span><br><span class="line">  <span class="attribute">color</span>: blue;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@import</span> <span class="string">"list.css"</span>;</span><br></pre></td></tr></table></figure>
-<h2 id="盒模型"><a href="#盒模型" class="headerlink" title="盒模型"></a>盒模型</h2><p><code>margin-top</code>, <code>margin-bottom</code> 这两个属性对非替换的行内元素无效</p>
+<h2><span id="盒模型">盒模型</span></h2><p><code>margin-top</code>, <code>margin-bottom</code> 这两个属性对非替换的行内元素无效</p>
 <p>两个 margin 是相邻的，当且仅当</p>
 <p>都属于流内（in-flow）块级盒，处于同一个块格式化上下文</p>
 <ul>
@@ -440,7 +440,7 @@
 </li>
 <li>margin 和 padding 的百分比数值都相对于包含块，border 不能设置百分比数值</li>
 </ul>
-<h2 id="块格式化上下文"><a href="#块格式化上下文" class="headerlink" title="块格式化上下文"></a>块格式化上下文</h2><p>以下方式会创建块格式化上下文</p>
+<h2><span id="块格式化上下文">块格式化上下文</span></h2><p>以下方式会创建块格式化上下文</p>
 <ul>
 <li>根元素或包含根元素的元素</li>
 <li>浮动元素（元素的 float 不是 none）</li>
@@ -465,15 +465,15 @@
 <li>注意 ‘direction’属性，给表格列元素指定时，不会被列中的单元格继承，因为在文档树中，列不是单元格的祖先。因此，CSS 无法轻易获知[HTML4]的 11.3.2.1 节中”dir”属性的继承规则</li>
 <li>direction 和 unicode-bidi 属性结合处理文本流方向问题（不仅，而且句子从右向左，单词也倒着写）</li>
 </ul>
-<h2 id="视觉格式化模型细节"><a href="#视觉格式化模型细节" class="headerlink" title="视觉格式化模型细节"></a>视觉格式化模型细节</h2><p>width 应用于除了非替换的行内元素，表格行和行组（row group） 外的所有元素,非替换的行内元素盒的内容宽度是它里面渲染的内容（的内容宽度）负值对于 width 是非法的。</p>
+<h2><span id="视觉格式化模型细节">视觉格式化模型细节</span></h2><p>width 应用于除了非替换的行内元素，表格行和行组（row group） 外的所有元素,非替换的行内元素盒的内容宽度是它里面渲染的内容（的内容宽度）负值对于 width 是非法的。</p>
 <p>行内非替换（non-replaced）元素 ‘width’属性不适用，其计算值为’auto’的’margin-left’或者’margin-right’对应的应用值为’0’。</p>
 <p>行内替换元素 计算值为’auto’的’margin-left’或者’margin-right’对应的应用值为’0’ 如果’height’和’width’计算值都是’auto’，并且该元素还具有固有宽度，那么这个固有宽度就是’width’的应用值。</p>
 <p>height 指定一个百分比高度。百分比参照生成盒的包含块的高度。如果包含块的高度没有显式指定（即取决于内容高度），并且该元素不是绝对定位的，则计算值为’auto’。根元素上的百分比高度是相对于初始包含块的 注意：对于那些包含块基于一个块级元素的绝对定位元素，百分比根据这个元素的内边距框（padding box）的高度来计算。这与 CSS1 不同，（CSS1 中）百分比总是根据父级元素的内容框（content box）来计算</p>
 <p>line-height 的百分比参考元素自身的字体大小</p>
 <p>vertical-align 的百分比是行高</p>
-<h2 id="可视化效果"><a href="#可视化效果" class="headerlink" title="可视化效果"></a>可视化效果</h2><p><code>visibility hidden</code> 生成的盒是不可见的（完全透明，什么都不绘制），但仍然会影响布局。而且该元素具有<code>visibility: visible</code> 的后代将是可见的</p>
-<h2 id="颜色与背景"><a href="#颜色与背景" class="headerlink" title="颜色与背景"></a>颜色与背景</h2><p>background-attachment 指定了它应该相对视口固定，还是随包含块滚动<br>文本<br>字母与单词间距 <code>letter-spacing’和’word-spacing</code><br><code>text-transform</code>属性 转换单词大小写<br><code>white-space</code>属性 决定如何处置换行符</p>
-<h2 id="用户界面"><a href="#用户界面" class="headerlink" title="用户界面"></a>用户界面</h2><p>cursor crosshair 简单十字 move 暗示可移动 text 暗示可选中的文本 wait 暗示正忙<br>outline 当元素具有焦点时，可应用轮廓属性，该属性不占用空间</p>
+<h2><span id="可视化效果">可视化效果</span></h2><p><code>visibility hidden</code> 生成的盒是不可见的（完全透明，什么都不绘制），但仍然会影响布局。而且该元素具有<code>visibility: visible</code> 的后代将是可见的</p>
+<h2><span id="颜色与背景">颜色与背景</span></h2><p>background-attachment 指定了它应该相对视口固定，还是随包含块滚动<br>文本<br>字母与单词间距 <code>letter-spacing’和’word-spacing</code><br><code>text-transform</code>属性 转换单词大小写<br><code>white-space</code>属性 决定如何处置换行符</p>
+<h2><span id="用户界面">用户界面</span></h2><p>cursor crosshair 简单十字 move 暗示可移动 text 暗示可选中的文本 wait 暗示正忙<br>outline 当元素具有焦点时，可应用轮廓属性，该属性不占用空间</p>
 
       
     </div>
@@ -647,7 +647,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一致性-要求和建议"><span class="nav-number">1.</span> <span class="nav-text">一致性 要求和建议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#选择器"><span class="nav-number">2.</span> <span class="nav-text">选择器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#层叠和继承"><span class="nav-number">3.</span> <span class="nav-text">层叠和继承</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#视觉格式化模型"><span class="nav-number">4.</span> <span class="nav-text">视觉格式化模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#盒模型"><span class="nav-number">5.</span> <span class="nav-text">盒模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#块格式化上下文"><span class="nav-number">6.</span> <span class="nav-text">块格式化上下文</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#视觉格式化模型细节"><span class="nav-number">7.</span> <span class="nav-text">视觉格式化模型细节</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可视化效果"><span class="nav-number">8.</span> <span class="nav-text">可视化效果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#颜色与背景"><span class="nav-number">9.</span> <span class="nav-text">颜色与背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用户界面"><span class="nav-number">10.</span> <span class="nav-text">用户界面</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-number">1.</span> <span class="nav-text">一致性 要求和建议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-number">2.</span> <span class="nav-text">选择器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-number">3.</span> <span class="nav-text">层叠和继承</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-number">4.</span> <span class="nav-text">视觉格式化模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-number">5.</span> <span class="nav-text">盒模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-number">6.</span> <span class="nav-text">块格式化上下文</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-number">7.</span> <span class="nav-text">视觉格式化模型细节</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-number">8.</span> <span class="nav-text">可视化效果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-number">9.</span> <span class="nav-text">颜色与背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-number">10.</span> <span class="nav-text">用户界面</span></a></li></ol></div>
             
 
           </div>

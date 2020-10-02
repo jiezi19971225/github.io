@@ -411,17 +411,17 @@
       
 
       
-        <h2 id="缘起"><a href="#缘起" class="headerlink" title="缘起"></a>缘起</h2><p>写这篇文章的契机，是最近有看 react 源码的想法。先是看了这篇文章 <a href="https://juejin.im/post/5afe3735518825426539afce" target="_blank" rel="noopener">如何阅读大型前端开源项目的源码</a> 学习了一波姿势，然后开始下载 react 工程鼓捣起来。源码打断点，构建 umd 代码，然后看函数调用栈，执行到这一步，看到了这个页面，发现都是我不熟悉的东西。比如这个 Scope，虽然大体知道是作用域，但是具体是按照什么规则得到的，就不是很清楚了。所以决定先搞清一下 js 的作用域问题。</p>
+        <h2><span id="缘起">缘起</span></h2><p>写这篇文章的契机，是最近有看 react 源码的想法。先是看了这篇文章 <a href="https://juejin.im/post/5afe3735518825426539afce" target="_blank" rel="noopener">如何阅读大型前端开源项目的源码</a> 学习了一波姿势，然后开始下载 react 工程鼓捣起来。源码打断点，构建 umd 代码，然后看函数调用栈，执行到这一步，看到了这个页面，发现都是我不熟悉的东西。比如这个 Scope，虽然大体知道是作用域，但是具体是按照什么规则得到的，就不是很清楚了。所以决定先搞清一下 js 的作用域问题。</p>
 <img src="/2020/07/22/javascript/再谈js作用域/这都啥玩意啊.png" title="这都啥玩意啊">
 <p>js 的作用域，是一个老生常谈的问题了，也是面试常考的内容。以前也通过看 js 高程，你不知道的 js 这些书对此有过据较为深入的学习，刷一些面试题的时候也背了一些“标准答案”，但是时间一长，也忘掉大半了。现在要我真说道说道，大概是说不出个所以然来的。今天搜索相关信息时看到这个博客的一一系列博文讲的真不错 <a href="https://blog.csdn.net/q1056843325/category_9267514.html" target="_blank" rel="noopener">https://blog.csdn.net/q1056843325/category_9267514.html</a> ，自己对这一块其实挺欠缺的。纸上得来终觉浅，觉知此事要躬行。这次主要借鉴这位博主的文章内容，借助 Chrome 的开发者工具好好探究一下这个问题。</p>
-<h2 id="探究"><a href="#探究" class="headerlink" title="探究"></a>探究</h2><h3 id="预编译，变量提升与-let，const"><a href="#预编译，变量提升与-let，const" class="headerlink" title="预编译，变量提升与 let，const"></a>预编译，变量提升与 let，const</h3><p>脚本执行时，js 引擎会做下面三件事。</p>
+<h2><span id="探究">探究</span></h2><h3><span id="预编译变量提升与-letconst">预编译，变量提升与 let，const</span></h3><p>脚本执行时，js 引擎会做下面三件事。</p>
 <ol>
 <li>语法分析 引擎检查代码是否包含低级语法错误</li>
 <li>预编译 在内存中开辟一些空间，存放变量与函数</li>
 <li>解释执行</li>
 </ol>
 <p>语法分析很简单，就是引擎检查你的代码有没有什么低级的语法错误<br>解释执行顾名思义便是执行代码了<br>预编译简单理解就是在内存中开辟一些空间，存放一些变量与函数</p>
-<h4 id="预编译的发生时间"><a href="#预编译的发生时间" class="headerlink" title="预编译的发生时间"></a>预编译的发生时间</h4><p>我之前也以为预编译主要就是做了变量提升这件工作，也就是在脚本解释执行前执行一次。但实际上，在函数执行前都会进行预编译。</p>
+<h4><span id="预编译的发生时间">预编译的发生时间</span></h4><p>我之前也以为预编译主要就是做了变量提升这件工作，也就是在脚本解释执行前执行一次。但实际上，在函数执行前都会进行预编译。</p>
 <p>先看一下我之前理解的预编译，在 v8 引擎中时怎么做的。</p>
 <img src="/2020/07/22/javascript/再谈js作用域/预编译1.png" title="预编译1">
 <p>在脚本第一行执行前插入了 debugger 语句，这个时候预编译已经完成。我们看到 Scope 的 Global 作用域（浏览器中的 window 对象）中已经有了以下的属性，符合我们的认知，对于 let 声明的属性，预编译的时候是没有处理的。</p>
@@ -436,7 +436,7 @@
 <p>这个博主的文章，里面多次提到了 AO 活动对象的概念，实际上这是 ES3 的说法了，还是以开发者工具的展现为准，这样更好理解一点。<br>至此，关于预编译的问题解决。</p>
 <p><strong>性能优化</strong></p>
 <p>js 引擎查找作用域链是为了解析标识符，变量在执行环境作用域链的位置越深，读写速度就越慢，因此应该多用局部变量（缓存）。</p>
-<h3 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h3><p>以前看过这样一个对于闭包的解释。当在一个函数中返回一个函数的时候，这个被返回的时候就可以保有当前函数作用域的变量的引用，这就形成了闭包。</p>
+<h3><span id="闭包">闭包</span></h3><p>以前看过这样一个对于闭包的解释。当在一个函数中返回一个函数的时候，这个被返回的时候就可以保有当前函数作用域的变量的引用，这就形成了闭包。</p>
 <p>但这样的理解是不充分的。实际上，只要是在函数的作用域内定义了函数，这个被定义的函数就具有闭包作用域。</p>
 <img src="/2020/07/22/javascript/再谈js作用域/闭包1.png" title="闭包1">
 <p>因此闭包的一大用途，就是实现私有变量。我们知道函数如果返回一个对象，在对它进行构造调用时，结果返回的就是该对象。不过使用这种方式，this 赋值的属性和原型绑定就失效了。</p>
@@ -615,7 +615,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#缘起"><span class="nav-number">1.</span> <span class="nav-text">缘起</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#探究"><span class="nav-number">2.</span> <span class="nav-text">探究</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#预编译，变量提升与-let，const"><span class="nav-number">2.1.</span> <span class="nav-text">预编译，变量提升与 let，const</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#预编译的发生时间"><span class="nav-number">2.1.1.</span> <span class="nav-text">预编译的发生时间</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#闭包"><span class="nav-number">2.2.</span> <span class="nav-text">闭包</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-number">1.</span> <span class="nav-text">缘起</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-number">2.</span> <span class="nav-text">探究</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-number">2.1.</span> <span class="nav-text">预编译，变量提升与 let，const</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#null"><span class="nav-number">2.1.1.</span> <span class="nav-text">预编译的发生时间</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-number">2.2.</span> <span class="nav-text">闭包</span></a></li></ol></li></ol></div>
             
 
           </div>
