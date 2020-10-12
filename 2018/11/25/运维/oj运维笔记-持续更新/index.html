@@ -29,7 +29,7 @@
 <meta property="og:description" content="接到协会老师的任务，我负责了学校 oj 的开发和运维工作，这篇博客记录我在运维过程中遇到的一些问题和解决办法。  重启容器 找不到 java，vi 等命令 使用 update update-alternatives —config 配置 java javac vi 等 java 遇到　 OpenJDK 64-Bit Server VM warning: Can’t detect initial t">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2018-11-25T05:59:10.000Z">
-<meta property="article:modified_time" content="2020-10-01T11:48:50.718Z">
+<meta property="article:modified_time" content="2020-10-05T02:20:28.648Z">
 <meta property="article:author" content="jiezi19971225">
 <meta property="article:tag" content="OJ">
 <meta name="twitter:card" content="summary">
@@ -198,7 +198,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-01 19:48:50" itemprop="dateModified" datetime="2020-10-01T19:48:50+08:00">2020-10-01</time>
+                <time title="修改时间：2020-10-05 10:20:28" itemprop="dateModified" datetime="2020-10-05T10:20:28+08:00">2020-10-05</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -218,7 +218,7 @@
               <i class="fa fa-bar-chart"></i>
             </span>
             <span class="post-meta-item-text">字数统计:</span>
-            <span class="post-count">606(字)</span>
+            <span class="post-count">668(字)</span>
 
           </span>
 
@@ -266,6 +266,9 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ulimit -n 204800</span><br></pre></td></tr></table></figure>
 <h3 id="redigo"><a href="#redigo" class="headerlink" title="redigo"></a>redigo</h3><p>文献 系统优点</p>
 <h3 id="nginx"><a href="#nginx" class="headerlink" title="nginx"></a>nginx</h3><p>nginx 容器配置反向代理，无法使用 localhost 访问主机，可以使用宿主机 docker 0 的网卡 ip 代替</p>
+<h3 id="mysql-相关"><a href="#mysql-相关" class="headerlink" title="mysql 相关"></a>mysql 相关</h3><p>innodb_lock_wait_timeout 和 lock_wait_timeout<br>前者是 innodb 的 dml 操作的行级锁的等待时间 后面是数据结构 ddl 操作的锁的等待时间</p>
+<p>减少锁等待时间，防止数据库卡死</p>
+<p>set GLOBAL innodb_lock_wait_timeout = 50;<br>set GLOBAL lock_wait_timeout = 10;</p>
 
     </div>
 
@@ -346,7 +349,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95"><span class="nav-number">1.</span> <span class="nav-text">压力测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ab-%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">2.</span> <span class="nav-text">ab 的使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#socket-Too-many-open-files-24-%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">socket: Too many open files (24)的解决办法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redigo"><span class="nav-number">4.</span> <span class="nav-text">redigo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#nginx"><span class="nav-number">5.</span> <span class="nav-text">nginx</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95"><span class="nav-number">1.</span> <span class="nav-text">压力测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ab-%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">2.</span> <span class="nav-text">ab 的使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#socket-Too-many-open-files-24-%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">socket: Too many open files (24)的解决办法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redigo"><span class="nav-number">4.</span> <span class="nav-text">redigo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#nginx"><span class="nav-number">5.</span> <span class="nav-text">nginx</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mysql-%E7%9B%B8%E5%85%B3"><span class="nav-number">6.</span> <span class="nav-text">mysql 相关</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -360,7 +363,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">64</span>
+          <span class="site-state-item-count">65</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

@@ -164,6 +164,97 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2019/08/03/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql45%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content="记录编程学习路上的点滴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/08/03/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql45%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02/" class="post-title-link" itemprop="url">mysql45-3</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-08-03 23:28:32" itemprop="dateCreated datePublished" datetime="2019-08-03T23:28:32+08:00">2019-08-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-22 02:23:25" itemprop="dateModified" datetime="2020-02-22T02:23:25+08:00">2020-02-22</time>
+              </span>
+
+          
+
+          <span class="post-time">
+            &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-bar-chart"></i>
+            </span>
+            <span class="post-meta-item-text">字数统计:</span>
+            <span class="post-count">164(字)</span>
+
+          </span>
+
+            <span class="post-time">
+          &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-clock-o"></i>
+            </span>
+            <span class="post-meta-item-text">阅读时长:</span>
+            <span class="post-count">1(分)</span>
+
+          </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="order-by-是怎么工作的"><a href="#order-by-是怎么工作的" class="headerlink" title="order by 是怎么工作的"></a>order by 是怎么工作的</h4><ul>
+<li>mysql 的外部排序采用归并排序，将排序数据分成多个保存到临时文件中，最后合并为一个大文件</li>
+<li>mysql 有两种排序方式 全字段排序和 rowid 排序，mysql 的设计思想是，如果内存够，就要多利用内存，尽量减少磁盘访问</li>
+<li>rc 模式下 for update 对所有行加了 X 锁 没有上 gap 锁 rr 模式下，也加了 X 锁</li>
+<li>幻读是指一个事务在前后两次查询同一个范围的时候，后一次查询到了前一次没看到的行</li>
+<li>加上 forupdate 是当前读</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2019/08/03/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql45%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -195,7 +286,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-02-22 02:23:28" itemprop="dateModified" datetime="2020-02-22T02:23:28+08:00">2020-02-22</time>
+                <time title="修改时间：2020-10-05 13:05:38" itemprop="dateModified" datetime="2020-10-05T13:05:38+08:00">2020-10-05</time>
               </span>
 
           
@@ -206,7 +297,7 @@
               <i class="fa fa-bar-chart"></i>
             </span>
             <span class="post-meta-item-text">字数统计:</span>
-            <span class="post-count">1.9k(字)</span>
+            <span class="post-count">2.3k(字)</span>
 
           </span>
 
@@ -216,7 +307,7 @@
               <i class="fa fa-clock-o"></i>
             </span>
             <span class="post-meta-item-text">阅读时长:</span>
-            <span class="post-count">6(分)</span>
+            <span class="post-count">7(分)</span>
 
           </span>
 
@@ -229,40 +320,28 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h3 id="日志系统"><a href="#日志系统" class="headerlink" title="日志系统"></a>日志系统</h3><ul>
-<li>在一个表上有更新的时候，跟这个表有关的查询缓存会失效，一般不使用查询缓存
+          <h2 id="查询过程"><a href="#查询过程" class="headerlink" title="查询过程"></a>查询过程</h2><h3 id="查询缓存"><a href="#查询缓存" class="headerlink" title="查询缓存"></a>查询缓存</h3><p>Mysql 拿到一个查询请求后，会先到查询缓存看是否执行过该语句。缓存可能会以 key-value 对形式直接缓存在内存，如果能直接在缓存中找到结果，就直接返回 value 给客户端，否则，就继续后面的执行阶段。执行完成后，执行结果被存入查询缓存。</p>
+<p>但是查询缓存的失效非常频繁，只要对一个表有更新，这个表上所有查询缓存都会被清空。从 mysql8.0 版本，查询缓存的功能被删除了。</p>
+<h2 id="日志系统"><a href="#日志系统" class="headerlink" title="日志系统"></a>日志系统</h2>
+<h3 id="redolog"><a href="#redolog" class="headerlink" title="redolog"></a>redolog</h3><p>WAL 技术全称是 Write-Ahead Logging 先写日志，再写磁盘，当有一条记录需要更新的时候，innodb 会把记录写到 redo log，并更新内存，并在适当的时候，将这个操作记录更新到磁盘。redolog 的大小是固定的，写到末尾又会回到开头覆写。<br>因为 redolog，innodb 可以保证数据库异常重启后，之前提交的记录不会丢失，称为 crash-safe。</p>
+<h3 id="binlog"><a href="#binlog" class="headerlink" title="binlog"></a>binlog</h3><p>redolog 是 innodb 特有的 log，而 server 层也有自己的日志，称为 binlog（归档日志）<br>redolog 是物理日志，记录在某个数据页做了什么修改，binlog 是逻辑日志，记录的是语句的原始逻辑<br>binlog 采用追加写，写到一定大写后会创建新的 binlog，不会覆盖之前的日志</p>
+<h3 id="两阶段提交"><a href="#两阶段提交" class="headerlink" title="两阶段提交"></a>两阶段提交</h3><p>浅色表示在 innoDB 内部执行，深色表示在执行器中执行<br><img src="/2019/08/03/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql45%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4.png" class="" title="两阶段提交"></p>
+<p>redolog 的写入拆分成 parpare 和 commit 两步，保证两个日志逻辑上的一致，这给了 binlog 和 redolog 一个同时说 ok 的机会</p>
+<h4 id="崩溃恢复原则"><a href="#崩溃恢复原则" class="headerlink" title="崩溃恢复原则"></a>崩溃恢复原则</h4><p>redo log 和 binlog 有一个共同的数据字段，叫 XID。崩溃恢复的时候，会按顺序扫描 redo log：</p>
+<ol>
+<li>如果碰到既有 prepare、又有 commit 的 redo log，就直接提交；</li>
+<li>如果碰到只有 parepare、而没有 commit 的 redo log，就拿着 XID 去 binlog 找对应的事务。<ul>
+<li>binlog 无记录，回滚事务</li>
+<li>binlog 有记录，提交事务。</li>
+</ul>
 </li>
-</ul>
-<h4 id="redolog"><a href="#redolog" class="headerlink" title="redolog"></a>redolog</h4><ul>
-<li>WAL 技术权证是 Write-Ahead Logging 先写日志，再写磁盘，当有一条记录需要更新的时候，innodb 会把记录写到 redo log，并更新内存，并在适当的时候，将这个操作记录更新到磁盘</li>
-<li>redolog 的大小是固定的，写到末尾又会回到开头覆写</li>
-<li>因为 redolog，innodb 可以保证数据库异常重启后，之前提交的记录不会丢失，称为 crash-safe</li>
-</ul>
-<h4 id="binlog"><a href="#binlog" class="headerlink" title="binlog"></a>binlog</h4><ul>
-<li>redolog 是 innodb 特有的 log，而 server 层也有自己的日志，称为 binlog（归档日志）</li>
-<li>redolog 是物理日志，记录在某个数据页做了什么修改，binlog 是逻辑日志，记录的是语句的原始逻辑</li>
-<li>binlog 采用追加写，写到一定大写后会创建新的 binlog，不会覆盖之前的日志</li>
-</ul>
-<h4 id="两阶段提交"><a href="#两阶段提交" class="headerlink" title="两阶段提交"></a>两阶段提交</h4><p>redolog 的写入拆分成 parpare 和 commit 两步，保证两个日志逻辑上的一致，这给了 binlog 和 redolog 一个同时说 ok 的机会</p>
-<h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><p>innodb_flush_log_at_trx_commit 将每次事务都持久化到磁盘<br>sync_binlog 将每次事务的 binlog 都持久化到磁盘</p>
-<h3 id="事务隔离"><a href="#事务隔离" class="headerlink" title="事务隔离"></a>事务隔离</h3><ul>
-<li>读未提交，一个事务还没提交时，它做的变更就能被别的事务看到</li>
-<li>读提交，一个事务提交之后，他做的变更才会被其他事务看到</li>
-<li>可重复读是，一个事务执行过程中看到的数据，总是跟这个事务在启动时看到的数据是一样的，未提交的变更对其他事务是不可见的</li>
-<li>串行化，对于同一行记录，写会加写锁，读会加读锁，当出现读写锁冲突的时候，后访问的事务必须等前一个事务执行完成后才能继续执行</li>
-<li>配置方式 将启动参数 transaction-isolation 的值设置成 READ-COMMITTED，可以用 show variables 查看当期数值</li>
-</ul>
-<h4 id="事务隔离的实现"><a href="#事务隔离的实现" class="headerlink" title="事务隔离的实现"></a>事务隔离的实现</h4><ul>
-<li>可重复读 每条记录在更新的时候都会同时记录一条回滚操作，记录上的最新值，通过回滚操作，可以得到前一个状态的值</li>
-<li>不同时刻启动的事务会有不同的 read-view,同一个记录的值分别是 1,2,3,4，同一个记录在系统中可以存在多个版本，这是数据库的多版本并发控制 mvcc。对于 read-view A，要得到更新后的值，就必须将当前数值依次执行所有回滚操作</li>
-<li>回滚日志会一直保留到没有比这个更早的 read-view 的时候，因此尽量不要使用长事务</li>
-</ul>
-<h4 id="事务的启动方式"><a href="#事务的启动方式" class="headerlink" title="事务的启动方式"></a>事务的启动方式</h4><ul>
-<li>显式启动事务 begin 或 start transaction 提交使用 commit 回滚使用 rollback</li>
-<li>set autocommit=0 会将线程的自动提交关掉，这意味着事务不会自动提交，知道主动执行 commit 或者 rollback 或者断开连接，建议总是设置 autocommit 为 1</li>
-<li>可以在 informatino_schema 库的 innodb_trx 表中查询长事务</li>
-</ul>
-<h3 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h3><ul>
+</ol>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>set innodb_flush_log_at_trx_commit = 1 将每次事务都持久化到磁盘<br>set sync_binlog = 1 将每次事务的 binlog 都持久化到磁盘</p>
+<h2 id="事务隔离"><a href="#事务隔离" class="headerlink" title="事务隔离"></a>事务隔离</h2><p>读未提交，一个事务还没提交时，它做的变更就能被别的事务看到<br>读提交，一个事务提交之后，他做的变更才会被其他事务看到<br>可重复读是，一个事务执行过程中看到的数据，总是跟这个事务在启动时看到的数据是一样的，未提交的变更对其他事务是不可见的<br>串行化，对于同一行记录，写会加写锁，读会加读锁，当出现读写锁冲突的时候，后访问的事务必须等前一个事务执行完成后才能继续执行<br>配置方式 将启动参数 transaction_isolation 的值设置成 READ-COMMITTED，可以用 show variables 查看当期数值</p>
+<p>数据库内会创建一个视图，访问的时候以视图的逻辑结果为准。在可重复读隔离级别下，这个视图是在事务启动的时候创建的，整个事务存在期间都用这个事务。在读提交级别下，这个视图是在每个 sql 语句开始执行的时候创建的。读未提交没有视图概念，串行化直接用加锁的方式避免并行访问。</p>
+<h3 id="事务隔离的实现"><a href="#事务隔离的实现" class="headerlink" title="事务隔离的实现"></a>事务隔离的实现</h3><p>可重复读 每条记录在更新的时候都会同时记录一条回滚操作，记录上的最新值，通过回滚操作，可以得到前一个状态的值<br>不同时刻启动的事务会有不同的 read-view,同一个记录的值分别是 1,2,3,4，同一个记录在系统中可以存在多个版本，这是数据库的多版本并发控制 mvcc。对于 read-view A，要得到更新后的值，就必须将当前数值依次执行所有回滚操作<br>回滚日志会一直保留到没有比这个更早的 read-view 的时候，因此尽量不要使用长事务</p>
+<h3 id="事务的启动方式"><a href="#事务的启动方式" class="headerlink" title="事务的启动方式"></a>事务的启动方式</h3><p>显式启动事务 begin 或 start transaction 提交使用 commit 回滚使用 rollback<br>set autocommit=0 会将线程的自动提交关掉，这意味着事务不会自动提交，知道主动执行 commit 或者 rollback 或者断开连接，建议总是设置 autocommit 为 1<br>可以在 informatino_schema 库的 innodb_trx 表中查询长事务</p>
+<h2 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h2><ul>
 <li>三种数据结构<ul>
 <li>哈希表 优点是增加新的 user 时速度很快，只需要往后追加，但缺点是，因为不是有序的，哈希索引做区间查询速度很慢</li>
 <li>有序数组 在等值查询和范围查询场景的性能非常优秀，但是需要插入的时候成本太高，只适用于静态存储引擎</li>
@@ -270,12 +349,12 @@
 </ul>
 </li>
 </ul>
-<h4 id="innodb-的索引模型"><a href="#innodb-的索引模型" class="headerlink" title="innodb 的索引模型"></a>innodb 的索引模型</h4><ul>
+<h3 id="innodb-的索引模型"><a href="#innodb-的索引模型" class="headerlink" title="innodb 的索引模型"></a>innodb 的索引模型</h3><ul>
 <li>innodb 中，表都是根据主键顺序以索引的形式存放的，这种方式称为索引组织表，使用 B+树索引模型，所有数据存储在 B+树中。</li>
 <li>主键索引的叶子节点存的是整行数据，在 innodb 中，主键索引也被称为聚簇索引，非主键索引的叶子节点的内容是主键的数值，非主键索引也被称为二级索引</li>
 <li>使用二级索引查表需要先找到主键的值，再在主键的索引书搜索一次，这个过程称为回表</li>
 </ul>
-<h4 id="索引维护"><a href="#索引维护" class="headerlink" title="索引维护"></a>索引维护</h4><ul>
+<h3 id="索引维护"><a href="#索引维护" class="headerlink" title="索引维护"></a>索引维护</h3><ul>
 <li>主键索引树需要保持树的有序性，自增主键的插入数据模式的耗时很低，而有业务逻辑的字段作主键，往往不容易保证有序插入，这样写数据的成本相对较高</li>
 <li>而且从空间角度，使用 int 型作为主键，占用的空间也较小，主键索引越小，普通索引的叶子节点就越小，普通索引占用的空间也就越小</li>
 <li>直接用业务字段作主键<ul>
@@ -284,12 +363,12 @@
 </ul>
 </li>
 </ul>
-<h4 id="覆盖索引"><a href="#覆盖索引" class="headerlink" title="覆盖索引"></a>覆盖索引</h4><p>如果在某个查询里面，索引 k 已经覆盖了我们的查询需求，我们称其为覆盖索引。覆盖索引可以减少树的搜索次数，显著提升查询性能</p>
-<h4 id="最左索引"><a href="#最左索引" class="headerlink" title="最左索引"></a>最左索引</h4><ul>
+<h3 id="覆盖索引"><a href="#覆盖索引" class="headerlink" title="覆盖索引"></a>覆盖索引</h3><p>如果在某个查询里面，索引 k 已经覆盖了我们的查询需求，我们称其为覆盖索引。覆盖索引可以减少树的搜索次数，显著提升查询性能</p>
+<h3 id="最左索引"><a href="#最左索引" class="headerlink" title="最左索引"></a>最左索引</h3><ul>
 <li>不只是索引的全部定义，只要满足最左前缀，就可以利用索引来加速检索。这个最左前缀可以使联合索引的最左 N 个字段，也可以是字符串索引的最左 M 个字符。</li>
 </ul>
-<h4 id="下推优化"><a href="#下推优化" class="headerlink" title="下推优化"></a>下推优化</h4><p>mysql5.6 之后，可以在索引遍历的过程中，对索引包含的字段先做判断，直接过滤掉不满足条件的记录，减少回表的次数</p>
-<h4 id="重建索引"><a href="#重建索引" class="headerlink" title="重建索引"></a>重建索引</h4><p>重建主键索引会将整个表重建</p>
+<h3 id="下推优化"><a href="#下推优化" class="headerlink" title="下推优化"></a>下推优化</h3><p>mysql5.6 之后，可以在索引遍历的过程中，对索引包含的字段先做判断，直接过滤掉不满足条件的记录，减少回表的次数</p>
+<h3 id="重建索引"><a href="#重建索引" class="headerlink" title="重建索引"></a>重建索引</h3><p>重建主键索引会将整个表重建</p>
 <ul>
 <li>普通索引与唯一索引的性能差距<br>对于普通索引，查找到满足条件的第一条记录后，还需要继续查找知道碰到第一个不满足条件的记录，对于唯一索引，由于定义了唯一性，查找到第一个满足条件的记录后就会停止继续检索，这带来的性能差距呢是微乎其微，innodb 是按照页读写的，当找到记录的时候，他所在的数据页也都在内存中，因此下一次查找的消耗很低</li>
 <li>change buffer<br>当需要更新一个数据页时，如果数据页在内存中就直接更新，如果不再，在不影响数据一致性的前提下，innodb 会将更新操作缓存在 changer buffer 中，当下一次查询需要访问这个页面的时候，将数据读入内存，然后执行 change buffer 中与这个页有关的操作。很像操作系统中的页面交换。</li>
@@ -298,7 +377,7 @@
 <li>change buffer 用的是 buffer pool 里的内存，可通过 innodb_change_buffer_max_size 来动态设置</li>
 <li>对于写多读少的业务，比较适合使用 change buffer，如果业务写入之后立即查询，由于会频繁触发 purge 过程，增加了 change buffer 的维护代价，反而起到了副作用</li>
 </ul>
-<h4 id="mysql-选择了错误的索引"><a href="#mysql-选择了错误的索引" class="headerlink" title="mysql 选择了错误的索引"></a>mysql 选择了错误的索引</h4><ul>
+<h3 id="mysql-选择了错误的索引"><a href="#mysql-选择了错误的索引" class="headerlink" title="mysql 选择了错误的索引"></a>mysql 选择了错误的索引</h3><ul>
 <li>可以使用 force index 强制选取使用的索引</li>
 </ul>
 
@@ -1422,102 +1501,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2019/05/11/%E7%AE%97%E6%B3%95/%E5%B7%AE%E5%88%86%E7%BA%A6%E6%9D%9F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="jiezi19971225">
-      <meta itemprop="description" content="记录编程学习路上的点滴">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Jiez19971225‘s Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/05/11/%E7%AE%97%E6%B3%95/%E5%B7%AE%E5%88%86%E7%BA%A6%E6%9D%9F/" class="post-title-link" itemprop="url">差分约束</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-05-11 18:44:49" itemprop="dateCreated datePublished" datetime="2019-05-11T18:44:49+08:00">2019-05-11</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-01 19:47:56" itemprop="dateModified" datetime="2020-10-01T19:47:56+08:00">2020-10-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
-                </span>
-            </span>
-
-          
-
-          <span class="post-time">
-            &nbsp; | &nbsp;
-            <span class="post-meta-item-icon">
-              <i class="fa fa-bar-chart"></i>
-            </span>
-            <span class="post-meta-item-text">字数统计:</span>
-            <span class="post-count">728(字)</span>
-
-          </span>
-
-            <span class="post-time">
-          &nbsp; | &nbsp;
-            <span class="post-meta-item-icon">
-              <i class="fa fa-clock-o"></i>
-            </span>
-            <span class="post-meta-item-text">阅读时长:</span>
-            <span class="post-count">3(分)</span>
-
-          </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>这还是一篇以前写的文章。</p>
-<p>差分约束问题是一类出一些形如 x-y&lt;=b 不等式的约束，问你是否满足有解的问题，这类问题竟然可以转换成图论里的最短路径问题，下面开始详细介绍下<br>比如给出三个不等式,b-a&lt;=k1,c-b&lt;=k2,c-a&lt;=k3,求出 c-a 的最大值,我们可以把 a,b,c 转换成三个点，k1，k2，k3 是边上的权，如图<br>由题我们可以得知，这个有向图中，由题 b-a&lt;=k1,c-b&lt;=k2,得出 c-a&lt;=k1+k2,因此比较 k1+k2 和 k3 的大小，求出最小的就是 c-a 的最大值了<br>根据以上的解法，我们可能会猜到求解过程实际就是求从 a 到 c 的最短路径，没错的….简单的说就是从 a 到 c 沿着某条路径后把所有权值和 k 求出就是 c -a&lt;=k 的一个<br>推广的不等式约束，既然这样，满足题目的肯定是最小的 k，也就是从 a 到 c 最短距离<br>再看 a - b &lt;= k1，b - c &lt;= k2， c-1 &lt;= k3， 那么有 k1+k2+k3&gt;=0，因此若图中存在负环，就说明不存在满足条件的解<br>判断图中是否存在负环 可以使用 dfs 形式的 spfa 算法，使用一个 vis 数组 值为 1 表示当前正在递归栈中的点，因为点可能多次入栈，需要注意回溯时处理。<br>洛谷 P1993   使用了超级源点的思想，将图中的所有点与超级源点连一条权值为 0 的边，对结果没有影响，但方便了问题的处理。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">int</span> n,m;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> inf = <span class="number">1e9</span>+<span class="number">7</span>;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">node</span>&#123;</span></span><br><span class="line">    <span class="keyword">int</span> to,w;</span><br><span class="line">    node(<span class="keyword">int</span> to,<span class="keyword">int</span> w)&#123;</span><br><span class="line">        <span class="keyword">this</span>-&gt;to = to,<span class="keyword">this</span>-&gt;w = w;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">1e4</span>+<span class="number">7</span>;</span><br><span class="line"><span class="built_in">vector</span>&lt;node&gt; gra[maxn];</span><br><span class="line"><span class="keyword">int</span> dist[maxn],vis[maxn];</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">addedge</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b,<span class="keyword">int</span> c)</span></span>&#123;</span><br><span class="line">    gra[a].push_back(node(b,c));</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">spfa</span><span class="params">(<span class="keyword">int</span> x)</span></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; gra[x].size(); i++)&#123;</span><br><span class="line">        <span class="keyword">int</span> to = gra[x][i].to;</span><br><span class="line">        <span class="keyword">if</span>(dist[to]&gt;dist[x]+gra[x][i].w)&#123;</span><br><span class="line">            <span class="keyword">if</span>(vis[to] == <span class="number">1</span>)&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            vis[to] = <span class="number">1</span>;</span><br><span class="line">            dist[to]=dist[x]+gra[x][i].w;</span><br><span class="line">            <span class="keyword">int</span> flag = spfa(to);</span><br><span class="line">            <span class="keyword">if</span>(!flag)&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            vis[to] = <span class="number">0</span>;<span class="comment">// 回溯的处理</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="built_in">cin</span>&gt;&gt;n&gt;&gt;m;</span><br><span class="line">    <span class="keyword">int</span> flag = <span class="number">1</span>;</span><br><span class="line">    fill(dist,dist+maxn,inf);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; m; i++)&#123;</span><br><span class="line">        <span class="keyword">int</span> t,a,b,c;</span><br><span class="line">        <span class="built_in">cin</span>&gt;&gt;t;</span><br><span class="line">        <span class="keyword">if</span>(t == <span class="number">1</span>)&#123;</span><br><span class="line">            <span class="built_in">cin</span>&gt;&gt;a&gt;&gt;b&gt;&gt;c;</span><br><span class="line">            addedge(b,a,-c);</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(t == <span class="number">2</span>)&#123;</span><br><span class="line">            <span class="built_in">cin</span>&gt;&gt;a&gt;&gt;b&gt;&gt;c;</span><br><span class="line">            addedge(a,b,c);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="built_in">cin</span>&gt;&gt;a&gt;&gt;b;</span><br><span class="line">            addedge(a,b,<span class="number">0</span>);</span><br><span class="line">            addedge(b,a,<span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">memset</span>(vis,<span class="number">0</span>,<span class="keyword">sizeof</span>(vis));</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)&#123;</span><br><span class="line">        addedge(<span class="number">0</span>,i,<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    dist[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span>(spfa(<span class="number">0</span>))&#123;</span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;<span class="string">&quot;Yes&quot;</span>;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;<span class="string">&quot;No&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1587,7 +1570,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">64</span>
+          <span class="site-state-item-count">65</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
