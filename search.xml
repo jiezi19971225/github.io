@@ -3934,7 +3934,7 @@
 <p>这里还踩了一个坑，一开始 helm 方式，连 db_init 的 job 都不运行。检查了以下各个组件，只有名为 sentry 的 service 处于 pending状态。它的 serviceType 是 loadbalance。尝试删掉它，helm 直接返回错误，我感觉是helm要等待所有组件就绪，才会调度job。我看了下文档，service 主要是负责外网连接功能的，它有两种类型 loadbalance 和 nodeport，loadbalance 只有使用 gce（谷歌的云服务） 的服务才能正常工作。后来把他改成 nodeport 果然正常了。db_init 后，user_create 也正常调度了。<br>最后摸索出来的命令是这样的。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">helm --kubeconfig  D:\bins\kubeconfig install sentry stable&#x2F;sentry -n sentry --set persistenc</span><br><span class="line">e.enabled&#x3D;true --set user.email&#x3D;你的用户名 --set user.password&#x3D;你的密码 --set email.host&#x3D;你的邮箱host --set email.port&#x3D;25 --set email.user&#x3D;你的邮箱服务用户 --set email.password&#x3D;你的邮箱服务密码 --set service.type&#x3D;NodePort --set email.use_tls&#x3D;false --wait --timeout&#x3D;800s</span><br></pre></td></tr></table></figure>
 <p>稍微等待个10分钟作用， sentry服务就部署完成了，确实是很简单。。。</p>
-<p>明天研究一下将 sentry 引入项目，然后下篇博客再总结一下 sentry 的前端监控应用。</p>
+<p>明天研究一下将 sentry 引入项目，然后在下篇博客再总结一下 sentry 的前端监控应用。</p>
 ]]></content>
       <categories>
         <category>开发工具</category>
