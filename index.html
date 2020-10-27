@@ -164,6 +164,107 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/10/27/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/helm%E5%AE%89%E8%A3%85sentry%E8%B8%A9%E5%9D%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content="记录编程学习路上的点滴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/10/27/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/helm%E5%AE%89%E8%A3%85sentry%E8%B8%A9%E5%9D%91/" class="post-title-link" itemprop="url">helm安装sentry踩坑</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-10-27 22:40:49 / 修改时间：23:50:38" itemprop="dateCreated datePublished" datetime="2020-10-27T22:40:49+08:00">2020-10-27</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/" itemprop="url" rel="index"><span itemprop="name">开发工具</span></a>
+                </span>
+            </span>
+
+          
+
+          <span class="post-time">
+            &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-bar-chart"></i>
+            </span>
+            <span class="post-meta-item-text">字数统计:</span>
+            <span class="post-count">1.5k(字)</span>
+
+          </span>
+
+            <span class="post-time">
+          &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-clock-o"></i>
+            </span>
+            <span class="post-meta-item-text">阅读时长:</span>
+            <span class="post-count">5(分)</span>
+
+          </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>最近一周一直在研究在公司的 rancher k8s 环境下搭建前端错误监控平台 sentry。首先介绍一下 sentry，这是一个非常强大的错误收集框架，可以收集众多语言的运行错误日志，其在前端错误的监控上应用的比较多。配合上传 sourceMap可以快速准确定位到源代码错误位置。</p>
+<p>为什么它来监控前端错误呢？我们的测试无法覆盖到应用的方方面面，很多线上错误，往往是用户反馈到了客服人员，然后技术人员才能知晓，同时由于前端运行环境复杂，问题可能很难复现，技术人员定位错误需要不少的时间，这段时间就可能造成不小的损失了，如果解决问题花费的时间很久，用户对于这家公司的技术力也会产生质疑。应用前端错误监控之后，当线上有高频错误发生时，可以立即通过钉钉或者邮件的方式通知到开发人员，开发人员通过错误日志信息可以快速定位到错误点，这带来的好处是不言而喻的。</p>
+<p>sentry 提供 saas 的服务，同时也提供开源的私有化部署版本，提供相同的服务体验。官方维护的是 docker-compose 的一键式部署方式，但是公司的云服务器都在 k8s 的集群，因此我考虑采用的是基于 k8s 的安装方式。然而公司并没有专业的运维人员，想折腾，只能自己动手了。最为一个一周前对 k8s 还是一窍不通的小白，踩坑是避免不了的，写这篇文章就是记录下踩的那些坑。</p>
+<h2 id="错误方式-rancher-ui-商店方式安装"><a href="#错误方式-rancher-ui-商店方式安装" class="headerlink" title="错误方式 rancher ui 商店方式安装"></a>错误方式 rancher ui 商店方式安装</h2><p>一开始知道可以在 rancher 上安装 sentry，是在 v 站看到的一个回复，说是起个部署 sentry 会方便很多。然后知道了 rancher 的商店里可以找到 sentry，然后一键安装。这里需要开启 rancher 商店的 helm 官方仓库，结果商店死活刷不出来应用列表，后来才知道国内的云主机是无法访问 google 的 helm 仓库的，需要使用国内加速的仓库 <a target="_blank" rel="noopener" href="http://mirror.azure.cn/kubernetes/charts。">http://mirror.azure.cn/kubernetes/charts。</a></p>
+<p>换了加速地址后，可以顺利使用 rancher 商店启动应用了，工作负载一堆爆红，web，db和redis都没起来，这是因为没有设置默认存储类，导致 pvc 没有 绑定到 pv。刚一开始我可不知道 pv 和 pvc 的概念，更不用说默认存储类，总之是又百度又google又看官方文档的，算是稍稍搞明白了这块。这个在安装要求里已经说明了，k8s集群应该有一个默认存储类，用来动态分配pv。rancher ui 里像下图一样。</p>
+<img src="/2020/10/27/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/helm%E5%AE%89%E8%A3%85sentry%E8%B8%A9%E5%9D%91/%E9%BB%98%E8%AE%A4%E5%AD%98%E5%82%A8%E7%B1%BB.png" class="" title="默认存储类">
+<p>配置好了这个，按理说通过 rancher ui 的商店应该可以正常安装了吧，然而答案是并不能。这时候所有组件都能正常创建，除了一个 pending 的 loadbalance Service，这个我一开始没管它，自己又创建了一个 Ingress 配置，总算是可以访问 sentry 的 web 页面了。但是我按照文档的方法，输入用户名和密码，一直提示登录失败。我重装了几次，一直如此，折腾了几个小时，才发现了原因。</p>
+<p>rancher ui 也是通过 helm 工具安装 chart 的，helm 默认的等待事件是 5分钟，超过了就认为安装失败了。而 sentry 的安装是包含了两个 job 的，db_init 和 user_create。db_init 用时很长，已经超过了5分钟，helm 认为安装失败了，就不继续调用 user_create 的 job了，导致初始用户根本没有被初始化进去。</p>
+<h2 id="正确方式-helm-方式安装"><a href="#正确方式-helm-方式安装" class="headerlink" title="正确方式 helm 方式安装"></a>正确方式 helm 方式安装</h2><p>rancher ui中并没有方式去设置 helm 的等待时间，因此只能采用 helm 的方式进行安装了。这里感谢这位仁兄的文章 <a target="_blank" rel="noopener" href="https://www.imooc.com/article/303501">Sentry实时应用错误跟踪系统在Kubernetes中私有化部署</a>，给予了我很大的帮助。</p>
+<p>先简单介绍一下 helm，helm 是一个 k8s 的应用管理工具。helm 的 chart 我理解和 docker-compose 的 compose.yaml 类似，但是比后者更强大，通过预先配置的一组文件，来一键式部署k8s应用。helm现在有helm2和helm3两个版本，其中helm2需要在k8s中安装 helm2 服务端 Tiller，麻烦不说，还有潜在的后门隐患。helm3取消了这一步，因此这里使用的是helm3。</p>
+<p>这里还踩了一个坑，一开始 helm 方式，连 db_init 的 job 都不运行。检查了以下各个组件，只有名为 sentry 的 service 处于 pending状态。它的 serviceType 是 loadbalance。尝试删掉它，helm 直接返回错误，我感觉是helm要等待所有组件就绪，才会调度job。我看了下文档，service 主要是负责外网连接功能的，它有两种类型 loadbalance 和 nodeport，loadbalance 只有使用 gce（谷歌的云服务） 的服务才能正常工作。后来把他改成 nodeport 果然正常了。db_init 后，user_create 也正常调度了。<br>最后摸索出来的命令是这样的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">helm --kubeconfig  D:\bins\kubeconfig install sentry stable&#x2F;sentry -n sentry --set persistenc</span><br><span class="line">e.enabled&#x3D;true --set user.email&#x3D;你的用户名 --set user.password&#x3D;你的密码 --set email.host&#x3D;你的邮箱host --set email.port&#x3D;25 --set email.user&#x3D;你的邮箱服务用户 --set email.password&#x3D;你的邮箱服务密码 --set service.type&#x3D;NodePort --set email.use_tls&#x3D;false --wait --timeout&#x3D;800s</span><br></pre></td></tr></table></figure>
+<p>稍微等待个10分钟作用， sentry服务就部署完成了，确实是很简单。。。</p>
+<p>明天研究一下将 sentry 引入项目，然后在下篇博客再总结一下 sentry 的前端监控应用。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/10/09/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/npm%E7%A7%81%E4%BB%93%E6%90%AD%E5%BB%BA%E5%B9%B6%E5%88%B6%E4%BD%9C%E5%8F%91%E5%B8%83npm%E5%8C%85/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -195,8 +296,17 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-12 21:23:30" itemprop="dateModified" datetime="2020-10-12T21:23:30+08:00">2020-10-12</time>
+                <time title="修改时间：2020-10-27 22:41:30" itemprop="dateModified" datetime="2020-10-27T22:41:30+08:00">2020-10-27</time>
               </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/" itemprop="url" rel="index"><span itemprop="name">开发工具</span></a>
+                </span>
+            </span>
 
           
 
@@ -1183,108 +1293,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/07/13/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/JavaScript%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%8E%E5%BA%94%E7%94%A8%E5%AE%9E%E8%B7%B5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="jiezi19971225">
-      <meta itemprop="description" content="记录编程学习路上的点滴">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Jiez19971225‘s Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/07/13/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/JavaScript%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%8E%E5%BA%94%E7%94%A8%E5%AE%9E%E8%B7%B5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="post-title-link" itemprop="url">设计模式</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-07-13 22:18:47" itemprop="dateCreated datePublished" datetime="2020-07-13T22:18:47+08:00">2020-07-13</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-01 20:24:57" itemprop="dateModified" datetime="2020-10-01T20:24:57+08:00">2020-10-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">设计模式</span></a>
-                </span>
-            </span>
-
-          
-
-          <span class="post-time">
-            &nbsp; | &nbsp;
-            <span class="post-meta-item-icon">
-              <i class="fa fa-bar-chart"></i>
-            </span>
-            <span class="post-meta-item-text">字数统计:</span>
-            <span class="post-count">478(字)</span>
-
-          </span>
-
-            <span class="post-time">
-          &nbsp; | &nbsp;
-            <span class="post-meta-item-icon">
-              <i class="fa fa-clock-o"></i>
-            </span>
-            <span class="post-meta-item-text">阅读时长:</span>
-            <span class="post-count">1(分)</span>
-
-          </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="策略模式-Strategy-Design-Pattern"><a href="#策略模式-Strategy-Design-Pattern" class="headerlink" title="策略模式 Strategy Design Pattern"></a>策略模式 Strategy Design Pattern</h2><pre><code>Define a family of algorithms, encapsulate each one, and make them interchangeable. Strategy lets the algorithm vary independently from clients that use it.
-</code></pre><p>定义一族算法类，将每个算法分别封装起来，让它们可以互相替换。策略模式可以使算法的变化独立于使用它们的客户端（这里的客户端代指使用算法的代码）。</p>
-<h3 id="js-版本的策略模式"><a href="#js-版本的策略模式" class="headerlink" title="js 版本的策略模式"></a>js 版本的策略模式</h3><p>js 中函数也是对象，所以 js 中策略模式可以这样实现</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> strategies = &#123;</span><br><span class="line">  S: <span class="function">(<span class="params">salary</span>) =&gt;</span> salary * <span class="number">4</span>,</span><br><span class="line">  A: <span class="function">(<span class="params">salary</span>) =&gt;</span> salary * <span class="number">3</span>,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> calcBonus = <span class="function">(<span class="params">level, salary</span>) =&gt;</span> strategies[level](salary);</span><br></pre></td></tr></table></figure>
-<p>策略模式在前端一个典型应用是给动画传入不同的缓动函数</p>
-<h2 id="代理模式-Proxy-Pattern"><a href="#代理模式-Proxy-Pattern" class="headerlink" title="代理模式 Proxy Pattern"></a>代理模式 Proxy Pattern</h2><h3 id="保护代理和虚拟代理"><a href="#保护代理和虚拟代理" class="headerlink" title="保护代理和虚拟代理"></a>保护代理和虚拟代理</h3><p>保护代理用于控制不同权限的对象对目标对象的访问，但在 JavaScript 并不容易实现保护代理，因为我们无法判断谁访问了某个对象。<br>虚拟代理把一些开销很大的对象，延迟到真正需要它的时候才去创建。</p>
-<h3 id="虚拟代理实现图片加载显示-loading"><a href="#虚拟代理实现图片加载显示-loading" class="headerlink" title="虚拟代理实现图片加载显示 loading"></a>虚拟代理实现图片加载显示 loading</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> myImage = (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> imgNode = <span class="built_in">document</span>.createElement(<span class="string">&quot;img&quot;</span>);</span><br><span class="line">  <span class="built_in">document</span>.body.appendChild(imgNode);</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    setSrc: <span class="function"><span class="keyword">function</span> (<span class="params">src</span>) </span>&#123;</span><br><span class="line">      imgNode.src = src;</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;)();</span><br><span class="line"><span class="keyword">var</span> proxyImage = (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> img = <span class="keyword">new</span> Image();</span><br><span class="line">  img.onload = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    myImage.setSrc(<span class="built_in">this</span>.src);</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    setSrc: <span class="function"><span class="keyword">function</span> (<span class="params">src</span>) </span>&#123;</span><br><span class="line">      myImage.setSrc(<span class="string">&quot;file:// /C:/Users/svenzeng/Desktop/loading.gif&quot;</span>);</span><br><span class="line">      img.src = src;</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;)();</span><br><span class="line">proxyImage.setSrc(<span class="string">&quot;http:// imgcache.qq.com/music/photo/k/000GGDys0yA0Nk.jpg&quot;</span>);</span><br></pre></td></tr></table></figure>
-<h2 id="发布-订阅模式"><a href="#发布-订阅模式" class="headerlink" title="发布-订阅模式"></a>发布-订阅模式</h2><p>Eventbus 就是发布订阅思想的体现</p>
-<p>在 Java 中实现一个自己的发布—订阅模式，通常会把订阅者对象自身当成引用传入发布者对象中，同时订阅者对象还需提供一个名为诸如 update 的方法，供发布者对象在适合的时候调用。在 js 中，可以用注册回调函数的方式代替传统的发布订阅模式。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1354,7 +1362,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">65</span>
+          <span class="site-state-item-count">66</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1367,7 +1375,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">44</span>
+        <span class="site-state-item-count">49</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1400,6 +1408,9 @@
   </span>
   <span class="author" itemprop="copyrightHolder">jiezi19971225</span>
 </div>
+  <img src="https://static.dy208.cn/o_1dfilp8ruo521thr1hvf18ji17soa.png"/>
+  <a href="http://www.beian.miit.gov.cn/"  style="color:#f72b07" target="_blank">皖ICP备17001385号-1</a>
+  <br/>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
   </div>
 

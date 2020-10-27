@@ -164,6 +164,119 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2019/08/03/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql45%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content="记录编程学习路上的点滴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/08/03/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql45%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03/" class="post-title-link" itemprop="url">mysql45-2</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-08-03 23:28:34" itemprop="dateCreated datePublished" datetime="2019-08-03T23:28:34+08:00">2019-08-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-22 02:23:22" itemprop="dateModified" datetime="2020-02-22T02:23:22+08:00">2020-02-22</time>
+              </span>
+
+          
+
+          <span class="post-time">
+            &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-bar-chart"></i>
+            </span>
+            <span class="post-meta-item-text">字数统计:</span>
+            <span class="post-count">502(字)</span>
+
+          </span>
+
+            <span class="post-time">
+          &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-clock-o"></i>
+            </span>
+            <span class="post-meta-item-text">阅读时长:</span>
+            <span class="post-count">1(分)</span>
+
+          </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="锁机制"><a href="#锁机制" class="headerlink" title="锁机制"></a>锁机制</h3><ul>
+<li>mysql 里面的锁可以大致分成全局锁，表级锁和行锁</li>
+</ul>
+<h4 id="全局锁"><a href="#全局锁" class="headerlink" title="全局锁"></a>全局锁</h4><p>全局锁对整个数据库实例加锁<br>Flush tables with read lock(FTWRL)<br>当使用这个命令后，其他线程的一下语句会被阻塞：数据更新语句，数据定义语句和更新类事务的提交语句<br>典型使用场景是做全局逻辑备份</p>
+<ul>
+<li>主库上备份，业务会停摆</li>
+<li>从库上备份，备份期间不能执行主库同步过来的 binlog，导致主从延迟<br>官方自带的逻辑备份工具是 mysqldump，当使用参数-single-transaction 的时候，导数据之前就会启动一个事务，确保拿到一致性视图</li>
+<li>myisam 不支持事务的引擎，这时就需要使用 FTWRL</li>
+<li>不建议使用 set global readonly = true</li>
+</ul>
+<h4 id="表级锁"><a href="#表级锁" class="headerlink" title="表级锁"></a>表级锁</h4><p>lock tables … read/write<br>可以使用 unlock 主动释放，也可以在客户端断开的时候自动释放</p>
+<h4 id="count"><a href="#count" class="headerlink" title="count(*)"></a>count(*)</h4><ul>
+<li>MyiSAM 把表的总行数存在了磁盘上，因此效率很高</li>
+<li>innodb 需要一行一行统计</li>
+<li>在保证逻辑正确的前提下 尽量减少扫描的数据量 是数据库系统设计的通用法则之一</li>
+<li>show table status 返回很快 但是不准确</li>
+<li>innodb 可以将计数保存到一张表中，使用事务，保持了一致性</li>
+<li>count(id) innodb 会遍历整张表，把每一行的 id 都取出来，返回给 server 层，server 层拿到 id 后，判断是不可能为空的，就按行累加</li>
+<li>count(1) innodb 引擎便利整张表，但不取值，server 层对返回的每一行，放一个数字 1 进去，判断是不可能为空的，按行累加</li>
+<li>count(字段)<ul>
+<li>如果是 not null 就一行行独读出，判断不能为 null，按行累加</li>
+<li>如果允许为 null，不是 null 才累加</li>
+</ul>
+</li>
+<li>count(*)做了优化，按行累加</li>
+</ul>
+<h4 id="答疑-1"><a href="#答疑-1" class="headerlink" title="答疑 1"></a>答疑 1</h4><ul>
+<li>insert on duplicate 确保了在事务内部，执行 SQL 后占住了这个行锁</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2019/08/03/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql45%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1391,116 +1504,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2019/05/11/%E7%AE%97%E6%B3%95/%E5%B7%A6%E5%81%8F%E6%A0%91/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="jiezi19971225">
-      <meta itemprop="description" content="记录编程学习路上的点滴">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Jiez19971225‘s Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/05/11/%E7%AE%97%E6%B3%95/%E5%B7%A6%E5%81%8F%E6%A0%91/" class="post-title-link" itemprop="url">左偏树</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-05-11 18:46:05" itemprop="dateCreated datePublished" datetime="2019-05-11T18:46:05+08:00">2019-05-11</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-01 19:48:05" itemprop="dateModified" datetime="2020-10-01T19:48:05+08:00">2020-10-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
-                </span>
-            </span>
-
-          
-
-          <span class="post-time">
-            &nbsp; | &nbsp;
-            <span class="post-meta-item-icon">
-              <i class="fa fa-bar-chart"></i>
-            </span>
-            <span class="post-meta-item-text">字数统计:</span>
-            <span class="post-count">992(字)</span>
-
-          </span>
-
-            <span class="post-time">
-          &nbsp; | &nbsp;
-            <span class="post-meta-item-icon">
-              <i class="fa fa-clock-o"></i>
-            </span>
-            <span class="post-meta-item-text">阅读时长:</span>
-            <span class="post-count">4(分)</span>
-
-          </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>最后一篇以前写的文章了，</p>
-<p>左偏树是一种实现简单的可并堆，可以在 logn 的复杂度下面完成优先队列的插入，删除，合并操作。</p>
-<p>这就是一颗左偏树啦 蓝色是该节点的 dist</p>
-<img src="/2019/05/11/%E7%AE%97%E6%B3%95/%E5%B7%A6%E5%81%8F%E6%A0%91/%E5%B7%A6%E5%81%8F%E6%A0%91.png" class="" title="左偏树">
-<p>结构体定义</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Node</span>&#123;</span></span><br><span class="line">    <span class="keyword">int</span> l,r,d,v;<span class="comment">//左右子树，距离和键值</span></span><br><span class="line">    Node()&#123;</span><br><span class="line">        l=r=v=d=<span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>我们定义左偏树的外界点为，一个左子树为空或者一个右子树为空的结点，结点的 dist 为它到它子树内外节点的最短距离。一个左偏树在满足堆的性质的前提下还应该满足它的右子树的 dist 不大于它的左子树的 dist。由此，我们可以得出其他一些性质。</p>
-<p>当前结点的 dist 为右子树 dist 的长度+1<br>若左偏树根节点的 dist 为一定值，则节点数最少的左偏树是一颗完全二叉树，并且为满二叉树<br>由上一条性质，可以知道根节点 dist 为 n 的左偏树，最少含有 2n+1−12n+1−1 个结点<br>一个有 n 个结点的左偏树，根节点距离最大为|log2（n+1）|−1|log2（n+1）|−1<br>左偏树的操作（最大堆）</p>
-<p>递归合并<br>如果有一颗树为空，返回另一棵树<br>否则，就将根节点键值较大树的右子树和根节点键值较小树合并<br>如果合并后破坏了左偏树的性质（左子树 dist&lt;右子树 dist）<br>交换根节点的左右子树<br>更新根节点的 dist 值</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">merge</span><span class="params">(<span class="keyword">int</span> x,<span class="keyword">int</span> y)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(!x)&#123;</span><br><span class="line">        <span class="keyword">return</span> y;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(!y)&#123;</span><br><span class="line">        <span class="keyword">return</span> x;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(node[x].v&lt;node[y].v)&#123;</span><br><span class="line">        swap(x,y);</span><br><span class="line">    &#125;</span><br><span class="line">    node[x].r=merge(node[x].r,y);</span><br><span class="line">    <span class="keyword">if</span>(node[node[x].l].d&lt;node[node[x].r].d)&#123;</span><br><span class="line">        swap(node[x].l,node[x].r);</span><br><span class="line">    &#125;</span><br><span class="line">    node[x].d=node[node[x].r].d+<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>插入<br>相当于和只有一个结点的树合并</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">insert</span><span class="params">(<span class="keyword">int</span> x,<span class="keyword">int</span> v)</span></span>&#123;</span><br><span class="line">    cnt++;</span><br><span class="line">    node[cnt].v=v;</span><br><span class="line">    <span class="keyword">return</span> merge(x,cnt);<span class="comment">//返回新的根节点</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>堆操作</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">top</span><span class="params">(<span class="keyword">int</span> x)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> node[x].v;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pop</span><span class="params">(<span class="keyword">int</span> x)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> merge(node[x].l,node[x].r);<span class="comment">//返回新的根节点</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>以上操作都以左偏树堆顶的编号代表这一刻左偏树<br>例题 hdu1512 左偏树加并查集的模版题，今年省赛的热身赛就是这题来着，当时乱搞搞出来了（数据太弱），重新用左偏树写一下。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn=<span class="number">1e5</span>+<span class="number">7</span>;</span><br><span class="line"><span class="keyword">int</span> cnt=<span class="number">0</span>;</span><br><span class="line"><span class="keyword">int</span> n,m;</span><br><span class="line"><span class="keyword">int</span> p[maxn],pqroot[maxn];</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Node</span>&#123;</span></span><br><span class="line">    <span class="keyword">int</span> l,r,d,v;</span><br><span class="line">    Node()&#123;</span><br><span class="line">        l=r=v=d=<span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">fight</span><span class="params">()</span></span>&#123;</span><br><span class="line">        l=r=d=<span class="number">0</span>;</span><br><span class="line">        v/=<span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;node[maxn];</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">merge</span><span class="params">(<span class="keyword">int</span> x,<span class="keyword">int</span> y)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(!x)&#123;</span><br><span class="line">        <span class="keyword">return</span> y;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(!y)&#123;</span><br><span class="line">        <span class="keyword">return</span> x;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(node[x].v&lt;node[y].v)&#123;</span><br><span class="line">        swap(x,y);</span><br><span class="line">    &#125;</span><br><span class="line">    node[x].r=merge(node[x].r,y);</span><br><span class="line">    <span class="keyword">if</span>(node[node[x].l].d&lt;node[node[x].r].d)&#123;</span><br><span class="line">        swap(node[x].l,node[x].r);</span><br><span class="line">    &#125;</span><br><span class="line">    node[x].d=node[node[x].r].d+<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pop</span><span class="params">(<span class="keyword">int</span> x)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> merge(node[x].l,node[x].r);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> x)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x==p[x]?x:x=find(p[x]);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">uset</span><span class="params">(<span class="keyword">int</span> x,<span class="keyword">int</span> y,<span class="keyword">int</span> root)</span></span>&#123;</span><br><span class="line">    p[x]=y;</span><br><span class="line">    pqroot[y]=root;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">//freopen(&quot;in.txt&quot;,&quot;r&quot;,stdin);</span></span><br><span class="line">    <span class="keyword">while</span>(<span class="built_in">cin</span>&gt;&gt;n)&#123;</span><br><span class="line">        <span class="built_in">memset</span>(node,<span class="number">0</span>,<span class="keyword">sizeof</span>(node));</span><br><span class="line">        <span class="built_in">memset</span>(p,<span class="number">0</span>,<span class="keyword">sizeof</span>(p));</span><br><span class="line">        <span class="built_in">memset</span>(pqroot,<span class="number">0</span>,<span class="keyword">sizeof</span>(pqroot));</span><br><span class="line">        node[<span class="number">0</span>].d=<span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">            p[i]=i;</span><br><span class="line">            pqroot[i]=i;</span><br><span class="line">            <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;node[i].v);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">cin</span>&gt;&gt;m;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;m;i++)&#123;</span><br><span class="line">            <span class="keyword">int</span> p1,p2;</span><br><span class="line">            <span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>,&amp;p1,&amp;p2);</span><br><span class="line">            <span class="keyword">int</span> s1=find(p1),s2=find(p2);</span><br><span class="line">            <span class="keyword">if</span>(s1!=s2)&#123;</span><br><span class="line">                <span class="keyword">int</span> pqroot1=pqroot[s1],pqroot2=pqroot[s2];</span><br><span class="line">                <span class="keyword">int</span> newroot1=pop(pqroot1);</span><br><span class="line">                <span class="keyword">int</span> newroot2=pop(pqroot2);</span><br><span class="line">                node[pqroot1].fight();</span><br><span class="line">                node[pqroot2].fight();</span><br><span class="line">                newroot1=merge(newroot1,pqroot1);</span><br><span class="line">                newroot2=merge(newroot2,pqroot2);</span><br><span class="line">                <span class="keyword">int</span> newpqroot=merge(newroot1,newroot2);</span><br><span class="line">                uset(s1,s2,newpqroot);</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>,node[newpqroot].v);</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;-1\n&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>并查集维护一个当前集合内优先队列的根节点 pqroot，合并的时候注意根的相关操作就 OK 了。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1570,7 +1573,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">65</span>
+          <span class="site-state-item-count">66</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1583,7 +1586,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">44</span>
+        <span class="site-state-item-count">49</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1616,6 +1619,9 @@
   </span>
   <span class="author" itemprop="copyrightHolder">jiezi19971225</span>
 </div>
+  <img src="https://static.dy208.cn/o_1dfilp8ruo521thr1hvf18ji17soa.png"/>
+  <a href="http://www.beian.miit.gov.cn/"  style="color:#f72b07" target="_blank">皖ICP备17001385号-1</a>
+  <br/>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
   </div>
 

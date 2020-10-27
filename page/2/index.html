@@ -164,6 +164,108 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/07/13/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/JavaScript%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%8E%E5%BA%94%E7%94%A8%E5%AE%9E%E8%B7%B5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content="记录编程学习路上的点滴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/07/13/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/JavaScript%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%8E%E5%BA%94%E7%94%A8%E5%AE%9E%E8%B7%B5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="post-title-link" itemprop="url">设计模式</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-07-13 22:18:47" itemprop="dateCreated datePublished" datetime="2020-07-13T22:18:47+08:00">2020-07-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-10-01 20:24:57" itemprop="dateModified" datetime="2020-10-01T20:24:57+08:00">2020-10-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">设计模式</span></a>
+                </span>
+            </span>
+
+          
+
+          <span class="post-time">
+            &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-bar-chart"></i>
+            </span>
+            <span class="post-meta-item-text">字数统计:</span>
+            <span class="post-count">478(字)</span>
+
+          </span>
+
+            <span class="post-time">
+          &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-clock-o"></i>
+            </span>
+            <span class="post-meta-item-text">阅读时长:</span>
+            <span class="post-count">1(分)</span>
+
+          </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="策略模式-Strategy-Design-Pattern"><a href="#策略模式-Strategy-Design-Pattern" class="headerlink" title="策略模式 Strategy Design Pattern"></a>策略模式 Strategy Design Pattern</h2><pre><code>Define a family of algorithms, encapsulate each one, and make them interchangeable. Strategy lets the algorithm vary independently from clients that use it.
+</code></pre><p>定义一族算法类，将每个算法分别封装起来，让它们可以互相替换。策略模式可以使算法的变化独立于使用它们的客户端（这里的客户端代指使用算法的代码）。</p>
+<h3 id="js-版本的策略模式"><a href="#js-版本的策略模式" class="headerlink" title="js 版本的策略模式"></a>js 版本的策略模式</h3><p>js 中函数也是对象，所以 js 中策略模式可以这样实现</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> strategies = &#123;</span><br><span class="line">  S: <span class="function">(<span class="params">salary</span>) =&gt;</span> salary * <span class="number">4</span>,</span><br><span class="line">  A: <span class="function">(<span class="params">salary</span>) =&gt;</span> salary * <span class="number">3</span>,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> calcBonus = <span class="function">(<span class="params">level, salary</span>) =&gt;</span> strategies[level](salary);</span><br></pre></td></tr></table></figure>
+<p>策略模式在前端一个典型应用是给动画传入不同的缓动函数</p>
+<h2 id="代理模式-Proxy-Pattern"><a href="#代理模式-Proxy-Pattern" class="headerlink" title="代理模式 Proxy Pattern"></a>代理模式 Proxy Pattern</h2><h3 id="保护代理和虚拟代理"><a href="#保护代理和虚拟代理" class="headerlink" title="保护代理和虚拟代理"></a>保护代理和虚拟代理</h3><p>保护代理用于控制不同权限的对象对目标对象的访问，但在 JavaScript 并不容易实现保护代理，因为我们无法判断谁访问了某个对象。<br>虚拟代理把一些开销很大的对象，延迟到真正需要它的时候才去创建。</p>
+<h3 id="虚拟代理实现图片加载显示-loading"><a href="#虚拟代理实现图片加载显示-loading" class="headerlink" title="虚拟代理实现图片加载显示 loading"></a>虚拟代理实现图片加载显示 loading</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> myImage = (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> imgNode = <span class="built_in">document</span>.createElement(<span class="string">&quot;img&quot;</span>);</span><br><span class="line">  <span class="built_in">document</span>.body.appendChild(imgNode);</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    setSrc: <span class="function"><span class="keyword">function</span> (<span class="params">src</span>) </span>&#123;</span><br><span class="line">      imgNode.src = src;</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;)();</span><br><span class="line"><span class="keyword">var</span> proxyImage = (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> img = <span class="keyword">new</span> Image();</span><br><span class="line">  img.onload = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    myImage.setSrc(<span class="built_in">this</span>.src);</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    setSrc: <span class="function"><span class="keyword">function</span> (<span class="params">src</span>) </span>&#123;</span><br><span class="line">      myImage.setSrc(<span class="string">&quot;file:// /C:/Users/svenzeng/Desktop/loading.gif&quot;</span>);</span><br><span class="line">      img.src = src;</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;)();</span><br><span class="line">proxyImage.setSrc(<span class="string">&quot;http:// imgcache.qq.com/music/photo/k/000GGDys0yA0Nk.jpg&quot;</span>);</span><br></pre></td></tr></table></figure>
+<h2 id="发布-订阅模式"><a href="#发布-订阅模式" class="headerlink" title="发布-订阅模式"></a>发布-订阅模式</h2><p>Eventbus 就是发布订阅思想的体现</p>
+<p>在 Java 中实现一个自己的发布—订阅模式，通常会把订阅者对象自身当成引用传入发布者对象中，同时订阅者对象还需提供一个名为诸如 update 的方法，供发布者对象在适合的时候调用。在 js 中，可以用注册回调函数的方式代替传统的发布订阅模式。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/07/05/vue/%E4%BA%8C%E6%AC%A1%E5%B0%81%E8%A3%85vue%E7%BB%84%E4%BB%B6%E7%9A%84%E4%B8%80%E7%A7%8D%E6%AF%94%E8%BE%83%E5%A5%BD%E7%9A%84%E6%96%B9%E5%BC%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1444,131 +1546,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/04/04/%E8%BF%90%E7%BB%B4/nginxLocation%E6%A8%A1%E5%9D%97%E5%AD%A6%E4%B9%A0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="jiezi19971225">
-      <meta itemprop="description" content="记录编程学习路上的点滴">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Jiez19971225‘s Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/04/04/%E8%BF%90%E7%BB%B4/nginxLocation%E6%A8%A1%E5%9D%97%E5%AD%A6%E4%B9%A0/" class="post-title-link" itemprop="url">nginxLocation模块学习</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-04-04 22:48:54" itemprop="dateCreated datePublished" datetime="2020-04-04T22:48:54+08:00">2020-04-04</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-01 19:48:55" itemprop="dateModified" datetime="2020-10-01T19:48:55+08:00">2020-10-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%BF%90%E7%BB%B4/" itemprop="url" rel="index"><span itemprop="name">运维</span></a>
-                </span>
-            </span>
-
-          
-
-          <span class="post-time">
-            &nbsp; | &nbsp;
-            <span class="post-meta-item-icon">
-              <i class="fa fa-bar-chart"></i>
-            </span>
-            <span class="post-meta-item-text">字数统计:</span>
-            <span class="post-count">497(字)</span>
-
-          </span>
-
-            <span class="post-time">
-          &nbsp; | &nbsp;
-            <span class="post-meta-item-icon">
-              <i class="fa fa-clock-o"></i>
-            </span>
-            <span class="post-meta-item-text">阅读时长:</span>
-            <span class="post-count">1(分)</span>
-
-          </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="uri-匹配规则"><a href="#uri-匹配规则" class="headerlink" title="uri 匹配规则"></a>uri 匹配规则</h3><h4 id="location-规则类型"><a href="#location-规则类型" class="headerlink" title="location 规则类型"></a>location 规则类型</h4><p>这部分内容来自<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dreamanddead/p/how-uri-match-location-rule-in-nginx.html">详细解析 nginx uri 如何匹配 location 规则</a></p>
-<h5 id="exact-uri"><a href="#exact-uri" class="headerlink" title="= exact uri"></a>= exact uri</h5><p>完全匹配规则，要求 url 和规则完全相同</p>
-<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">location ~ /api/v1 &#123;</span><br><span class="line">    ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h5 id="case-sensitive-regex"><a href="#case-sensitive-regex" class="headerlink" title="~ case-sensitive regex"></a>~ case-sensitive regex</h5><p>区分大小写的正则表达式匹配规则</p>
-<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">location ~ /api/v1 &#123;</span><br><span class="line">    ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h5 id="case-insensitive-regex"><a href="#case-insensitive-regex" class="headerlink" title="~* case-insensitive regex"></a>~* case-insensitive regex</h5><p>不区分大小写的正则表达式匹配规则</p>
-<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">location ~ /api/v1 &#123;</span><br><span class="line">    ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h5 id="case-insensitive-regex-1"><a href="#case-insensitive-regex-1" class="headerlink" title="~* case-insensitive regex"></a>~* case-insensitive regex</h5><p>不大小写的正则表达式匹配规则</p>
-<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">location ~ /api/v1 &#123;</span><br><span class="line">    ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h5 id="～-disable-regex-prefix"><a href="#～-disable-regex-prefix" class="headerlink" title="^～ disable regex prefix"></a>^～ disable regex prefix</h5><p>匹配流程与 prefix 规则相同，有一点区别在于，如果最长匹配是当前规则，则之后不进行 正则表达式 规则的搜索。</p>
-<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">location ~ /api/v1 &#123;</span><br><span class="line">    ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="uri-如何选择-location"><a href="#uri-如何选择-location" class="headerlink" title="uri 如何选择 location"></a>uri 如何选择 location</h4><ol>
-<li>如果存在 exact uri 规则与 uri 匹配，至步骤 6</li>
-<li><p>在所有 prefix 规则和 disable regex prefix 规则中进行匹配（与这些规则定义的顺序无关），<br>如果没有匹配到规则，至步骤 3；如果存在匹配的规则，选择出最长匹配 uri 的规则：</p>
-<ul>
-<li>如果规则是 disable regex prefix 类型，至步骤 6</li>
-<li>如果规则是 prefix 类型，记住当前匹配的 prefix 规则，选为待定，至步骤 3</li>
-</ul>
-</li>
-<li><p>逐个遍历 case-sensitive regex 规则和 case-insensitive regex 规则（按照这些规则定义的前后顺序）:</p>
-<ul>
-<li>如果规则匹配，则遍历终止，至步骤 6</li>
-<li>如果规则没有匹配，则继续</li>
-</ul>
-</li>
-<li><p>如果之前有 prefix 规则条目被选择为待定，至步骤 6</p>
-</li>
-<li>匹配失败，返回 404，结束</li>
-<li>选择当前规则，使用其配置，结束</li>
-</ol>
-<h4 id="try-files-解析"><a href="#try-files-解析" class="headerlink" title="try_files 解析"></a>try_files 解析</h4><p><code>$uri</code> 指代访问的 uri 资源，<code>$uri/</code>语法可以用来检测一个目录的存在，如果没有找到，一个内置的重定向将请求重定向到最后一个参数<br>最后一个参数可以指向一个命名的 location</p>
-<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">location / &#123;</span><br><span class="line">    try_files $uri $uri/ index.html $uri.html =404;</span><br><span class="line">&#125;</span><br><span class="line">location / &#123;</span><br><span class="line">    try_files /system/maintenance.html</span><br><span class="line">              $uri $uri/index.html $uri.html</span><br><span class="line">              @mongrel;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">location @mongrel &#123;</span><br><span class="line">    proxy_pass http://mongrel;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1638,7 +1615,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">65</span>
+          <span class="site-state-item-count">66</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1651,7 +1628,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">44</span>
+        <span class="site-state-item-count">49</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1684,6 +1661,9 @@
   </span>
   <span class="author" itemprop="copyrightHolder">jiezi19971225</span>
 </div>
+  <img src="https://static.dy208.cn/o_1dfilp8ruo521thr1hvf18ji17soa.png"/>
+  <a href="http://www.beian.miit.gov.cn/"  style="color:#f72b07" target="_blank">皖ICP备17001385号-1</a>
+  <br/>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
   </div>
 
