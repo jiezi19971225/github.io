@@ -164,6 +164,348 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2019/08/31/vue/vue-cli%E5%AD%A6%E4%B9%A0%E5%92%8Cdebug%E9%85%8D%E7%BD%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content="记录编程学习路上的点滴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/08/31/vue/vue-cli%E5%AD%A6%E4%B9%A0%E5%92%8Cdebug%E9%85%8D%E7%BD%AE/" class="post-title-link" itemprop="url">vue-cli学习和debug配置</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-08-31 16:15:21" itemprop="dateCreated datePublished" datetime="2019-08-31T16:15:21+08:00">2019-08-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-10-01 19:57:56" itemprop="dateModified" datetime="2020-10-01T19:57:56+08:00">2020-10-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/vue/" itemprop="url" rel="index"><span itemprop="name">vue</span></a>
+                </span>
+            </span>
+
+          
+
+          <span class="post-time">
+            &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-bar-chart"></i>
+            </span>
+            <span class="post-meta-item-text">字数统计:</span>
+            <span class="post-count">962(字)</span>
+
+          </span>
+
+            <span class="post-time">
+          &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-clock-o"></i>
+            </span>
+            <span class="post-meta-item-text">阅读时长:</span>
+            <span class="post-count">3(分)</span>
+
+          </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="开发"><a href="#开发" class="headerlink" title="开发"></a>开发</h3><h4 id="浏览器兼容性"><a href="#浏览器兼容性" class="headerlink" title="浏览器兼容性"></a>浏览器兼容性</h4><p>如果有依赖需要 polyfill，你有几种选择：</p>
+<ul>
+<li>如果该依赖基于一个目标环境不支持的 ES 版本撰写: 将其添加到 vue.config.js 中的 transpileDependencies 选项。这会为该依赖同时开启语法语法转换和根据使用情况检测 polyfill。</li>
+<li>如果该依赖交付了 ES5 代码并显式地列出了需要的 polyfill: 你可以使用 @vue/babel-preset-app 的 polyfills 选项预包含所需要的 polyfill。注意 es6.promise 将被默认包含，因为现在的库依赖 Promise 是非常普遍的。</li>
+<li>如果该依赖交付 ES5 代码，但使用了 ES6+ 特性且没有显式地列出需要的 polyfill (例如 Vuetify)：请使用 useBuiltIns: ‘entry’ 然后在入口文件添加 import ‘@babel/polyfill’。这会根据 browserslist 目标导入所有 polyfill，这样你就不用再担心依赖的 polyfill 问题了，但是因为包含了一些没有用到的 polyfill 所以最终的包大小可能会增加。</li>
+</ul>
+<h4 id="环境变量和模式"><a href="#环境变量和模式" class="headerlink" title="环境变量和模式"></a>环境变量和模式</h4><p>你可以替换你的项目根目录中的下列文件来指定环境变量：<br>.env # 在所有的环境中被载入<br>.env.local # 在所有的环境中被载入，但会被 git 忽略<br>.env.[mode] # 只在指定的模式中被载入<br>.env.[mode].local # 只在指定的模式中被载入，但会被 git 忽略</p>
+<p>模式是 Vue CLI 项目中一个重要的概念，默认情况下，一个 Vue CLI 项目有三个模式：</p>
+<ul>
+<li>development 模式用于 vue-cli-service serve</li>
+<li>production 模式用于 vue-cli-service build 和 vue-cli-service test:e2e</li>
+<li>test 模式用于 vue-cli-service test:unit<br>可以通过传递 —mode 选项参数为命令行覆写默认的模式</li>
+<li>“dev-build”: “vue-cli-service build —mode development”</li>
+</ul>
+<p>只有以 VUE_APP 开头的变量会被 webpack.DefinePlugin 静态嵌入到客户端侧的包中。你可以在应用的代码中这样访问它们：</p>
+<ul>
+<li>console.log(process.env.VUE<em>APP_SECRET)<br>除了 VUE_APP</em>* 变量之外，在你的应用代码中始终可用的还有两个特殊的变量：</li>
+<li>NODE_ENV - 会是 “development”、”production” 或 “test” 中的一个。具体的值取决于应用运行的模式。</li>
+<li>BASE_URL - 会和 vue.config.js 中的 publicPath 选项相符，即你的应用会部署到的基础路径。<br>所有解析出来的环境变量都可以在 public/index.html 中以 HTML 插值中介绍的方式使用。</li>
+</ul>
+<h4 id="静态资源处理"><a href="#静态资源处理" class="headerlink" title="静态资源处理"></a>静态资源处理</h4><h5 id="URL-转换规则"><a href="#URL-转换规则" class="headerlink" title="URL 转换规则"></a>URL 转换规则</h5><p>如果 URL 是一个绝对路径 (例如 /images/foo.png)，它将会被保留不变。<br>如果 URL 以 . 开头，它会作为一个相对模块请求被解释且基于你的文件系统中的目录结构进行解析。<br>如果 URL 以 ~ 开头，其后的任何内容都会作为一个模块请求被解析。这意味着你甚至可以引用 Node 模块中的资源：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;~some-npm-package/foo.png&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<p>如果 URL 以 @ 开头，它也会作为一个模块请求被解析。它的用处在于 Vue CLI 默认会设置一个指向 projectRoot/src 的别名 @。(仅作用于模版中)</p>
+<h3 id="Debug-配置"><a href="#Debug-配置" class="headerlink" title="Debug 配置"></a>Debug 配置</h3><p>效果：在 vscode 中的终端输出 Chrome 的控制台信息，可以在 vscode 中进行断点调试<br>首先需要安装插件 Debugger for Chrome<br>新增 Debug 配置项</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">        <span class="string">&quot;name&quot;</span>: <span class="string">&quot;attach to chrome&quot;</span>,</span><br><span class="line">        <span class="string">&quot;type&quot;</span>: <span class="string">&quot;chrome&quot;</span>,</span><br><span class="line">        <span class="string">&quot;request&quot;</span>: <span class="string">&quot;attach&quot;</span>,</span><br><span class="line">        <span class="string">&quot;port&quot;</span>: <span class="number">9222</span>,</span><br><span class="line">        <span class="string">&quot;address&quot;</span>: <span class="string">&quot;localhost&quot;</span>,</span><br><span class="line">        <span class="string">&quot;url&quot;</span>: <span class="string">&quot;http://localhost:8080&quot;</span>,</span><br><span class="line">        <span class="string">&quot;webRoot&quot;</span>: <span class="string">&quot;$&#123;workspaceFolder&#125;/src&quot;</span>,    <span class="comment">// 这个webRoot应该是指webpack打包js文件的目录</span></span><br><span class="line">        <span class="string">&quot;sourceMaps&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">        <span class="string">&quot;sourceMapPathOverrides&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;webpack:///src/*&quot;</span>: <span class="string">&quot;$&#123;webRoot&#125;/*&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>启动 chrome，附加启动参数</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">google-chrome-stable  --remote-debugging-port=<span class="number">9222</span></span><br></pre></td></tr></table></figure>
+<p>如果使用的是 vue-cli，需要在 vue.config.js 中添加相应配置，如</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    configureWebpack: &#123;</span><br><span class="line">        devtool: <span class="string">&#x27;source-map&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2019/08/16/misc/%E8%AE%B0%E5%BD%95%E7%AC%94%E8%AE%B0%E7%9A%84%E5%8E%9F%E5%9B%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content="记录编程学习路上的点滴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/08/16/misc/%E8%AE%B0%E5%BD%95%E7%AC%94%E8%AE%B0%E7%9A%84%E5%8E%9F%E5%9B%A0/" class="post-title-link" itemprop="url">记录笔记的原因</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-08-16 11:33:33" itemprop="dateCreated datePublished" datetime="2019-08-16T11:33:33+08:00">2019-08-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-10-01 19:53:55" itemprop="dateModified" datetime="2020-10-01T19:53:55+08:00">2020-10-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9D%82%E9%A1%B9/" itemprop="url" rel="index"><span itemprop="name">杂项</span></a>
+                </span>
+            </span>
+
+          
+
+          <span class="post-time">
+            &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-bar-chart"></i>
+            </span>
+            <span class="post-meta-item-text">字数统计:</span>
+            <span class="post-count">290(字)</span>
+
+          </span>
+
+            <span class="post-time">
+          &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-clock-o"></i>
+            </span>
+            <span class="post-meta-item-text">阅读时长:</span>
+            <span class="post-count">1(分)</span>
+
+          </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>其实我向来不是一个学习努力的人，高中时就不喜欢记笔记，高中的时候课堂管理严格，多多少少还是能记录下一些东西。<br>上了大学以后，我更是很少去做课堂笔记了，主要原因是我根本不听 O(∩_∩)O~。不过上了大学以后，我能明显感受到记忆力的衰退。记笔记确实是一种有效的学习方法，在学习技术的时候，我也是有在记录笔记的，一开始是记在本子上的，后来觉得这样很麻烦，开始使用有道云，最后开了这个博客，倒不是希望能被人看到，只是 hexo 用 VSCode 打开真的很好管理和编辑，然后哪天高兴了，随手 push 上去就好。<br>记录笔记其实是一件节省时间的事情，一般我只会记录我在学习的时候遇到的重难点的核心知识，自己已经理解的就不会记录了，之后遇到问题，只要搜索自己的笔记，省去了翻阅原书/文档的时间。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2019/08/16/javascript/es6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content="记录编程学习路上的点滴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/08/16/javascript/es6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02/" class="post-title-link" itemprop="url">es6 学习笔记 2</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-08-16 11:32:37" itemprop="dateCreated datePublished" datetime="2019-08-16T11:32:37+08:00">2019-08-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-08 11:51:45" itemprop="dateModified" datetime="2021-01-08T11:51:45+08:00">2021-01-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index"><span itemprop="name">javascript</span></a>
+                </span>
+            </span>
+
+          
+
+          <span class="post-time">
+            &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-bar-chart"></i>
+            </span>
+            <span class="post-meta-item-text">字数统计:</span>
+            <span class="post-count">813(字)</span>
+
+          </span>
+
+            <span class="post-time">
+          &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-clock-o"></i>
+            </span>
+            <span class="post-meta-item-text">阅读时长:</span>
+            <span class="post-count">3(分)</span>
+
+          </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="Class"><a href="#Class" class="headerlink" title="Class"></a>Class</h3><ul>
+<li>不存在变量提升</li>
+<li>构造函数的 prototype 属性，在 ES6 的“类”上面继续存在。事实上，类的所有方法都定义在类的 prototype 属性上面。</li>
+<li>prototype 对象的 constructor 属性，直接指向“类”的本身，constructor()方法默认返回实例对象（即 this），完全可以指定返回另外一个对象。</li>
+</ul>
+<h4 id="类的实例"><a href="#类的实例" class="headerlink" title="类的实例"></a>类的实例</h4><ul>
+<li>与 ES5 一样，实例的属性除非显式定义在其本身（即定义在 this 对象上），否则都是定义在原型上（即定义在 class 上）。与 ES5 一样，类的所有实例共享一个原型对象。</li>
+</ul>
+<h3 id="Class-表达式"><a href="#Class-表达式" class="headerlink" title="Class 表达式"></a>Class 表达式</h3><p>与函数一样，类也可以使用表达式的形式定义。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> MyClass = <span class="class"><span class="keyword">class</span> <span class="title">Me</span> </span>&#123;</span><br><span class="line">  getClassName() &#123;</span><br><span class="line">    <span class="keyword">return</span> Me.name;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>上面代码表示，Me 只在 Class 内部有定义。<br>采用 Class 表达式，可以写出立即执行的 Class。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> person = <span class="keyword">new</span> (<span class="class"><span class="keyword">class</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(name) &#123;</span><br><span class="line">    <span class="built_in">this</span>.name = name;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  sayName() &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">this</span>.name);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)(<span class="string">&quot;张三&quot;</span>);</span><br><span class="line"></span><br><span class="line">person.sayName(); <span class="comment">// &quot;张三&quot;</span></span><br></pre></td></tr></table></figure>
+<p>上面代码中，person 是一个立即执行的类的实例。</p>
+<h4 id="静态方法"><a href="#静态方法" class="headerlink" title="静态方法"></a>静态方法</h4><ul>
+<li>类相当于实例的原型，所有在类中定义的方法，都会被实例继承。如果在一个方法前，加上 static 关键字，就表示该方法不会被实例继承，而是直接通过类来调用，这就称为“静态方法”。</li>
+</ul>
+<h4 id="实例属性的新写法"><a href="#实例属性的新写法" class="headerlink" title="实例属性的新写法"></a>实例属性的新写法</h4><ul>
+<li>实例属性除了定义在 constructor()方法里面的 this 上面，也可以定义在类的最顶层，这时不需要在之前加 this。</li>
+</ul>
+<h4 id="静态属性"><a href="#静态属性" class="headerlink" title="静态属性"></a>静态属性</h4><ul>
+<li>静态属性指的是 Class 本身的属性，即 Class.propName，而不是定义在实例对象（this）上的属性。</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">Foo.prop = <span class="number">1</span>;</span><br><span class="line">Foo.prop; <span class="comment">// 1</span></span><br></pre></td></tr></table></figure>
+<h4 id="new-target-属性"><a href="#new-target-属性" class="headerlink" title="new.target 属性"></a>new.target 属性</h4><p>new 是从构造函数生成实例对象的命令。ES6 为 new 命令引入了一个 new.target 属性，该属性一般用在构造函数之中，返回 new 命令作用于的那个构造函数。如果构造函数不是通过 new 命令或 Reflect.construct()调用的，new.target 会返回 undefined，因此这个属性可以用来确定构造函数是怎么调用的。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Rectangle</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(length, width) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">new</span>.target === Rectangle);</span><br><span class="line">    <span class="built_in">this</span>.length = length;</span><br><span class="line">    <span class="built_in">this</span>.width = width;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> obj = <span class="keyword">new</span> Rectangle(<span class="number">3</span>, <span class="number">4</span>); <span class="comment">// 输出 true</span></span><br></pre></td></tr></table></figure>
+<p>子类继承父类时，new.target 会返回子类。</p>
+<h4 id="Object-getPrototypeOf"><a href="#Object-getPrototypeOf" class="headerlink" title="Object.getPrototypeOf()"></a>Object.getPrototypeOf()</h4><p>用于获取父类</p>
+<h4 id="super"><a href="#super" class="headerlink" title="super"></a>super</h4><p>有两种用法　当做函数代表父类的构造函数，当做对象，在普通方法中，指向父类的原型对象，在静态方法中指向父类<br>需要注意的是，由于 super 指向父类的原型对象，所以定义在父类实例上的方法或属性，是无法通过 super 调用的。在子类普通方法中通过 super 调用父类的方法时，方法内部的 this 指向当前的子类实例。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="built_in">this</span>.x = <span class="number">1</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  print() &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">this</span>.x);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> <span class="keyword">extends</span> <span class="title">A</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="built_in">super</span>();</span><br><span class="line">    <span class="built_in">this</span>.x = <span class="number">2</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  m() &#123;</span><br><span class="line">    <span class="built_in">super</span>.print();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> b = <span class="keyword">new</span> B();</span><br><span class="line">b.m(); <span class="comment">// 2</span></span><br></pre></td></tr></table></figure>
+<h4 id="继承链"><a href="#继承链" class="headerlink" title="继承链"></a>继承链</h4><ul>
+<li>1 子类的<strong>proto</strong>属性，表示构造函数的继承，总是指向父类。</li>
+<li>2 子类 prototype 属性的<strong>proto</strong>属性，表示方法的继承，总是指向父类的 prototype 属性。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2019/08/05/javascript/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84javascript%E4%B8%8A%E5%8D%B7%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1231,328 +1573,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2019/06/06/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="jiezi19971225">
-      <meta itemprop="description" content="记录编程学习路上的点滴">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Jiez19971225‘s Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/06/06/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="post-title-link" itemprop="url">计算机系统基础学习笔记</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-06-06 23:33:37" itemprop="dateCreated datePublished" datetime="2019-06-06T23:33:37+08:00">2019-06-06</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-01 19:45:57" itemprop="dateModified" datetime="2020-10-01T19:45:57+08:00">2020-10-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">计算机基础</span></a>
-                </span>
-            </span>
-
-          
-
-          <span class="post-time">
-            &nbsp; | &nbsp;
-            <span class="post-meta-item-icon">
-              <i class="fa fa-bar-chart"></i>
-            </span>
-            <span class="post-meta-item-text">字数统计:</span>
-            <span class="post-count">863(字)</span>
-
-          </span>
-
-            <span class="post-time">
-          &nbsp; | &nbsp;
-            <span class="post-meta-item-icon">
-              <i class="fa fa-clock-o"></i>
-            </span>
-            <span class="post-meta-item-text">阅读时长:</span>
-            <span class="post-count">3(分)</span>
-
-          </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="数字逻辑电路基础"><a href="#数字逻辑电路基础" class="headerlink" title="数字逻辑电路基础"></a>数字逻辑电路基础</h2><p>全加器 溢出标志的逻辑表达式 <script type="math/tex">OF=C_n \oplus C_(n-1)</script> 因为若为两个正数相加，最高位必然没有进位，而弱次高位有进位，则说明溢出 若为两个负数相加，最高位必然有进位，若次高位没有进位，则说明溢出</p>
-<h2 id="IEEE754-标准"><a href="#IEEE754-标准" class="headerlink" title="IEEE754 标准"></a>IEEE754 标准</h2><ul>
-<li>32 位包括 1 位符号位 8 位阶码 23 位有效位</li>
-<li>64 位包括 1 位符号位 52 位有效位</li>
-<li>规格化尾数最高位总是 1，所以隐含表示，省略一位</li>
-<li>阶码使用移码表示</li>
-<li>全 0 +0</li>
-<li>符号位 1 之后全 0 -0</li>
-<li>浮点数除 0 的结果是正负无穷大，而不是一出一场</li>
-<li>0 11111111 00000000000000000000000 正无穷大</li>
-<li>1 11111111 00000000000000000000000 负无穷大</li>
-<li>Not a Number 非数 sqrt(-0.4) 0/0 使用全 1 的阶码和非 0 的尾数</li>
-<li>非规格化数<ul>
-<li>阶码全 0 尾数非 0</li>
-</ul>
-</li>
-</ul>
-<h4 id="C-语言中涉及的运算"><a href="#C-语言中涉及的运算" class="headerlink" title="C 语言中涉及的运算"></a>C 语言中涉及的运算</h4><ul>
-<li>无符号数 逻辑左（右）移动，有符号数 算数左（右）移动</li>
-<li>溢出标志 of，最高位和次高位的进位 Cn 异或 Cn-1， 当两个正数相加时，最高位不会进位，若次高位进位，则为溢出 ，当两个负数相加，最高位必然进位，若次高位不进位，则为溢出，正数加负数永远不会溢出</li>
-<li>乘法指令分有符号乘和无符号乘 若只取低 n 位 不考虑溢出 则可以只使用无符号乘 由程序员自行判断是否溢出</li>
-<li>乘法可以转换成加法和移位运算的组合</li>
-<li>对于带符号正数 出了 -2^n / -1 = 2^n-1 会发生溢出外，其余情况都不会发生溢出</li>
-<li>对于正数 对商取 floor 对于负数 对商取 ceil</li>
-<li>编译器对于除数为 2 的倍数的除法运算使用移位优化，对于无符号数，带符号数正整数，移除的低位直接舍弃，对于带符号负整数，由于商取 ceil，需要现加上一个偏移量 2^k-1，然后再右移 k 位，低位截断</li>
-</ul>
-<h4 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h4><p>汇编结果是一个可重定位目标文件，其中包含的是不可读的二进制代码，必须用相应的工具软件来查看其内容</p>
-<p>生成的.o 文件可重定位的目标文件 程序中的地址尚未确定 通过链接后方可执行</p>
-<h4 id="磁盘驱动器"><a href="#磁盘驱动器" class="headerlink" title="磁盘驱动器"></a>磁盘驱动器</h4><p>柱面号就是磁道号</p>
-<h4 id="层次结构存储系统"><a href="#层次结构存储系统" class="headerlink" title="层次结构存储系统"></a>层次结构存储系统</h4><ul>
-<li>非易失存储器 Nonvolatile Memory 易失存储器 Volitile Memory</li>
-<li>SRAM 不采用地址引脚复用方式，DRAM 采用地址引脚复用方式</li>
-<li>内存位宽是 64bit DDR3 采用 8 位预读，若内部核心频率为 133.25MHZ，则每秒传送的数据次数为 133.25M*8 = 1066M 次，带宽为 1066 M*8B=8.5GB/S</li>
-<li>当写不命中时，有写分配法和非写分配法。采用写分配法时，需要分配一个 cache 空行，以将主存块复制到 cache，当采用非写分配法时，不将主存块分配到 cache。因此，回写策略下，一定采用写分配法，在全写策略下，两种分配方式都可采用</li>
-<li>栈和堆合称堆栈，栈区从 0xc0000000 开始向低地址增长，共享库区从 0x400000000 向高地址增长，只读区从 0x08048000 开始向高地址增长。</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2019/05/26/%E7%AE%97%E6%B3%95/%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95%E6%96%B9%E6%A1%88%E6%95%B0%E9%87%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="jiezi19971225">
-      <meta itemprop="description" content="记录编程学习路上的点滴">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Jiez19971225‘s Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/05/26/%E7%AE%97%E6%B3%95/%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95%E6%96%B9%E6%A1%88%E6%95%B0%E9%87%8F/" class="post-title-link" itemprop="url">背包问题记录方案数量</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-05-26 13:39:48" itemprop="dateCreated datePublished" datetime="2019-05-26T13:39:48+08:00">2019-05-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-01 19:47:54" itemprop="dateModified" datetime="2020-10-01T19:47:54+08:00">2020-10-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
-                </span>
-            </span>
-
-          
-
-          <span class="post-time">
-            &nbsp; | &nbsp;
-            <span class="post-meta-item-icon">
-              <i class="fa fa-bar-chart"></i>
-            </span>
-            <span class="post-meta-item-text">字数统计:</span>
-            <span class="post-count">240(字)</span>
-
-          </span>
-
-            <span class="post-time">
-          &nbsp; | &nbsp;
-            <span class="post-meta-item-icon">
-              <i class="fa fa-clock-o"></i>
-            </span>
-            <span class="post-meta-item-text">阅读时长:</span>
-            <span class="post-count">1(分)</span>
-
-          </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>题目是求 2019 可以由多少个两两不同的质因数组成，可以转化为 01 背包模型，将每个质因数的价值和花费等同于其数值大小。那么问题就简单变为了求 01 背包的方案数量。<br>代码如下<br>注意初始化 dp[0] =1</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> ll;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">double</span> PI = <span class="built_in">acos</span>(<span class="number">-1.0</span>);</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">double</span> eps = <span class="number">1e-6</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> INF = <span class="number">0x3f3f3f3f</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">3000</span>;</span><br><span class="line"><span class="keyword">int</span> isp[maxn];</span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; prime;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">seive</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    isp[<span class="number">0</span>] = isp[<span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>; i &lt; maxn; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        isp[i] = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>; i &lt; maxn; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (isp[i])</span><br><span class="line">        &#123;</span><br><span class="line">            prime.push_back(i);</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = i + i; j &lt; maxn; j += i)</span><br><span class="line">            &#123;</span><br><span class="line">                isp[j] = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">std</span>::ios::sync_with_stdio(<span class="literal">false</span>);</span><br><span class="line">    freopen(<span class="string">&quot;data.in&quot;</span>, <span class="string">&quot;r&quot;</span>, <span class="built_in">stdin</span>);</span><br><span class="line">    seive();</span><br><span class="line">    <span class="keyword">int</span> dp[maxn];</span><br><span class="line">    <span class="built_in">memset</span>(dp, <span class="number">0</span>, <span class="keyword">sizeof</span>(dp));</span><br><span class="line">    dp[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; prime.size(); i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">2019</span>; j &gt;= prime[i]; j--)</span><br><span class="line">        &#123;</span><br><span class="line">            dp[j] += dp[j - prime[i]];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; dp[<span class="number">2019</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2019/05/26/%E7%AE%97%E6%B3%95/%E7%BA%A6%E6%95%B0%E4%B8%AA%E6%95%B0%E5%85%AC%E5%BC%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="jiezi19971225">
-      <meta itemprop="description" content="记录编程学习路上的点滴">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Jiez19971225‘s Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/05/26/%E7%AE%97%E6%B3%95/%E7%BA%A6%E6%95%B0%E4%B8%AA%E6%95%B0%E5%85%AC%E5%BC%8F/" class="post-title-link" itemprop="url">约数个数公式</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-05-26 11:29:06" itemprop="dateCreated datePublished" datetime="2019-05-26T11:29:06+08:00">2019-05-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-01 19:48:02" itemprop="dateModified" datetime="2020-10-01T19:48:02+08:00">2020-10-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
-                </span>
-            </span>
-
-          
-
-          <span class="post-time">
-            &nbsp; | &nbsp;
-            <span class="post-meta-item-icon">
-              <i class="fa fa-bar-chart"></i>
-            </span>
-            <span class="post-meta-item-text">字数统计:</span>
-            <span class="post-count">361(字)</span>
-
-          </span>
-
-            <span class="post-time">
-          &nbsp; | &nbsp;
-            <span class="post-meta-item-icon">
-              <i class="fa fa-clock-o"></i>
-            </span>
-            <span class="post-meta-item-text">阅读时长:</span>
-            <span class="post-count">1(分)</span>
-
-          </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>题目是求有 100 个约数的数字的最小值。有两种方法去做，一种直接暴力求每个数的约数个数，直到找到第一个约数为 100 的数。第二种用到了约数定理，首先用质因数分解的方法求出每个质因数的指数：</p>
-<script type="math/tex; mode=display">n = a_{1}^{p1}*a_{2}^{p2}*...*a_{n}^{pn}</script><p>那么 n 的约数个数可以用以下公式求得：</p>
-<script type="math/tex; mode=display">(p1+1)*(p2+1)*...*(pn+1)</script><p>很简单的乘法原理的思想，对于质因数 $ a_1 $ 可以取 0,1,2…n 一共 n+1 个，其他同理。<br>如何证明这样不会取得相同的因数呢？<br>假设两个因数</p>
-<script type="math/tex; mode=display">b_1 = a_1 * a_1 * a_2 * a_2 * a_3 \\ b_2 = a_1 * a_2 * a_3 * a_4</script><p>如果 $ b_1 = b_2 $ 那么有 $ a_1 * a _2 = a_4 $，显然与$a_4$是一个质数矛盾，所以不存在重复的情况。<br>代码如下</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> ll;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">double</span> PI = <span class="built_in">acos</span>(<span class="number">-1.0</span>);</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">double</span> eps = <span class="number">1e-6</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> INF = <span class="number">0x3f3f3f3f</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">solve</span><span class="params">(<span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> factor = <span class="number">2</span>, cnt = <span class="number">0</span>;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; a;</span><br><span class="line">    <span class="keyword">while</span> (n != <span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (n % factor != <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            factor++;</span><br><span class="line">            a.push_back(cnt);</span><br><span class="line">            cnt = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            n = n / factor;</span><br><span class="line">            cnt++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    a.push_back(cnt);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> sum = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; a.size(); i++)</span><br><span class="line">    &#123;</span><br><span class="line">        sum *= (a[i] + <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> sum;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">std</span>::ios::sync_with_stdio(<span class="literal">false</span>);</span><br><span class="line">    freopen(<span class="string">&quot;data.in&quot;</span>, <span class="string">&quot;r&quot;</span>, <span class="built_in">stdin</span>);</span><br><span class="line">    <span class="keyword">int</span> n = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">int</span> ret = solve(n);</span><br><span class="line">        <span class="comment">// cout &lt;&lt; ret &lt;&lt; endl;5</span></span><br><span class="line">        <span class="keyword">if</span> (ret == <span class="number">100</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">cout</span> &lt;&lt; n &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        n++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1622,7 +1642,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">67</span>
+          <span class="site-state-item-count">70</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1662,7 +1682,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

@@ -164,6 +164,504 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/03/24/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E4%B9%8B%E6%9C%89%E7%A9%B7%E8%87%AA%E5%8A%A8%E6%9C%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content="记录编程学习路上的点滴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/24/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E4%B9%8B%E6%9C%89%E7%A9%B7%E8%87%AA%E5%8A%A8%E6%9C%BA/" class="post-title-link" itemprop="url">有穷自动机</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-03-24 10:53:25" itemprop="dateCreated datePublished" datetime="2020-03-24T10:53:25+08:00">2020-03-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-03-26 08:14:21" itemprop="dateModified" datetime="2020-03-26T08:14:21+08:00">2020-03-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/" itemprop="url" rel="index"><span itemprop="name">编译原理</span></a>
+                </span>
+            </span>
+
+          
+
+          <span class="post-time">
+            &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-bar-chart"></i>
+            </span>
+            <span class="post-meta-item-text">字数统计:</span>
+            <span class="post-count">1.5k(字)</span>
+
+          </span>
+
+            <span class="post-time">
+          &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-clock-o"></i>
+            </span>
+            <span class="post-meta-item-text">阅读时长:</span>
+            <span class="post-count">6(分)</span>
+
+          </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>（以下内容摘自龙书）</p>
+<p>有穷自动机是一般化的状态转换图，它可以是确定的或不确定的，其中不确定的含义是，对于某个输入符号，在同一个状态上存在不止一种转换。</p>
+<p>下文以 DFA 指代确定的有穷自动机，NFA 指代不确定的有穷自动机。</p>
+<p>DFA 和 NFA 都能且仅能识别正规集，即它们能够识别正规表达式所表示的语言。DFA 导出的识别器比 NFA 导出的识别器快得多，但是 DFA 可能比与之等价的 NFA 大得多。</p>
+<h2 id="NFA"><a href="#NFA" class="headerlink" title="NFA"></a>NFA</h2><p>NFA 是由以下几个部分组成的数学模型：</p>
+<ul>
+<li>一个状态的有穷集合 S</li>
+<li>一个输入符合集合$\Sigma$,即输入符号字母表</li>
+<li>一个转换函数 move，它把状态和符号组成的二元组映射到状态集合</li>
+<li>状态 $s_0$ 是唯一的开始或初始状态</li>
+<li>状态集合 F 是接受（或中止）状态集合</li>
+</ul>
+<p>NFA 可以用带标记的有向图表示，称为转换图，其节点是状态，有标记的边是转化函数。</p>
+<img src="/2020/03/24/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E4%B9%8B%E6%9C%89%E7%A9%B7%E8%87%AA%E5%8A%A8%E6%9C%BA/NFA.png" class="" title="NFA">
+<img src="/2020/03/24/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E4%B9%8B%E6%9C%89%E7%A9%B7%E8%87%AA%E5%8A%A8%E6%9C%BA/NFA2.png" class="" title="NFA2">
+<h2 id="DFA"><a href="#DFA" class="headerlink" title="DFA"></a>DFA</h2><p>DFA 是 NFA 的特例</p>
+<ul>
+<li>没有一个状态具有$\epsilon$转换</li>
+<li>对每个状态 s 和输入符号 a，最多只有一条标记为 a 的边离开</li>
+</ul>
+<p>确定的有穷自动机在任何状态下，对任一输入符号，最多只有一个转换。如果用转换表表示 DFA 的转换函数，那么表中的每个表项最多只有一个状态。因而，很容易确定 DFA 是否接受某输入字符串，因为从开始状态起，最多只有一条到达接受状态的路径可由这个符号串标记。</p>
+<h2 id="NFA-转为-DFA"><a href="#NFA-转为-DFA" class="headerlink" title="NFA 转为 DFA"></a>NFA 转为 DFA</h2><p>子集构造算法，在 NFA 的转换表中，每个表项是一个状态集，在 DFA 的转化表中，每个表项只有一个状态。从 NFA 变换到 DFA 的基本思想是让 DFA 的每个状态对应 NFA 的一个状态集。DFA 用它的状态去记住 NFA 在读输入符号后到达的所有状态。</p>
+<img src="/2020/03/24/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E4%B9%8B%E6%9C%89%E7%A9%B7%E8%87%AA%E5%8A%A8%E6%9C%BA/NFA%E8%BD%ACDFA.png" class="" title="NFA转DFA">
+<p>定义三种操作</p>
+<ul>
+<li>$\epsilon-closure(s)$ 从 NFA 状态 s 只经过$\epsilon$转换可以到达的 NFA 状态集</li>
+<li>$\epsilon-closure(T)$ 从 T 中的状态只经过$\epsilon$转换可以到达的 NFA 状态集</li>
+<li>move(T,a) 从 T 中的状态 S 经过输入符号 a 上的转换可以到达的 NFA 状态集</li>
+</ul>
+<p>子集构造的步骤伪码如下，其中 Dstates 是 D 的状态集合，Dtran 是 D 的转换表</p>
+<p>初始时，$\epsilon-closure(s)$是 Dstates 中唯一的状态且未被标记</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">while Dstates 中存在一个未标记的状态T</span><br><span class="line">    标记T</span><br><span class="line">    for 每个输入符号a</span><br><span class="line">        U &#x3D; epsilon-closure(move(T,a))</span><br><span class="line">        if U 不在 Dstates中</span><br><span class="line">            将U作为一个未标记的状态添加到Dstates中</span><br><span class="line">        Dtran[T,a] &#x3D; U</span><br></pre></td></tr></table></figure>
+<p>开始状态 A = $\epsilon-closure(s)$ = {0，1，2，4，7}，根据算法流程，先标记 A</p>
+<p>然后计算 $\epsilon-closure(move(A,a))$，在状态 A 上只有 2 和 7 有 a 上的转换，得到状态 B={1,2,3,4,6,7,8},Dtran[A,a] = B</p>
+<p>状态 A 中只有状态 4 对于输入 b 有一个转换，得到状态 C={1,2,4,5,6,7},Dtran[A,b]=C</p>
+<p>然后对没被标记的状态 B 和状态 C 继续这个过程</p>
+<p>状态 B 的 a 转换 得到的状态仍然是 B， Dtran[B,a] = B</p>
+<p>状态 B 中在 8 上的 b 的转换可以得到新的状态 D={1,2,4,5,6,7,9} Dtran[B,b] = D。这里的计算详细解释一下，{1,2,3,4,6,7,8} 经过 b 转换后的集合是 {5,9}，然后再计算 $\epsilon-closure({5,8})$ 得到 {1,2,4,5,6,7,9}</p>
+<p>状态 C 的 a 转换可以得到的状态 {1,2,3,4,6,7,8}，即状态 B，Dtran[C,a] = B</p>
+<p>状态 C 的 b 转换可以得到的状态 {1,2,4,5,6,7}，即状态 C 自身，Dtran[C,b] = C</p>
+<p>之后的过程省略，可以得到的五个状态集合是</p>
+<p>A = {0,1,2,4,7}<br>B = {1,2,3,4,6,7,8}<br>C = {1,2,4,5,6,7}<br>D = {1,2,4,5,6,7,9}<br>E = {1,2,4,5,6,7,10}</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>a</th>
+<th>b</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>B</td>
+<td>C</td>
+</tr>
+<tr>
+<td>B</td>
+<td>B</td>
+<td>D</td>
+</tr>
+<tr>
+<td>C</td>
+<td>B</td>
+<td>C</td>
+</tr>
+<tr>
+<td>D</td>
+<td>B</td>
+<td>E</td>
+</tr>
+<tr>
+<td>E</td>
+<td>B</td>
+<td>C</td>
+</tr>
+</tbody>
+</table>
+</div>
+<img src="/2020/03/24/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E4%B9%8B%E6%9C%89%E7%A9%B7%E8%87%AA%E5%8A%A8%E6%9C%BA/%E5%AD%90%E9%9B%86%E6%9E%84%E9%80%A0%E6%B3%95%E7%BB%93%E6%9E%9C.png" class="" title="子集构造法结果">
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>接下来用编程语言实现一个简单的 DFA</p>
+<img src="/2020/03/24/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E4%B9%8B%E6%9C%89%E7%A9%B7%E8%87%AA%E5%8A%A8%E6%9C%BA/%E8%A6%81%E5%AE%9E%E7%8E%B0%E7%9A%84DFA.png" class="" title="要实现的DFA">
+<p>功能要求：输入一个单行无空格的字符串（以“#”号结束），如果该字符串是一个合法的输入，则显示“接受”，否则显示“不接受”。</p>
+<p>分析该 DFA 的五元组信息如下</p>
+<ul>
+<li>一个状态的有穷集合 S = {0,1,2,3}</li>
+<li>一个输入符合集合$\Sigma$ = {a,b}</li>
+<li>一个转换函数 move，它把状态和符号组成的二元组映射到状态集合<ul>
+<li>move(0,a) = 1</li>
+<li>move(0,b) = 0</li>
+<li>move(1,a) = 1</li>
+<li>move(1,b) = 2</li>
+<li>move(2,a) = 1</li>
+<li>move(2,b) = 3</li>
+<li>move(3,a) = 1</li>
+<li>move(3,b) = 0</li>
+</ul>
+</li>
+<li>状态 $s_0$ 是唯一的开始或初始状态 = 0</li>
+<li>状态集合 F 是接受（或中止）状态集合 = {3}</li>
+</ul>
+<p>根据如下信息就可以开始编码了</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="built_in">string</span> str;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dfa</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">bool</span> ok = <span class="literal">true</span>; <span class="comment">// 是否合法</span></span><br><span class="line">    <span class="keyword">int</span> pos = <span class="number">0</span>;    <span class="comment">// 当前扫描位置</span></span><br><span class="line">    <span class="keyword">int</span> state = <span class="number">0</span>;  <span class="comment">// 当前状态</span></span><br><span class="line">    <span class="keyword">while</span> (str[pos] != <span class="string">&#x27;#&#x27;</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">char</span> next = str[pos];</span><br><span class="line">        ++pos;</span><br><span class="line">        <span class="keyword">if</span> (state == <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (next == <span class="string">&#x27;a&#x27;</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                state = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (next == <span class="string">&#x27;b&#x27;</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                state = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                ok = <span class="literal">false</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (state == <span class="number">1</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (next == <span class="string">&#x27;a&#x27;</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                state = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (next == <span class="string">&#x27;b&#x27;</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                state = <span class="number">2</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                ok = <span class="literal">false</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (state == <span class="number">2</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (next == <span class="string">&#x27;a&#x27;</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                state = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (next == <span class="string">&#x27;b&#x27;</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                state = <span class="number">3</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                ok = <span class="literal">false</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (state == <span class="number">3</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (next == <span class="string">&#x27;a&#x27;</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                state = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (next == <span class="string">&#x27;b&#x27;</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                state = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                ok = <span class="literal">false</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (state != <span class="number">3</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        ok = <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (ok)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;接受&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;不接受&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (<span class="built_in">cin</span> &gt;&gt; str)</span><br><span class="line">    &#123;</span><br><span class="line">        dfa();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输入：<br>abbab#<br>abb#<br>输出：<br>不接受<br>接受</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content="记录编程学习路上的点滴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="post-title-link" itemprop="url">计算机基础之异常控制流学习笔记</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-03-21 22:04:59" itemprop="dateCreated datePublished" datetime="2020-03-21T22:04:59+08:00">2020-03-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-10-01 19:45:22" itemprop="dateModified" datetime="2020-10-01T19:45:22+08:00">2020-10-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">计算机基础</span></a>
+                </span>
+            </span>
+
+          
+
+          <span class="post-time">
+            &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-bar-chart"></i>
+            </span>
+            <span class="post-meta-item-text">字数统计:</span>
+            <span class="post-count">4.1k(字)</span>
+
+          </span>
+
+            <span class="post-time">
+          &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-clock-o"></i>
+            </span>
+            <span class="post-meta-item-text">阅读时长:</span>
+            <span class="post-count">13(分)</span>
+
+          </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <img src="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE.png" class="" title="思维导图">
+<h2 id="正常控制流"><a href="#正常控制流" class="headerlink" title="正常控制流"></a>正常控制流</h2><p>正常控制流包含两种顺序</p>
+<ul>
+<li>按照指令存放的顺序执行，新的 PC 数值为当前指令地址加上指令长度</li>
+<li>跳转到由于转移类指令指出的转移目标地址处执行，新的 PC 数值为转移目标地址</li>
+</ul>
+<h2 id="进程与进程上下文的切换"><a href="#进程与进程上下文的切换" class="headerlink" title="进程与进程上下文的切换"></a>进程与进程上下文的切换</h2><h3 id="进程的概念"><a href="#进程的概念" class="headerlink" title="进程的概念"></a>进程的概念</h3><p>进程是资源分配的最小单位，每个应用程序在运行时均有自己的存储空间，用来存储自己的程序代码和数据，包括只读区（代码和只读数据），可读可写数据区（初始化数据和未初始化数据），动态的堆区和栈区</p>
+<p>进程的引入为程序提供了以下两方面的抽象。一个独立的逻辑控制流和一个私有的虚拟内存地址。每个进程拥有一个独立的逻辑，使得程序员以为程序似在执行过程中独占处理器。一个私有的虚拟地址空间，使得程序员以为程序在执行过程中独占存储器。</p>
+<p>为了实现以上两方面的抽象，操作系统必须提供一整套管理机制，包括处理器调度、进程上下文切换、虚拟存储管理等。</p>
+<h3 id="逻辑控制流"><a href="#逻辑控制流" class="headerlink" title="逻辑控制流"></a>逻辑控制流</h3><p>一个可执行目标文件被加载并启动执行后，就成为一个进程。他们代码段中的每一条指令都有一个确定的地址，在这些指令的执行过程中，会形成一个指令执行的地址序列，对于确定的输入数据，其指令的地址序列也是确定的。这个确定的指令执行地址序列被称为进程的<strong>逻辑控制流</strong>。</p>
+<p>对于一个具有单核处理器的系统，如果有多个进程运行，这些进程会轮流使用处理器，处理器的<strong>物理控制流</strong>是由多个逻辑控制流组成。<br><img src="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%A4%9A%E4%B8%AA%E9%80%BB%E8%BE%91%E6%8E%A7%E5%88%B6%E6%B5%81.png" class="" title="多个逻辑控制流"></p>
+<p>图中可以看出有些进程的逻辑控制流在时间上有交错，通常把这种不同进程的逻辑控制流在时间上交错或者重叠称为<strong>并发</strong>。而<strong>并行</strong>则是并发执行的一个特例，我们称两个进程是并行的，是指他们并发的运行在不同的处理器或者处理器核中。</p>
+<p>连续执行同一个进程的时间段称为时间片，每个时间片结束时，通过进程的上下文切换，换一个新的进程到处理器上执行，开始一个新的时间片，这个过程称为<strong>时间片轮转处理器调度</strong>。</p>
+<h3 id="进程的上下文切换"><a href="#进程的上下文切换" class="headerlink" title="进程的上下文切换"></a>进程的上下文切换</h3><p>实现不同进程中指令交替执行的机制称为<strong>进程的上下文切换</strong>。</p>
+<p>进程的物理实体（代码和数据）和支持进程运行的环境合称为<strong>进程的上下文</strong>，可以细分为</p>
+<ul>
+<li>由用户进程的程序块，数据块，运行时的堆和用户栈等组成的用户空间信息被称为<strong>用户级上下文</strong>。</li>
+<li>进程表示信息，进程现场信息，进程控制信息和系统内核堆栈组成的<strong>内核空间信息</strong>被称为<strong>系统级上下文</strong>。</li>
+<li>处理器中各个寄存器的内存被称为<strong>寄存器上下文</strong>。</li>
+</ul>
+<p>用户级上下文和系统级上下文地址空间一起构成了一个进程的整个存储器映像。进程控制信息包含各种内核数据结构，如有关进程信息的进程表，页表，文件表等。<br><img src="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%AD%98%E5%82%A8%E6%98%A0%E5%83%8F.png" class="" title="进程的存储映像"></p>
+<p>上下文切换发生在操作系统调度一个新进程到处理器上运行，他需要完成以下三件事</p>
+<ul>
+<li>将当前进程的寄存器上下文保存到当前进程的系统级上下文的现场信息中</li>
+<li>将新进程系统上下文中的现场信息作为新的寄存器上下文恢复到处理器的各个寄存器中</li>
+<li>将控制转移到新进程执行</li>
+</ul>
+<p>一个重要的上下文信息是 PC，当前进程被打断的断点处的 PC 作为寄存器上下文的一部分被保存在进程现场信息中。</p>
+<h3 id="进程的私有地址空间"><a href="#进程的私有地址空间" class="headerlink" title="进程的私有地址空间"></a>进程的私有地址空间</h3><img src="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E8%99%9A%E6%8B%9F%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%E6%98%A0%E5%83%8F.png" class="" title="虚拟地址空间映像">
+<p>整个虚拟地址空间分为两大部分。<strong>内核虚拟存储空间</strong>（简称内核空间）和<strong>进程虚拟内存空间</strong>（简称用户空间）。在采用虚拟存储机制的系统中，每个程序的可执行目标文件在装入时都被映射到同样的虚拟地址空间上，即所有用户进程的虚拟地址空间是一致的，只是在相应的制度区域和可读写数据区域中映射的信息不同而已。</p>
+<p>linux 将用户空间对应的进程虚拟存储空间组织成若干“区域”的集合，<br>内核为每个进程维护了一个进程描述符，记录或者指向内核运行该进程所需要的所有信息，如进程 pid，指向用户栈的指针，可执行目标文件的文件名，程序计数器 PC 等。</p>
+<h3 id="程序的加载和运行"><a href="#程序的加载和运行" class="headerlink" title="程序的加载和运行"></a>程序的加载和运行</h3><p>当启动一个可以行目标文件执行时，首先会通过某种方式调出常驻内存的一个称为加载器的操作系统程序来处理。在 UNIX/Linux 系统中，可以通过 execve() 函数来启动加载器，其作用是在当前进程的上下文中加载并且运行一个新程序。</p>
+<h2 id="异常和中断"><a href="#异常和中断" class="headerlink" title="异常和中断"></a>异常和中断</h2><p>除了时间片到，当前进程的执行被新进程打断，还有用户按下 CTRL+C，当前执行执行中发生了不能使指令执行的意外事件，IO 设备完成了系统交给的任务需要进一步处理，这些特殊事件统称为<strong>异常</strong>或者<strong>中断</strong>。<br>当发生异常或者终端，正在执行进程的逻辑控制流被打断，CPU 转到具体的特殊处理事件的内核程序去执行。他与上下文切换有一个明显的不同：上下文切换后 CPU 执行另一个用户进程，但是，中断或异常处理程序执行的代码不是一个进程，而是一个<strong>内核控制路径</strong>，它代表异常或终端发生时正在运行的当前进程在内核态执行的一个独立的指令序列。作为一个内核控制路径，他比进程更轻，其上下文信息比一个进程的上下文信息少得多。</p>
+<h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p>异常是在 CPU 内部执行时发生的，中断是 CPU 外部的 IO 设备向 CPU 发出的请求，通常称异常为<strong>内部异常</strong>，而称中断为<strong>外部中断</strong>。</p>
+<img src="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%AD%E6%96%AD%E5%A4%84%E7%90%86%E8%BF%87%E7%A8%8B.png" class="" title="中断处理过程">
+<p>大致处理流程如下：当 CPU 在执行当前程序或任务的第 i 条指令时检测到一个异常事件，或者在执行第 i 条指令后发现有一个中断请求信息，CPU 会打断当前用户进程，然后转到相应的异常或中断处理程序去执行。如果该处理程序能解决相应问题，则在该处理程序的最后，CPU 通过执行“异常/中断返回指令”回到被打断的用户进程的第 i 条指令或第 i+1 条指令继续执行。若异常或中断处理程序发现是不可恢复的知名错误，则中止用户进程。通常情况下，对于异常和中断事件的具体处理过程全部由操作系统（可能包括驱动程序）软件来完成。</p>
+<h3 id="异常的分类"><a href="#异常的分类" class="headerlink" title="异常的分类"></a>异常的分类</h3><p>intel 将内部异常分为三类</p>
+<p>故障</p>
+<p><strong>故障</strong>是在引起故障的指令被启动后但未结束执行时 CPU 检测到的一类与指令执行相关的意外事件。这种意外事件有些可以回复，有些不能回复。如指令译码出现的非法操作码；取指令或者取数据时发生页故障，执行触发操作时发现除数为 0.</p>
+<p>对于像溢出和非法操作码等这类故障，因为无法通过异常处理程序回复，会调用内核的 abort 例程，以中止发生故障的当前进程。</p>
+<p>对于页故障。cpu 在指令执行过程中需要访问存储器，首先进行地址转换，在查页表进行地址转换时，判断相应页表项中的有效位是否是 1，并且确定是否地址越界或访问越权，如果检测到有效位不为 1 或者地址越界或者访问越权，都会产生页故障异常。页故障异常包含多种不同情况：处理程序首先检测是否发生地址越界或访问越权，如果是的话，故障不可恢复，否则是缺陷故障，可通过从磁盘读入页面来恢复。Linux 中不可恢复的访存故障（地址越界和访问越权）都称为<strong>段故障</strong>。</p>
+<p>陷阱</p>
+<p><strong>陷阱</strong>也成为自陷或者陷入，与故障等其他异常事件不同，是预先安排的一种异常事件，就像预先设定的陷阱一样，当执行到陷阱指令，CPU 就调出特定的程序进行相应的处理，处理结束后返回到陷阱指令的下一条指令执行。</p>
+<p>陷阱的重要作之一是在用户程序和内核之间提供一个像过程调用一样的接口，这个接口称为<strong>系统调用</strong>。操作系统给每个服务编一个号，称为系统调用号，每个服务功能通过一个对应的<strong>系统调用服务例程</strong>提供。如在 linux 中就提供了创建子线程（fork），读文件（read），加载并且运行新程序（execve）等服务功能。</p>
+<p>用于程序调试的<strong>断点设置</strong>也是一种陷阱指令。</p>
+<p>在 IA-32 中，陷阱指令引擎的异常称为编程异常，这些指令包括 INT n，int 3，into（溢出检查），bound（地址越界检查）,通常将 INT n 称为软中断指令，该指令引起的异常通常也称为<strong>软中断</strong>。在 IA-32/Linux 中可以使用快速系统调用指令 sysenter 或者软中断指令 int $0x80 进行系统调用。</p>
+<p>终止</p>
+<p>如果在执行指令的过程中发生了严重错误，如控制器出现问题，访问 DRAM 或者 SRAM 时发生校验错误等，则程序无法继续执行，只好终止发生问题的进程。</p>
+<h3 id="中断的分类"><a href="#中断的分类" class="headerlink" title="中断的分类"></a>中断的分类</h3><p><strong>中断</strong> 是由外部 IO 设备请求处理器进行的一种信号。他不是由当前执行的指令引起的，外部 IO 设备通过特定的<strong>中断请求信号线</strong>向 CPU 提出中断申请。CPU 在执行指令过程中，每执行一条指令就查看中断请求引脚，如果中断请求引脚的信号有效，则进入中断响应周期。在<strong>中断响应周期</strong>中，CPU 先将当前 PC 值和当前机器状态保存到栈中，并设置成为<strong>关中断</strong>状态，然后从数据总线读取<strong>中断类型号</strong>，根据中断类型号跳转到对应的中断服务程序执行。中断响应过程由硬件完成，而中断服务程序执行具体的中断处理工作，中断处理完成后，再回到被打断程序的断点处继续执行。</p>
+<img src="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%A4%96%E9%83%A8%E4%B8%AD%E6%96%AD%E7%9A%84%E5%A4%84%E7%90%86%E8%BF%87%E7%A8%8B.png" class="" title="外部中断的处理过程">
+<p>可屏蔽中断</p>
+<p>是指通过<strong>可屏蔽中断请求线</strong>INTR 向 CPU 进行请求的中断，主要来自 IO 设备的中断请求。CPU 可以通过在中断控制器中设置相应的屏蔽字来屏蔽他或者不屏蔽他。若一个 IO 设备的中断请求被屏蔽，他的中断请求信号不会被送到 CPU。</p>
+<p>不可屏蔽中断</p>
+<p>通常是非常紧急的硬件故障，通过专门的<strong>不可屏蔽中断请求线</strong>NMI 向 CPU 发出中断请求。</p>
+<h3 id="异常和中断的响应过程"><a href="#异常和中断的响应过程" class="headerlink" title="异常和中断的响应过程"></a>异常和中断的响应过程</h3><p>CPU 从检测到异常或中断事件，到调出响应的异常或中断处理程序开始执行，整个过程称为<strong>异常和中断的响应</strong>。主要分为以下三个步骤：</p>
+<ul>
+<li>保护断点和程序状态</li>
+<li>关中断</li>
+<li>识别异常和中断事件并转到响应处理程序执行</li>
+</ul>
+<p>保护断点和程序状态</p>
+<p>对于不同的异常事件，其返回地址不同。如却也故障异常的断点是发生页故障的当前指令的地址。陷阱的断点是陷阱指令后面一条指令的地址。</p>
+<p>为了能够支持异常或者中断的嵌套处理，大多数处理器将断点保存到栈中，如 IA-32 处理器的断点被保存到栈中，如果系统不支持桥套处理，则可以将断点保存到特定寄存器中。MIPS 处理器用 EPC 寄存器专门存放断点，其 CPU 用于中断的开销较小。</p>
+<p>被中断时源程序状态（如产生的各种标志信息，允许自陷标志等）都必须保存起来。每个正在运行程序的状态信息存放在一个专门的寄存器中，这些专门寄存器统称为<strong>程序状态字寄存器</strong>（PSWR），存放在 PSWR 中的信息称为<strong>程序状态字</strong>。</p>
+<p>关中断</p>
+<p>应有一种机制来禁止在处理异常或中断时再响应新的异常或中断，通常通过设置<strong>中断允许位</strong>来实现。</p>
+<p>识别异常和中断事件并转到响应处理程序执行</p>
+<p>在调出异常和中断你处理程序之前，必须知道发生了什么异常或者那个 IO 设备发出了中断请求。一般来说，内部异常事件和外部中断源的识别方式不同，大多数处理器会将二者分开来处理。</p>
+<p>内部异常事件的识别很简单，只要 CPU 在执行期间把检测到的事件对应的异常类型或者表示异常类型的信息记录到特定的内部寄存器中即可。</p>
+<p>外部中断源的识别比较复杂，只能通过在每条指令执行完成后，取下条指令之前去查询是否有中断请求。通常 CPU 通过采样对应的中断请求引脚来进行查询。但是到底是那个 IO 设备发出的请求，还需要进一步识别。</p>
+<p>异常中断的识别可以采用软件识别和硬件识别两种方式。</p>
+<p>软件识别是指，CPU 中设置一个原因寄存器，该寄存器中有一些标识异常原因或终端类型的标志信息。操作系统使用一个统一的异常或中断查询程序，按一定的优先级顺序查询原因寄存器，先查询到的先处理。MIPS 采用软件识别方式</p>
+<p>硬件识别方式称为<strong>向量中断方式</strong>，这种方式下，异常或中断处理程序的首地址称为<strong>中断向量</strong>，所有中断向量存放在一个表中，称为<strong>中断向量表</strong>。每个异常和中断都被设定一个<strong>中断类型号</strong>，中断向量存放的位置与对应的中断类型号相关。可以根据类型号快速找到对应的处理程序。IA-32 中的异常和中断识别就采用这种方式。</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>BIOS（Basic Input/Output System）是基本输入/输出系统的简称</p>
+<p>Intel 从奔二处理器开始，引入了指令 sysenter 和 sysexit，sysenter 被称为<strong>快速系统调用指令</strong>，他提供了从用户态到内核态的快速切换方式。</p>
+<p>页的大小是 4kb，当对于页起始地址的发起第一次访问时，会发生缺页异常。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/03/17/%E7%AE%97%E6%B3%95/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content="记录编程学习路上的点滴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/17/%E7%AE%97%E6%B3%95/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/" class="post-title-link" itemprop="url">二叉搜索树</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-03-17 11:12:05" itemprop="dateCreated datePublished" datetime="2020-03-17T11:12:05+08:00">2020-03-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-10-01 19:47:58" itemprop="dateModified" datetime="2020-10-01T19:47:58+08:00">2020-10-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+                </span>
+            </span>
+
+          
+
+          <span class="post-time">
+            &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-bar-chart"></i>
+            </span>
+            <span class="post-meta-item-text">字数统计:</span>
+            <span class="post-count">1.4k(字)</span>
+
+          </span>
+
+            <span class="post-time">
+          &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-clock-o"></i>
+            </span>
+            <span class="post-meta-item-text">阅读时长:</span>
+            <span class="post-count">6(分)</span>
+
+          </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>二叉搜索树（Binary Search Tree）是一种可以在 O(logN) 复杂度做查找，插入和删除的操作。</p>
+<p>二叉搜索树是一种满足以下特殊性质的二叉树。</p>
+<ul>
+<li>若左子树不空，则左子树上所有结点的值均小于或等于它的根结点的值</li>
+<li>若右子树不空，则右子树上所有结点的值均小于或等于它的根结点的值</li>
+<li>左右子树均为二叉搜索树</li>
+</ul>
+<p>二叉搜索树包含三种基本操作。其流程如下。</p>
+<h2 id="查找操作"><a href="#查找操作" class="headerlink" title="查找操作"></a>查找操作</h2><ul>
+<li>若当前节点为 NULL，返回 false</li>
+<li>若查找的值小于当前节点的值，则递归搜索左子树</li>
+<li>若查找的值大于当前节点的值，则递归搜索右子树</li>
+<li>若查找的值等于当前节点的值，则返回 true</li>
+</ul>
+<h2 id="插入操作"><a href="#插入操作" class="headerlink" title="插入操作"></a>插入操作</h2><ul>
+<li>若当前节点为 NULL，用插入的值构建新节点插入到当前位置</li>
+<li>若插入的值小于当前节点的值，则在左子树上执行插入操作</li>
+<li>若插入的值大于当前节点的值，则在右子树上执行插入操作</li>
+</ul>
+<h2 id="删除操作"><a href="#删除操作" class="headerlink" title="删除操作"></a>删除操作</h2><ul>
+<li>若当前节点为 NULL，返回 false</li>
+<li>若删除的值小于当前节点的值，则在左子树上执行删除操作</li>
+<li>若删除的值大于当前节点的值，则在右子树上执行删除操作</li>
+<li>若删除的值等于当前节点的值，这里又分为多种情况<ul>
+<li>若当前节点左子树为空，则直接将右子树接上来</li>
+<li>若当前节点右子树为空，则直接将左子树接上来</li>
+<li>否则，查找左子树中最大的值（或者右子树中最小的值），与当前节点的值进行交换，然后删除被交换的节点，这里想一下就可以明白，左子树最大的数值移动到当前节点的位置，因为它是左子树中最大的数值，所以它一定大于左子树中其他值，同时也一定小于右子树中所有值，这样操作后仍然满足 BST 的性质。</li>
+</ul>
+</li>
+</ul>
+<p>根据二叉搜索树的性质，中序遍历二叉搜索树，得到的一定是一个有序的数列。所以用二叉搜索树进行排序，时间复杂度为 O(NlogN)</p>
+<h2 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h2><p>以下内容来自洛谷日报</p>
+<p>这样一种数据结构，支持找前驱与后继，还可以按排名与按数值查找</p>
+<h3 id="找前驱"><a href="#找前驱" class="headerlink" title="找前驱"></a>找前驱</h3><p>所谓前驱，就是小于 x 的最大的数，所以前驱一定比 x 小<br>其实找前驱，就是从根节点开始，递归子树，如果你要找的数小于当前节点，就找他的左子树，反之找他的右子树，直到没有可以找的为止。</p>
+<h3 id="按排名找值"><a href="#按排名找值" class="headerlink" title="按排名找值"></a>按排名找值</h3><p>再节点维护一个 size 信息，表示当前位置开始的树的节点数量，则找排名为 k 的节点，先看左子树的 size+1 是否大于等于 k，若大于，则在左子树中查找 排名为 k-1 的节点。否则，查询右树中排名为 k-size-1 的节点。</p>
+<h3 id="按值找排名"><a href="#按值找排名" class="headerlink" title="按值找排名"></a>按值找排名</h3><p>按值找排名时，从根开始，如果该位置的值小于要查询的值，就找他的右子树，同时记住他左子树的大小，如果小于，就查询他的左子树，直到大小相等，他的排名就是该点左子树的大小加上一路上比他小的节点个数再加上 1。</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p>以下是 BST 基础功能的 C++ 实现的代码:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stack&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bitset&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdlib&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cmath&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;set&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;list&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;deque&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;map&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;queue&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sstream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> ll;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">double</span> PI = <span class="built_in">acos</span>(<span class="number">-1.0</span>);</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">double</span> eps = <span class="number">1e-6</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> INF = <span class="number">1000000000</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">100</span>;</span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">node</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    T val;</span><br><span class="line">    node *lch, *rch;</span><br><span class="line">    node(T val) : val(val), lch(<span class="literal">NULL</span>), rch(<span class="literal">NULL</span>) &#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">bst</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">typedef</span> node&lt;T&gt; node;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    node *root;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    bst() : root(<span class="literal">NULL</span>) &#123;&#125;</span><br><span class="line">    <span class="comment">// 插入操作</span></span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">insert</span><span class="params">(<span class="keyword">const</span> T &amp;val)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> _insert(root, val);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">bool</span> _insert(node *&amp;root, <span class="keyword">const</span> T &amp;val)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (root == <span class="literal">NULL</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            root = <span class="keyword">new</span> node(val);</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (val &lt; root-&gt;val)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> _insert(root-&gt;lch, val);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> _insert(root-&gt;rch, val);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 查找操作</span></span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">find</span><span class="params">(T val)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> _find(root, val);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">bool</span> _find(node *root, <span class="keyword">const</span> T &amp;val)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (root == <span class="literal">NULL</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (val &lt; root-&gt;val)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> _find(root-&gt;lch);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (val &gt; root-&gt;val)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> _find(root-&gt;rch);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> root;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">remove</span><span class="params">(T val)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> _remove(root, val);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">bool</span> _remove(node *&amp;root, T val)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (root == <span class="literal">NULL</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (val &lt; root-&gt;val)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> _remove(root-&gt;lch, val);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (val &gt; root-&gt;val)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> _remove(root-&gt;rch, val);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (root-&gt;lch == <span class="literal">NULL</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                node *del = root;</span><br><span class="line">                root = root-&gt;rch;</span><br><span class="line">                <span class="keyword">delete</span> del;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (root-&gt;rch == <span class="literal">NULL</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                node *del = root;</span><br><span class="line">                root = root-&gt;lch;</span><br><span class="line">                <span class="keyword">delete</span> del;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">// 找右子树中值最小的</span></span><br><span class="line">                node *rightMin = root-&gt;rch-&gt;lch;</span><br><span class="line">                <span class="keyword">while</span> (rightMin)</span><br><span class="line">                &#123;</span><br><span class="line">                    rightMin = rightMin-&gt;lch;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">// 交换之后，右子树仍然满足 bst 性质</span></span><br><span class="line">                swap(root-&gt;val, rightMin-&gt;val);</span><br><span class="line">                _remove(root-&gt;rch, rightMin-&gt;val);</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">output</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        _output(root);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">void</span> _output(node *root)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (root == <span class="literal">NULL</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        _output(root-&gt;lch);</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; root-&gt;val &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">        _output(root-&gt;rch);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    bst&lt;<span class="keyword">int</span>&gt; b;</span><br><span class="line">    b.insert(<span class="number">1</span>);</span><br><span class="line">    b.insert(<span class="number">3</span>);</span><br><span class="line">    b.insert(<span class="number">2</span>);</span><br><span class="line">    b.insert(<span class="number">10</span>);</span><br><span class="line">    b.insert(<span class="number">8</span>);</span><br><span class="line">    b.remove(<span class="number">2</span>);</span><br><span class="line">    b.insert(<span class="number">4</span>);</span><br><span class="line">    b.remove(<span class="number">3</span>);</span><br><span class="line">    b.output();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/02/22/CSS/css%E4%B8%96%E7%95%8C%E7%AC%94%E8%AE%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -195,7 +693,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-01 19:52:18" itemprop="dateModified" datetime="2020-10-01T19:52:18+08:00">2020-10-01</time>
+                <time title="修改时间：2021-01-08 11:51:45" itemprop="dateModified" datetime="2021-01-08T11:51:45+08:00">2021-01-08</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -288,7 +786,7 @@
 <h3 id="padding-属性"><a href="#padding-属性" class="headerlink" title="padding 属性"></a>padding 属性</h3><ul>
 <li>内联的元素设置垂直 padding 依然有效果，如果父元素设置 overflow: auto，会显示滚动条。id 锚点元素可以设置为内联元素然后设置 padding-top 使得定位位置偏下</li>
 <li>实际上,对于非替换元素的内联元素,不仅 padding 不会加入行盒高度的计算,margin 和 border 也都是如此,都是不计算高度,但实际上在内联盒周围发生了渲染。</li>
-<li>padding 的百分比数值无论水平数值都是相对父元素宽度计算的</li>
+<li>padding 的百分比数值无论水平竖直都是相对父元素宽度计算的</li>
 </ul>
 <h3 id="margin-与元素尺寸以及相关布局"><a href="#margin-与元素尺寸以及相关布局" class="headerlink" title="margin 与元素尺寸以及相关布局"></a>margin 与元素尺寸以及相关布局</h3><ul>
 <li>只有元素是“充分利用可用空间”状态的时候,margin 才可以改变元素的可视尺寸。因为只要宽度设定,margin 就无法改变元素尺寸。对于水平排列的列表，采用 float 方案，可以在 ul 设置负的 margin 数值，来增加可用宽度。</li>
@@ -298,7 +796,7 @@
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.column-box</span> &#123;</span><br><span class="line">  <span class="attribute">overflow</span>: hidden;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.column-left</span>,</span><br><span class="line"><span class="selector-class">.column-right</span> &#123;</span><br><span class="line">  <span class="attribute">margin-bottom</span>: -<span class="number">9999px</span>;</span><br><span class="line">  <span class="attribute">padding-bottom</span>: <span class="number">9999px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>视觉层多了 9999px 高度可以使用的背景色，当任一栏的高度增加时，父元素总的高度增加</p>
 <ul>
-<li>margin 的百分比数值无论水平数值都是相对父元素宽度计算的</li>
+<li>margin 的百分比数值无论水平竖直都是相对父元素宽度计算的</li>
 <li>margin 合并的 3 种场景<ul>
 <li>相邻兄弟元素 margin 合并</li>
 <li>父级和第一个/最后一个子元素</li>
@@ -1232,348 +1730,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2019/08/31/vue/vue-cli%E5%AD%A6%E4%B9%A0%E5%92%8Cdebug%E9%85%8D%E7%BD%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="jiezi19971225">
-      <meta itemprop="description" content="记录编程学习路上的点滴">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Jiez19971225‘s Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/08/31/vue/vue-cli%E5%AD%A6%E4%B9%A0%E5%92%8Cdebug%E9%85%8D%E7%BD%AE/" class="post-title-link" itemprop="url">vue-cli学习和debug配置</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-08-31 16:15:21" itemprop="dateCreated datePublished" datetime="2019-08-31T16:15:21+08:00">2019-08-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-01 19:57:56" itemprop="dateModified" datetime="2020-10-01T19:57:56+08:00">2020-10-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/vue/" itemprop="url" rel="index"><span itemprop="name">vue</span></a>
-                </span>
-            </span>
-
-          
-
-          <span class="post-time">
-            &nbsp; | &nbsp;
-            <span class="post-meta-item-icon">
-              <i class="fa fa-bar-chart"></i>
-            </span>
-            <span class="post-meta-item-text">字数统计:</span>
-            <span class="post-count">962(字)</span>
-
-          </span>
-
-            <span class="post-time">
-          &nbsp; | &nbsp;
-            <span class="post-meta-item-icon">
-              <i class="fa fa-clock-o"></i>
-            </span>
-            <span class="post-meta-item-text">阅读时长:</span>
-            <span class="post-count">3(分)</span>
-
-          </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="开发"><a href="#开发" class="headerlink" title="开发"></a>开发</h3><h4 id="浏览器兼容性"><a href="#浏览器兼容性" class="headerlink" title="浏览器兼容性"></a>浏览器兼容性</h4><p>如果有依赖需要 polyfill，你有几种选择：</p>
-<ul>
-<li>如果该依赖基于一个目标环境不支持的 ES 版本撰写: 将其添加到 vue.config.js 中的 transpileDependencies 选项。这会为该依赖同时开启语法语法转换和根据使用情况检测 polyfill。</li>
-<li>如果该依赖交付了 ES5 代码并显式地列出了需要的 polyfill: 你可以使用 @vue/babel-preset-app 的 polyfills 选项预包含所需要的 polyfill。注意 es6.promise 将被默认包含，因为现在的库依赖 Promise 是非常普遍的。</li>
-<li>如果该依赖交付 ES5 代码，但使用了 ES6+ 特性且没有显式地列出需要的 polyfill (例如 Vuetify)：请使用 useBuiltIns: ‘entry’ 然后在入口文件添加 import ‘@babel/polyfill’。这会根据 browserslist 目标导入所有 polyfill，这样你就不用再担心依赖的 polyfill 问题了，但是因为包含了一些没有用到的 polyfill 所以最终的包大小可能会增加。</li>
-</ul>
-<h4 id="环境变量和模式"><a href="#环境变量和模式" class="headerlink" title="环境变量和模式"></a>环境变量和模式</h4><p>你可以替换你的项目根目录中的下列文件来指定环境变量：<br>.env # 在所有的环境中被载入<br>.env.local # 在所有的环境中被载入，但会被 git 忽略<br>.env.[mode] # 只在指定的模式中被载入<br>.env.[mode].local # 只在指定的模式中被载入，但会被 git 忽略</p>
-<p>模式是 Vue CLI 项目中一个重要的概念，默认情况下，一个 Vue CLI 项目有三个模式：</p>
-<ul>
-<li>development 模式用于 vue-cli-service serve</li>
-<li>production 模式用于 vue-cli-service build 和 vue-cli-service test:e2e</li>
-<li>test 模式用于 vue-cli-service test:unit<br>可以通过传递 —mode 选项参数为命令行覆写默认的模式</li>
-<li>“dev-build”: “vue-cli-service build —mode development”</li>
-</ul>
-<p>只有以 VUE_APP 开头的变量会被 webpack.DefinePlugin 静态嵌入到客户端侧的包中。你可以在应用的代码中这样访问它们：</p>
-<ul>
-<li>console.log(process.env.VUE<em>APP_SECRET)<br>除了 VUE_APP</em>* 变量之外，在你的应用代码中始终可用的还有两个特殊的变量：</li>
-<li>NODE_ENV - 会是 “development”、”production” 或 “test” 中的一个。具体的值取决于应用运行的模式。</li>
-<li>BASE_URL - 会和 vue.config.js 中的 publicPath 选项相符，即你的应用会部署到的基础路径。<br>所有解析出来的环境变量都可以在 public/index.html 中以 HTML 插值中介绍的方式使用。</li>
-</ul>
-<h4 id="静态资源处理"><a href="#静态资源处理" class="headerlink" title="静态资源处理"></a>静态资源处理</h4><h5 id="URL-转换规则"><a href="#URL-转换规则" class="headerlink" title="URL 转换规则"></a>URL 转换规则</h5><p>如果 URL 是一个绝对路径 (例如 /images/foo.png)，它将会被保留不变。<br>如果 URL 以 . 开头，它会作为一个相对模块请求被解释且基于你的文件系统中的目录结构进行解析。<br>如果 URL 以 ~ 开头，其后的任何内容都会作为一个模块请求被解析。这意味着你甚至可以引用 Node 模块中的资源：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;~some-npm-package/foo.png&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
-<p>如果 URL 以 @ 开头，它也会作为一个模块请求被解析。它的用处在于 Vue CLI 默认会设置一个指向 projectRoot/src 的别名 @。(仅作用于模版中)</p>
-<h3 id="Debug-配置"><a href="#Debug-配置" class="headerlink" title="Debug 配置"></a>Debug 配置</h3><p>效果：在 vscode 中的终端输出 Chrome 的控制台信息，可以在 vscode 中进行断点调试<br>首先需要安装插件 Debugger for Chrome<br>新增 Debug 配置项</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">        <span class="string">&quot;name&quot;</span>: <span class="string">&quot;attach to chrome&quot;</span>,</span><br><span class="line">        <span class="string">&quot;type&quot;</span>: <span class="string">&quot;chrome&quot;</span>,</span><br><span class="line">        <span class="string">&quot;request&quot;</span>: <span class="string">&quot;attach&quot;</span>,</span><br><span class="line">        <span class="string">&quot;port&quot;</span>: <span class="number">9222</span>,</span><br><span class="line">        <span class="string">&quot;address&quot;</span>: <span class="string">&quot;localhost&quot;</span>,</span><br><span class="line">        <span class="string">&quot;url&quot;</span>: <span class="string">&quot;http://localhost:8080&quot;</span>,</span><br><span class="line">        <span class="string">&quot;webRoot&quot;</span>: <span class="string">&quot;$&#123;workspaceFolder&#125;/src&quot;</span>,    <span class="comment">// 这个webRoot应该是指webpack打包js文件的目录</span></span><br><span class="line">        <span class="string">&quot;sourceMaps&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">        <span class="string">&quot;sourceMapPathOverrides&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;webpack:///src/*&quot;</span>: <span class="string">&quot;$&#123;webRoot&#125;/*&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>启动 chrome，附加启动参数</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">google-chrome-stable  --remote-debugging-port=<span class="number">9222</span></span><br></pre></td></tr></table></figure>
-<p>如果使用的是 vue-cli，需要在 vue.config.js 中添加相应配置，如</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    configureWebpack: &#123;</span><br><span class="line">        devtool: <span class="string">&#x27;source-map&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2019/08/16/misc/%E8%AE%B0%E5%BD%95%E7%AC%94%E8%AE%B0%E7%9A%84%E5%8E%9F%E5%9B%A0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="jiezi19971225">
-      <meta itemprop="description" content="记录编程学习路上的点滴">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Jiez19971225‘s Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/08/16/misc/%E8%AE%B0%E5%BD%95%E7%AC%94%E8%AE%B0%E7%9A%84%E5%8E%9F%E5%9B%A0/" class="post-title-link" itemprop="url">记录笔记的原因</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-08-16 11:33:33" itemprop="dateCreated datePublished" datetime="2019-08-16T11:33:33+08:00">2019-08-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-01 19:53:55" itemprop="dateModified" datetime="2020-10-01T19:53:55+08:00">2020-10-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%9D%82%E9%A1%B9/" itemprop="url" rel="index"><span itemprop="name">杂项</span></a>
-                </span>
-            </span>
-
-          
-
-          <span class="post-time">
-            &nbsp; | &nbsp;
-            <span class="post-meta-item-icon">
-              <i class="fa fa-bar-chart"></i>
-            </span>
-            <span class="post-meta-item-text">字数统计:</span>
-            <span class="post-count">290(字)</span>
-
-          </span>
-
-            <span class="post-time">
-          &nbsp; | &nbsp;
-            <span class="post-meta-item-icon">
-              <i class="fa fa-clock-o"></i>
-            </span>
-            <span class="post-meta-item-text">阅读时长:</span>
-            <span class="post-count">1(分)</span>
-
-          </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>其实我向来不是一个学习努力的人，高中时就不喜欢记笔记，高中的时候课堂管理严格，多多少少还是能记录下一些东西。<br>上了大学以后，我更是很少去做课堂笔记了，主要原因是我根本不听 O(∩_∩)O~。不过上了大学以后，我能明显感受到记忆力的衰退。记笔记确实是一种有效的学习方法，在学习技术的时候，我也是有在记录笔记的，一开始是记在本子上的，后来觉得这样很麻烦，开始使用有道云，最后开了这个博客，倒不是希望能被人看到，只是 hexo 用 VSCode 打开真的很好管理和编辑，然后哪天高兴了，随手 push 上去就好。<br>记录笔记其实是一件节省时间的事情，一般我只会记录我在学习的时候遇到的重难点的核心知识，自己已经理解的就不会记录了，之后遇到问题，只要搜索自己的笔记，省去了翻阅原书/文档的时间。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2019/08/16/javascript/es6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="jiezi19971225">
-      <meta itemprop="description" content="记录编程学习路上的点滴">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Jiez19971225‘s Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/08/16/javascript/es6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02/" class="post-title-link" itemprop="url">es6 学习笔记 2</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-08-16 11:32:37" itemprop="dateCreated datePublished" datetime="2019-08-16T11:32:37+08:00">2019-08-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-01 19:53:22" itemprop="dateModified" datetime="2020-10-01T19:53:22+08:00">2020-10-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/javascript/" itemprop="url" rel="index"><span itemprop="name">javascript</span></a>
-                </span>
-            </span>
-
-          
-
-          <span class="post-time">
-            &nbsp; | &nbsp;
-            <span class="post-meta-item-icon">
-              <i class="fa fa-bar-chart"></i>
-            </span>
-            <span class="post-meta-item-text">字数统计:</span>
-            <span class="post-count">525(字)</span>
-
-          </span>
-
-            <span class="post-time">
-          &nbsp; | &nbsp;
-            <span class="post-meta-item-icon">
-              <i class="fa fa-clock-o"></i>
-            </span>
-            <span class="post-meta-item-text">阅读时长:</span>
-            <span class="post-count">1(分)</span>
-
-          </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="Class"><a href="#Class" class="headerlink" title="Class"></a>Class</h3><ul>
-<li>不存在变量提升</li>
-<li>构造函数的 prototype 属性，在 ES6 的“类”上面继续存在。事实上，类的所有方法都定义在类的 prototype 属性上面。</li>
-<li>prototype 对象的 constructor 属性，直接指向“类”的本身，这与 ES5 的行为是一致的。</li>
-</ul>
-<h4 id="类的实例"><a href="#类的实例" class="headerlink" title="类的实例"></a>类的实例</h4><ul>
-<li>与 ES5 一样，实例的属性除非显式定义在其本身（即定义在 this 对象上），否则都是定义在原型上（即定义在 class 上）。与 ES5 一样，类的所有实例共享一个原型对象。</li>
-</ul>
-<h3 id="Class-表达式"><a href="#Class-表达式" class="headerlink" title="Class 表达式"></a>Class 表达式</h3><p>与函数一样，类也可以使用表达式的形式定义。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> MyClass = <span class="class"><span class="keyword">class</span> <span class="title">Me</span> </span>&#123;</span><br><span class="line">  getClassName() &#123;</span><br><span class="line">    <span class="keyword">return</span> Me.name;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>上面代码表示，Me 只在 Class 内部有定义。<br>采用 Class 表达式，可以写出立即执行的 Class。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> person = <span class="keyword">new</span> (<span class="class"><span class="keyword">class</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(name) &#123;</span><br><span class="line">    <span class="built_in">this</span>.name = name;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  sayName() &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">this</span>.name);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)(<span class="string">&quot;张三&quot;</span>);</span><br><span class="line"></span><br><span class="line">person.sayName(); <span class="comment">// &quot;张三&quot;</span></span><br></pre></td></tr></table></figure>
-<p>上面代码中，person 是一个立即执行的类的实例。</p>
-<h4 id="静态方法"><a href="#静态方法" class="headerlink" title="静态方法"></a>静态方法</h4><ul>
-<li>类相当于实例的原型，所有在类中定义的方法，都会被实例继承。如果在一个方法前，加上 static 关键字，就表示该方法不会被实例继承，而是直接通过类来调用，这就称为“静态方法”。</li>
-</ul>
-<h4 id="实例属性的新写法"><a href="#实例属性的新写法" class="headerlink" title="实例属性的新写法"></a>实例属性的新写法</h4><ul>
-<li>实例属性除了定义在 constructor()方法里面的 this 上面，也可以定义在类的最顶层，这时不需要在之前加 this。</li>
-</ul>
-<h4 id="静态属性"><a href="#静态属性" class="headerlink" title="静态属性"></a>静态属性</h4><ul>
-<li>静态属性指的是 Class 本身的属性，即 Class.propName，而不是定义在实例对象（this）上的属性。</li>
-</ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">Foo.prop = <span class="number">1</span>;</span><br><span class="line">Foo.prop; <span class="comment">// 1</span></span><br></pre></td></tr></table></figure>
-<h4 id="Object-getPrototypeOf"><a href="#Object-getPrototypeOf" class="headerlink" title="Object.getPrototypeOf()"></a>Object.getPrototypeOf()</h4><ul>
-<li>用于获取父类</li>
-</ul>
-<h4 id="super"><a href="#super" class="headerlink" title="super"></a>super</h4><ul>
-<li>有两种用法　当做函数代表父类的构造函数，当做对象，在普通方法中，指向父类的原型对象，在静态方法中指向父类，</li>
-</ul>
-<h4 id="继承链"><a href="#继承链" class="headerlink" title="继承链"></a>继承链</h4><ul>
-<li>1 子类的<strong>proto</strong>属性，表示构造函数的继承，总是指向父类。</li>
-<li>2 子类 prototype 属性的<strong>proto</strong>属性，表示方法的继承，总是指向父类的 prototype 属性。</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1643,7 +1799,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">67</span>
+          <span class="site-state-item-count">70</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1683,7 +1839,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

@@ -164,6 +164,392 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/04/18/react/reactRouter%E5%AD%A6%E4%B9%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content="记录编程学习路上的点滴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/04/18/react/reactRouter%E5%AD%A6%E4%B9%A0/" class="post-title-link" itemprop="url">reactRouter学习</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-04-18 23:41:25" itemprop="dateCreated datePublished" datetime="2020-04-18T23:41:25+08:00">2020-04-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-10 23:22:37" itemprop="dateModified" datetime="2021-01-10T23:22:37+08:00">2021-01-10</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/react/" itemprop="url" rel="index"><span itemprop="name">react</span></a>
+                </span>
+            </span>
+
+          
+
+          <span class="post-time">
+            &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-bar-chart"></i>
+            </span>
+            <span class="post-meta-item-text">字数统计:</span>
+            <span class="post-count">636(字)</span>
+
+          </span>
+
+            <span class="post-time">
+          &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-clock-o"></i>
+            </span>
+            <span class="post-meta-item-text">阅读时长:</span>
+            <span class="post-count">2(分)</span>
+
+          </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>记录一下学习 React 全家桶中的 react-router</p>
+<h2 id="examples"><a href="#examples" class="headerlink" title="examples"></a>examples</h2><h3 id="路由参数"><a href="#路由参数" class="headerlink" title="路由参数"></a>路由参数</h3><p>通过 hooks 获取</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> &#123; id &#125; = useParams();</span><br></pre></td></tr></table></figure>
+<h3 id="Route"><a href="#Route" class="headerlink" title="Route"></a>Route</h3><h4 id="route-props"><a href="#route-props" class="headerlink" title="route props"></a>route props</h4><p>所有渲染方式会传递以下三种 props</p>
+<ul>
+<li>match</li>
+<li>location</li>
+<li>history<br>会在 props 接受这三个 props</li>
+</ul>
+<h5 id="component"><a href="#component" class="headerlink" title="component"></a>component</h5><p>当你使用 component 时，router 使用 React.CreateElement 根据传递的 component 创建一个新的 React element 。这意味着如果你提供了一个内联的函数给 component 属性，你会在每次 render 的时候都创建这个组件，这会导致旧组件的 unmount 和 新组建的 mount</p>
+<p>其背后的原理在于，react 在比较组件状态以便决定如何更新 dom 节点时，首先要比较组件的 type 和 key。在使用<code>&lt;Route component=&#123;() =&gt; (&lt;Bar idx=&#123;this.state.idx&#125;/&gt;)&#125;/&gt;</code>时，由于调用了 React.createElement，组件的 type 不是 Bar 这个类，而是一个匿名函数。App 组件每次 render 时都生成一个新的匿名函数，导致生成的组件的 type 总是不相同，所以会产生重复的 unmounting 和 mounting。</p>
+<h5 id="render"><a href="#render" class="headerlink" title="render"></a>render</h5><p>允许方便的内联渲染，避免不必要的重新挂载。当路由匹配的时候，这个函数会被调用。函数可以访问所有的 props。</p>
+<p><code>&lt;Route component&gt;</code> 优先级高于 <code>&lt;Route render&gt;</code></p>
+<h5 id="children"><a href="#children" class="headerlink" title="children"></a>children</h5><p>有时你需要渲染渲染子组件，不管路由是否匹配。这种情况下，可以使用 children 。</p>
+<h4 id="exact"><a href="#exact" class="headerlink" title="exact"></a>exact</h4><p>当为 true，进行精确匹配。</p>
+<h4 id="strict"><a href="#strict" class="headerlink" title="strict"></a>strict</h4><p>当为 true，路径中的 slash 也必须精确匹配。</p>
+<h4 id="sensitive"><a href="#sensitive" class="headerlink" title="sensitive"></a>sensitive</h4><p>当为 true，大小写敏感。</p>
+<h3 id="history-是可变对象"><a href="#history-是可变对象" class="headerlink" title="history 是可变对象"></a>history 是可变对象</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Comp</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  componentDidUpdate(prevProps) &#123;</span><br><span class="line">    <span class="comment">// will be true</span></span><br><span class="line">    <span class="keyword">const</span> locationChanged = <span class="built_in">this</span>.props.location !== prevProps.location;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// INCORRECT, will *always* be false because history is mutable.</span></span><br><span class="line">    <span class="keyword">const</span> locationChanged =</span><br><span class="line">      <span class="built_in">this</span>.props.history.location !== prevProps.history.location;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&lt;Route component=&#123;Comp&#125; /&gt;;</span><br></pre></td></tr></table></figure>
+<h3 id="Link"><a href="#Link" class="headerlink" title="Link"></a>Link</h3><h4 id="to"><a href="#to" class="headerlink" title="to"></a>to</h4><p>可以是一个路径字符串，也可以是一个对象</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    pathname:<span class="string">&#x27;xxx&#x27;</span>,</span><br><span class="line">    search:<span class="string">&#x27;xxx&#x27;</span>,</span><br><span class="line">    hash:<span class="string">&#x27;xxx&#x27;</span>,</span><br><span class="line">    state:<span class="string">&#x27;xxx&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>也可以是一个函数，传递当前的 location，返回一个字符串或者对象</p>
+<h4 id="replace"><a href="#replace" class="headerlink" title="replace"></a>replace</h4><p>当为 true，替换历史栈中的当前记录，而不是添加一条记录</p>
+<h3 id="NavLink"><a href="#NavLink" class="headerlink" title="NavLink"></a>NavLink</h3><h4 id="activeClassName"><a href="#activeClassName" class="headerlink" title="activeClassName"></a>activeClassName</h4><p>默认的类名是 active，这将会被连接到 className 属性后</p>
+<h4 id="link-exact"><a href="#link-exact" class="headerlink" title="link-exact"></a>link-exact</h4><p>当为 true，activeClassName 和 activeStyle 只会在精确匹配时生效</p>
+<h4 id="link-strict"><a href="#link-strict" class="headerlink" title="link-strict"></a>link-strict</h4><p>结合 Route 的 strict，会跳转到严格匹配的路由</p>
+<h4 id="isActive"><a href="#isActive" class="headerlink" title="isActive"></a>isActive</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;NavLink</span><br><span class="line">  to=<span class="string">&quot;/events/123&quot;</span></span><br><span class="line">  isActive=&#123;<span class="function">(<span class="params">match, location</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (!match) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// only consider an event active if its event id is an odd number</span></span><br><span class="line">    <span class="keyword">const</span> eventID = <span class="built_in">parseInt</span>(match.params.eventID);</span><br><span class="line">    <span class="keyword">return</span> !<span class="built_in">isNaN</span>(eventID) &amp;&amp; eventID % <span class="number">2</span> === <span class="number">1</span>;</span><br><span class="line">  &#125;&#125;</span><br><span class="line">&gt;</span><br><span class="line">  Event <span class="number">123</span></span><br><span class="line">&lt;/NavLink&gt;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/04/18/vue/%E8%AF%95%E7%94%A8vue3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content="记录编程学习路上的点滴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/04/18/vue/%E8%AF%95%E7%94%A8vue3/" class="post-title-link" itemprop="url">试用vue3</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-04-18 23:36:48" itemprop="dateCreated datePublished" datetime="2020-04-18T23:36:48+08:00">2020-04-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-10-01 19:57:47" itemprop="dateModified" datetime="2020-10-01T19:57:47+08:00">2020-10-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/vue/" itemprop="url" rel="index"><span itemprop="name">vue</span></a>
+                </span>
+            </span>
+
+          
+
+          <span class="post-time">
+            &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-bar-chart"></i>
+            </span>
+            <span class="post-meta-item-text">字数统计:</span>
+            <span class="post-count">2.5k(字)</span>
+
+          </span>
+
+            <span class="post-time">
+          &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-clock-o"></i>
+            </span>
+            <span class="post-meta-item-text">阅读时长:</span>
+            <span class="post-count">11(分)</span>
+
+          </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>vue 3.0 在 2020.4.17 发布了 beta 版本，可以说离正式发布已经很近了，是时候学习一波新姿势了。</p>
+<h2 id="composition-api"><a href="#composition-api" class="headerlink" title="composition api"></a>composition api</h2><p>目前 vue 3.0 的文档还未更新，可以先看这个了解 vue3.0 的新语法 <a target="_blank" rel="noopener" href="https://vue-composition-api-rfc.netlify.app/">vue composition api rfc</a><br>以下是我的学习笔记。</p>
+<h2 id="核心概念-响应性"><a href="#核心概念-响应性" class="headerlink" title="核心概念 响应性"></a>核心概念 响应性</h2><p>响应性 vue 3.0 最重要的概念，vue3.0 使用 proxy 赋予对象响应性，一个对象具有响应性，那么当这个对象发生改变的时候，就可以自动触发视图的更新或者 watchEffect 中的副作用。</p>
+<h3 id="proxy"><a href="#proxy" class="headerlink" title="proxy"></a>proxy</h3><h4 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h4><p>Proxy 用于修改某些操作的默认行为，等同于在语言层面做出修改，所以属于一种“元编程”（meta programming），即对编程语言进行编程。Proxy 实际上重载（overload）了点运算符，即用自己的定义覆盖了语言的原始定义。所以可以实现 Object.defineProperty 做不到的对于对象新增属性，数组下标的响应式操作。</p>
+<h4 id="构造"><a href="#构造" class="headerlink" title="构造"></a>构造</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> proxy = <span class="keyword">new</span> <span class="built_in">Proxy</span>(target, handler);</span><br></pre></td></tr></table></figure>
+<p>要使得 proxy 起作用，必须针对 Proxy 实例（上例中是 proxy）进行操作，而不是对目标对象 target 进行操作，如果 handler 没有设置任何拦截，那么等同于直接通向原对象</p>
+<p>proxy 实例也可以作为其他对象的原型对象</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> proxy = <span class="keyword">new</span> <span class="built_in">Proxy</span>(</span><br><span class="line">  &#123;&#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    get: <span class="function"><span class="keyword">function</span> (<span class="params">target, propKey</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="number">35</span>;</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> obj = <span class="built_in">Object</span>.create(proxy);</span><br><span class="line">obj.time; <span class="comment">// 35</span></span><br></pre></td></tr></table></figure>
+<p>proxy 对象是 obj 对象的原型，obj 对象本身没有 time 属性，所以根据原型链，会在 proxy 对象上读取该属性，导致被拦截</p>
+<h4 id="支持的操作"><a href="#支持的操作" class="headerlink" title="支持的操作"></a>支持的操作</h4><p>几乎可以支持全部对于对象的访问操作，甚至包括 函数的调用，constructor 的调用，具体看文档就好。</p>
+<h3 id="setup"><a href="#setup" class="headerlink" title="setup"></a>setup</h3><p>回到 Vue3 这里</p>
+<p>setup 相当于原来的 options，可以接受两个参数</p>
+<p>第一个参数 props，props 是响应性的，可以触发 watchEffect，注意 props 不能被解构，否则会失去响应性。</p>
+<p>第二个参数 context 是一个不可变对象。它有以下属性，其实也都对应了 2.0 中的 api。</p>
+<ul>
+<li>context.attrs 就是组件上的 attrs，等同于 2.0 的 $attrs</li>
+<li>context.slots 可访问通过组件插槽分发的的内容，等同于 2.0 的 $slots</li>
+<li>context.emit 就是 2.0 的 $emit 方法</li>
+</ul>
+<h3 id="setup-中的-this"><a href="#setup-中的-this" class="headerlink" title="setup 中的 this"></a>setup 中的 this</h3><p>setup 中不支持使用 this</p>
+<h3 id="reactive"><a href="#reactive" class="headerlink" title="reactive"></a>reactive</h3><p>赋予一个对象响应性，相当于 2.0 中的 Vue.observable()</p>
+<h3 id="ref"><a href="#ref" class="headerlink" title="ref"></a>ref</h3><p>接受一个非引用类型值，返回一个 reactive 的可变 ref 对象，对象有一个唯一的 value 属性</p>
+<p>当其作为一个 reactive 对象的属性的时候，会自动 unwrap 内部的值，使它的行为与普通属性一致</p>
+<h3 id="toRefs"><a href="#toRefs" class="headerlink" title="toRefs"></a>toRefs</h3><p>接受一个 reactive 对象，返回一个对象，对象中每个属性都是 ref 对象<br>这在函数返回一个对象的时候很有用，返回值可以被解构而不失响应特性</p>
+<h3 id="computed"><a href="#computed" class="headerlink" title="computed"></a>computed</h3><p>接受一个 getter 函数，返回一个不可变的响应 ref 对象</p>
+<h3 id="readonly"><a href="#readonly" class="headerlink" title="readonly"></a>readonly</h3><p>接受一个对象（reactive 或者 朴素的）或者一个 ref，返回一个 readonly 的 proxy</p>
+<h3 id="watchEffect"><a href="#watchEffect" class="headerlink" title="watchEffect"></a>watchEffect</h3><p>立即运行一个函数，同时动态地跟踪它的依赖项，并在依赖项发生变化时重新运行它。</p>
+<p>当 watchEffect 在 setup 中或者生命周期钩子中被调用，watcher 会被链接到组件的生命周期中，会在组件卸载的时候自动停止</p>
+<p>watchEffect 也会返回一个 stop 函数，可以手动调用</p>
+<h3 id="side-effect"><a href="#side-effect" class="headerlink" title="side effect"></a>side effect</h3><p>有时在 watchEffect 中需要执行一些异步的方法，当再次触发 watchEffect 但是异步操作还未完成，就需要清理一些操作。</p>
+<p>watchEffect 可以接受一个 onInvalidate 参数，大致形式如下</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">watchEffect(<span class="function">(<span class="params">onInvalidate</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> token = performAsyncOperation(id.value);</span><br><span class="line">  onInvalidate(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// id has changed or watcher is stopped.</span></span><br><span class="line">    <span class="comment">// invalidate previously pending async operation</span></span><br><span class="line">    token.cancel();</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>不像是 react 中 useEffect 返回一个函数的原因是，异步函数的返回值是很重要的。<br>vue 会缓冲无效的副作用，当在一个 tick 中多次发生副作用的时候，避免不必要的重复调用。一个组件的 update 钩子也是一个副作用。watchEffect 会在 update 钩子触发前触发。触发的顺序是 beforeUpdate=》watchEffect=》onUpdate</p>
+<h3 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h3><p>Vue 3.0 提供了在 setup 中使用的生命周期的钩子函数，与 2.0 的对应关系如下</p>
+<p><del>beforeCreate</del> -&gt; use setup()<br><del>created</del> -&gt; use setup()<br>beforeMount -&gt; onBeforeMount<br>mounted -&gt; onMounted<br>beforeUpdate -&gt; onBeforeUpdate<br>updated -&gt; onUpdated<br>beforeDestroy -&gt; onBeforeUnmount<br>destroyed -&gt; onUnmounted<br>errorCaptured -&gt; onErrorCaptured</p>
+<p>新提供了一下供调试使用的钩子<br>onRenderTracked<br>onRenderTriggered</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  onRenderTriggered(e) &#123;</span><br><span class="line">    <span class="keyword">debugger</span>;</span><br><span class="line">    <span class="comment">// inspect which dependency is causing the component to re-render</span></span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="inject-provide"><a href="#inject-provide" class="headerlink" title="inject provide"></a>inject provide</h3><p>在 vue 3.0 中的使用方式如下，provide 可以注入普通数据，也可以注入响应性数据。官方的例子，provide 的键值用的是 Symbol，当然也可以用字符串。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Parent.vue</span></span><br><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;div&gt;parent&lt;/div&gt;</span><br><span class="line">    &lt;slot&gt;&lt;/slot&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line"><span class="keyword">import</span> &#123; provide, ref &#125; <span class="keyword">from</span> <span class="string">&quot;vue&quot;</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  setup() &#123;</span><br><span class="line">    <span class="keyword">const</span> themeRef = ref(<span class="string">&quot;dark&quot;</span>);</span><br><span class="line">    provide(<span class="string">&quot;ThemeSymbol&quot;</span>, themeRef);</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Son.vue</span></span><br><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;div&gt;son&lt;/div&gt;</span><br><span class="line">    &lt;div&gt;&#123;&#123; theme &#125;&#125;&lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line"><span class="keyword">import</span> &#123; watchEffect, inject, ref &#125; <span class="keyword">from</span> <span class="string">&quot;vue&quot;</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  setup() &#123;</span><br><span class="line">    <span class="keyword">const</span> theme = inject(<span class="string">&quot;ThemeSymbol&quot;</span>, ref(<span class="string">&quot;light&quot;</span>));</span><br><span class="line">    watchEffect(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">`theme set to: <span class="subst">$&#123;theme.value&#125;</span>`</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      theme,</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="template-Refs"><a href="#template-Refs" class="headerlink" title="template Refs"></a>template Refs</h3><p>在 vue2.0 中，通过 ref 可以获取到 虚拟 dom 的引用。3.0 中也是如此，但是有一些变化。<br>下面的代码中，我们在 setep 创建了一个名叫 root 的 ref，同时在 template 的 div 的 ref 属性值为 root，那么在<strong>初次渲染</strong>后，root 的值将会指向虚拟 dom 引用。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div ref=<span class="string">&quot;root&quot;</span>&gt;&lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">  <span class="keyword">import</span> &#123; ref, onMounted &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">    setup() &#123;</span><br><span class="line">      <span class="keyword">const</span> root = ref(<span class="literal">null</span>)</span><br><span class="line"></span><br><span class="line">      onMounted(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="comment">// the DOM element will be assigned to the ref after initial render</span></span><br><span class="line">        <span class="built_in">console</span>.log(root.value) <span class="comment">// &lt;div/&gt;</span></span><br><span class="line">      &#125;)</span><br><span class="line"></span><br><span class="line">      <span class="keyword">return</span> &#123;</span><br><span class="line">        root</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="Reactivity-Utilities"><a href="#Reactivity-Utilities" class="headerlink" title="Reactivity Utilities"></a>Reactivity Utilities</h2><h3 id="unref"><a href="#unref" class="headerlink" title="unref"></a>unref</h3><p>如果参数是一个 ref，返回它的内部值，否则返回参数自身，实际上是 val = isRef(val) ? val.value : val 的语法糖</p>
+<h3 id="toRef"><a href="#toRef" class="headerlink" title="toRef"></a>toRef</h3><p>被用来从 reactive 对象中的属性中 创建一个 ref</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> state = reactive(&#123;</span><br><span class="line">  foo: <span class="number">1</span>,</span><br><span class="line">  bar: <span class="number">2</span>,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> fooRef = toRef(state, <span class="string">&quot;foo&quot;</span>);</span><br></pre></td></tr></table></figure>
+<h3 id="toRefs-这个之前已经写了"><a href="#toRefs-这个之前已经写了" class="headerlink" title="toRefs 这个之前已经写了"></a>toRefs 这个之前已经写了</h3><p>将一个 reactive 对象转换为 普通对象，对象的每一个属性都是一个 ref 对象</p>
+<h3 id="isRef-amp-amp-isProxy-amp-amp-isReactive-amp-amp-isReadonly"><a href="#isRef-amp-amp-isProxy-amp-amp-isReactive-amp-amp-isReadonly" class="headerlink" title="isRef &amp;&amp; isProxy &amp;&amp; isReactive &amp;&amp; isReadonly"></a>isRef &amp;&amp; isProxy &amp;&amp; isReactive &amp;&amp; isReadonly</h3><p>都是一些顾名思义的方法了，不赘述了</p>
+<h2 id="Advanced-Reactivity-APIs"><a href="#Advanced-Reactivity-APIs" class="headerlink" title="Advanced Reactivity APIs"></a>Advanced Reactivity APIs</h2><h3 id="customRef"><a href="#customRef" class="headerlink" title="customRef"></a>customRef</h3><p>平时应该很少用到，知道有这个方法就好了。允许你定义自己的 ref 方法，可以加入额外的操作</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">useDebouncedRef</span>(<span class="params">value, delay = <span class="number">200</span></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> timeout;</span><br><span class="line">  <span class="keyword">return</span> customRef(<span class="function">(<span class="params">track, trigger</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      get() &#123;</span><br><span class="line">        track();</span><br><span class="line">        <span class="keyword">return</span> value;</span><br><span class="line">      &#125;,</span><br><span class="line">      set(newValue) &#123;</span><br><span class="line">        <span class="built_in">clearTimeout</span>(timeout);</span><br><span class="line">        timeout = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">          value = newValue;</span><br><span class="line">          trigger();</span><br><span class="line">        &#125;, delay);</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  setup() &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      text: useDebouncedRef(<span class="string">&quot;hello&quot;</span>),</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="markRaw"><a href="#markRaw" class="headerlink" title="markRaw"></a>markRaw</h3><p>标记一个对象，这个对象不会被添加响应性</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> foo = markRaw(&#123;&#125;);</span><br><span class="line"><span class="built_in">console</span>.log(isReactive(reactive(foo))); <span class="comment">// false</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// also works when nested inside other reactive objects</span></span><br><span class="line"><span class="keyword">const</span> bar = reactive(&#123; foo &#125;);</span><br><span class="line"><span class="built_in">console</span>.log(isReactive(bar.foo)); <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+<h3 id="shallowReactive"><a href="#shallowReactive" class="headerlink" title="shallowReactive"></a>shallowReactive</h3><p>创建一个只追踪它自己的属性的响应性的对象（不会深度追踪嵌套的对象）</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> state = shallowReactive(&#123;</span><br><span class="line">  foo: <span class="number">1</span>,</span><br><span class="line">  nested: &#123;</span><br><span class="line">    bar: <span class="number">2</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// mutating state&#x27;s own properties is reactive</span></span><br><span class="line">state.foo++;</span><br><span class="line"><span class="comment">// ...but does not convert nested objects</span></span><br><span class="line">isReactive(state.nested); <span class="comment">// false</span></span><br><span class="line">state.nested.bar++; <span class="comment">// non-reactive</span></span><br></pre></td></tr></table></figure>
+<h3 id="shallowReadonly"><a href="#shallowReadonly" class="headerlink" title="shallowReadonly"></a>shallowReadonly</h3><p>创建一个只使得它自己的属性是只读的对象（不会深度使嵌套的对象只读）</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> state = shallowReadonly(&#123;</span><br><span class="line">  foo: <span class="number">1</span>,</span><br><span class="line">  nested: &#123;</span><br><span class="line">    bar: <span class="number">2</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// mutating state&#x27;s own properties will fail</span></span><br><span class="line">state.foo++;</span><br><span class="line"><span class="comment">// ...but works on nested objects</span></span><br><span class="line">isReadonly(state.nested); <span class="comment">// false</span></span><br><span class="line">state.nested.bar++; <span class="comment">// works</span></span><br></pre></td></tr></table></figure>
+<h3 id="shallowRef"><a href="#shallowRef" class="headerlink" title="shallowRef"></a>shallowRef</h3><p>创建一个 ref，只使得它自身的 value 属性是响应性的</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> foo = shallowRef(&#123;&#125;);</span><br><span class="line"><span class="comment">// mutating the ref&#x27;s value is reactive</span></span><br><span class="line">foo.value = &#123;&#125;;</span><br><span class="line"><span class="comment">// but the value will not be converted.</span></span><br><span class="line">isReactive(foo.value); <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+<h3 id="toRaw"><a href="#toRaw" class="headerlink" title="toRaw"></a>toRaw</h3><p>可以获得 reactive 或者 readonly 的原始对象，允许你对原始对象进行操作。这是一个你没有其他方法时的逃生舱，可以被用来临时读取或者写入而不会触发响应追踪。这个方式是不推荐使用的，当你使用这个方法的时候，会给与警告。</p>
+<h2 id="vuex"><a href="#vuex" class="headerlink" title="vuex"></a>vuex</h2><p>vue3.0 搭配的是 vuex 的 4.0 版本，大部分 api 的用法都没有改变。</p>
+<p>创建 store 的方法现在使用 creatStore。<br>vue3.0 的写法套路如下，首先需要用 useStore() 方法（和 react hooks 一模一样啊）获取 store 对象，如果返回 store 中的属性，用 computed 处理，如果返回 action，需要用 store 手动 dispatch。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    Clicked: times, count is &#123;&#123; counter.count &#125;&#125;.</span><br><span class="line">    &lt;button @click=<span class="string">&quot;increment&quot;</span>&gt;+&lt;/button&gt;</span><br><span class="line">    &lt;button @click=<span class="string">&quot;decrement&quot;</span>&gt;-&lt;/button&gt;</span><br><span class="line">    &lt;button @click=<span class="string">&quot;incrementSync&quot;</span>&gt;-&lt;/button&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line"><span class="keyword">import</span> &#123; computed, watchEffect, onUpdated, onBeforeUpdate &#125; <span class="keyword">from</span> <span class="string">&quot;vue&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; useStore &#125; <span class="keyword">from</span> <span class="string">&quot;vuex&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  setup() &#123;</span><br><span class="line">    <span class="keyword">const</span> store = useStore();</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      counter:computed(<span class="function">() =&gt;</span> store.state.counter)</span><br><span class="line">      increment: <span class="function">() =&gt;</span> store.dispatch(<span class="string">&quot;counter/increment&quot;</span>),</span><br><span class="line">      decrement: <span class="function">() =&gt;</span> store.dispatch(<span class="string">&quot;counter/decrement&quot;</span>),</span><br><span class="line">      incrementSync: <span class="function">() =&gt;</span> store.dispatch(<span class="string">&quot;counter/incrementSync&quot;</span>),</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>mapState，mapGetters，mapActions 这些辅助方法在 Vue3.0 写法下是无法使用的。因为 setup 中无法使用 this ，而这些辅助方法在 2.0 中是需要访问 this.$store 的。当然我们完全可以用 2.0 的写法用这些辅助方法。</p>
+<h2 id="vue-router"><a href="#vue-router" class="headerlink" title="vue-router"></a>vue-router</h2><p>主要的破坏性更新是</p>
+<ul>
+<li>使用历史模式 从 mode:’history’ 改为 history: createWebHistory()</li>
+<li>捕获所有路由的写法现在应该是 /:catchAll(.*)</li>
+<li>router.match 和 router.resolve 方法被合并到 router.resolve</li>
+<li>router.getMathedComponents 这个方法被移除了<br>可以通过以下代码实现这个方法</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">router.currentRoute.value.matched</span><br><span class="line">  .map(<span class="function">(<span class="params">record</span>) =&gt;</span> <span class="built_in">Object</span>.values(record.components))</span><br><span class="line">  .flat();</span><br></pre></td></tr></table></figure>
+<p>目前合并了四个 rfc</p>
+<p>动态路由 实现了以下 API</p>
+<ul>
+<li>router.addRoute(route: RouteRecord) Add a new route</li>
+<li>router.removeRoute(name: string | symbol) Remove an existing route</li>
+<li>router.hasRoute(name: string | symbol): boolean Check if a route exists</li>
+<li>router.getRoutes(): RouteRecord[] Get the current list of routes</li>
+</ul>
+<p>移除了 router-link 的 tag 和 event prop，不再自动给内部 a 元素添加点击事件，增加了 scoped-slot api</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/04/07/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/yarn%E5%AD%A6%E4%B9%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content="记录编程学习路上的点滴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/04/07/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/yarn%E5%AD%A6%E4%B9%A0/" class="post-title-link" itemprop="url">yarn命令</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-04-07 11:18:15" itemprop="dateCreated datePublished" datetime="2020-04-07T11:18:15+08:00">2020-04-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-10-01 20:22:43" itemprop="dateModified" datetime="2020-10-01T20:22:43+08:00">2020-10-01</time>
+              </span>
+
+          
+
+          <span class="post-time">
+            &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-bar-chart"></i>
+            </span>
+            <span class="post-meta-item-text">字数统计:</span>
+            <span class="post-count">286(字)</span>
+
+          </span>
+
+            <span class="post-time">
+          &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-clock-o"></i>
+            </span>
+            <span class="post-meta-item-text">阅读时长:</span>
+            <span class="post-count">1(分)</span>
+
+          </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="yarn-add"><a href="#yarn-add" class="headerlink" title="yarn add"></a>yarn add</h2><p>-E 选项明确指定版本<br>—audit 检查在已安装的包中所有已经的安全问题并输出</p>
+<h2 id="yarn-autoclean"><a href="#yarn-autoclean" class="headerlink" title="yarn autoclean"></a>yarn autoclean</h2><p>autoclean 命令通过从依赖项中删除不必要的文件和文件夹来释放空间。它减少了项目节点模块文件夹中的文件数量，这在直接将包签入版本控制的环境中非常有用。</p>
+<h2 id="yarn-bin"><a href="#yarn-bin" class="headerlink" title="yarn bin"></a>yarn bin</h2><p>输出 yarn 安装可执行文件的目录</p>
+<h2 id="yarn-cache"><a href="#yarn-cache" class="headerlink" title="yarn cache"></a>yarn cache</h2><p>可以管理下载的包缓存</p>
+<h2 id="yarn-create"><a href="#yarn-create" class="headerlink" title="yarn create"></a>yarn create</h2><p>是一个快捷指令</p>
+<p>yarn create react-app my-app 就相当于</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yarn global add create-react-app</span><br><span class="line">create-react-app my-app</span><br></pre></td></tr></table></figure>
+<h3 id="peerDependencies"><a href="#peerDependencies" class="headerlink" title="peerDependencies"></a>peerDependencies</h3><p>举个例子，项目中引入了 pakcageA，依赖 A 中的 package.json 中的 dependencies 中包含了 packageB，那么项目的目录结构是这样的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">MyProject</span><br><span class="line">|- node_modules</span><br><span class="line">   |- PackageA</span><br><span class="line">      |- node_modules</span><br><span class="line">         |- PackageB</span><br></pre></td></tr></table></figure>
+<p>我们在项目中，可以直接通过下面语句引用 PackegeA，但是不能直接引用 PackageB。所以，为了解决这个问题，在 MyProject 项目 package.json 中我们必须直接声明对 PackageB 的依赖并安装。</p>
+<p>而如果是在 peerDependencies 声明的 packgeB 的话，得到的目录结构是</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">MyProject</span><br><span class="line">|- node_modules</span><br><span class="line">   |- PackageA</span><br><span class="line">   |- PackageB</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/04/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA%E4%B8%8E%E5%A4%84%E7%90%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -778,7 +1164,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-01 19:56:51" itemprop="dateModified" datetime="2020-10-01T19:56:51+08:00">2020-10-01</time>
+                <time title="修改时间：2021-01-10 23:13:37" itemprop="dateModified" datetime="2021-01-10T23:13:37+08:00">2021-01-10</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -823,7 +1209,7 @@
       
           <p>闭关学习 react！</p>
 <h2 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h2><h3 id="jsx"><a href="#jsx" class="headerlink" title="jsx"></a>jsx</h3><figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> name = <span class="string">&quot;Josh Perez&quot;</span>;</span><br><span class="line"><span class="keyword">const</span> element = <span class="xml"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>Hello, &#123;name&#125;<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span>;</span><br><span class="line">ReactDOM.render(element, <span class="built_in">document</span>.getElementById(<span class="string">&quot;root&quot;</span>));</span><br></pre></td></tr></table></figure>
-<p>再大括号中可以填入任何有效的 javascript 表达式。</p>
+<p>在大括号中可以填入任何有效的 javascript 表达式。</p>
 <p>在编译之后，JSX 表达式会被转为普通 JavaScript 函数调用，并且对其取值后得到 JavaScript 对象。</p>
 <p>也就是说，你可以在 if 语句和 for 循环的代码块中使用 JSX，将 JSX 赋值给变量，把 JSX 当作参数传入，以及从函数中返回 JSX：</p>
 <p>React DOM 在渲染所有输入内容之前，默认会进行转义。这可以有效防止 XSS 攻击。</p>
@@ -931,7 +1317,7 @@
 <li>.required 必填</li>
 <li>function(){return new Error()} 自定义验证器</li>
 </ul>
-<h3 id="性能分析"><a href="#性能分析" class="headerlink" title="性能分析"></a>性能分析</h3><p>分析性能 react 可以直接使用 ?react_perf，然后使用 chrome 进行录制分析</p>
+<h3 id="性能分析"><a href="#性能分析" class="headerlink" title="性能分析"></a>性能分析</h3><p>分析性能 react 可以直接使用 react_perf，然后使用 chrome 进行录制分析</p>
 <h3 id="避免重复渲染"><a href="#避免重复渲染" class="headerlink" title="避免重复渲染"></a>避免重复渲染</h3><p>重写 shouldComponentUpdate 减少重新渲染</p>
 <h4 id="PureConponent"><a href="#PureConponent" class="headerlink" title="PureConponent"></a>PureConponent</h4><p>继承自 component，它做了一个优化，它重写了 shouleComponentUpdate 方法<br>这个比较是浅比较，所以 props 如果是对象，会出现无法更新的问题</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">shouldComponentUpdate(nextProps,nextState)&#123;</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">let</span> prop <span class="keyword">in</span> nextProps)&#123;</span><br><span class="line">    <span class="keyword">if</span>(nextProps[prop]!==<span class="built_in">this</span>.props[prop])&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">let</span> state <span class="keyword">in</span> nextStates)&#123;</span><br><span class="line">    <span class="keyword">if</span>(nextStates[state]!==<span class="built_in">this</span>.states[state])&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -949,7 +1335,7 @@
 <p>只能在 React 的函数组件中调用 Hook。不要在其他 JavaScript 函数中调用。（还有一个地方可以调用 Hook —— 就是自定义的 Hook 中。）</p>
 <h3 id="通过跳过-Effect-进行性能优化"><a href="#通过跳过-Effect-进行性能优化" class="headerlink" title="通过跳过 Effect 进行性能优化"></a>通过跳过 Effect 进行性能优化</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">useEffect(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">document</span>.title = <span class="string">`You clicked <span class="subst">$&#123;count&#125;</span> times`</span>;</span><br><span class="line">&#125;, [count]); <span class="comment">// 仅在 count 更改时更新</span></span><br></pre></td></tr></table></figure>
 <h2 id="createPortal"><a href="#createPortal" class="headerlink" title="createPortal"></a>createPortal</h2><p>将组件渲染到组件树之外的地方，可以用来做弹窗</p>
-<h3 id="diff-算法处理-key"><a href="#diff-算法处理-key" class="headerlink" title="diff 算法处理 key"></a>diff 算法处理 key</h3><p>希望操作最小化</p>
+<h3 id="diff-算法处理-key"><a href="#diff-算法处理-key" class="headerlink" title="diff 算法处理 key"></a>diff 算法处理 key</h3><p>// TODO<br>希望操作最小化</p>
 <p>第一步，把老数组在新数组中没有的元素移除掉</p>
 <h3 id="React-Fiber"><a href="#React-Fiber" class="headerlink" title="React Fiber"></a>React Fiber</h3><h3 id="React-render"><a href="#React-render" class="headerlink" title="React render"></a>React render</h3><h4 id="触发-render-的场景"><a href="#触发-render-的场景" class="headerlink" title="触发 render 的场景"></a>触发 render 的场景</h4><ul>
 <li>状态更新时，类组件调用 setState 或者 函数组件的 state 更新</li>
@@ -1217,504 +1603,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/03/24/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E4%B9%8B%E6%9C%89%E7%A9%B7%E8%87%AA%E5%8A%A8%E6%9C%BA/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="jiezi19971225">
-      <meta itemprop="description" content="记录编程学习路上的点滴">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Jiez19971225‘s Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/03/24/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E4%B9%8B%E6%9C%89%E7%A9%B7%E8%87%AA%E5%8A%A8%E6%9C%BA/" class="post-title-link" itemprop="url">有穷自动机</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-03-24 10:53:25" itemprop="dateCreated datePublished" datetime="2020-03-24T10:53:25+08:00">2020-03-24</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-03-26 08:14:21" itemprop="dateModified" datetime="2020-03-26T08:14:21+08:00">2020-03-26</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/" itemprop="url" rel="index"><span itemprop="name">编译原理</span></a>
-                </span>
-            </span>
-
-          
-
-          <span class="post-time">
-            &nbsp; | &nbsp;
-            <span class="post-meta-item-icon">
-              <i class="fa fa-bar-chart"></i>
-            </span>
-            <span class="post-meta-item-text">字数统计:</span>
-            <span class="post-count">1.5k(字)</span>
-
-          </span>
-
-            <span class="post-time">
-          &nbsp; | &nbsp;
-            <span class="post-meta-item-icon">
-              <i class="fa fa-clock-o"></i>
-            </span>
-            <span class="post-meta-item-text">阅读时长:</span>
-            <span class="post-count">6(分)</span>
-
-          </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>（以下内容摘自龙书）</p>
-<p>有穷自动机是一般化的状态转换图，它可以是确定的或不确定的，其中不确定的含义是，对于某个输入符号，在同一个状态上存在不止一种转换。</p>
-<p>下文以 DFA 指代确定的有穷自动机，NFA 指代不确定的有穷自动机。</p>
-<p>DFA 和 NFA 都能且仅能识别正规集，即它们能够识别正规表达式所表示的语言。DFA 导出的识别器比 NFA 导出的识别器快得多，但是 DFA 可能比与之等价的 NFA 大得多。</p>
-<h2 id="NFA"><a href="#NFA" class="headerlink" title="NFA"></a>NFA</h2><p>NFA 是由以下几个部分组成的数学模型：</p>
-<ul>
-<li>一个状态的有穷集合 S</li>
-<li>一个输入符合集合$\Sigma$,即输入符号字母表</li>
-<li>一个转换函数 move，它把状态和符号组成的二元组映射到状态集合</li>
-<li>状态 $s_0$ 是唯一的开始或初始状态</li>
-<li>状态集合 F 是接受（或中止）状态集合</li>
-</ul>
-<p>NFA 可以用带标记的有向图表示，称为转换图，其节点是状态，有标记的边是转化函数。</p>
-<img src="/2020/03/24/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E4%B9%8B%E6%9C%89%E7%A9%B7%E8%87%AA%E5%8A%A8%E6%9C%BA/NFA.png" class="" title="NFA">
-<img src="/2020/03/24/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E4%B9%8B%E6%9C%89%E7%A9%B7%E8%87%AA%E5%8A%A8%E6%9C%BA/NFA2.png" class="" title="NFA2">
-<h2 id="DFA"><a href="#DFA" class="headerlink" title="DFA"></a>DFA</h2><p>DFA 是 NFA 的特例</p>
-<ul>
-<li>没有一个状态具有$\epsilon$转换</li>
-<li>对每个状态 s 和输入符号 a，最多只有一条标记为 a 的边离开</li>
-</ul>
-<p>确定的有穷自动机在任何状态下，对任一输入符号，最多只有一个转换。如果用转换表表示 DFA 的转换函数，那么表中的每个表项最多只有一个状态。因而，很容易确定 DFA 是否接受某输入字符串，因为从开始状态起，最多只有一条到达接受状态的路径可由这个符号串标记。</p>
-<h2 id="NFA-转为-DFA"><a href="#NFA-转为-DFA" class="headerlink" title="NFA 转为 DFA"></a>NFA 转为 DFA</h2><p>子集构造算法，在 NFA 的转换表中，每个表项是一个状态集，在 DFA 的转化表中，每个表项只有一个状态。从 NFA 变换到 DFA 的基本思想是让 DFA 的每个状态对应 NFA 的一个状态集。DFA 用它的状态去记住 NFA 在读输入符号后到达的所有状态。</p>
-<img src="/2020/03/24/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E4%B9%8B%E6%9C%89%E7%A9%B7%E8%87%AA%E5%8A%A8%E6%9C%BA/NFA%E8%BD%ACDFA.png" class="" title="NFA转DFA">
-<p>定义三种操作</p>
-<ul>
-<li>$\epsilon-closure(s)$ 从 NFA 状态 s 只经过$\epsilon$转换可以到达的 NFA 状态集</li>
-<li>$\epsilon-closure(T)$ 从 T 中的状态只经过$\epsilon$转换可以到达的 NFA 状态集</li>
-<li>move(T,a) 从 T 中的状态 S 经过输入符号 a 上的转换可以到达的 NFA 状态集</li>
-</ul>
-<p>子集构造的步骤伪码如下，其中 Dstates 是 D 的状态集合，Dtran 是 D 的转换表</p>
-<p>初始时，$\epsilon-closure(s)$是 Dstates 中唯一的状态且未被标记</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">while Dstates 中存在一个未标记的状态T</span><br><span class="line">    标记T</span><br><span class="line">    for 每个输入符号a</span><br><span class="line">        U &#x3D; epsilon-closure(move(T,a))</span><br><span class="line">        if U 不在 Dstates中</span><br><span class="line">            将U作为一个未标记的状态添加到Dstates中</span><br><span class="line">        Dtran[T,a] &#x3D; U</span><br></pre></td></tr></table></figure>
-<p>开始状态 A = $\epsilon-closure(s)$ = {0，1，2，4，7}，根据算法流程，先标记 A</p>
-<p>然后计算 $\epsilon-closure(move(A,a))$，在状态 A 上只有 2 和 7 有 a 上的转换，得到状态 B={1,2,3,4,6,7,8},Dtran[A,a] = B</p>
-<p>状态 A 中只有状态 4 对于输入 b 有一个转换，得到状态 C={1,2,4,5,6,7},Dtran[A,b]=C</p>
-<p>然后对没被标记的状态 B 和状态 C 继续这个过程</p>
-<p>状态 B 的 a 转换 得到的状态仍然是 B， Dtran[B,a] = B</p>
-<p>状态 B 中在 8 上的 b 的转换可以得到新的状态 D={1,2,4,5,6,7,9} Dtran[B,b] = D。这里的计算详细解释一下，{1,2,3,4,6,7,8} 经过 b 转换后的集合是 {5,9}，然后再计算 $\epsilon-closure({5,8})$ 得到 {1,2,4,5,6,7,9}</p>
-<p>状态 C 的 a 转换可以得到的状态 {1,2,3,4,6,7,8}，即状态 B，Dtran[C,a] = B</p>
-<p>状态 C 的 b 转换可以得到的状态 {1,2,4,5,6,7}，即状态 C 自身，Dtran[C,b] = C</p>
-<p>之后的过程省略，可以得到的五个状态集合是</p>
-<p>A = {0,1,2,4,7}<br>B = {1,2,3,4,6,7,8}<br>C = {1,2,4,5,6,7}<br>D = {1,2,4,5,6,7,9}<br>E = {1,2,4,5,6,7,10}</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>状态</th>
-<th>a</th>
-<th>b</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>A</td>
-<td>B</td>
-<td>C</td>
-</tr>
-<tr>
-<td>B</td>
-<td>B</td>
-<td>D</td>
-</tr>
-<tr>
-<td>C</td>
-<td>B</td>
-<td>C</td>
-</tr>
-<tr>
-<td>D</td>
-<td>B</td>
-<td>E</td>
-</tr>
-<tr>
-<td>E</td>
-<td>B</td>
-<td>C</td>
-</tr>
-</tbody>
-</table>
-</div>
-<img src="/2020/03/24/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E4%B9%8B%E6%9C%89%E7%A9%B7%E8%87%AA%E5%8A%A8%E6%9C%BA/%E5%AD%90%E9%9B%86%E6%9E%84%E9%80%A0%E6%B3%95%E7%BB%93%E6%9E%9C.png" class="" title="子集构造法结果">
-<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>接下来用编程语言实现一个简单的 DFA</p>
-<img src="/2020/03/24/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E4%B9%8B%E6%9C%89%E7%A9%B7%E8%87%AA%E5%8A%A8%E6%9C%BA/%E8%A6%81%E5%AE%9E%E7%8E%B0%E7%9A%84DFA.png" class="" title="要实现的DFA">
-<p>功能要求：输入一个单行无空格的字符串（以“#”号结束），如果该字符串是一个合法的输入，则显示“接受”，否则显示“不接受”。</p>
-<p>分析该 DFA 的五元组信息如下</p>
-<ul>
-<li>一个状态的有穷集合 S = {0,1,2,3}</li>
-<li>一个输入符合集合$\Sigma$ = {a,b}</li>
-<li>一个转换函数 move，它把状态和符号组成的二元组映射到状态集合<ul>
-<li>move(0,a) = 1</li>
-<li>move(0,b) = 0</li>
-<li>move(1,a) = 1</li>
-<li>move(1,b) = 2</li>
-<li>move(2,a) = 1</li>
-<li>move(2,b) = 3</li>
-<li>move(3,a) = 1</li>
-<li>move(3,b) = 0</li>
-</ul>
-</li>
-<li>状态 $s_0$ 是唯一的开始或初始状态 = 0</li>
-<li>状态集合 F 是接受（或中止）状态集合 = {3}</li>
-</ul>
-<p>根据如下信息就可以开始编码了</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="built_in">string</span> str;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dfa</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">bool</span> ok = <span class="literal">true</span>; <span class="comment">// 是否合法</span></span><br><span class="line">    <span class="keyword">int</span> pos = <span class="number">0</span>;    <span class="comment">// 当前扫描位置</span></span><br><span class="line">    <span class="keyword">int</span> state = <span class="number">0</span>;  <span class="comment">// 当前状态</span></span><br><span class="line">    <span class="keyword">while</span> (str[pos] != <span class="string">&#x27;#&#x27;</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">char</span> next = str[pos];</span><br><span class="line">        ++pos;</span><br><span class="line">        <span class="keyword">if</span> (state == <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (next == <span class="string">&#x27;a&#x27;</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                state = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (next == <span class="string">&#x27;b&#x27;</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                state = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                ok = <span class="literal">false</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (state == <span class="number">1</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (next == <span class="string">&#x27;a&#x27;</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                state = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (next == <span class="string">&#x27;b&#x27;</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                state = <span class="number">2</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                ok = <span class="literal">false</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (state == <span class="number">2</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (next == <span class="string">&#x27;a&#x27;</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                state = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (next == <span class="string">&#x27;b&#x27;</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                state = <span class="number">3</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                ok = <span class="literal">false</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (state == <span class="number">3</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (next == <span class="string">&#x27;a&#x27;</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                state = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (next == <span class="string">&#x27;b&#x27;</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                state = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                ok = <span class="literal">false</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (state != <span class="number">3</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        ok = <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (ok)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;接受&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;不接受&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (<span class="built_in">cin</span> &gt;&gt; str)</span><br><span class="line">    &#123;</span><br><span class="line">        dfa();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>输入：<br>abbab#<br>abb#<br>输出：<br>不接受<br>接受</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="jiezi19971225">
-      <meta itemprop="description" content="记录编程学习路上的点滴">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Jiez19971225‘s Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="post-title-link" itemprop="url">计算机基础之异常控制流学习笔记</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-03-21 22:04:59" itemprop="dateCreated datePublished" datetime="2020-03-21T22:04:59+08:00">2020-03-21</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-01 19:45:22" itemprop="dateModified" datetime="2020-10-01T19:45:22+08:00">2020-10-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">计算机基础</span></a>
-                </span>
-            </span>
-
-          
-
-          <span class="post-time">
-            &nbsp; | &nbsp;
-            <span class="post-meta-item-icon">
-              <i class="fa fa-bar-chart"></i>
-            </span>
-            <span class="post-meta-item-text">字数统计:</span>
-            <span class="post-count">4.1k(字)</span>
-
-          </span>
-
-            <span class="post-time">
-          &nbsp; | &nbsp;
-            <span class="post-meta-item-icon">
-              <i class="fa fa-clock-o"></i>
-            </span>
-            <span class="post-meta-item-text">阅读时长:</span>
-            <span class="post-count">13(分)</span>
-
-          </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <img src="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE.png" class="" title="思维导图">
-<h2 id="正常控制流"><a href="#正常控制流" class="headerlink" title="正常控制流"></a>正常控制流</h2><p>正常控制流包含两种顺序</p>
-<ul>
-<li>按照指令存放的顺序执行，新的 PC 数值为当前指令地址加上指令长度</li>
-<li>跳转到由于转移类指令指出的转移目标地址处执行，新的 PC 数值为转移目标地址</li>
-</ul>
-<h2 id="进程与进程上下文的切换"><a href="#进程与进程上下文的切换" class="headerlink" title="进程与进程上下文的切换"></a>进程与进程上下文的切换</h2><h3 id="进程的概念"><a href="#进程的概念" class="headerlink" title="进程的概念"></a>进程的概念</h3><p>进程是资源分配的最小单位，每个应用程序在运行时均有自己的存储空间，用来存储自己的程序代码和数据，包括只读区（代码和只读数据），可读可写数据区（初始化数据和未初始化数据），动态的堆区和栈区</p>
-<p>进程的引入为程序提供了以下两方面的抽象。一个独立的逻辑控制流和一个私有的虚拟内存地址。每个进程拥有一个独立的逻辑，使得程序员以为程序似在执行过程中独占处理器。一个私有的虚拟地址空间，使得程序员以为程序在执行过程中独占存储器。</p>
-<p>为了实现以上两方面的抽象，操作系统必须提供一整套管理机制，包括处理器调度、进程上下文切换、虚拟存储管理等。</p>
-<h3 id="逻辑控制流"><a href="#逻辑控制流" class="headerlink" title="逻辑控制流"></a>逻辑控制流</h3><p>一个可执行目标文件被加载并启动执行后，就成为一个进程。他们代码段中的每一条指令都有一个确定的地址，在这些指令的执行过程中，会形成一个指令执行的地址序列，对于确定的输入数据，其指令的地址序列也是确定的。这个确定的指令执行地址序列被称为进程的<strong>逻辑控制流</strong>。</p>
-<p>对于一个具有单核处理器的系统，如果有多个进程运行，这些进程会轮流使用处理器，处理器的<strong>物理控制流</strong>是由多个逻辑控制流组成。<br><img src="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%A4%9A%E4%B8%AA%E9%80%BB%E8%BE%91%E6%8E%A7%E5%88%B6%E6%B5%81.png" class="" title="多个逻辑控制流"></p>
-<p>图中可以看出有些进程的逻辑控制流在时间上有交错，通常把这种不同进程的逻辑控制流在时间上交错或者重叠称为<strong>并发</strong>。而<strong>并行</strong>则是并发执行的一个特例，我们称两个进程是并行的，是指他们并发的运行在不同的处理器或者处理器核中。</p>
-<p>连续执行同一个进程的时间段称为时间片，每个时间片结束时，通过进程的上下文切换，换一个新的进程到处理器上执行，开始一个新的时间片，这个过程称为<strong>时间片轮转处理器调度</strong>。</p>
-<h3 id="进程的上下文切换"><a href="#进程的上下文切换" class="headerlink" title="进程的上下文切换"></a>进程的上下文切换</h3><p>实现不同进程中指令交替执行的机制称为<strong>进程的上下文切换</strong>。</p>
-<p>进程的物理实体（代码和数据）和支持进程运行的环境合称为<strong>进程的上下文</strong>，可以细分为</p>
-<ul>
-<li>由用户进程的程序块，数据块，运行时的堆和用户栈等组成的用户空间信息被称为<strong>用户级上下文</strong>。</li>
-<li>进程表示信息，进程现场信息，进程控制信息和系统内核堆栈组成的<strong>内核空间信息</strong>被称为<strong>系统级上下文</strong>。</li>
-<li>处理器中各个寄存器的内存被称为<strong>寄存器上下文</strong>。</li>
-</ul>
-<p>用户级上下文和系统级上下文地址空间一起构成了一个进程的整个存储器映像。进程控制信息包含各种内核数据结构，如有关进程信息的进程表，页表，文件表等。<br><img src="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%AD%98%E5%82%A8%E6%98%A0%E5%83%8F.png" class="" title="进程的存储映像"></p>
-<p>上下文切换发生在操作系统调度一个新进程到处理器上运行，他需要完成以下三件事</p>
-<ul>
-<li>将当前进程的寄存器上下文保存到当前进程的系统级上下文的现场信息中</li>
-<li>将新进程系统上下文中的现场信息作为新的寄存器上下文恢复到处理器的各个寄存器中</li>
-<li>将控制转移到新进程执行</li>
-</ul>
-<p>一个重要的上下文信息是 PC，当前进程被打断的断点处的 PC 作为寄存器上下文的一部分被保存在进程现场信息中。</p>
-<h3 id="进程的私有地址空间"><a href="#进程的私有地址空间" class="headerlink" title="进程的私有地址空间"></a>进程的私有地址空间</h3><img src="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E8%99%9A%E6%8B%9F%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%E6%98%A0%E5%83%8F.png" class="" title="虚拟地址空间映像">
-<p>整个虚拟地址空间分为两大部分。<strong>内核虚拟存储空间</strong>（简称内核空间）和<strong>进程虚拟内存空间</strong>（简称用户空间）。在采用虚拟存储机制的系统中，每个程序的可执行目标文件在装入时都被映射到同样的虚拟地址空间上，即所有用户进程的虚拟地址空间是一致的，只是在相应的制度区域和可读写数据区域中映射的信息不同而已。</p>
-<p>linux 将用户空间对应的进程虚拟存储空间组织成若干“区域”的集合，<br>内核为每个进程维护了一个进程描述符，记录或者指向内核运行该进程所需要的所有信息，如进程 pid，指向用户栈的指针，可执行目标文件的文件名，程序计数器 PC 等。</p>
-<h3 id="程序的加载和运行"><a href="#程序的加载和运行" class="headerlink" title="程序的加载和运行"></a>程序的加载和运行</h3><p>当启动一个可以行目标文件执行时，首先会通过某种方式调出常驻内存的一个称为加载器的操作系统程序来处理。在 UNIX/Linux 系统中，可以通过 execve() 函数来启动加载器，其作用是在当前进程的上下文中加载并且运行一个新程序。</p>
-<h2 id="异常和中断"><a href="#异常和中断" class="headerlink" title="异常和中断"></a>异常和中断</h2><p>除了时间片到，当前进程的执行被新进程打断，还有用户按下 CTRL+C，当前执行执行中发生了不能使指令执行的意外事件，IO 设备完成了系统交给的任务需要进一步处理，这些特殊事件统称为<strong>异常</strong>或者<strong>中断</strong>。<br>当发生异常或者终端，正在执行进程的逻辑控制流被打断，CPU 转到具体的特殊处理事件的内核程序去执行。他与上下文切换有一个明显的不同：上下文切换后 CPU 执行另一个用户进程，但是，中断或异常处理程序执行的代码不是一个进程，而是一个<strong>内核控制路径</strong>，它代表异常或终端发生时正在运行的当前进程在内核态执行的一个独立的指令序列。作为一个内核控制路径，他比进程更轻，其上下文信息比一个进程的上下文信息少得多。</p>
-<h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p>异常是在 CPU 内部执行时发生的，中断是 CPU 外部的 IO 设备向 CPU 发出的请求，通常称异常为<strong>内部异常</strong>，而称中断为<strong>外部中断</strong>。</p>
-<img src="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%AD%E6%96%AD%E5%A4%84%E7%90%86%E8%BF%87%E7%A8%8B.png" class="" title="中断处理过程">
-<p>大致处理流程如下：当 CPU 在执行当前程序或任务的第 i 条指令时检测到一个异常事件，或者在执行第 i 条指令后发现有一个中断请求信息，CPU 会打断当前用户进程，然后转到相应的异常或中断处理程序去执行。如果该处理程序能解决相应问题，则在该处理程序的最后，CPU 通过执行“异常/中断返回指令”回到被打断的用户进程的第 i 条指令或第 i+1 条指令继续执行。若异常或中断处理程序发现是不可恢复的知名错误，则中止用户进程。通常情况下，对于异常和中断事件的具体处理过程全部由操作系统（可能包括驱动程序）软件来完成。</p>
-<h3 id="异常的分类"><a href="#异常的分类" class="headerlink" title="异常的分类"></a>异常的分类</h3><p>intel 将内部异常分为三类</p>
-<p>故障</p>
-<p><strong>故障</strong>是在引起故障的指令被启动后但未结束执行时 CPU 检测到的一类与指令执行相关的意外事件。这种意外事件有些可以回复，有些不能回复。如指令译码出现的非法操作码；取指令或者取数据时发生页故障，执行触发操作时发现除数为 0.</p>
-<p>对于像溢出和非法操作码等这类故障，因为无法通过异常处理程序回复，会调用内核的 abort 例程，以中止发生故障的当前进程。</p>
-<p>对于页故障。cpu 在指令执行过程中需要访问存储器，首先进行地址转换，在查页表进行地址转换时，判断相应页表项中的有效位是否是 1，并且确定是否地址越界或访问越权，如果检测到有效位不为 1 或者地址越界或者访问越权，都会产生页故障异常。页故障异常包含多种不同情况：处理程序首先检测是否发生地址越界或访问越权，如果是的话，故障不可恢复，否则是缺陷故障，可通过从磁盘读入页面来恢复。Linux 中不可恢复的访存故障（地址越界和访问越权）都称为<strong>段故障</strong>。</p>
-<p>陷阱</p>
-<p><strong>陷阱</strong>也成为自陷或者陷入，与故障等其他异常事件不同，是预先安排的一种异常事件，就像预先设定的陷阱一样，当执行到陷阱指令，CPU 就调出特定的程序进行相应的处理，处理结束后返回到陷阱指令的下一条指令执行。</p>
-<p>陷阱的重要作之一是在用户程序和内核之间提供一个像过程调用一样的接口，这个接口称为<strong>系统调用</strong>。操作系统给每个服务编一个号，称为系统调用号，每个服务功能通过一个对应的<strong>系统调用服务例程</strong>提供。如在 linux 中就提供了创建子线程（fork），读文件（read），加载并且运行新程序（execve）等服务功能。</p>
-<p>用于程序调试的<strong>断点设置</strong>也是一种陷阱指令。</p>
-<p>在 IA-32 中，陷阱指令引擎的异常称为编程异常，这些指令包括 INT n，int 3，into（溢出检查），bound（地址越界检查）,通常将 INT n 称为软中断指令，该指令引起的异常通常也称为<strong>软中断</strong>。在 IA-32/Linux 中可以使用快速系统调用指令 sysenter 或者软中断指令 int $0x80 进行系统调用。</p>
-<p>终止</p>
-<p>如果在执行指令的过程中发生了严重错误，如控制器出现问题，访问 DRAM 或者 SRAM 时发生校验错误等，则程序无法继续执行，只好终止发生问题的进程。</p>
-<h3 id="中断的分类"><a href="#中断的分类" class="headerlink" title="中断的分类"></a>中断的分类</h3><p><strong>中断</strong> 是由外部 IO 设备请求处理器进行的一种信号。他不是由当前执行的指令引起的，外部 IO 设备通过特定的<strong>中断请求信号线</strong>向 CPU 提出中断申请。CPU 在执行指令过程中，每执行一条指令就查看中断请求引脚，如果中断请求引脚的信号有效，则进入中断响应周期。在<strong>中断响应周期</strong>中，CPU 先将当前 PC 值和当前机器状态保存到栈中，并设置成为<strong>关中断</strong>状态，然后从数据总线读取<strong>中断类型号</strong>，根据中断类型号跳转到对应的中断服务程序执行。中断响应过程由硬件完成，而中断服务程序执行具体的中断处理工作，中断处理完成后，再回到被打断程序的断点处继续执行。</p>
-<img src="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%A4%96%E9%83%A8%E4%B8%AD%E6%96%AD%E7%9A%84%E5%A4%84%E7%90%86%E8%BF%87%E7%A8%8B.png" class="" title="外部中断的处理过程">
-<p>可屏蔽中断</p>
-<p>是指通过<strong>可屏蔽中断请求线</strong>INTR 向 CPU 进行请求的中断，主要来自 IO 设备的中断请求。CPU 可以通过在中断控制器中设置相应的屏蔽字来屏蔽他或者不屏蔽他。若一个 IO 设备的中断请求被屏蔽，他的中断请求信号不会被送到 CPU。</p>
-<p>不可屏蔽中断</p>
-<p>通常是非常紧急的硬件故障，通过专门的<strong>不可屏蔽中断请求线</strong>NMI 向 CPU 发出中断请求。</p>
-<h3 id="异常和中断的响应过程"><a href="#异常和中断的响应过程" class="headerlink" title="异常和中断的响应过程"></a>异常和中断的响应过程</h3><p>CPU 从检测到异常或中断事件，到调出响应的异常或中断处理程序开始执行，整个过程称为<strong>异常和中断的响应</strong>。主要分为以下三个步骤：</p>
-<ul>
-<li>保护断点和程序状态</li>
-<li>关中断</li>
-<li>识别异常和中断事件并转到响应处理程序执行</li>
-</ul>
-<p>保护断点和程序状态</p>
-<p>对于不同的异常事件，其返回地址不同。如却也故障异常的断点是发生页故障的当前指令的地址。陷阱的断点是陷阱指令后面一条指令的地址。</p>
-<p>为了能够支持异常或者中断的嵌套处理，大多数处理器将断点保存到栈中，如 IA-32 处理器的断点被保存到栈中，如果系统不支持桥套处理，则可以将断点保存到特定寄存器中。MIPS 处理器用 EPC 寄存器专门存放断点，其 CPU 用于中断的开销较小。</p>
-<p>被中断时源程序状态（如产生的各种标志信息，允许自陷标志等）都必须保存起来。每个正在运行程序的状态信息存放在一个专门的寄存器中，这些专门寄存器统称为<strong>程序状态字寄存器</strong>（PSWR），存放在 PSWR 中的信息称为<strong>程序状态字</strong>。</p>
-<p>关中断</p>
-<p>应有一种机制来禁止在处理异常或中断时再响应新的异常或中断，通常通过设置<strong>中断允许位</strong>来实现。</p>
-<p>识别异常和中断事件并转到响应处理程序执行</p>
-<p>在调出异常和中断你处理程序之前，必须知道发生了什么异常或者那个 IO 设备发出了中断请求。一般来说，内部异常事件和外部中断源的识别方式不同，大多数处理器会将二者分开来处理。</p>
-<p>内部异常事件的识别很简单，只要 CPU 在执行期间把检测到的事件对应的异常类型或者表示异常类型的信息记录到特定的内部寄存器中即可。</p>
-<p>外部中断源的识别比较复杂，只能通过在每条指令执行完成后，取下条指令之前去查询是否有中断请求。通常 CPU 通过采样对应的中断请求引脚来进行查询。但是到底是那个 IO 设备发出的请求，还需要进一步识别。</p>
-<p>异常中断的识别可以采用软件识别和硬件识别两种方式。</p>
-<p>软件识别是指，CPU 中设置一个原因寄存器，该寄存器中有一些标识异常原因或终端类型的标志信息。操作系统使用一个统一的异常或中断查询程序，按一定的优先级顺序查询原因寄存器，先查询到的先处理。MIPS 采用软件识别方式</p>
-<p>硬件识别方式称为<strong>向量中断方式</strong>，这种方式下，异常或中断处理程序的首地址称为<strong>中断向量</strong>，所有中断向量存放在一个表中，称为<strong>中断向量表</strong>。每个异常和中断都被设定一个<strong>中断类型号</strong>，中断向量存放的位置与对应的中断类型号相关。可以根据类型号快速找到对应的处理程序。IA-32 中的异常和中断识别就采用这种方式。</p>
-<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>BIOS（Basic Input/Output System）是基本输入/输出系统的简称</p>
-<p>Intel 从奔二处理器开始，引入了指令 sysenter 和 sysexit，sysenter 被称为<strong>快速系统调用指令</strong>，他提供了从用户态到内核态的快速切换方式。</p>
-<p>页的大小是 4kb，当对于页起始地址的发起第一次访问时，会发生缺页异常。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/03/17/%E7%AE%97%E6%B3%95/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="jiezi19971225">
-      <meta itemprop="description" content="记录编程学习路上的点滴">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Jiez19971225‘s Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/03/17/%E7%AE%97%E6%B3%95/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/" class="post-title-link" itemprop="url">二叉搜索树</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-03-17 11:12:05" itemprop="dateCreated datePublished" datetime="2020-03-17T11:12:05+08:00">2020-03-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-01 19:47:58" itemprop="dateModified" datetime="2020-10-01T19:47:58+08:00">2020-10-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
-                </span>
-            </span>
-
-          
-
-          <span class="post-time">
-            &nbsp; | &nbsp;
-            <span class="post-meta-item-icon">
-              <i class="fa fa-bar-chart"></i>
-            </span>
-            <span class="post-meta-item-text">字数统计:</span>
-            <span class="post-count">1.4k(字)</span>
-
-          </span>
-
-            <span class="post-time">
-          &nbsp; | &nbsp;
-            <span class="post-meta-item-icon">
-              <i class="fa fa-clock-o"></i>
-            </span>
-            <span class="post-meta-item-text">阅读时长:</span>
-            <span class="post-count">6(分)</span>
-
-          </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>二叉搜索树（Binary Search Tree）是一种可以在 O(logN) 复杂度做查找，插入和删除的操作。</p>
-<p>二叉搜索树是一种满足以下特殊性质的二叉树。</p>
-<ul>
-<li>若左子树不空，则左子树上所有结点的值均小于或等于它的根结点的值</li>
-<li>若右子树不空，则右子树上所有结点的值均小于或等于它的根结点的值</li>
-<li>左右子树均为二叉搜索树</li>
-</ul>
-<p>二叉搜索树包含三种基本操作。其流程如下。</p>
-<h2 id="查找操作"><a href="#查找操作" class="headerlink" title="查找操作"></a>查找操作</h2><ul>
-<li>若当前节点为 NULL，返回 false</li>
-<li>若查找的值小于当前节点的值，则递归搜索左子树</li>
-<li>若查找的值大于当前节点的值，则递归搜索右子树</li>
-<li>若查找的值等于当前节点的值，则返回 true</li>
-</ul>
-<h2 id="插入操作"><a href="#插入操作" class="headerlink" title="插入操作"></a>插入操作</h2><ul>
-<li>若当前节点为 NULL，用插入的值构建新节点插入到当前位置</li>
-<li>若插入的值小于当前节点的值，则在左子树上执行插入操作</li>
-<li>若插入的值大于当前节点的值，则在右子树上执行插入操作</li>
-</ul>
-<h2 id="删除操作"><a href="#删除操作" class="headerlink" title="删除操作"></a>删除操作</h2><ul>
-<li>若当前节点为 NULL，返回 false</li>
-<li>若删除的值小于当前节点的值，则在左子树上执行删除操作</li>
-<li>若删除的值大于当前节点的值，则在右子树上执行删除操作</li>
-<li>若删除的值等于当前节点的值，这里又分为多种情况<ul>
-<li>若当前节点左子树为空，则直接将右子树接上来</li>
-<li>若当前节点右子树为空，则直接将左子树接上来</li>
-<li>否则，查找左子树中最大的值（或者右子树中最小的值），与当前节点的值进行交换，然后删除被交换的节点，这里想一下就可以明白，左子树最大的数值移动到当前节点的位置，因为它是左子树中最大的数值，所以它一定大于左子树中其他值，同时也一定小于右子树中所有值，这样操作后仍然满足 BST 的性质。</li>
-</ul>
-</li>
-</ul>
-<p>根据二叉搜索树的性质，中序遍历二叉搜索树，得到的一定是一个有序的数列。所以用二叉搜索树进行排序，时间复杂度为 O(NlogN)</p>
-<h2 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h2><p>以下内容来自洛谷日报</p>
-<p>这样一种数据结构，支持找前驱与后继，还可以按排名与按数值查找</p>
-<h3 id="找前驱"><a href="#找前驱" class="headerlink" title="找前驱"></a>找前驱</h3><p>所谓前驱，就是小于 x 的最大的数，所以前驱一定比 x 小<br>其实找前驱，就是从根节点开始，递归子树，如果你要找的数小于当前节点，就找他的左子树，反之找他的右子树，直到没有可以找的为止。</p>
-<h3 id="按排名找值"><a href="#按排名找值" class="headerlink" title="按排名找值"></a>按排名找值</h3><p>再节点维护一个 size 信息，表示当前位置开始的树的节点数量，则找排名为 k 的节点，先看左子树的 size+1 是否大于等于 k，若大于，则在左子树中查找 排名为 k-1 的节点。否则，查询右树中排名为 k-size-1 的节点。</p>
-<h3 id="按值找排名"><a href="#按值找排名" class="headerlink" title="按值找排名"></a>按值找排名</h3><p>按值找排名时，从根开始，如果该位置的值小于要查询的值，就找他的右子树，同时记住他左子树的大小，如果小于，就查询他的左子树，直到大小相等，他的排名就是该点左子树的大小加上一路上比他小的节点个数再加上 1。</p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p>以下是 BST 基础功能的 C++ 实现的代码:</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stack&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bitset&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdlib&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cmath&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;set&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;list&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;deque&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;map&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;queue&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sstream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> ll;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">double</span> PI = <span class="built_in">acos</span>(<span class="number">-1.0</span>);</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">double</span> eps = <span class="number">1e-6</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> INF = <span class="number">1000000000</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">100</span>;</span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">node</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    T val;</span><br><span class="line">    node *lch, *rch;</span><br><span class="line">    node(T val) : val(val), lch(<span class="literal">NULL</span>), rch(<span class="literal">NULL</span>) &#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">bst</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">typedef</span> node&lt;T&gt; node;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    node *root;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    bst() : root(<span class="literal">NULL</span>) &#123;&#125;</span><br><span class="line">    <span class="comment">// 插入操作</span></span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">insert</span><span class="params">(<span class="keyword">const</span> T &amp;val)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> _insert(root, val);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">bool</span> _insert(node *&amp;root, <span class="keyword">const</span> T &amp;val)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (root == <span class="literal">NULL</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            root = <span class="keyword">new</span> node(val);</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (val &lt; root-&gt;val)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> _insert(root-&gt;lch, val);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> _insert(root-&gt;rch, val);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 查找操作</span></span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">find</span><span class="params">(T val)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> _find(root, val);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">bool</span> _find(node *root, <span class="keyword">const</span> T &amp;val)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (root == <span class="literal">NULL</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (val &lt; root-&gt;val)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> _find(root-&gt;lch);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (val &gt; root-&gt;val)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> _find(root-&gt;rch);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> root;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">remove</span><span class="params">(T val)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> _remove(root, val);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">bool</span> _remove(node *&amp;root, T val)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (root == <span class="literal">NULL</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (val &lt; root-&gt;val)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> _remove(root-&gt;lch, val);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (val &gt; root-&gt;val)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> _remove(root-&gt;rch, val);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (root-&gt;lch == <span class="literal">NULL</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                node *del = root;</span><br><span class="line">                root = root-&gt;rch;</span><br><span class="line">                <span class="keyword">delete</span> del;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (root-&gt;rch == <span class="literal">NULL</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                node *del = root;</span><br><span class="line">                root = root-&gt;lch;</span><br><span class="line">                <span class="keyword">delete</span> del;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">// 找右子树中值最小的</span></span><br><span class="line">                node *rightMin = root-&gt;rch-&gt;lch;</span><br><span class="line">                <span class="keyword">while</span> (rightMin)</span><br><span class="line">                &#123;</span><br><span class="line">                    rightMin = rightMin-&gt;lch;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">// 交换之后，右子树仍然满足 bst 性质</span></span><br><span class="line">                swap(root-&gt;val, rightMin-&gt;val);</span><br><span class="line">                _remove(root-&gt;rch, rightMin-&gt;val);</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">output</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        _output(root);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">void</span> _output(node *root)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (root == <span class="literal">NULL</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        _output(root-&gt;lch);</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; root-&gt;val &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">        _output(root-&gt;rch);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    bst&lt;<span class="keyword">int</span>&gt; b;</span><br><span class="line">    b.insert(<span class="number">1</span>);</span><br><span class="line">    b.insert(<span class="number">3</span>);</span><br><span class="line">    b.insert(<span class="number">2</span>);</span><br><span class="line">    b.insert(<span class="number">10</span>);</span><br><span class="line">    b.insert(<span class="number">8</span>);</span><br><span class="line">    b.remove(<span class="number">2</span>);</span><br><span class="line">    b.insert(<span class="number">4</span>);</span><br><span class="line">    b.remove(<span class="number">3</span>);</span><br><span class="line">    b.output();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1784,7 +1672,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">67</span>
+          <span class="site-state-item-count">70</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1824,7 +1712,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
