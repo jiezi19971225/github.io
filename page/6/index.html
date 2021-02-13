@@ -627,7 +627,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-01 19:48:05" itemprop="dateModified" datetime="2020-10-01T19:48:05+08:00">2020-10-01</time>
+                <time title="修改时间：2021-02-13 16:23:42" itemprop="dateModified" datetime="2021-02-13T16:23:42+08:00">2021-02-13</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -673,7 +673,7 @@
           <p>最后一篇以前写的文章了，</p>
 <p>左偏树是一种实现简单的可并堆，可以在 logn 的复杂度下面完成优先队列的插入，删除，合并操作。</p>
 <p>这就是一颗左偏树啦 蓝色是该节点的 dist</p>
-<img src="/2019/05/11/%E7%AE%97%E6%B3%95/%E5%B7%A6%E5%81%8F%E6%A0%91/%E5%B7%A6%E5%81%8F%E6%A0%91.png" class="" title="左偏树">
+<p><img src="/2019/05/11/%E7%AE%97%E6%B3%95/%E5%B7%A6%E5%81%8F%E6%A0%91/左偏树.png" alt="左偏树"></p>
 <p>结构体定义</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Node</span>&#123;</span></span><br><span class="line">    <span class="keyword">int</span> l,r,d,v;<span class="comment">//左右子树，距离和键值</span></span><br><span class="line">    Node()&#123;</span><br><span class="line">        l=r=v=d=<span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>我们定义左偏树的外界点为，一个左子树为空或者一个右子树为空的结点，结点的 dist 为它到它子树内外节点的最短距离。一个左偏树在满足堆的性质的前提下还应该满足它的右子树的 dist 不大于它的左子树的 dist。由此，我们可以得出其他一些性质。</p>
@@ -833,7 +833,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-01 19:48:01" itemprop="dateModified" datetime="2020-10-01T19:48:01+08:00">2020-10-01</time>
+                <time title="修改时间：2021-02-13 16:23:42" itemprop="dateModified" datetime="2021-02-13T16:23:42+08:00">2021-02-13</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -887,7 +887,7 @@
 <p>在图的遍历中，往往设置了一个标记数组 vis 来记录顶点是否被访问过。但有些时候需要改变 vis 值的意义。令 vis 具有 3 种值并表示 3 种不同含义</p>
 <p>vis = 0,表示该顶点没没有被访问<br>vis = 1,表示该顶点已经被访问，但其子孙后代还没被访问完，也就没从该点返回<br>vis = 2,，表示该顶点已经被访问，其子孙后代也已经访问完，也已经从该顶点返回<br>可以 vis 的 3 种值表示的是一种顺序关系和时间关系</p>
 <p>《算法导论》334 页有这 4 种边的准确定义</p>
-<img src="/2019/05/11/%E7%AE%97%E6%B3%95/%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%9B%BE%E4%B8%AD%E6%89%BE%E7%8E%AF/%E8%BE%B9%E7%9A%84%E5%AE%9A%E4%B9%89.png" class="" title="边的定义">
+<p><img src="/2019/05/11/%E7%AE%97%E6%B3%95/%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%9B%BE%E4%B8%AD%E6%89%BE%E7%8E%AF/边的定义.png" alt="边的定义"></p>
 <p>DFS 过程中，对于一条边 u-&gt;v<br>vis[v] = 0,说明 v 还没被访问，v 是首次被发现，u-&gt;v 是一条树边<br>vis[v] = 1,说明 v 已经被访问，但其子孙后代还没有被访问完（正在访问中），而 u 又指向 v，说明 u 就是 v 的子孙后代，u-&gt;v 是一条后向边，因此后向边又称返祖边，<br>vis[v] = 2,说明 v 已经被访问，其子孙后代也已经全部访问完，u-&gt;v 这条边可能是一条横叉边，或者前向边</p>
 <p>注意：树边，后向边，前向边，都有祖先，后裔的关系，但横叉边没有，u-&gt;v 为横叉边，说明在这棵 DFS 树中，它们不是祖先后裔的关系它们可能是兄弟关系，堂兄弟关系，甚至更远的关系，如果是 dfs 森林的话，u 和 v 甚至可以在不同的树上</p>
 <p>对于无向图而言，只存在树边和返祖边，当发现一条返祖边时，说明找到了环，这时输出所有 vis[i] = 1 的节点即可</p>
@@ -1134,7 +1134,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-01 19:52:14" itemprop="dateModified" datetime="2020-10-01T19:52:14+08:00">2020-10-01</time>
+                <time title="修改时间：2021-02-13 16:28:20" itemprop="dateModified" datetime="2021-02-13T16:28:20+08:00">2021-02-13</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1233,7 +1233,7 @@
 <h3 id="网络命名空间"><a href="#网络命名空间" class="headerlink" title="网络命名空间"></a>网络命名空间</h3><p>有了进程命名空间，不同命名空间中的进程号可以相互隔离，但是网络端口还是共享本地系统的端口。通过网络命名空间，可以实现网络隔离。一个网络命名空间为进程提供了一个完全独立的网络协议栈的视图。包括网络设备接口，IPV4 和 IPV6 协议栈，IP 路由表，防火墙规则，sockets 等。</p>
 <p>docker 采用虚拟网络设备 Virtual Network Device VND 的方式，将不同命名空间的网络设备连接到一起。默认情况下，Docker 在宿主机上创建多个虚拟网桥，如默认的 docker0 网桥，容器中的虚拟网卡通过网桥进行桥接。</p>
 <p>docker network ls 可以查看当前系统中的网桥。</p>
-<img src="/2019/04/05/%E8%BF%90%E7%BB%B4/docker%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/docker%E7%BD%91%E6%A1%A5.png" class="" title="docker网桥">
+<p><img src="/2019/04/05/%E8%BF%90%E7%BB%B4/docker%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/docker网桥.png" alt="docker网桥"></p>
 <p>使用 brctl 工具，可以看到连接到网桥上的虚拟网口信息。每个容器默认分配一个网桥上的虚拟网口，并将 docker0 的 IP 地址设置为默认的网关。容器发起的网络流量通过 宿主机的 iptables 规则进行转发。</p>
 <h4 id="虚拟网卡-veth"><a href="#虚拟网卡-veth" class="headerlink" title="虚拟网卡 veth"></a>虚拟网卡 veth</h4><p>这里参考了这篇文章 <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/369e50201bce">Linux 网络命名空间</a>，下面简述一下其中的内容。</p>
 <p>虚拟网卡成对出现，像一个管道的两端，从这个管道一端的 veth 进去的数会从另一端的 veth 出来，可以用 veth 接口把一个网络命名空间连接到外部的默认命名空间或者 global 命名空间，而物理网卡就存在这些命名空间里。</p>
@@ -1241,11 +1241,11 @@
 <p>Linux 中 IP 转发的意思是 Linux 主机存在多个网卡的时候，允许一个网卡的数据包转发到另外一张网卡。</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -t nat -A POSTROUTING -s 10.1.1.0/255.255.255.0 -o ens160 -j MASQUERADE</span><br></pre></td></tr></table></figure>
 <p>添加了一条规则到 NAT 表的 POSTROUTING 链中，对于源 IP 地址为 10.1.1.0 网段的数据包，用 ens160 网口的 IP 地址替换并发送。这样在容器中就可以访问外部网络了。</p>
-<img src="/2019/04/05/%E8%BF%90%E7%BB%B4/docker%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E6%95%B4%E4%B8%AA%E6%B5%81%E7%A8%8B.png" class="" title="整个流程">
+<p><img src="/2019/04/05/%E8%BF%90%E7%BB%B4/docker%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/整个流程.png" alt="整个流程"></p>
 <h2 id="两个容器为什么能通信"><a href="#两个容器为什么能通信" class="headerlink" title="两个容器为什么能通信"></a>两个容器为什么能通信</h2><p>只要有容器运行，docker0 接口的状态就从 down 变成了 up。</p>
 <p>主机上的 veth 只能和 docker0 通信。容器内的 veth 可以和主机上的配对的 veth 通信。</p>
 <p>veth 成对出现，docker0 是多个容器之间能通信的关键。</p>
-<img src="/2019/04/05/%E8%BF%90%E7%BB%B4/docker%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/docker%E5%AE%B9%E5%99%A8%E9%97%B4%E9%80%9A%E4%BF%A1.png" class="" title="docker容器间通信">
+<p><img src="/2019/04/05/%E8%BF%90%E7%BB%B4/docker%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/docker容器间通信.png" alt="docker容器间通信"></p>
 <h3 id="link"><a href="#link" class="headerlink" title="link"></a>link</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name=test2 --link test1 busybox /bin/sh -c <span class="string">&quot;while true; do sleep 3600; done&quot;</span></span><br></pre></td></tr></table></figure>
 <p>当于添加了 DNS 解析，同时 link 是单向的。只能在 test2 通过 test1 ping 通 test1。</p>
 <h2 id="none-和-host-网络"><a href="#none-和-host-网络" class="headerlink" title="none 和 host 网络"></a>none 和 host 网络</h2><p>连接到 none 网络</p>

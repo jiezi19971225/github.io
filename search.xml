@@ -418,48 +418,6 @@
       </tags>
   </entry>
   <entry>
-    <title>再谈js作用域</title>
-    <url>/2020/07/22/javascript/%E5%86%8D%E8%B0%88js%E4%BD%9C%E7%94%A8%E5%9F%9F/</url>
-    <content><![CDATA[<h2 id="缘起"><a href="#缘起" class="headerlink" title="缘起"></a>缘起</h2><p>写这篇文章的契机，是最近有看 react 源码的想法。先是看了这篇文章 <a href="https://juejin.im/post/5afe3735518825426539afce">如何阅读大型前端开源项目的源码</a> 学习了一波姿势，然后开始下载 react 工程鼓捣起来。源码打断点，构建 umd 代码，然后看函数调用栈，执行到这一步，看到了这个页面，发现都是我不熟悉的东西。比如这个 Scope，虽然大体知道是作用域，但是具体是按照什么规则得到的，就不是很清楚了。所以决定先搞清一下 js 的作用域问题。</p>
-<img src="/2020/07/22/javascript/%E5%86%8D%E8%B0%88js%E4%BD%9C%E7%94%A8%E5%9F%9F/%E8%BF%99%E9%83%BD%E5%95%A5%E7%8E%A9%E6%84%8F%E5%95%8A.png" class="" title="这都啥玩意啊">
-<p>js 的作用域，是一个老生常谈的问题了，也是面试常考的内容。以前也通过看 js 高程，你不知道的 js 这些书对此有过据较为深入的学习，刷一些面试题的时候也背了一些“标准答案”，但是时间一长，也忘掉大半了。现在要我真说道说道，大概是说不出个所以然来的。今天搜索相关信息时看到这个博客的一一系列博文讲的真不错 <a href="https://blog.csdn.net/q1056843325/category_9267514.html">https://blog.csdn.net/q1056843325/category_9267514.html</a> ，自己对这一块其实挺欠缺的。纸上得来终觉浅，觉知此事要躬行。这次主要借鉴这位博主的文章内容，借助 Chrome 的开发者工具好好探究一下这个问题。</p>
-<h2 id="探究"><a href="#探究" class="headerlink" title="探究"></a>探究</h2><h3 id="预编译，变量提升与-let，const"><a href="#预编译，变量提升与-let，const" class="headerlink" title="预编译，变量提升与 let，const"></a>预编译，变量提升与 let，const</h3><p>脚本执行时，js 引擎会做下面三件事。</p>
-<ol>
-<li>语法分析 引擎检查代码是否包含低级语法错误</li>
-<li>预编译 在内存中开辟一些空间，存放变量与函数</li>
-<li>解释执行</li>
-</ol>
-<p>语法分析很简单，就是引擎检查你的代码有没有什么低级的语法错误<br>解释执行顾名思义便是执行代码了<br>预编译简单理解就是在内存中开辟一些空间，存放一些变量与函数</p>
-<h4 id="预编译的发生时间"><a href="#预编译的发生时间" class="headerlink" title="预编译的发生时间"></a>预编译的发生时间</h4><p>我之前也以为预编译主要就是做了变量提升这件工作，也就是在脚本解释执行前执行一次。但实际上，在函数执行前都会进行预编译。</p>
-<p>先看一下我之前理解的预编译，在 v8 引擎中时怎么做的。</p>
-<img src="/2020/07/22/javascript/%E5%86%8D%E8%B0%88js%E4%BD%9C%E7%94%A8%E5%9F%9F/%E9%A2%84%E7%BC%96%E8%AF%911.png" class="" title="预编译1">
-<p>在脚本第一行执行前插入了 debugger 语句，这个时候预编译已经完成。我们看到 Scope 的 Global 作用域（浏览器中的 window 对象）中已经有了以下的属性，符合我们的认知，对于 let 声明的属性，预编译的时候是没有处理的。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  a:<span class="literal">undefined</span>,</span><br><span class="line">  b:ƒ b(y),</span><br><span class="line">  c: <span class="literal">undefined</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>然后继续执行，直到执行完了，我们看到 Scope 中多了一个 Script 的标签，其中保存了 aa 的值。这个按我的理解，也可以把它当作全局作用域，与 Global 不同的是，你没法在 window 对象上访问它。</p>
-<img src="/2020/07/22/javascript/%E5%86%8D%E8%B0%88js%E4%BD%9C%E7%94%A8%E5%9F%9F/%E9%A2%84%E7%BC%96%E8%AF%912.png" class="" title="预编译2">
-<p>接下来就要执行函数了，在此之前，需要插入一点另外的知识</p>
-<p><strong>函数的 <code>[[Scope]]</code> 属性</strong><br>函数是特殊的可执行对象。既然是对象，就可以拥有属性。函数中存在这一个内部属性<code>[[Scope]]</code>（我们不能使用，供 js 引擎使用）函数被创建时，这个内部属性就会包含函数被创建的作用域中对象的集合。这个集合呈链式链接，被称为函数的作用域链。按照我的理解，这和词法作用域是一个概念。这个 <code>[[Scope]]</code>是会随着代码执行动态变化的。在这个例子中，b 函数的 <code>[[Scope]]</code> 一开始是没有 Script 的，在 let 声明执行后，Script 就被添加上了。</p>
-<p><strong>函数的执行环境</strong><br>在函数执行时，会创建一个叫做执行环境/执行上下文（execution context）的内部对象，它定义了一个函数执行时的环境。函数每次执行时的执行环境独一无二，多次调用函数就多次创建执行环境，并且函数执行完毕后，执行环境就会被销毁，执行环境有自己的作用域链，用于解析标识符。</p>
-<p><code>[[Scope]]</code>和执行期上下文虽然保存的都是作用域链，但不是同一个东西。<code>[[Scope]]</code>属性是函数创建时产生的，会一直存在,而执行上下文在函数执行时产生，函数执行结束便会销毁。</p>
-<p><strong>预编译发生在每次函数执行前这个创建执行上下文的过程</strong><br>预编译生成了下图中的 Local 作用域。而 Script 和 Global 作用域，则是函数属性 <code>[[Scope]]</code>的拷贝。<br><img src="/2020/07/22/javascript/%E5%86%8D%E8%B0%88js%E4%BD%9C%E7%94%A8%E5%9F%9F/%E9%A2%84%E7%BC%96%E8%AF%913.png" class="" title="预编译3"></p>
-<p>这个博主的文章，里面多次提到了 AO 活动对象的概念，实际上这是 ES3 的说法了，还是以开发者工具的展现为准，这样更好理解一点。<br>至此，关于预编译的问题解决。</p>
-<p><strong>性能优化</strong></p>
-<p>js 引擎查找作用域链是为了解析标识符，变量在执行环境作用域链的位置越深，读写速度就越慢，因此应该多用局部变量（缓存）。</p>
-<h3 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h3><p>以前看过这样一个对于闭包的解释。当在一个函数中返回一个函数的时候，这个被返回的时候就可以保有当前函数作用域的变量的引用，这就形成了闭包。</p>
-<p>但这样的理解是不充分的。实际上，只要是在函数的作用域内定义了函数，这个被定义的函数就具有闭包作用域。</p>
-<img src="/2020/07/22/javascript/%E5%86%8D%E8%B0%88js%E4%BD%9C%E7%94%A8%E5%9F%9F/%E9%97%AD%E5%8C%851.png" class="" title="闭包1">
-<p>因此闭包的一大用途，就是实现私有变量。我们知道函数如果返回一个对象，在对它进行构造调用时，结果返回的就是该对象。不过使用这种方式，this 赋值的属性和原型绑定就失效了。</p>
-<img src="/2020/07/22/javascript/%E5%86%8D%E8%B0%88js%E4%BD%9C%E7%94%A8%E5%9F%9F/%E9%97%AD%E5%8C%852.png" class="" title="闭包2">
-<p>可以看到，当执行以这种方式返回的函数时，可以通过闭包的方式访问执行构造调用时的 Local 作用域。<br>再回想一下之前说过的，函数每次执行时的执行环境独一无二，多次调用函数就多次创建执行环境，和 settimeout 打印的经典问题，顿时感觉豁然开朗了啊。</p>
-]]></content>
-      <categories>
-        <category>javascript</category>
-      </categories>
-      <tags>
-        <tag>javascript</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>块格式化上下文</title>
     <url>/2019/08/03/CSS/CSS2%E8%A7%84%E8%8C%83%E7%AC%94%E8%AE%B0/</url>
     <content><![CDATA[<h3 id="一致性-要求和建议"><a href="#一致性-要求和建议" class="headerlink" title="一致性 要求和建议"></a>一致性 要求和建议</h3><p>CSS 渲染模型中不考虑替换元素的内容。</p>
@@ -1144,7 +1102,7 @@
 <h2 id="jenkins-插件下载加速"><a href="#jenkins-插件下载加速" class="headerlink" title="jenkins 插件下载加速"></a>jenkins 插件下载加速</h2><p>修改 jenkins_home 里 updates 中 default.json 文件,之后访问 /restart 路径 重启 jenkins 后生效</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sed -i <span class="string">&#x27;s/http:\/\/updates.jenkins-ci.org\/download/https:\/\/mirrors.tuna.tsinghua.edu.cn\/jenkins/g&#x27;</span> default.json &amp;&amp; sed -i <span class="string">&#x27;s/http:\/\/www.google.com/https:\/\/www.baidu.com/g&#x27;</span> default.json</span><br></pre></td></tr></table></figure>
 <h2 id="无法执行-shell-脚本"><a href="#无法执行-shell-脚本" class="headerlink" title="无法执行 shell 脚本"></a>无法执行 shell 脚本</h2><p>Manage Jenkins&gt;Configuration System<br>将 shell 设置为 git 安装目录 下 bin/sh.exe 的路径</p>
-<h2 id="node-环境"><a href="#node-环境" class="headerlink" title="node 环境"></a>node 环境</h2><p>下载 jenkinsNode 插件后，直接设置为本机的 node 安装目录<br><img src="/2020/06/27/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/jenkins%E8%87%AA%E5%8A%A8%E6%9E%84%E5%BB%BA%E9%83%A8%E7%BD%B2%E5%89%8D%E7%AB%AF%E9%95%9C%E5%83%8F/nodejs%E9%85%8D%E7%BD%AE.png" class="" title="nodejs配置"></p>
+<h2 id="node-环境"><a href="#node-环境" class="headerlink" title="node 环境"></a>node 环境</h2><p>下载 jenkinsNode 插件后，直接设置为本机的 node 安装目录<br><img src="/2020/06/27/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/jenkins%E8%87%AA%E5%8A%A8%E6%9E%84%E5%BB%BA%E9%83%A8%E7%BD%B2%E5%89%8D%E7%AB%AF%E9%95%9C%E5%83%8F/nodejs配置.png" alt="nodejs配置"></p>
 <h2 id="配置-publish-over-ssh"><a href="#配置-publish-over-ssh" class="headerlink" title="配置 publish over ssh"></a>配置 publish over ssh</h2><p>首先安装 Publish Over SSH 插件</p>
 <p>报错 invalid private key<br>这是生成的 key 格式不同，插件不认新的 openssh 的格式，需要将私钥转回老格式</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-----BEGIN RSA PRIVATE KEY-----</span><br></pre></td></tr></table></figure>
@@ -1152,7 +1110,7 @@
 <h2 id="构建配置"><a href="#构建配置" class="headerlink" title="构建配置"></a>构建配置</h2><p>选择自由软件，配置 github 仓库地址，选择构建环境为设置的 nodejs 环境</p>
 <h3 id="构建脚本"><a href="#构建脚本" class="headerlink" title="构建脚本"></a>构建脚本</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> FE &amp;&amp; yarn &amp;&amp; yarn build</span><br><span class="line"><span class="built_in">cd</span> FE &amp;&amp; docker build -t ccr.ccs.tencentyun.com/jiezi19971225/ahpuoj-fe .</span><br><span class="line">docker login --username=xxxxxx --password=xxxxxx ccr.ccs.tencentyun.com &amp;&amp; docker tag ccr.ccs.tencentyun.com/jiezi19971225/ahpuoj-fe ccr.ccs.tencentyun.com/jiezi19971225/ahpuoj-fe:<span class="variable">$BUILD_NUMBER</span> &amp;&amp; docker push ccr.ccs.tencentyun.com/jiezi19971225/ahpuoj-fe</span><br><span class="line">docker rmi ccr.ccs.tencentyun.com/jiezi19971225/ahpuoj-fe:<span class="variable">$BUILD_NUMBER</span></span><br><span class="line">docker rmi ccr.ccs.tencentyun.com/jiezi19971225/ahpuoj-fe</span><br></pre></td></tr></table></figure>
 <h3 id="构建后操作"><a href="#构建后操作" class="headerlink" title="构建后操作"></a>构建后操作</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /home/ahpuoj/ahpuojv2docker/compose</span><br><span class="line">docker-compose pull fe</span><br><span class="line">docker-compose up -d fe</span><br><span class="line">// 这行命令用来删除老的镜像</span><br><span class="line">docker image prune -f --filter <span class="string">&quot;dangling=true&quot;</span></span><br></pre></td></tr></table></figure>
-<h2 id="it-works"><a href="#it-works" class="headerlink" title="it works"></a>it works</h2><img src="/2020/06/27/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/jenkins%E8%87%AA%E5%8A%A8%E6%9E%84%E5%BB%BA%E9%83%A8%E7%BD%B2%E5%89%8D%E7%AB%AF%E9%95%9C%E5%83%8F/itWorks.png" class="" title="itWorks">
+<h2 id="it-works"><a href="#it-works" class="headerlink" title="it works"></a>it works</h2><p><img src="/2020/06/27/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/jenkins%E8%87%AA%E5%8A%A8%E6%9E%84%E5%BB%BA%E9%83%A8%E7%BD%B2%E5%89%8D%E7%AB%AF%E9%95%9C%E5%83%8F/itWorks.png" alt="itWorks"></p>
 ]]></content>
       <categories>
         <category>开发工具</category>
@@ -1183,8 +1141,7 @@
 <li>使用 HtmlWebpackPlugin 插件，一个典型的配置如下</li>
 </ul>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">new</span> HtmlWebpackPlugin(&#123;</span><br><span class="line">    filename: <span class="string">&#x27;admin_index.html&#x27;</span>,</span><br><span class="line">    template: <span class="string">&#x27;web-admin/admin_index.html&#x27;</span>,</span><br><span class="line">    inject: <span class="literal">true</span>,</span><br><span class="line">    hash: <span class="literal">false</span>,</span><br><span class="line">    chunks: [<span class="string">&#x27;adminApp&#x27;</span>, <span class="string">&#x27;vendor~adminApp&#x27;</span>, <span class="string">&#x27;vendor~adminApp~userApp&#x27;</span>],  <span class="comment">// 这个数组是html要引入的打包生成的chunk文件，chunkname 在 webpack 打包输出信息中</span></span><br><span class="line">    minify: &#123;</span><br><span class="line">        removeComments: <span class="literal">true</span>,</span><br><span class="line">        collapseWhitespace: <span class="literal">true</span>,</span><br><span class="line">        removeAttributeQuotes: <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;),</span><br></pre></td></tr></table></figure>
-
-<p>图中最右边一列就是资源的 chunkname</p>
+<p><img src="/2019/09/04/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/webpack%E7%88%AC%E5%9D%91%E4%B9%8B%E8%B7%AF/chunkname.png" alt="chunkname"><br>图中最右边一列就是资源的 chunkname</p>
 <h3 id="MiniCssExtractPlugin"><a href="#MiniCssExtractPlugin" class="headerlink" title="MiniCssExtractPlugin"></a>MiniCssExtractPlugin</h3><p>之前项目使用的是 ExtractTextPlugin 对 css 进行抽出并打包，然而 ExtractTextPlugin 在 4.0 版本后不再支持对 css 进行打包 (会在生成的 css 文件末尾附加 webpack 运行时的代码)，后学习得知现在应使用 MiniCssExtractPlugin 对 css 进行抽离</p>
 <h3 id="CleanWebpackPlugin"><a href="#CleanWebpackPlugin" class="headerlink" title="CleanWebpackPlugin"></a>CleanWebpackPlugin</h3><p>这个插件的作用是每次构建的时候，清理重复构建的文件，因为使用哈希方式构建的时候，文件名不同，更改的文件不会直接替换。个人感觉使用 rm -rf dist/* 清理也可以 当然这可以避免你神志不清时误把整个项目文件删了</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">new</span> CleanWebpackPlugin([<span class="string">&quot;dist&quot;</span>]);</span><br></pre></td></tr></table></figure>
@@ -1325,10 +1282,10 @@
     <url>/2019/08/03/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql45%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/</url>
     <content><![CDATA[<h2 id="查询过程"><a href="#查询过程" class="headerlink" title="查询过程"></a>查询过程</h2><h3 id="查询缓存"><a href="#查询缓存" class="headerlink" title="查询缓存"></a>查询缓存</h3><p>Mysql 拿到一个查询请求后，会先到查询缓存看是否执行过该语句。缓存可能会以 key-value 对形式直接缓存在内存，如果能直接在缓存中找到结果，就直接返回 value 给客户端，否则，就继续后面的执行阶段。执行完成后，执行结果被存入查询缓存。</p>
 <p>但是查询缓存的失效非常频繁，只要对一个表有更新，这个表上所有查询缓存都会被清空。从 mysql8.0 版本，查询缓存的功能被删除了。</p>
-<h2 id="日志系统"><a href="#日志系统" class="headerlink" title="日志系统"></a>日志系统</h2>
+<h2 id="日志系统"><a href="#日志系统" class="headerlink" title="日志系统"></a>日志系统</h2><p><img src="/2019/08/03/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql45%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/查询流程.png" alt="查询流程"></p>
 <h3 id="redolog"><a href="#redolog" class="headerlink" title="redolog"></a>redolog</h3><p>WAL 技术全称是 Write-Ahead Logging 先写日志，再写磁盘，当有一条记录需要更新的时候，innodb 会把记录写到 redo log，并更新内存，并在适当的时候，将这个操作记录更新到磁盘。redolog 的大小是固定的，写到末尾又会回到开头覆写。<br>因为 redolog，innodb 可以保证数据库异常重启后，之前提交的记录不会丢失，称为 crash-safe。</p>
 <h3 id="binlog"><a href="#binlog" class="headerlink" title="binlog"></a>binlog</h3><p>redolog 是 innodb 特有的 log，而 server 层也有自己的日志，称为 binlog（归档日志）<br>redolog 是物理日志，记录在某个数据页做了什么修改，binlog 是逻辑日志，记录的是语句的原始逻辑<br>binlog 采用追加写，写到一定大写后会创建新的 binlog，不会覆盖之前的日志</p>
-<h3 id="两阶段提交"><a href="#两阶段提交" class="headerlink" title="两阶段提交"></a>两阶段提交</h3><p>浅色表示在 innoDB 内部执行，深色表示在执行器中执行<br><img src="/2019/08/03/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql45%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4.png" class="" title="两阶段提交"></p>
+<h3 id="两阶段提交"><a href="#两阶段提交" class="headerlink" title="两阶段提交"></a>两阶段提交</h3><p>浅色表示在 innoDB 内部执行，深色表示在执行器中执行<br><img src="/2019/08/03/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql45%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/两阶段提交.png" alt="两阶段提交"></p>
 <p>redolog 的写入拆分成 parpare 和 commit 两步，保证两个日志逻辑上的一致，这给了 binlog 和 redolog 一个同时说 ok 的机会</p>
 <h4 id="崩溃恢复原则"><a href="#崩溃恢复原则" class="headerlink" title="崩溃恢复原则"></a>崩溃恢复原则</h4><p>redo log 和 binlog 有一个共同的数据字段，叫 XID。崩溃恢复的时候，会按顺序扫描 redo log：</p>
 <ol>
@@ -1520,7 +1477,7 @@
   <entry>
     <title>计算机基础之异常控制流学习笔记</title>
     <url>/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
-    <content><![CDATA[<img src="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE.png" class="" title="思维导图">
+    <content><![CDATA[<p><img src="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/思维导图.png" alt="思维导图"></p>
 <h2 id="正常控制流"><a href="#正常控制流" class="headerlink" title="正常控制流"></a>正常控制流</h2><p>正常控制流包含两种顺序</p>
 <ul>
 <li>按照指令存放的顺序执行，新的 PC 数值为当前指令地址加上指令长度</li>
@@ -1530,7 +1487,7 @@
 <p>进程的引入为程序提供了以下两方面的抽象。一个独立的逻辑控制流和一个私有的虚拟内存地址。每个进程拥有一个独立的逻辑，使得程序员以为程序似在执行过程中独占处理器。一个私有的虚拟地址空间，使得程序员以为程序在执行过程中独占存储器。</p>
 <p>为了实现以上两方面的抽象，操作系统必须提供一整套管理机制，包括处理器调度、进程上下文切换、虚拟存储管理等。</p>
 <h3 id="逻辑控制流"><a href="#逻辑控制流" class="headerlink" title="逻辑控制流"></a>逻辑控制流</h3><p>一个可执行目标文件被加载并启动执行后，就成为一个进程。他们代码段中的每一条指令都有一个确定的地址，在这些指令的执行过程中，会形成一个指令执行的地址序列，对于确定的输入数据，其指令的地址序列也是确定的。这个确定的指令执行地址序列被称为进程的<strong>逻辑控制流</strong>。</p>
-<p>对于一个具有单核处理器的系统，如果有多个进程运行，这些进程会轮流使用处理器，处理器的<strong>物理控制流</strong>是由多个逻辑控制流组成。<br><img src="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%A4%9A%E4%B8%AA%E9%80%BB%E8%BE%91%E6%8E%A7%E5%88%B6%E6%B5%81.png" class="" title="多个逻辑控制流"></p>
+<p>对于一个具有单核处理器的系统，如果有多个进程运行，这些进程会轮流使用处理器，处理器的<strong>物理控制流</strong>是由多个逻辑控制流组成。<br><img src="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/多个逻辑控制流.png" alt="多个逻辑控制流"></p>
 <p>图中可以看出有些进程的逻辑控制流在时间上有交错，通常把这种不同进程的逻辑控制流在时间上交错或者重叠称为<strong>并发</strong>。而<strong>并行</strong>则是并发执行的一个特例，我们称两个进程是并行的，是指他们并发的运行在不同的处理器或者处理器核中。</p>
 <p>连续执行同一个进程的时间段称为时间片，每个时间片结束时，通过进程的上下文切换，换一个新的进程到处理器上执行，开始一个新的时间片，这个过程称为<strong>时间片轮转处理器调度</strong>。</p>
 <h3 id="进程的上下文切换"><a href="#进程的上下文切换" class="headerlink" title="进程的上下文切换"></a>进程的上下文切换</h3><p>实现不同进程中指令交替执行的机制称为<strong>进程的上下文切换</strong>。</p>
@@ -1540,7 +1497,7 @@
 <li>进程表示信息，进程现场信息，进程控制信息和系统内核堆栈组成的<strong>内核空间信息</strong>被称为<strong>系统级上下文</strong>。</li>
 <li>处理器中各个寄存器的内存被称为<strong>寄存器上下文</strong>。</li>
 </ul>
-<p>用户级上下文和系统级上下文地址空间一起构成了一个进程的整个存储器映像。进程控制信息包含各种内核数据结构，如有关进程信息的进程表，页表，文件表等。<br><img src="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%AD%98%E5%82%A8%E6%98%A0%E5%83%8F.png" class="" title="进程的存储映像"></p>
+<p>用户级上下文和系统级上下文地址空间一起构成了一个进程的整个存储器映像。进程控制信息包含各种内核数据结构，如有关进程信息的进程表，页表，文件表等。<br><img src="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/进程的存储映像.png" alt="进程的存储映像"></p>
 <p>上下文切换发生在操作系统调度一个新进程到处理器上运行，他需要完成以下三件事</p>
 <ul>
 <li>将当前进程的寄存器上下文保存到当前进程的系统级上下文的现场信息中</li>
@@ -1548,13 +1505,13 @@
 <li>将控制转移到新进程执行</li>
 </ul>
 <p>一个重要的上下文信息是 PC，当前进程被打断的断点处的 PC 作为寄存器上下文的一部分被保存在进程现场信息中。</p>
-<h3 id="进程的私有地址空间"><a href="#进程的私有地址空间" class="headerlink" title="进程的私有地址空间"></a>进程的私有地址空间</h3><img src="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E8%99%9A%E6%8B%9F%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%E6%98%A0%E5%83%8F.png" class="" title="虚拟地址空间映像">
+<h3 id="进程的私有地址空间"><a href="#进程的私有地址空间" class="headerlink" title="进程的私有地址空间"></a>进程的私有地址空间</h3><p><img src="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/虚拟地址空间映像.png" alt="虚拟地址空间映像"></p>
 <p>整个虚拟地址空间分为两大部分。<strong>内核虚拟存储空间</strong>（简称内核空间）和<strong>进程虚拟内存空间</strong>（简称用户空间）。在采用虚拟存储机制的系统中，每个程序的可执行目标文件在装入时都被映射到同样的虚拟地址空间上，即所有用户进程的虚拟地址空间是一致的，只是在相应的制度区域和可读写数据区域中映射的信息不同而已。</p>
 <p>linux 将用户空间对应的进程虚拟存储空间组织成若干“区域”的集合，<br>内核为每个进程维护了一个进程描述符，记录或者指向内核运行该进程所需要的所有信息，如进程 pid，指向用户栈的指针，可执行目标文件的文件名，程序计数器 PC 等。</p>
 <h3 id="程序的加载和运行"><a href="#程序的加载和运行" class="headerlink" title="程序的加载和运行"></a>程序的加载和运行</h3><p>当启动一个可以行目标文件执行时，首先会通过某种方式调出常驻内存的一个称为加载器的操作系统程序来处理。在 UNIX/Linux 系统中，可以通过 execve() 函数来启动加载器，其作用是在当前进程的上下文中加载并且运行一个新程序。</p>
 <h2 id="异常和中断"><a href="#异常和中断" class="headerlink" title="异常和中断"></a>异常和中断</h2><p>除了时间片到，当前进程的执行被新进程打断，还有用户按下 CTRL+C，当前执行执行中发生了不能使指令执行的意外事件，IO 设备完成了系统交给的任务需要进一步处理，这些特殊事件统称为<strong>异常</strong>或者<strong>中断</strong>。<br>当发生异常或者终端，正在执行进程的逻辑控制流被打断，CPU 转到具体的特殊处理事件的内核程序去执行。他与上下文切换有一个明显的不同：上下文切换后 CPU 执行另一个用户进程，但是，中断或异常处理程序执行的代码不是一个进程，而是一个<strong>内核控制路径</strong>，它代表异常或终端发生时正在运行的当前进程在内核态执行的一个独立的指令序列。作为一个内核控制路径，他比进程更轻，其上下文信息比一个进程的上下文信息少得多。</p>
 <h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p>异常是在 CPU 内部执行时发生的，中断是 CPU 外部的 IO 设备向 CPU 发出的请求，通常称异常为<strong>内部异常</strong>，而称中断为<strong>外部中断</strong>。</p>
-<img src="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%AD%E6%96%AD%E5%A4%84%E7%90%86%E8%BF%87%E7%A8%8B.png" class="" title="中断处理过程">
+<p><img src="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/中断处理过程.png" alt="中断处理过程"></p>
 <p>大致处理流程如下：当 CPU 在执行当前程序或任务的第 i 条指令时检测到一个异常事件，或者在执行第 i 条指令后发现有一个中断请求信息，CPU 会打断当前用户进程，然后转到相应的异常或中断处理程序去执行。如果该处理程序能解决相应问题，则在该处理程序的最后，CPU 通过执行“异常/中断返回指令”回到被打断的用户进程的第 i 条指令或第 i+1 条指令继续执行。若异常或中断处理程序发现是不可恢复的知名错误，则中止用户进程。通常情况下，对于异常和中断事件的具体处理过程全部由操作系统（可能包括驱动程序）软件来完成。</p>
 <h3 id="异常的分类"><a href="#异常的分类" class="headerlink" title="异常的分类"></a>异常的分类</h3><p>intel 将内部异常分为三类</p>
 <p>故障</p>
@@ -1569,7 +1526,7 @@
 <p>终止</p>
 <p>如果在执行指令的过程中发生了严重错误，如控制器出现问题，访问 DRAM 或者 SRAM 时发生校验错误等，则程序无法继续执行，只好终止发生问题的进程。</p>
 <h3 id="中断的分类"><a href="#中断的分类" class="headerlink" title="中断的分类"></a>中断的分类</h3><p><strong>中断</strong> 是由外部 IO 设备请求处理器进行的一种信号。他不是由当前执行的指令引起的，外部 IO 设备通过特定的<strong>中断请求信号线</strong>向 CPU 提出中断申请。CPU 在执行指令过程中，每执行一条指令就查看中断请求引脚，如果中断请求引脚的信号有效，则进入中断响应周期。在<strong>中断响应周期</strong>中，CPU 先将当前 PC 值和当前机器状态保存到栈中，并设置成为<strong>关中断</strong>状态，然后从数据总线读取<strong>中断类型号</strong>，根据中断类型号跳转到对应的中断服务程序执行。中断响应过程由硬件完成，而中断服务程序执行具体的中断处理工作，中断处理完成后，再回到被打断程序的断点处继续执行。</p>
-<img src="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%A4%96%E9%83%A8%E4%B8%AD%E6%96%AD%E7%9A%84%E5%A4%84%E7%90%86%E8%BF%87%E7%A8%8B.png" class="" title="外部中断的处理过程">
+<p><img src="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/外部中断的处理过程.png" alt="外部中断的处理过程"></p>
 <p>可屏蔽中断</p>
 <p>是指通过<strong>可屏蔽中断请求线</strong>INTR 向 CPU 进行请求的中断，主要来自 IO 设备的中断请求。CPU 可以通过在中断控制器中设置相应的屏蔽字来屏蔽他或者不屏蔽他。若一个 IO 设备的中断请求被屏蔽，他的中断请求信号不会被送到 CPU。</p>
 <p>不可屏蔽中断</p>
@@ -1772,7 +1729,7 @@
 <p>补码表示法</p>
 <p>补码表示可以实现加减运算的统一，用加法来实现减法运算。计算机中，补码用来表示带符号整数，补码表示法也称为“2-补码”（two’s complement）表示法，由符号位后跟上真值的模$2^n$补码构成。</p>
 <p>可以用以下方法求一个数的补码：对于正数，符号位取 0，其余各位同真值中对应的各位。对于负数，符号位取 1，其余各位由真值各位取反，末尾加 1 得到。</p>
-<img src="/2020/04/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA%E4%B8%8E%E5%A4%84%E7%90%86/%E8%A1%A5%E7%A0%81%E8%BF%90%E7%AE%97%E7%9A%84%E6%8E%A8%E5%AF%BC.png" class="" title="补码运算的推导">
+<p><img src="/2020/04/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA%E4%B8%8E%E5%A4%84%E7%90%86/补码运算的推导.png" alt="补码运算的推导"></p>
 <p>两个正数相加，两个负数相加，可能会出现<strong>溢出</strong>的情况。</p>
 <p>变形补码</p>
 <p>为了便于判断运算结果是否溢出，某些计算机中采用了一种双符号位的补码表示方式，也成为变形补码，或者模 4 补码。在双符号位中，左符是真正的符号位，右符用来判别溢出。</p>
@@ -1784,7 +1741,7 @@
 <p>阶可以是正数，也可以是负数。当进行浮点数的加减运算时，必须先对阶，为了简化比较操作，在操作过程中不涉及阶的符号，可以对每个阶都加上一个正的常数，称为<strong>偏置常数（bias）</strong>。</p>
 <h4 id="整数的表示"><a href="#整数的表示" class="headerlink" title="整数的表示"></a>整数的表示</h4><p>计算机中的整数分为<strong>无符号整数</strong>和<strong>带符号整数</strong>两种。</p>
 <p>省略有关 C 语言相关处理内容。</p>
-<h4 id="浮点数的表示"><a href="#浮点数的表示" class="headerlink" title="浮点数的表示"></a>浮点数的表示</h4><h5 id="浮点数的表示范围"><a href="#浮点数的表示范围" class="headerlink" title="浮点数的表示范围"></a>浮点数的表示范围</h5><img src="/2020/04/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA%E4%B8%8E%E5%A4%84%E7%90%86/%E6%B5%AE%E7%82%B9%E6%95%B0%E7%9A%84%E8%A1%A8%E7%A4%BA%E8%8C%83%E5%9B%B4.png" class="" title="浮点数的表示范围">
+<h4 id="浮点数的表示"><a href="#浮点数的表示" class="headerlink" title="浮点数的表示"></a>浮点数的表示</h4><h5 id="浮点数的表示范围"><a href="#浮点数的表示范围" class="headerlink" title="浮点数的表示范围"></a>浮点数的表示范围</h5><p><img src="/2020/04/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA%E4%B8%8E%E5%A4%84%E7%90%86/浮点数的表示范围.png" alt="浮点数的表示范围"></p>
 <p>根据浮点数的格式格式，只要尾数为 0，阶码取任何值都为 0，这样的数被称为<strong>机器零</strong>。因此机器零不唯一。</p>
 <h5 id="浮点数的规格化"><a href="#浮点数的规格化" class="headerlink" title="浮点数的规格化"></a>浮点数的规格化</h5><p>规格化数的标志是真值的尾数部分中最高位具有非零数字。</p>
 <ul>
@@ -1908,8 +1865,8 @@
 <li>状态集合 F 是接受（或中止）状态集合</li>
 </ul>
 <p>NFA 可以用带标记的有向图表示，称为转换图，其节点是状态，有标记的边是转化函数。</p>
-<img src="/2020/03/24/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E4%B9%8B%E6%9C%89%E7%A9%B7%E8%87%AA%E5%8A%A8%E6%9C%BA/NFA.png" class="" title="NFA">
-<img src="/2020/03/24/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E4%B9%8B%E6%9C%89%E7%A9%B7%E8%87%AA%E5%8A%A8%E6%9C%BA/NFA2.png" class="" title="NFA2">
+<p><img src="/2020/03/24/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E4%B9%8B%E6%9C%89%E7%A9%B7%E8%87%AA%E5%8A%A8%E6%9C%BA/NFA.png" alt="NFA"></p>
+<p><img src="/2020/03/24/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E4%B9%8B%E6%9C%89%E7%A9%B7%E8%87%AA%E5%8A%A8%E6%9C%BA/NFA2.png" alt="NFA2"></p>
 <h2 id="DFA"><a href="#DFA" class="headerlink" title="DFA"></a>DFA</h2><p>DFA 是 NFA 的特例</p>
 <ul>
 <li>没有一个状态具有$\epsilon$转换</li>
@@ -1917,7 +1874,7 @@
 </ul>
 <p>确定的有穷自动机在任何状态下，对任一输入符号，最多只有一个转换。如果用转换表表示 DFA 的转换函数，那么表中的每个表项最多只有一个状态。因而，很容易确定 DFA 是否接受某输入字符串，因为从开始状态起，最多只有一条到达接受状态的路径可由这个符号串标记。</p>
 <h2 id="NFA-转为-DFA"><a href="#NFA-转为-DFA" class="headerlink" title="NFA 转为 DFA"></a>NFA 转为 DFA</h2><p>子集构造算法，在 NFA 的转换表中，每个表项是一个状态集，在 DFA 的转化表中，每个表项只有一个状态。从 NFA 变换到 DFA 的基本思想是让 DFA 的每个状态对应 NFA 的一个状态集。DFA 用它的状态去记住 NFA 在读输入符号后到达的所有状态。</p>
-<img src="/2020/03/24/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E4%B9%8B%E6%9C%89%E7%A9%B7%E8%87%AA%E5%8A%A8%E6%9C%BA/NFA%E8%BD%ACDFA.png" class="" title="NFA转DFA">
+<p><img src="/2020/03/24/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E4%B9%8B%E6%9C%89%E7%A9%B7%E8%87%AA%E5%8A%A8%E6%9C%BA/NFA转DFA.png" alt="NFA转DFA"></p>
 <p>定义三种操作</p>
 <ul>
 <li>$\epsilon-closure(s)$ 从 NFA 状态 s 只经过$\epsilon$转换可以到达的 NFA 状态集</li>
@@ -1975,9 +1932,9 @@
 </tbody>
 </table>
 </div>
-<img src="/2020/03/24/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E4%B9%8B%E6%9C%89%E7%A9%B7%E8%87%AA%E5%8A%A8%E6%9C%BA/%E5%AD%90%E9%9B%86%E6%9E%84%E9%80%A0%E6%B3%95%E7%BB%93%E6%9E%9C.png" class="" title="子集构造法结果">
+<p><img src="/2020/03/24/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E4%B9%8B%E6%9C%89%E7%A9%B7%E8%87%AA%E5%8A%A8%E6%9C%BA/子集构造法结果.png" alt="子集构造法结果"></p>
 <h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>接下来用编程语言实现一个简单的 DFA</p>
-<img src="/2020/03/24/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E4%B9%8B%E6%9C%89%E7%A9%B7%E8%87%AA%E5%8A%A8%E6%9C%BA/%E8%A6%81%E5%AE%9E%E7%8E%B0%E7%9A%84DFA.png" class="" title="要实现的DFA">
+<p><img src="/2020/03/24/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E4%B9%8B%E6%9C%89%E7%A9%B7%E8%87%AA%E5%8A%A8%E6%9C%BA/要实现的DFA.png" alt="要实现的DFA"></p>
 <p>功能要求：输入一个单行无空格的字符串（以“#”号结束），如果该字符串是一个合法的输入，则显示“接受”，否则显示“不接受”。</p>
 <p>分析该 DFA 的五元组信息如下</p>
 <ul>
@@ -2023,7 +1980,7 @@
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">node</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    node *next[<span class="number">26</span>];</span><br><span class="line">    <span class="keyword">bool</span> exist;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>以下是使用指针方式的构建代码,比较易懂</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">trie</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">node</span></span></span><br><span class="line"><span class="class">    &#123;</span></span><br><span class="line">        node *next[<span class="number">26</span>];</span><br><span class="line">        <span class="keyword">bool</span> exist;</span><br><span class="line">        node()</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">memset</span>(next, <span class="number">0</span>, <span class="keyword">sizeof</span>(next));</span><br><span class="line">            exist = <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    node *root;</span><br><span class="line">    trie()</span><br><span class="line">    &#123;</span><br><span class="line">        root = <span class="keyword">new</span> node();</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">insert</span><span class="params">(<span class="built_in">string</span> word)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        node *cur = root;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; word.length(); ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">int</span> num = word[i] - <span class="string">&#x27;a&#x27;</span>;</span><br><span class="line">            <span class="keyword">if</span> (!cur-&gt;next[num])</span><br><span class="line">            &#123;</span><br><span class="line">                cur-&gt;next[num] = <span class="keyword">new</span> node();</span><br><span class="line">                cur = cur-&gt;next[num];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                cur = cur-&gt;next[num];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        cur-&gt;exist = <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">find</span><span class="params">(<span class="built_in">string</span> word)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        node *cur = root;</span><br><span class="line">        <span class="keyword">bool</span> ok = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; word.length(); ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">int</span> num = word[i] - <span class="string">&#x27;a&#x27;</span>;</span><br><span class="line">            <span class="keyword">if</span> (!cur-&gt;next[num])</span><br><span class="line">            &#123;</span><br><span class="line">                ok = <span class="literal">false</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            cur = cur-&gt;next[num];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (!cur-&gt;exist)</span><br><span class="line">        &#123;</span><br><span class="line">            ok = <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ok;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">main()</span><br><span class="line">&#123;</span><br><span class="line">    trie t;</span><br><span class="line">    t.insert(<span class="string">&quot;hello&quot;</span>);</span><br><span class="line">    t.insert(<span class="string">&quot;world&quot;</span>);</span><br><span class="line">    t.insert(<span class="string">&quot;i&quot;</span>);</span><br><span class="line">    t.insert(<span class="string">&quot;am&quot;</span>);</span><br><span class="line">    t.insert(<span class="string">&quot;a&quot;</span>);</span><br><span class="line">    t.insert(<span class="string">&quot;lvjie&quot;</span>);</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; t.find(<span class="string">&quot;lvjie&quot;</span>) &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; t.find(<span class="string">&quot;lvji&quot;</span>) &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; t.find(<span class="string">&quot;i&quot;</span>) &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; t.find(<span class="string">&quot;a&quot;</span>) &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<img src="/2020/03/24/%E7%AE%97%E6%B3%95/AC%E8%87%AA%E5%8A%A8%E6%9C%BA/%E5%AD%97%E5%85%B8%E6%A0%91.png" class="" title="字典树">
+<p><img src="/2020/03/24/%E7%AE%97%E6%B3%95/AC%E8%87%AA%E5%8A%A8%E6%9C%BA/字典树.png" alt="字典树"></p>
 <h2 id="利用字典树暴力求解多模式匹配"><a href="#利用字典树暴力求解多模式匹配" class="headerlink" title="利用字典树暴力求解多模式匹配"></a>利用字典树暴力求解多模式匹配</h2><p>很容易想到，从字符串的每一个字符开始，跑 Trie 的匹配算法，这样的时间复杂度是 O(len(T) * maxD(Trie)) 即字符串长度乘以字典树的深度</p>
 <h2 id="KMP-的思想很重要"><a href="#KMP-的思想很重要" class="headerlink" title="KMP 的思想很重要"></a>KMP 的思想很重要</h2><p>显然，匹配失败并不需要在下一位置从 Trie 根节点开始匹配，而是应该找当前匹配的最长后缀。</p>
 <p>这里引入 fail 指针的概念，表示从该节点取前缀，在字典树中找到该前缀中后缀最长的节点。<br>以下摘自洛谷日报</p>
@@ -2074,7 +2031,7 @@
 <h3 id="KMP-算法流程"><a href="#KMP-算法流程" class="headerlink" title="KMP 算法流程"></a>KMP 算法流程</h3><h4 id="构造最大前后缀数组"><a href="#构造最大前后缀数组" class="headerlink" title="构造最大前后缀数组"></a>构造最大前后缀数组</h4><p>首先构造 presuf 数组，构造的流程如下</p>
 <p>为了方便算法编写，令 presuf[0] = -1 作为边界，最大公共前后缀从 1 下标开始记录。<br>令 j 表示当前指针位置，可以理解为后缀指针，t 表示前缀指针位置。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">t &#x3D; presuf[0] &#x3D; -1</span><br><span class="line">m &#x3D; sp.length()</span><br><span class="line">while j &lt; m-1</span><br><span class="line">    &#x2F;&#x2F; 当前位置前后缀匹配，更新 presuf 数组</span><br><span class="line">    if t &lt; 0 || sp[j] &#x3D;&#x3D; sp[t]</span><br><span class="line">        presuf[++j] &#x3D; ++ t</span><br><span class="line">    &#x2F;&#x2F; 当前不匹配，则应该缩小前缀的范围</span><br><span class="line">    else</span><br><span class="line">        t &#x3D; presuf[t];</span><br></pre></td></tr></table></figure>
-<img src="/2020/03/24/%E7%AE%97%E6%B3%95/kmp%E7%AE%97%E6%B3%95/%E6%9E%84%E9%80%A0%E8%BF%87%E7%A8%8B.png" class="" title="构造过程">
+<p><img src="/2020/03/24/%E7%AE%97%E6%B3%95/kmp%E7%AE%97%E6%B3%95/构造过程.png" alt="构造过程"></p>
 <h4 id="匹配流程"><a href="#匹配流程" class="headerlink" title="匹配流程"></a>匹配流程</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">i &#x3D; 0</span><br><span class="line">j &#x3D; 0</span><br><span class="line">m &#x3D; st.length()</span><br><span class="line">while j &lt; m</span><br><span class="line">    if i &lt; 0 || sp[i] &#x3D;&#x3D; st[i]</span><br><span class="line">        ++i,++j</span><br><span class="line">        if i &#x3D;&#x3D; sp.length()</span><br><span class="line">            &#x2F;&#x2F; 得到结果</span><br><span class="line">    else</span><br><span class="line">        &#x2F;&#x2F; 这一步也很好理解，和构造过程是一样</span><br><span class="line">        i &#x3D; presuf[i]</span><br></pre></td></tr></table></figure>
 <h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>为了便于理解，变量名都是用了更具意义的缩写</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">10005</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">string</span> st = <span class="string">&quot;AAAAAAAAB&quot;</span>;</span><br><span class="line">    <span class="built_in">string</span> sp = <span class="string">&quot;AAAAB&quot;</span>;</span><br><span class="line">    <span class="keyword">int</span> presuf[maxn];</span><br><span class="line">    <span class="built_in">memset</span>(presuf, <span class="number">0</span>, <span class="keyword">sizeof</span>(presuf));</span><br><span class="line">    <span class="comment">// 构造过程</span></span><br><span class="line">    <span class="keyword">int</span> prep = presuf[<span class="number">0</span>] = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">int</span> sufp = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (sufp &lt; sp.size())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (prep &lt; <span class="number">0</span> || sp[prep] == sp[sufp])</span><br><span class="line">        &#123;</span><br><span class="line">            presuf[++sufp] = ++prep;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            prep = presuf[prep];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 匹配过程</span></span><br><span class="line">    <span class="keyword">int</span> stp = <span class="number">0</span>, spp = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> res = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">while</span> (stp &lt; st.size())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (spp &lt; <span class="number">0</span> || st[stp] == sp[spp])</span><br><span class="line">        &#123;</span><br><span class="line">            ++spp, ++stp;</span><br><span class="line">            <span class="keyword">if</span> (spp == sp.length())</span><br><span class="line">            &#123;</span><br><span class="line">                res = stp;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            spp = presuf[spp];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -2182,7 +2139,7 @@
     <content><![CDATA[<p>最后一篇以前写的文章了，</p>
 <p>左偏树是一种实现简单的可并堆，可以在 logn 的复杂度下面完成优先队列的插入，删除，合并操作。</p>
 <p>这就是一颗左偏树啦 蓝色是该节点的 dist</p>
-<img src="/2019/05/11/%E7%AE%97%E6%B3%95/%E5%B7%A6%E5%81%8F%E6%A0%91/%E5%B7%A6%E5%81%8F%E6%A0%91.png" class="" title="左偏树">
+<p><img src="/2019/05/11/%E7%AE%97%E6%B3%95/%E5%B7%A6%E5%81%8F%E6%A0%91/左偏树.png" alt="左偏树"></p>
 <p>结构体定义</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Node</span>&#123;</span></span><br><span class="line">    <span class="keyword">int</span> l,r,d,v;<span class="comment">//左右子树，距离和键值</span></span><br><span class="line">    Node()&#123;</span><br><span class="line">        l=r=v=d=<span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>我们定义左偏树的外界点为，一个左子树为空或者一个右子树为空的结点，结点的 dist 为它到它子树内外节点的最短距离。一个左偏树在满足堆的性质的前提下还应该满足它的右子树的 dist 不大于它的左子树的 dist。由此，我们可以得出其他一些性质。</p>
@@ -2218,7 +2175,7 @@
 <p>在图的遍历中，往往设置了一个标记数组 vis 来记录顶点是否被访问过。但有些时候需要改变 vis 值的意义。令 vis 具有 3 种值并表示 3 种不同含义</p>
 <p>vis = 0,表示该顶点没没有被访问<br>vis = 1,表示该顶点已经被访问，但其子孙后代还没被访问完，也就没从该点返回<br>vis = 2,，表示该顶点已经被访问，其子孙后代也已经访问完，也已经从该顶点返回<br>可以 vis 的 3 种值表示的是一种顺序关系和时间关系</p>
 <p>《算法导论》334 页有这 4 种边的准确定义</p>
-<img src="/2019/05/11/%E7%AE%97%E6%B3%95/%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%9B%BE%E4%B8%AD%E6%89%BE%E7%8E%AF/%E8%BE%B9%E7%9A%84%E5%AE%9A%E4%B9%89.png" class="" title="边的定义">
+<p><img src="/2019/05/11/%E7%AE%97%E6%B3%95/%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%9B%BE%E4%B8%AD%E6%89%BE%E7%8E%AF/边的定义.png" alt="边的定义"></p>
 <p>DFS 过程中，对于一条边 u-&gt;v<br>vis[v] = 0,说明 v 还没被访问，v 是首次被发现，u-&gt;v 是一条树边<br>vis[v] = 1,说明 v 已经被访问，但其子孙后代还没有被访问完（正在访问中），而 u 又指向 v，说明 u 就是 v 的子孙后代，u-&gt;v 是一条后向边，因此后向边又称返祖边，<br>vis[v] = 2,说明 v 已经被访问，其子孙后代也已经全部访问完，u-&gt;v 这条边可能是一条横叉边，或者前向边</p>
 <p>注意：树边，后向边，前向边，都有祖先，后裔的关系，但横叉边没有，u-&gt;v 为横叉边，说明在这棵 DFS 树中，它们不是祖先后裔的关系它们可能是兄弟关系，堂兄弟关系，甚至更远的关系，如果是 dfs 森林的话，u 和 v 甚至可以在不同的树上</p>
 <p>对于无向图而言，只存在树边和返祖边，当发现一条返祖边时，说明找到了环，这时输出所有 vis[i] = 1 的节点即可</p>
@@ -2552,7 +2509,7 @@
 <h3 id="网络命名空间"><a href="#网络命名空间" class="headerlink" title="网络命名空间"></a>网络命名空间</h3><p>有了进程命名空间，不同命名空间中的进程号可以相互隔离，但是网络端口还是共享本地系统的端口。通过网络命名空间，可以实现网络隔离。一个网络命名空间为进程提供了一个完全独立的网络协议栈的视图。包括网络设备接口，IPV4 和 IPV6 协议栈，IP 路由表，防火墙规则，sockets 等。</p>
 <p>docker 采用虚拟网络设备 Virtual Network Device VND 的方式，将不同命名空间的网络设备连接到一起。默认情况下，Docker 在宿主机上创建多个虚拟网桥，如默认的 docker0 网桥，容器中的虚拟网卡通过网桥进行桥接。</p>
 <p>docker network ls 可以查看当前系统中的网桥。</p>
-<img src="/2019/04/05/%E8%BF%90%E7%BB%B4/docker%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/docker%E7%BD%91%E6%A1%A5.png" class="" title="docker网桥">
+<p><img src="/2019/04/05/%E8%BF%90%E7%BB%B4/docker%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/docker网桥.png" alt="docker网桥"></p>
 <p>使用 brctl 工具，可以看到连接到网桥上的虚拟网口信息。每个容器默认分配一个网桥上的虚拟网口，并将 docker0 的 IP 地址设置为默认的网关。容器发起的网络流量通过 宿主机的 iptables 规则进行转发。</p>
 <h4 id="虚拟网卡-veth"><a href="#虚拟网卡-veth" class="headerlink" title="虚拟网卡 veth"></a>虚拟网卡 veth</h4><p>这里参考了这篇文章 <a href="https://www.jianshu.com/p/369e50201bce">Linux 网络命名空间</a>，下面简述一下其中的内容。</p>
 <p>虚拟网卡成对出现，像一个管道的两端，从这个管道一端的 veth 进去的数会从另一端的 veth 出来，可以用 veth 接口把一个网络命名空间连接到外部的默认命名空间或者 global 命名空间，而物理网卡就存在这些命名空间里。</p>
@@ -2560,11 +2517,11 @@
 <p>Linux 中 IP 转发的意思是 Linux 主机存在多个网卡的时候，允许一个网卡的数据包转发到另外一张网卡。</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">iptables -t nat -A POSTROUTING -s 10.1.1.0/255.255.255.0 -o ens160 -j MASQUERADE</span><br></pre></td></tr></table></figure>
 <p>添加了一条规则到 NAT 表的 POSTROUTING 链中，对于源 IP 地址为 10.1.1.0 网段的数据包，用 ens160 网口的 IP 地址替换并发送。这样在容器中就可以访问外部网络了。</p>
-<img src="/2019/04/05/%E8%BF%90%E7%BB%B4/docker%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E6%95%B4%E4%B8%AA%E6%B5%81%E7%A8%8B.png" class="" title="整个流程">
+<p><img src="/2019/04/05/%E8%BF%90%E7%BB%B4/docker%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/整个流程.png" alt="整个流程"></p>
 <h2 id="两个容器为什么能通信"><a href="#两个容器为什么能通信" class="headerlink" title="两个容器为什么能通信"></a>两个容器为什么能通信</h2><p>只要有容器运行，docker0 接口的状态就从 down 变成了 up。</p>
 <p>主机上的 veth 只能和 docker0 通信。容器内的 veth 可以和主机上的配对的 veth 通信。</p>
 <p>veth 成对出现，docker0 是多个容器之间能通信的关键。</p>
-<img src="/2019/04/05/%E8%BF%90%E7%BB%B4/docker%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/docker%E5%AE%B9%E5%99%A8%E9%97%B4%E9%80%9A%E4%BF%A1.png" class="" title="docker容器间通信">
+<p><img src="/2019/04/05/%E8%BF%90%E7%BB%B4/docker%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/docker容器间通信.png" alt="docker容器间通信"></p>
 <h3 id="link"><a href="#link" class="headerlink" title="link"></a>link</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">docker run -d --name=test2 --link test1 busybox /bin/sh -c <span class="string">&quot;while true; do sleep 3600; done&quot;</span></span><br></pre></td></tr></table></figure>
 <p>当于添加了 DNS 解析，同时 link 是单向的。只能在 test2 通过 test1 ping 通 test1。</p>
 <h2 id="none-和-host-网络"><a href="#none-和-host-网络" class="headerlink" title="none 和 host 网络"></a>none 和 host 网络</h2><p>连接到 none 网络</p>
@@ -2748,12 +2705,10 @@
 <li>对模拟信号数字化取样，将抽样信号变为离散时间，离散幅度的数字化信号，编码后称为一个二进制码组输出，这种方式叫做<strong>脉编调制</strong>，是 VCD 和 DVD 的视频编码原理。</li>
 </ul>
 </li>
-<li>常用编码方式<img src="/2019/03/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E7%89%A9%E7%90%86%E5%B1%82/%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F.jpg" class="" title="常用的编码方式">
-<em> <strong>不归零制</strong> 正电平代表 1 复电平代表 0
+<li>常用编码方式<br><img src="/2019/03/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E7%89%A9%E7%90%86%E5%B1%82/编码方式.jpg" alt="常用的编码方式"><br><em> <strong>不归零制</strong> 正电平代表 1 复电平代表 0
 </em> <strong>归零制</strong> 正脉冲代表 1，负脉冲代表 0<br><em> <strong>曼彻斯特编码</strong> 位周期中心的向上跳代表 0，向下跳代表 1，也可以反过来定义
 </em> <strong>差分曼彻斯特编码</strong> 在每一位的中心处都有跳变，位开始边界有跳变代表 0，位开始边界没有跳变代表 1 * 不归零不能从波形本身提取信号时钟频率，这叫做没有自同步能力，而曼彻斯特编码具有自同步能力</li>
-<li>基本的带通调制方法<img src="/2019/03/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E7%89%A9%E7%90%86%E5%B1%82/%E5%B8%A6%E9%80%9A%E8%B0%83%E5%88%B6%E6%96%B9%E6%B3%95.jpg" class="" title="基本的带通调制方法">
-<em> <strong>调幅（AM）</strong> 载波的振幅随着基带数字信号而变化，如 0 或者 1 分别对应无载波或者有载波输出
+<li>基本的带通调制方法<br><img src="/2019/03/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E7%89%A9%E7%90%86%E5%B1%82/带通调制方法.jpg" alt="基本的带通调制方法"><br><em> <strong>调幅（AM）</strong> 载波的振幅随着基带数字信号而变化，如 0 或者 1 分别对应无载波或者有载波输出
 </em> <strong>调频（FM）</strong> 载波的频率随着基带数字信号而变化，如 0 或者 1 分别对应于频率 f1 或者 f2 * <strong>调相（PM）</strong> 载波的初始相位随着基带数字变化而变化，如 0 或者 1 分别对应于相位 0 或者 180 度</li>
 <li>为了达到更高的信息传输速率，必须采用技术上更为复杂的多元制的振幅相位混合调制方法，例如<strong>正交振幅调制 QAM（Quadrature Amplitede Modulation）</strong></li>
 </ul>
@@ -3260,11 +3215,11 @@
 <li>返回 false 不处理</li>
 </ul>
 <h4 id="销毁阶段"><a href="#销毁阶段" class="headerlink" title="销毁阶段"></a>销毁阶段</h4><p>componentWillUnmount<br>在这个生命周期勾子中清除定时器，防止内存泄漏</p>
-<img src="/2020/03/30/react/react%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.png" class="" title="生命周期">
+<p><img src="/2020/03/30/react/react%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/生命周期.png" alt="生命周期"></p>
 <h4 id="react16-3-生命周期的变化"><a href="#react16-3-生命周期的变化" class="headerlink" title="react16.3 生命周期的变化"></a>react16.3 生命周期的变化</h4><p>我看的这个视频时 18 年的，在之后 react 的生命周期有一次大的变动，增加了 getDerivedStateFromProps 和 getSnapshotBeforeUpdate 这两个生命周期函数，同时 componentWillMount 和 componentWillReceiveProps 已经不推荐使用，将在未来的 react 版本中移除</p>
 <p>getDerivedStateFromProps</p>
 <p>这个生命周期会在每次 re-rendering 之前被调用<br><strong>意味着即使你的 props 没有任何变化，而是父 state 发生了变化，导致子组件发生了 re-render，这个生命周期函数依然会被调用</strong></p>
-<img src="/2020/03/30/react/react%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%96%B0.png" class="" title="生命周期新">
+<p><img src="/2020/03/30/react/react%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/生命周期新.png" alt="生命周期新"></p>
 <h3 id="PropTypes-类型检查"><a href="#PropTypes-类型检查" class="headerlink" title="PropTypes 类型检查"></a>PropTypes 类型检查</h3><ul>
 <li>array 数组</li>
 <li>bool 布尔值</li>
@@ -3515,7 +3470,7 @@
 </ul>
 <h3 id="点对点信道的数据链路层"><a href="#点对点信道的数据链路层" class="headerlink" title="点对点信道的数据链路层"></a>点对点信道的数据链路层</h3><ul>
 <li>链路(link)是一条无源的点到点的物理线路段,中间没有任何其他的交换结点。一条链路只是一条通路的一个组成部分。</li>
-<li>数据链路(data link) 除了物理线路外,还必须有通信协议来控制这些数据的传输。若把实现这些协议的硬件和软件加到链路上,就构成了数据链路。现在最常用的方法是使用适配器(即网卡)来实现这些协议的硬件和软件。<img src="/2019/03/27/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82/%E4%BC%A0%E9%80%81%E5%B8%A7.png" class="" title="传送帧"></li>
+<li>数据链路(data link) 除了物理线路外,还必须有通信协议来控制这些数据的传输。若把实现这些协议的硬件和软件加到链路上,就构成了数据链路。现在最常用的方法是使用适配器(即网卡)来实现这些协议的硬件和软件。<br><img src="/2019/03/27/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82/传送帧.png" alt="传送帧"></li>
 <li>点对点通信在数据链路层的主要步骤<br><em> 结点 A 的数据链路层把网络层交下来的 IP 数据报添加首部和尾部封装成帧
 </em> 结点 A 把封装好的帧发给结点 B 的数据链路层 * 若结点 B 的数据链路层收到的帧无差错，则从收到的帧中提取出 IP 数据报交给上面的网络层，否则丢弃该帧<br>数据链路层不考虑物理层之间如何实现比特传输的细节</li>
 </ul>
@@ -3547,8 +3502,7 @@
 <li>在数据后面添加上的冗余码称为帧检验序列 FCS (Frame Check Sequence)。循环冗余检验 CRC 和帧检验序列 FCS 并不等同。CRC 是一种常用的检错方法,而 FCS 是添加在数据后面的冗余码。FCS 可以用 CRC 这种方法得出,但 CRC 并非用来获得 FCS 的唯一方法。</li>
 <li>若得出的余数 R = 0,则判定这个帧没有差错,就接受(accept)。 若余数 R != 0,则判定这个帧有差错,就丢弃。但这种检测方法并不能确定究竟是哪一个或哪几个比特出现了差错。只要经过严格的挑选,并使用位数足够多的除数 P,那么出现检测不到的差错的概率就很小很小。</li>
 </ul>
-<h5 id="汉明码"><a href="#汉明码" class="headerlink" title="汉明码"></a>汉明码</h5><img src="/2019/03/27/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82/%E6%B1%89%E6%98%8E%E7%A0%81%E5%8E%9F%E7%90%86.png" class="" title="汉明码原理">
-<p>汉明码(Hamming Code)编码的关键是使用多余的奇偶校验位来识别一位错误。假设信息码共有 n 位,海明码共有 h 位,那么总共的码长为 n + h 位。为能检测出 n + h 位编码，中其中一位的错误,海明码必须能够表示至少 n + h + 1 种状态,其中 n + h 种表示 n + h 位编码中有一位错误,另外还需要 1 种来表示整个编码正确无误。则海明码的长度需要满足下列关系:</p>
+<h5 id="汉明码"><a href="#汉明码" class="headerlink" title="汉明码"></a>汉明码</h5><p><img src="/2019/03/27/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82/汉明码原理.png" alt="汉明码原理"><br>汉明码(Hamming Code)编码的关键是使用多余的奇偶校验位来识别一位错误。假设信息码共有 n 位,海明码共有 h 位,那么总共的码长为 n + h 位。为能检测出 n + h 位编码，中其中一位的错误,海明码必须能够表示至少 n + h + 1 种状态,其中 n + h 种表示 n + h 位编码中有一位错误,另外还需要 1 种来表示整个编码正确无误。则海明码的长度需要满足下列关系:</p>
 <script type="math/tex; mode=display">2^h >= n + h + 1</script><p>把所有 2 的幂次方的数据位标记为奇偶校验位(编号为 1, 2, 4, 8, 16, 32, 64 等的位置)<br>其他数据位用于待编码数据. (编号为 3, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 17 等的位置)<br>每个奇偶校验位的值代表了码字中部分数据位的奇偶性,其所在位置决定了要校验的比特位。<br>位置 1，校验所有二进制最后一位是 1 的位置<br>位置 2，校验所有二进制倒数第二位是 1 的位置<br>位置 4，校验所有二进制倒数第三位是 1 的位置<br>配偶是该位置的数值加上是其要效验的位置和为偶数，可以用异或运算计算。<br>配奇则正好相反。<br>如何得到是哪一位出错了呢？以配偶方式为例，求冗余码的效验和，假设 分别为 1 1 0 0 。正常效验和应当为 0，为 1 说明该位置效验的比特位有一位出现了错误。因此倒数第一位和倒数第二位为 1 的都为 1 的位置出现了错误，这可以唯一确定一个位置，即数据的第三位。</p>
 <h4 id="可靠传输"><a href="#可靠传输" class="headerlink" title="可靠传输"></a>可靠传输</h4><p>在不可靠的信道上实现可靠的数据传输为上层提供一条可靠的逻辑通道。CRC 循环冗余检测只能保证无比特差错，但是可能会出现帧丢失，帧失序等，无法做到无传输差错。</p>
 <h5 id="停止等待协议"><a href="#停止等待协议" class="headerlink" title="停止等待协议"></a>停止等待协议</h5><ul>
@@ -3671,8 +3625,7 @@
 <li>IEEE 的 802.3 标准</li>
 </ul>
 </li>
-<li>最常用的 MAC 帧是以太网 V2 的格式。<img src="/2019/03/27/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82/%E4%BB%A5%E5%A4%AA%E7%BD%91%E7%9A%84%E5%B8%A7%E6%A0%BC%E5%BC%8F.png" class="" title="以太网的帧格式">
-<em> 源地址和目的地址的地址指的是 MAC 地址
+<li>最常用的 MAC 帧是以太网 V2 的格式。<br><img src="/2019/03/27/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82/以太网的帧格式.png" alt="以太网的帧格式"><br><em> 源地址和目的地址的地址指的是 MAC 地址
 </em> 类型字段用来表示上层协议的类型<br><em> FCS 是帧检验学列
 </em> 如果数据字段的长度小于 46 字节，MAC 子层就会在数据字段的最后加入一个整数字节的填充字段</li>
 <li>因为以太网在传输帧的时候，各个帧之间必须有一定的间隙，因此不需要使用帧结束定界符</li>
@@ -3793,8 +3746,7 @@
 <li>仅在下面的情况下才不使用退避算法:检测到信道是空闲的,并且这个数据帧是要发送的第一个数据帧。<br>除此以外的所有情况,都必须使用退避算法。即:<ul>
 <li>在发送第一个帧之前检测到信道处于忙态。</li>
 <li>在每一次的重传后。</li>
-<li>在每一次的成功发送后。<img src="/2019/03/27/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82/802.11%E9%80%80%E9%81%BF%E6%9C%BA%E5%88%B6.png" class="" title="802.11退避机制">
-</li>
+<li>在每一次的成功发送后。<br><img src="/2019/03/27/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82/802.11退避机制.png" alt="802.11退避机制"></li>
 </ul>
 </li>
 </ul>
@@ -3842,7 +3794,7 @@
 <p>sentry 提供 saas 的服务，同时也提供开源的私有化部署版本，提供相同的服务体验。官方维护的是 docker-compose 的一键式部署方式，但是公司的云服务器都在 k8s 的集群，因此我考虑采用的是基于 k8s 的安装方式。然而公司并没有专业的运维人员，想折腾，只能自己动手了。最为一个一周前对 k8s 还是一窍不通的小白，踩坑是避免不了的，写这篇文章就是记录下踩的那些坑。</p>
 <h2 id="错误方式-rancher-ui-商店方式安装"><a href="#错误方式-rancher-ui-商店方式安装" class="headerlink" title="错误方式 rancher ui 商店方式安装"></a>错误方式 rancher ui 商店方式安装</h2><p>一开始知道可以在 rancher 上安装 sentry，是在 v 站看到的一个回复，说是起个部署 sentry 会方便很多。然后知道了 rancher 的商店里可以找到 sentry，然后一键安装。这里需要开启 rancher 商店的 helm 官方仓库，结果商店死活刷不出来应用列表，后来才知道国内的云主机是无法访问 google 的 helm 仓库的，需要使用国内加速的仓库 <a href="http://mirror.azure.cn/kubernetes/charts。">http://mirror.azure.cn/kubernetes/charts。</a></p>
 <p>换了加速地址后，可以顺利使用 rancher 商店启动应用了，工作负载一堆爆红，web，db和redis都没起来，这是因为没有设置默认存储类，导致 pvc 没有 绑定到 pv。刚一开始我可不知道 pv 和 pvc 的概念，更不用说默认存储类，总之是又百度又google又看官方文档的，算是稍稍搞明白了这块。这个在安装要求里已经说明了，k8s集群应该有一个默认存储类，用来动态分配pv。rancher ui 里像下图一样。</p>
-<img src="/2020/10/27/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/helm%E5%AE%89%E8%A3%85sentry%E8%B8%A9%E5%9D%91/%E9%BB%98%E8%AE%A4%E5%AD%98%E5%82%A8%E7%B1%BB.png" class="" title="默认存储类">
+<p><img src="/2020/10/27/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/helm%E5%AE%89%E8%A3%85sentry%E8%B8%A9%E5%9D%91/默认存储类.png" alt="默认存储类"></p>
 <p>配置好了这个，按理说通过 rancher ui 的商店应该可以正常安装了吧，然而答案是并不能。这时候所有组件都能正常创建，除了一个 pending 的 loadbalance Service，这个我一开始没管它，自己又创建了一个 Ingress 配置，总算是可以访问 sentry 的 web 页面了。但是我按照文档的方法，输入用户名和密码，一直提示登录失败。我重装了几次，一直如此，折腾了几个小时，才发现了原因。</p>
 <p>rancher ui 也是通过 helm 工具安装 chart 的，helm 默认的等待事件是 5分钟，超过了就认为安装失败了。而 sentry 的安装是包含了两个 job 的，db_init 和 user_create。db_init 用时很长，已经超过了5分钟，helm 认为安装失败了，就不继续调用 user_create 的 job了，导致初始用户根本没有被初始化进去。</p>
 <h2 id="正确方式-helm-方式安装"><a href="#正确方式-helm-方式安装" class="headerlink" title="正确方式 helm 方式安装"></a>正确方式 helm 方式安装</h2><p>rancher ui中并没有方式去设置 helm 的等待时间，因此只能采用 helm 的方式进行安装了。这里感谢这位仁兄的文章 <a href="https://www.imooc.com/article/303501">Sentry实时应用错误跟踪系统在Kubernetes中私有化部署</a>，给予了我很大的帮助。</p>
@@ -3940,7 +3892,7 @@
 <p>为什么 UDP 提供了检验和。许多链路层协议，包括流行的以太计算机网协议，也提供了差错检测，其原因是不能保证源和目的之间的所有链路都提供插座检测。这就是说，也许这些链路中的一条可能使用没有差错检测的协议。此外，即使报文段经链路正确地传输，当报文段存储在某台路由器的内存中时，也可能引入比特差错。在既无法确保连链路的可靠性，又无法确保内存中的差错检测的情况下，如果端到端数据传输服务要提供差错检测， UDP 就必须在端到端基础上在运输层提供差错检测。这是 个在系统设计巾被称颂的端到端原则( end - end principle)。</p>
 <p>因为假定 IP 是可以运行在任何第二层协议之上的，运输层提供差错检测作为 种保险措施是非常有用的 虽然 UDP 提供差错检测，但它对差错恢复无能为力。 UDP 的某种实现只是丢弃受损的报文段; 其他实现是将受损的报文段交给应用程序并给出警告。</p>
 <h3 id="可靠数据传输原理"><a href="#可靠数据传输原理" class="headerlink" title="可靠数据传输原理"></a>可靠数据传输原理</h3><p>本节一步步研究一系列协议，逐步构建一个无错、可靠的数据传输协议。</p>
-<h4 id="经完全可靠信道的可靠传输-rdt-1-0"><a href="#经完全可靠信道的可靠传输-rdt-1-0" class="headerlink" title="经完全可靠信道的可靠传输 rdt 1.0"></a>经完全可靠信道的可靠传输 rdt 1.0</h4><p>首先考虑最简单的情况，即底层信道是完全可靠的。<br><img src="/2020/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E4%BC%A0%E8%BE%93%E5%B1%82/rdt1.0.png" class="" title="rdt1.0"></p>
+<h4 id="经完全可靠信道的可靠传输-rdt-1-0"><a href="#经完全可靠信道的可靠传输-rdt-1-0" class="headerlink" title="经完全可靠信道的可靠传输 rdt 1.0"></a>经完全可靠信道的可靠传输 rdt 1.0</h4><p>首先考虑最简单的情况，即底层信道是完全可靠的。<br><img src="/2020/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E4%BC%A0%E8%BE%93%E5%B1%82/rdt1.0.png" alt="rdt1.0"></p>
 <p>在这个简单的协议中，一个单元数据与一个分组没差别。，所有计算机#### 经具有比特差错信道的可靠数据传输 rdt 2.0</p>
 <p>底层信道更为实际的模型是分组中的比特可能受损 在分组的传输、传播或缓存的过程中，这种比特差错通常会出现在网络的物理部件中 我们眼下还将继续假定所有发送的分组(虽然有些比特可能受损)将按其发送的顺序被接收。</p>
 <p>协议使用了<strong>肯定确认</strong>与<strong>否定确认</strong>，这种形式使得接收方可以让发送方知道那些内容被正确接收，哪些内容接收有误并因此需要重复。在计算机网络环境中，基于这种重传机制的可靠传输协议被称为 <strong>自动重传请求（Automatic Repeat reQuest，ARQ）协议</strong>。</p>
@@ -3950,7 +3902,7 @@
 <li>接收方反馈 因为发送方和接收方通常在不同端系统上执行，可能相隔数千英里，发送方要了解接收方情况(此时为分组是再被正确接收)的唯一途径就是让接收方提供明确的反馈信息给发送方</li>
 <li>重传 接收方收到有差错的分组时，发送方将重传该分组文</li>
 </ul>
-<img src="/2020/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E4%BC%A0%E8%BE%93%E5%B1%82/rdt2.0.png" class="" title="rdt2.0">
+<p><img src="/2020/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E4%BC%A0%E8%BE%93%E5%B1%82/rdt2.0.png" alt="rdt2.0"></p>
 <p>目前该协议有一个致命缺陷，没有考虑到 ACK 或者 NAK 分组受损的可能性。</p>
 <p>可以在发送方收到受损的 ACK 或 NAK 分组时，重传当前数据分组，但是这种方法引入了 <strong>冗余分组</strong>，其根本困难在于接收方不知道它上次所发送的 ACK 或者 NAK 是否被发送方正确地收到，因此它无法事先知道接收到的分组是新的还是一次重传。</p>
 <p>解决这个问题的一个简单方法，是在数据分组增加一个新字段，让发送方对其数据分组编号，即将发送数据的分组的序号放在该字段，接收方只需要检查序号即可确定收到的分组是否一次重传。对于停等协议，1 比特序号就足够了，因为它可以让接收方知道发送方是否正在重传前一个发送分组（接收到的分组序号与最近收到的分组序号相同），或是一个新分组（序号变化了）。</p>
@@ -3964,7 +3916,7 @@
 <li>所需序号范围和对缓冲的要求取决于数据传输协议如何处理丢失、损坏和延时过大的分组。解决流水线的差错恢复有两种基本方法：<strong>回退 N 步</strong>和<strong>选择重传</strong></li>
 </ul>
 <h4 id="回退-N-步"><a href="#回退-N-步" class="headerlink" title="回退 N 步"></a>回退 N 步</h4><p>那些已被发送但还未被确认的分组的许可序号范围可以被看成是一个在序号范围内长度为 的窗口 随着协议的运行，该窗口在序号空间向前滑动。因此 N 常被称为窗口长度 (window size) , GBN 协议也常被称为滑动窗口协议。<br>为什么要限制这些被发送的、未被确认的分组的数目为 N 呢？流量控制是对发送发施加限制的原因之一，拥塞控制则是另一个原因。</p>
-<img src="/2020/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E4%BC%A0%E8%BE%93%E5%B1%82/GBN.png" class="" title="GBN">
+<p><img src="/2020/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E4%BC%A0%E8%BE%93%E5%B1%82/GBN.png" alt="GBN"></p>
 ]]></content>
   </entry>
   <entry>
@@ -4108,7 +4060,7 @@
 <figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="comment">// @vue/composition-api/src/apis/watch.ts</span></span><br><span class="line"><span class="keyword">const</span> stop = vm.$watch(getter, callback, &#123;</span><br><span class="line">  immediate: options.immediate,</span><br><span class="line">  deep: deep,</span><br><span class="line">  sync: isSync,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// vue/src/core/instance/state.js</span></span><br><span class="line">Vue.prototype.$watch = <span class="function"><span class="keyword">function</span> (<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">    expOrFn: <span class="built_in">string</span> | <span class="built_in">Function</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">    cb: <span class="built_in">any</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">    options?: <span class="built_in">Object</span></span></span></span><br><span class="line"><span class="function"><span class="params">  </span>): <span class="title">Function</span> </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> vm: Component = <span class="built_in">this</span></span><br><span class="line">    <span class="keyword">if</span> (isPlainObject(cb)) &#123;</span><br><span class="line">      <span class="keyword">return</span> createWatcher(vm, expOrFn, cb, options)</span><br><span class="line">    &#125;</span><br><span class="line">    options = options || &#123;&#125;</span><br><span class="line">    options.user = <span class="literal">true</span></span><br><span class="line">    <span class="keyword">const</span> watcher = <span class="keyword">new</span> Watcher(vm, expOrFn, cb, options)</span><br><span class="line">    <span class="keyword">if</span> (options.immediate) &#123;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        cb.call(vm, watcher.value)</span><br><span class="line">      &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">        handleError(error, vm, <span class="string">`callback for immediate watcher &quot;<span class="subst">$&#123;watcher.expression&#125;</span>&quot;`</span>)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">unwatchFn</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      watcher.teardown()</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// vue/src/core/observer/watcher.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">class</span> Watcher &#123;</span><br><span class="line">  <span class="comment">// ... 省略各种定义</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">constructor</span>(<span class="params"></span></span><br><span class="line"><span class="params">    vm: Component,</span></span><br><span class="line"><span class="params">    expOrFn: <span class="built_in">string</span> | <span class="built_in">Function</span>,</span></span><br><span class="line"><span class="params">    cb: <span class="built_in">Function</span>,</span></span><br><span class="line"><span class="params">    options?: ?<span class="built_in">Object</span>,</span></span><br><span class="line"><span class="params">    isRenderWatcher?: <span class="built_in">boolean</span></span></span><br><span class="line"><span class="params">  </span>) &#123;</span><br><span class="line">    <span class="comment">// 省略无关内容</span></span><br><span class="line">    <span class="comment">// parse expression for getter</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> expOrFn === <span class="string">&quot;function&quot;</span>) &#123;</span><br><span class="line">      <span class="built_in">this</span>.getter = expOrFn;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="built_in">this</span>.getter = parsePath(expOrFn);</span><br><span class="line">      <span class="keyword">if</span> (!<span class="built_in">this</span>.getter) &#123;</span><br><span class="line">        <span class="built_in">this</span>.getter = noop;</span><br><span class="line">        <span class="comment">// 开发环境下警告 省略</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">this</span>.value = <span class="built_in">this</span>.lazy ? <span class="literal">undefined</span> : <span class="built_in">this</span>.get();</span><br><span class="line">  &#125;</span><br><span class="line">  get() &#123;</span><br><span class="line">    pushTarget(<span class="built_in">this</span>);</span><br><span class="line">    <span class="keyword">let</span> value;</span><br><span class="line">    <span class="keyword">const</span> vm = <span class="built_in">this</span>.vm;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      value = <span class="built_in">this</span>.getter.call(vm, vm);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="built_in">this</span>.user) &#123;</span><br><span class="line">        handleError(e, vm, <span class="string">`getter for watcher &quot;<span class="subst">$&#123;<span class="built_in">this</span>.expression&#125;</span>&quot;`</span>);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">throw</span> e;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">      <span class="comment">// &quot;touch&quot; every property so they are all tracked as</span></span><br><span class="line">      <span class="comment">// dependencies for deep watching</span></span><br><span class="line">      <span class="keyword">if</span> (<span class="built_in">this</span>.deep) &#123;</span><br><span class="line">        traverse(value);</span><br><span class="line">      &#125;</span><br><span class="line">      popTarget();</span><br><span class="line">      <span class="built_in">this</span>.cleanupDeps();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> value;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>可以看到 $watch 要求传入 getter 或者一个路径字符串，这个 getter 是要在进行依赖收集的时候被调用的<br>composition-api 中的 watch 使用了 vue2 自身的 watch 机制</p>
 <p>至于 watch 的响应式原理，大致如下吧</p>
-<img src="/2021/01/31/vue/vue-composition-api%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E4%B9%8Bwatch%E4%B8%8Ecomputed/watch.png" class="" title="watch">
+<p><img src="/2021/01/31/vue/vue-composition-api%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E4%B9%8Bwatch%E4%B8%8Ecomputed/watch.png" alt="watch"></p>
 <p>通过看源码也搞清了一个点，这里的 childObj 和深度监听一点关系都没有</p>
 <figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="comment">// vue/src/core/observer/index.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">defineReactive</span>(<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">  obj: <span class="built_in">Object</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">  key: <span class="built_in">string</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">  val: <span class="built_in">any</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">  customSetter?: ?<span class="built_in">Function</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">  shallow?: <span class="built_in">boolean</span></span></span></span><br><span class="line"><span class="function"><span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 无关代码 略过</span></span><br><span class="line">  <span class="keyword">let</span> childOb = !shallow &amp;&amp; observe(val);</span><br><span class="line">  <span class="built_in">Object</span>.defineProperty(obj, key, &#123;</span><br><span class="line">    enumerable: <span class="literal">true</span>,</span><br><span class="line">    configurable: <span class="literal">true</span>,</span><br><span class="line">    get: <span class="function"><span class="keyword">function</span> <span class="title">reactiveGetter</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="keyword">const</span> value = getter ? getter.call(obj) : val;</span><br><span class="line">      <span class="keyword">if</span> (Dep.target) &#123;</span><br><span class="line">        dep.depend();</span><br><span class="line">        <span class="keyword">if</span> (childOb) &#123;</span><br><span class="line">          childOb.dep.depend();</span><br><span class="line">          <span class="keyword">if</span> (<span class="built_in">Array</span>.isArray(value)) &#123;</span><br><span class="line">            dependArray(value);</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> value;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// 无关代码 略过</span></span><br></pre></td></tr></table></figure>
 <p>它的作用是：每个 Observer 对象都有一个 dep 属性，如果使用 Vue.$set 给对象动态添加新属性，会给赋予该属性响应式并调用该对象的 dep 的 notify</p>
@@ -4131,6 +4083,48 @@
       </categories>
       <tags>
         <tag>vue</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>再谈js作用域</title>
+    <url>/2020/07/22/javascript/%E5%86%8D%E8%B0%88js%E4%BD%9C%E7%94%A8%E5%9F%9F/</url>
+    <content><![CDATA[<h2 id="缘起"><a href="#缘起" class="headerlink" title="缘起"></a>缘起</h2><p>写这篇文章的契机，是最近有看 react 源码的想法。先是看了这篇文章 <a href="https://juejin.im/post/5afe3735518825426539afce">如何阅读大型前端开源项目的源码</a> 学习了一波姿势，然后开始下载 react 工程鼓捣起来。源码打断点，构建 umd 代码，然后看函数调用栈，执行到这一步，看到了这个页面，发现都是我不熟悉的东西。比如这个 Scope，虽然大体知道是作用域，但是具体是按照什么规则得到的，就不是很清楚了。所以决定先搞清一下 js 的作用域问题。</p>
+<p><img src="/2020/07/22/javascript/%E5%86%8D%E8%B0%88js%E4%BD%9C%E7%94%A8%E5%9F%9F/这都啥玩意啊.png" alt="这都啥玩意啊"></p>
+<p>js 的作用域，是一个老生常谈的问题了，也是面试常考的内容。以前也通过看 js 高程，你不知道的 js 这些书对此有过据较为深入的学习，刷一些面试题的时候也背了一些“标准答案”，但是时间一长，也忘掉大半了。现在要我真说道说道，大概是说不出个所以然来的。今天搜索相关信息时看到这个博客的一一系列博文讲的真不错 <a href="https://blog.csdn.net/q1056843325/category_9267514.html">https://blog.csdn.net/q1056843325/category_9267514.html</a> ，自己对这一块其实挺欠缺的。纸上得来终觉浅，觉知此事要躬行。这次主要借鉴这位博主的文章内容，借助 Chrome 的开发者工具好好探究一下这个问题。</p>
+<h2 id="探究"><a href="#探究" class="headerlink" title="探究"></a>探究</h2><h3 id="预编译，变量提升与-let，const"><a href="#预编译，变量提升与-let，const" class="headerlink" title="预编译，变量提升与 let，const"></a>预编译，变量提升与 let，const</h3><p>脚本执行时，js 引擎会做下面三件事。</p>
+<ol>
+<li>语法分析 引擎检查代码是否包含低级语法错误</li>
+<li>预编译 在内存中开辟一些空间，存放变量与函数</li>
+<li>解释执行</li>
+</ol>
+<p>语法分析很简单，就是引擎检查你的代码有没有什么低级的语法错误<br>解释执行顾名思义便是执行代码了<br>预编译简单理解就是在内存中开辟一些空间，存放一些变量与函数</p>
+<h4 id="预编译的发生时间"><a href="#预编译的发生时间" class="headerlink" title="预编译的发生时间"></a>预编译的发生时间</h4><p>我之前也以为预编译主要就是做了变量提升这件工作，也就是在脚本解释执行前执行一次。但实际上，在函数执行前都会进行预编译。</p>
+<p>先看一下我之前理解的预编译，在 v8 引擎中时怎么做的。</p>
+<p><img src="/2020/07/22/javascript/%E5%86%8D%E8%B0%88js%E4%BD%9C%E7%94%A8%E5%9F%9F/预编译1.png" alt="预编译1"></p>
+<p>在脚本第一行执行前插入了 debugger 语句，这个时候预编译已经完成。我们看到 Scope 的 Global 作用域（浏览器中的 window 对象）中已经有了以下的属性，符合我们的认知，对于 let 声明的属性，预编译的时候是没有处理的。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  a:<span class="literal">undefined</span>,</span><br><span class="line">  b:ƒ b(y),</span><br><span class="line">  c: <span class="literal">undefined</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后继续执行，直到执行完了，我们看到 Scope 中多了一个 Script 的标签，其中保存了 aa 的值。这个按我的理解，也可以把它当作全局作用域，与 Global 不同的是，你没法在 window 对象上访问它。</p>
+<p><img src="/2020/07/22/javascript/%E5%86%8D%E8%B0%88js%E4%BD%9C%E7%94%A8%E5%9F%9F/预编译2.png" alt="预编译2"></p>
+<p>接下来就要执行函数了，在此之前，需要插入一点另外的知识</p>
+<p><strong>函数的 <code>[[Scope]]</code> 属性</strong><br>函数是特殊的可执行对象。既然是对象，就可以拥有属性。函数中存在这一个内部属性<code>[[Scope]]</code>（我们不能使用，供 js 引擎使用）函数被创建时，这个内部属性就会包含函数被创建的作用域中对象的集合。这个集合呈链式链接，被称为函数的作用域链。按照我的理解，这和词法作用域是一个概念。这个 <code>[[Scope]]</code>是会随着代码执行动态变化的。在这个例子中，b 函数的 <code>[[Scope]]</code> 一开始是没有 Script 的，在 let 声明执行后，Script 就被添加上了。</p>
+<p><strong>函数的执行环境</strong><br>在函数执行时，会创建一个叫做执行环境/执行上下文（execution context）的内部对象，它定义了一个函数执行时的环境。函数每次执行时的执行环境独一无二，多次调用函数就多次创建执行环境，并且函数执行完毕后，执行环境就会被销毁，执行环境有自己的作用域链，用于解析标识符。</p>
+<p><code>[[Scope]]</code>和执行期上下文虽然保存的都是作用域链，但不是同一个东西。<code>[[Scope]]</code>属性是函数创建时产生的，会一直存在,而执行上下文在函数执行时产生，函数执行结束便会销毁。</p>
+<p><strong>预编译发生在每次函数执行前这个创建执行上下文的过程</strong><br>预编译生成了下图中的 Local 作用域。而 Script 和 Global 作用域，则是函数属性 <code>[[Scope]]</code>的拷贝。<br><img src="/2020/07/22/javascript/%E5%86%8D%E8%B0%88js%E4%BD%9C%E7%94%A8%E5%9F%9F/预编译3.png" alt="预编译3"></p>
+<p>这个博主的文章，里面多次提到了 AO 活动对象的概念，实际上这是 ES3 的说法了，还是以开发者工具的展现为准，这样更好理解一点。<br>至此，关于预编译的问题解决。</p>
+<p><strong>性能优化</strong></p>
+<p>js 引擎查找作用域链是为了解析标识符，变量在执行环境作用域链的位置越深，读写速度就越慢，因此应该多用局部变量（缓存）。</p>
+<h3 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h3><p>以前看过这样一个对于闭包的解释。当在一个函数中返回一个函数的时候，这个被返回的时候就可以保有当前函数作用域的变量的引用，这就形成了闭包。</p>
+<p>但这样的理解是不充分的。实际上，只要是在函数的作用域内定义了函数，这个被定义的函数就具有闭包作用域。</p>
+<p><img src="/2020/07/22/javascript/%E5%86%8D%E8%B0%88js%E4%BD%9C%E7%94%A8%E5%9F%9F/闭包1.png" alt="闭包1"></p>
+<p>因此闭包的一大用途，就是实现私有变量。我们知道函数如果返回一个对象，在对它进行构造调用时，结果返回的就是该对象。不过使用这种方式，this 赋值的属性和原型绑定就失效了。</p>
+<p><img src="/2020/07/22/javascript/%E5%86%8D%E8%B0%88js%E4%BD%9C%E7%94%A8%E5%9F%9F/闭包2.png" alt="闭包2"></p>
+<p>可以看到，当执行以这种方式返回的函数时，可以通过闭包的方式访问执行构造调用时的 Local 作用域。<br>再回想一下之前说过的，函数每次执行时的执行环境独一无二，多次调用函数就多次创建执行环境，和 settimeout 打印的经典问题，顿时感觉豁然开朗了啊。</p>
+]]></content>
+      <categories>
+        <category>javascript</category>
+      </categories>
+      <tags>
+        <tag>javascript</tag>
       </tags>
   </entry>
 </search>

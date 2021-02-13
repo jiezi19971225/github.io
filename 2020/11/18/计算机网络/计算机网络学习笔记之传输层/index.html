@@ -32,7 +32,7 @@
 <meta property="og:image" content="http://www.jiezi19971225.cn/2020/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E4%BC%A0%E8%BE%93%E5%B1%82/rdt2.0.png">
 <meta property="og:image" content="http://www.jiezi19971225.cn/2020/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E4%BC%A0%E8%BE%93%E5%B1%82/GBN.png">
 <meta property="article:published_time" content="2020-11-18T05:37:14.000Z">
-<meta property="article:modified_time" content="2021-01-08T03:51:45.751Z">
+<meta property="article:modified_time" content="2021-02-13T08:28:20.035Z">
 <meta property="article:author" content="jiezi19971225">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://www.jiezi19971225.cn/2020/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E4%BC%A0%E8%BE%93%E5%B1%82/rdt1.0.png">
@@ -201,7 +201,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-08 11:51:45" itemprop="dateModified" datetime="2021-01-08T11:51:45+08:00">2021-01-08</time>
+                <time title="修改时间：2021-02-13 16:28:20" itemprop="dateModified" datetime="2021-02-13T16:28:20+08:00">2021-02-13</time>
               </span>
 
           
@@ -255,7 +255,7 @@
 <p>为什么 UDP 提供了检验和。许多链路层协议，包括流行的以太计算机网协议，也提供了差错检测，其原因是不能保证源和目的之间的所有链路都提供插座检测。这就是说，也许这些链路中的一条可能使用没有差错检测的协议。此外，即使报文段经链路正确地传输，当报文段存储在某台路由器的内存中时，也可能引入比特差错。在既无法确保连链路的可靠性，又无法确保内存中的差错检测的情况下，如果端到端数据传输服务要提供差错检测， UDP 就必须在端到端基础上在运输层提供差错检测。这是 个在系统设计巾被称颂的端到端原则( end - end principle)。</p>
 <p>因为假定 IP 是可以运行在任何第二层协议之上的，运输层提供差错检测作为 种保险措施是非常有用的 虽然 UDP 提供差错检测，但它对差错恢复无能为力。 UDP 的某种实现只是丢弃受损的报文段; 其他实现是将受损的报文段交给应用程序并给出警告。</p>
 <h3 id="可靠数据传输原理"><a href="#可靠数据传输原理" class="headerlink" title="可靠数据传输原理"></a>可靠数据传输原理</h3><p>本节一步步研究一系列协议，逐步构建一个无错、可靠的数据传输协议。</p>
-<h4 id="经完全可靠信道的可靠传输-rdt-1-0"><a href="#经完全可靠信道的可靠传输-rdt-1-0" class="headerlink" title="经完全可靠信道的可靠传输 rdt 1.0"></a>经完全可靠信道的可靠传输 rdt 1.0</h4><p>首先考虑最简单的情况，即底层信道是完全可靠的。<br><img src="/2020/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E4%BC%A0%E8%BE%93%E5%B1%82/rdt1.0.png" class="" title="rdt1.0"></p>
+<h4 id="经完全可靠信道的可靠传输-rdt-1-0"><a href="#经完全可靠信道的可靠传输-rdt-1-0" class="headerlink" title="经完全可靠信道的可靠传输 rdt 1.0"></a>经完全可靠信道的可靠传输 rdt 1.0</h4><p>首先考虑最简单的情况，即底层信道是完全可靠的。<br><img src="/2020/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E4%BC%A0%E8%BE%93%E5%B1%82/rdt1.0.png" alt="rdt1.0"></p>
 <p>在这个简单的协议中，一个单元数据与一个分组没差别。，所有计算机#### 经具有比特差错信道的可靠数据传输 rdt 2.0</p>
 <p>底层信道更为实际的模型是分组中的比特可能受损 在分组的传输、传播或缓存的过程中，这种比特差错通常会出现在网络的物理部件中 我们眼下还将继续假定所有发送的分组(虽然有些比特可能受损)将按其发送的顺序被接收。</p>
 <p>协议使用了<strong>肯定确认</strong>与<strong>否定确认</strong>，这种形式使得接收方可以让发送方知道那些内容被正确接收，哪些内容接收有误并因此需要重复。在计算机网络环境中，基于这种重传机制的可靠传输协议被称为 <strong>自动重传请求（Automatic Repeat reQuest，ARQ）协议</strong>。</p>
@@ -265,7 +265,7 @@
 <li>接收方反馈 因为发送方和接收方通常在不同端系统上执行，可能相隔数千英里，发送方要了解接收方情况(此时为分组是再被正确接收)的唯一途径就是让接收方提供明确的反馈信息给发送方</li>
 <li>重传 接收方收到有差错的分组时，发送方将重传该分组文</li>
 </ul>
-<img src="/2020/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E4%BC%A0%E8%BE%93%E5%B1%82/rdt2.0.png" class="" title="rdt2.0">
+<p><img src="/2020/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E4%BC%A0%E8%BE%93%E5%B1%82/rdt2.0.png" alt="rdt2.0"></p>
 <p>目前该协议有一个致命缺陷，没有考虑到 ACK 或者 NAK 分组受损的可能性。</p>
 <p>可以在发送方收到受损的 ACK 或 NAK 分组时，重传当前数据分组，但是这种方法引入了 <strong>冗余分组</strong>，其根本困难在于接收方不知道它上次所发送的 ACK 或者 NAK 是否被发送方正确地收到，因此它无法事先知道接收到的分组是新的还是一次重传。</p>
 <p>解决这个问题的一个简单方法，是在数据分组增加一个新字段，让发送方对其数据分组编号，即将发送数据的分组的序号放在该字段，接收方只需要检查序号即可确定收到的分组是否一次重传。对于停等协议，1 比特序号就足够了，因为它可以让接收方知道发送方是否正在重传前一个发送分组（接收到的分组序号与最近收到的分组序号相同），或是一个新分组（序号变化了）。</p>
@@ -279,7 +279,7 @@
 <li>所需序号范围和对缓冲的要求取决于数据传输协议如何处理丢失、损坏和延时过大的分组。解决流水线的差错恢复有两种基本方法：<strong>回退 N 步</strong>和<strong>选择重传</strong></li>
 </ul>
 <h4 id="回退-N-步"><a href="#回退-N-步" class="headerlink" title="回退 N 步"></a>回退 N 步</h4><p>那些已被发送但还未被确认的分组的许可序号范围可以被看成是一个在序号范围内长度为 的窗口 随着协议的运行，该窗口在序号空间向前滑动。因此 N 常被称为窗口长度 (window size) , GBN 协议也常被称为滑动窗口协议。<br>为什么要限制这些被发送的、未被确认的分组的数目为 N 呢？流量控制是对发送发施加限制的原因之一，拥塞控制则是另一个原因。</p>
-<img src="/2020/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E4%BC%A0%E8%BE%93%E5%B1%82/GBN.png" class="" title="GBN">
+<p><img src="/2020/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E4%BC%A0%E8%BE%93%E5%B1%82/GBN.png" alt="GBN"></p>
 
     </div>
 

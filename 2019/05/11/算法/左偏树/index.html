@@ -28,13 +28,13 @@
 <meta property="og:site_name" content="Jiez19971225‘s Blog">
 <meta property="og:description" content="最后一篇以前写的文章了， 左偏树是一种实现简单的可并堆，可以在 logn 的复杂度下面完成优先队列的插入，删除，合并操作。 这就是一颗左偏树啦 蓝色是该节点的 dist  结构体定义 123456struct Node&amp;#123;    int l,r,d,v;&#x2F;&#x2F;左右子树，距离和键值    Node()&amp;#123;        l&#x3D;r&#x3D;v&#x3D;d&#x3D;0;    &amp;#125;&amp;#125; 我们定义左偏">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://www.jiezi19971225.cn/2019/05/11/%E7%AE%97%E6%B3%95/%E5%B7%A6%E5%81%8F%E6%A0%91/%E5%B7%A6%E5%81%8F%E6%A0%91.png">
+<meta property="og:image" content="http://www.jiezi19971225.cn/2019/05/11/%E7%AE%97%E6%B3%95/%E5%B7%A6%E5%81%8F%E6%A0%91/左偏树.png">
 <meta property="article:published_time" content="2019-05-11T10:46:05.000Z">
-<meta property="article:modified_time" content="2020-10-01T11:48:05.330Z">
+<meta property="article:modified_time" content="2021-02-13T08:23:42.267Z">
 <meta property="article:author" content="jiezi19971225">
 <meta property="article:tag" content="左偏树">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://www.jiezi19971225.cn/2019/05/11/%E7%AE%97%E6%B3%95/%E5%B7%A6%E5%81%8F%E6%A0%91/%E5%B7%A6%E5%81%8F%E6%A0%91.png">
+<meta name="twitter:image" content="http://www.jiezi19971225.cn/2019/05/11/%E7%AE%97%E6%B3%95/%E5%B7%A6%E5%81%8F%E6%A0%91/左偏树.png">
 
 <link rel="canonical" href="http://www.jiezi19971225.cn/2019/05/11/%E7%AE%97%E6%B3%95/%E5%B7%A6%E5%81%8F%E6%A0%91/">
 
@@ -200,7 +200,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-01 19:48:05" itemprop="dateModified" datetime="2020-10-01T19:48:05+08:00">2020-10-01</time>
+                <time title="修改时间：2021-02-13 16:23:42" itemprop="dateModified" datetime="2021-02-13T16:23:42+08:00">2021-02-13</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -246,7 +246,7 @@
         <p>最后一篇以前写的文章了，</p>
 <p>左偏树是一种实现简单的可并堆，可以在 logn 的复杂度下面完成优先队列的插入，删除，合并操作。</p>
 <p>这就是一颗左偏树啦 蓝色是该节点的 dist</p>
-<img src="/2019/05/11/%E7%AE%97%E6%B3%95/%E5%B7%A6%E5%81%8F%E6%A0%91/%E5%B7%A6%E5%81%8F%E6%A0%91.png" class="" title="左偏树">
+<p><img src="/2019/05/11/%E7%AE%97%E6%B3%95/%E5%B7%A6%E5%81%8F%E6%A0%91/左偏树.png" alt="左偏树"></p>
 <p>结构体定义</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Node</span>&#123;</span></span><br><span class="line">    <span class="keyword">int</span> l,r,d,v;<span class="comment">//左右子树，距离和键值</span></span><br><span class="line">    Node()&#123;</span><br><span class="line">        l=r=v=d=<span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>我们定义左偏树的外界点为，一个左子树为空或者一个右子树为空的结点，结点的 dist 为它到它子树内外节点的最短距离。一个左偏树在满足堆的性质的前提下还应该满足它的右子树的 dist 不大于它的左子树的 dist。由此，我们可以得出其他一些性质。</p>

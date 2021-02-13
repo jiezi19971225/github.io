@@ -28,13 +28,13 @@
 <meta property="og:site_name" content="Jiez19971225‘s Blog">
 <meta property="og:description" content="对于有向图而言 可以使用拓扑排序的方式找出图中的环 1234567891011121314151617181920212223242526272829303132333435363738394041424344#include&lt;bits&#x2F;stdc++.h&gt;using namespace std;const int maxn &#x3D; 1e5+7;int n;int du[maxn];&#x2F;&#x2F;入度">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://www.jiezi19971225.cn/2019/05/11/%E7%AE%97%E6%B3%95/%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%9B%BE%E4%B8%AD%E6%89%BE%E7%8E%AF/%E8%BE%B9%E7%9A%84%E5%AE%9A%E4%B9%89.png">
+<meta property="og:image" content="http://www.jiezi19971225.cn/2019/05/11/%E7%AE%97%E6%B3%95/%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%9B%BE%E4%B8%AD%E6%89%BE%E7%8E%AF/边的定义.png">
 <meta property="article:published_time" content="2019-05-11T10:35:20.000Z">
-<meta property="article:modified_time" content="2020-10-01T11:48:01.372Z">
+<meta property="article:modified_time" content="2021-02-13T08:23:42.265Z">
 <meta property="article:author" content="jiezi19971225">
 <meta property="article:tag" content="图论">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://www.jiezi19971225.cn/2019/05/11/%E7%AE%97%E6%B3%95/%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%9B%BE%E4%B8%AD%E6%89%BE%E7%8E%AF/%E8%BE%B9%E7%9A%84%E5%AE%9A%E4%B9%89.png">
+<meta name="twitter:image" content="http://www.jiezi19971225.cn/2019/05/11/%E7%AE%97%E6%B3%95/%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%9B%BE%E4%B8%AD%E6%89%BE%E7%8E%AF/边的定义.png">
 
 <link rel="canonical" href="http://www.jiezi19971225.cn/2019/05/11/%E7%AE%97%E6%B3%95/%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%9B%BE%E4%B8%AD%E6%89%BE%E7%8E%AF/">
 
@@ -200,7 +200,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-01 19:48:01" itemprop="dateModified" datetime="2020-10-01T19:48:01+08:00">2020-10-01</time>
+                <time title="修改时间：2021-02-13 16:23:42" itemprop="dateModified" datetime="2021-02-13T16:23:42+08:00">2021-02-13</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -254,7 +254,7 @@
 <p>在图的遍历中，往往设置了一个标记数组 vis 来记录顶点是否被访问过。但有些时候需要改变 vis 值的意义。令 vis 具有 3 种值并表示 3 种不同含义</p>
 <p>vis = 0,表示该顶点没没有被访问<br>vis = 1,表示该顶点已经被访问，但其子孙后代还没被访问完，也就没从该点返回<br>vis = 2,，表示该顶点已经被访问，其子孙后代也已经访问完，也已经从该顶点返回<br>可以 vis 的 3 种值表示的是一种顺序关系和时间关系</p>
 <p>《算法导论》334 页有这 4 种边的准确定义</p>
-<img src="/2019/05/11/%E7%AE%97%E6%B3%95/%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%9B%BE%E4%B8%AD%E6%89%BE%E7%8E%AF/%E8%BE%B9%E7%9A%84%E5%AE%9A%E4%B9%89.png" class="" title="边的定义">
+<p><img src="/2019/05/11/%E7%AE%97%E6%B3%95/%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%9B%BE%E4%B8%AD%E6%89%BE%E7%8E%AF/边的定义.png" alt="边的定义"></p>
 <p>DFS 过程中，对于一条边 u-&gt;v<br>vis[v] = 0,说明 v 还没被访问，v 是首次被发现，u-&gt;v 是一条树边<br>vis[v] = 1,说明 v 已经被访问，但其子孙后代还没有被访问完（正在访问中），而 u 又指向 v，说明 u 就是 v 的子孙后代，u-&gt;v 是一条后向边，因此后向边又称返祖边，<br>vis[v] = 2,说明 v 已经被访问，其子孙后代也已经全部访问完，u-&gt;v 这条边可能是一条横叉边，或者前向边</p>
 <p>注意：树边，后向边，前向边，都有祖先，后裔的关系，但横叉边没有，u-&gt;v 为横叉边，说明在这棵 DFS 树中，它们不是祖先后裔的关系它们可能是兄弟关系，堂兄弟关系，甚至更远的关系，如果是 dfs 森林的话，u 和 v 甚至可以在不同的树上</p>
 <p>对于无向图而言，只存在树边和返祖边，当发现一条返祖边时，说明找到了环，这时输出所有 vis[i] = 1 的节点即可</p>

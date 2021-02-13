@@ -28,19 +28,19 @@
 <meta property="og:site_name" content="Jiez19971225‘s Blog">
 <meta property="og:description" content="正常控制流正常控制流包含两种顺序  按照指令存放的顺序执行，新的 PC 数值为当前指令地址加上指令长度 跳转到由于转移类指令指出的转移目标地址处执行，新的 PC 数值为转移目标地址  进程与进程上下文的切换进程的概念进程是资源分配的最小单位，每个应用程序在运行时均有自己的存储空间，用来存储自己的程序代码和数据，包括只读区（代码和只读数据），可读可写数据区（初始化数据和未初始化数据），动态的堆区和">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://www.jiezi19971225.cn/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE.png">
-<meta property="og:image" content="http://www.jiezi19971225.cn/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%A4%9A%E4%B8%AA%E9%80%BB%E8%BE%91%E6%8E%A7%E5%88%B6%E6%B5%81.png">
-<meta property="og:image" content="http://www.jiezi19971225.cn/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%AD%98%E5%82%A8%E6%98%A0%E5%83%8F.png">
-<meta property="og:image" content="http://www.jiezi19971225.cn/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E8%99%9A%E6%8B%9F%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%E6%98%A0%E5%83%8F.png">
-<meta property="og:image" content="http://www.jiezi19971225.cn/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%AD%E6%96%AD%E5%A4%84%E7%90%86%E8%BF%87%E7%A8%8B.png">
-<meta property="og:image" content="http://www.jiezi19971225.cn/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%A4%96%E9%83%A8%E4%B8%AD%E6%96%AD%E7%9A%84%E5%A4%84%E7%90%86%E8%BF%87%E7%A8%8B.png">
+<meta property="og:image" content="http://www.jiezi19971225.cn/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/思维导图.png">
+<meta property="og:image" content="http://www.jiezi19971225.cn/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/多个逻辑控制流.png">
+<meta property="og:image" content="http://www.jiezi19971225.cn/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/进程的存储映像.png">
+<meta property="og:image" content="http://www.jiezi19971225.cn/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/虚拟地址空间映像.png">
+<meta property="og:image" content="http://www.jiezi19971225.cn/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/中断处理过程.png">
+<meta property="og:image" content="http://www.jiezi19971225.cn/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/外部中断的处理过程.png">
 <meta property="article:published_time" content="2020-03-21T14:04:59.000Z">
-<meta property="article:modified_time" content="2020-10-01T11:45:22.047Z">
+<meta property="article:modified_time" content="2021-02-13T08:28:20.031Z">
 <meta property="article:author" content="jiezi19971225">
 <meta property="article:tag" content="进程">
 <meta property="article:tag" content="异常和中断">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://www.jiezi19971225.cn/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE.png">
+<meta name="twitter:image" content="http://www.jiezi19971225.cn/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/思维导图.png">
 
 <link rel="canonical" href="http://www.jiezi19971225.cn/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
 
@@ -206,7 +206,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-01 19:45:22" itemprop="dateModified" datetime="2020-10-01T19:45:22+08:00">2020-10-01</time>
+                <time title="修改时间：2021-02-13 16:28:20" itemprop="dateModified" datetime="2021-02-13T16:28:20+08:00">2021-02-13</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -249,7 +249,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <img src="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE.png" class="" title="思维导图">
+        <p><img src="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/思维导图.png" alt="思维导图"></p>
 <h2 id="正常控制流"><a href="#正常控制流" class="headerlink" title="正常控制流"></a>正常控制流</h2><p>正常控制流包含两种顺序</p>
 <ul>
 <li>按照指令存放的顺序执行，新的 PC 数值为当前指令地址加上指令长度</li>
@@ -259,7 +259,7 @@
 <p>进程的引入为程序提供了以下两方面的抽象。一个独立的逻辑控制流和一个私有的虚拟内存地址。每个进程拥有一个独立的逻辑，使得程序员以为程序似在执行过程中独占处理器。一个私有的虚拟地址空间，使得程序员以为程序在执行过程中独占存储器。</p>
 <p>为了实现以上两方面的抽象，操作系统必须提供一整套管理机制，包括处理器调度、进程上下文切换、虚拟存储管理等。</p>
 <h3 id="逻辑控制流"><a href="#逻辑控制流" class="headerlink" title="逻辑控制流"></a>逻辑控制流</h3><p>一个可执行目标文件被加载并启动执行后，就成为一个进程。他们代码段中的每一条指令都有一个确定的地址，在这些指令的执行过程中，会形成一个指令执行的地址序列，对于确定的输入数据，其指令的地址序列也是确定的。这个确定的指令执行地址序列被称为进程的<strong>逻辑控制流</strong>。</p>
-<p>对于一个具有单核处理器的系统，如果有多个进程运行，这些进程会轮流使用处理器，处理器的<strong>物理控制流</strong>是由多个逻辑控制流组成。<br><img src="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%A4%9A%E4%B8%AA%E9%80%BB%E8%BE%91%E6%8E%A7%E5%88%B6%E6%B5%81.png" class="" title="多个逻辑控制流"></p>
+<p>对于一个具有单核处理器的系统，如果有多个进程运行，这些进程会轮流使用处理器，处理器的<strong>物理控制流</strong>是由多个逻辑控制流组成。<br><img src="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/多个逻辑控制流.png" alt="多个逻辑控制流"></p>
 <p>图中可以看出有些进程的逻辑控制流在时间上有交错，通常把这种不同进程的逻辑控制流在时间上交错或者重叠称为<strong>并发</strong>。而<strong>并行</strong>则是并发执行的一个特例，我们称两个进程是并行的，是指他们并发的运行在不同的处理器或者处理器核中。</p>
 <p>连续执行同一个进程的时间段称为时间片，每个时间片结束时，通过进程的上下文切换，换一个新的进程到处理器上执行，开始一个新的时间片，这个过程称为<strong>时间片轮转处理器调度</strong>。</p>
 <h3 id="进程的上下文切换"><a href="#进程的上下文切换" class="headerlink" title="进程的上下文切换"></a>进程的上下文切换</h3><p>实现不同进程中指令交替执行的机制称为<strong>进程的上下文切换</strong>。</p>
@@ -269,7 +269,7 @@
 <li>进程表示信息，进程现场信息，进程控制信息和系统内核堆栈组成的<strong>内核空间信息</strong>被称为<strong>系统级上下文</strong>。</li>
 <li>处理器中各个寄存器的内存被称为<strong>寄存器上下文</strong>。</li>
 </ul>
-<p>用户级上下文和系统级上下文地址空间一起构成了一个进程的整个存储器映像。进程控制信息包含各种内核数据结构，如有关进程信息的进程表，页表，文件表等。<br><img src="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%AD%98%E5%82%A8%E6%98%A0%E5%83%8F.png" class="" title="进程的存储映像"></p>
+<p>用户级上下文和系统级上下文地址空间一起构成了一个进程的整个存储器映像。进程控制信息包含各种内核数据结构，如有关进程信息的进程表，页表，文件表等。<br><img src="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/进程的存储映像.png" alt="进程的存储映像"></p>
 <p>上下文切换发生在操作系统调度一个新进程到处理器上运行，他需要完成以下三件事</p>
 <ul>
 <li>将当前进程的寄存器上下文保存到当前进程的系统级上下文的现场信息中</li>
@@ -277,13 +277,13 @@
 <li>将控制转移到新进程执行</li>
 </ul>
 <p>一个重要的上下文信息是 PC，当前进程被打断的断点处的 PC 作为寄存器上下文的一部分被保存在进程现场信息中。</p>
-<h3 id="进程的私有地址空间"><a href="#进程的私有地址空间" class="headerlink" title="进程的私有地址空间"></a>进程的私有地址空间</h3><img src="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E8%99%9A%E6%8B%9F%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%E6%98%A0%E5%83%8F.png" class="" title="虚拟地址空间映像">
+<h3 id="进程的私有地址空间"><a href="#进程的私有地址空间" class="headerlink" title="进程的私有地址空间"></a>进程的私有地址空间</h3><p><img src="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/虚拟地址空间映像.png" alt="虚拟地址空间映像"></p>
 <p>整个虚拟地址空间分为两大部分。<strong>内核虚拟存储空间</strong>（简称内核空间）和<strong>进程虚拟内存空间</strong>（简称用户空间）。在采用虚拟存储机制的系统中，每个程序的可执行目标文件在装入时都被映射到同样的虚拟地址空间上，即所有用户进程的虚拟地址空间是一致的，只是在相应的制度区域和可读写数据区域中映射的信息不同而已。</p>
 <p>linux 将用户空间对应的进程虚拟存储空间组织成若干“区域”的集合，<br>内核为每个进程维护了一个进程描述符，记录或者指向内核运行该进程所需要的所有信息，如进程 pid，指向用户栈的指针，可执行目标文件的文件名，程序计数器 PC 等。</p>
 <h3 id="程序的加载和运行"><a href="#程序的加载和运行" class="headerlink" title="程序的加载和运行"></a>程序的加载和运行</h3><p>当启动一个可以行目标文件执行时，首先会通过某种方式调出常驻内存的一个称为加载器的操作系统程序来处理。在 UNIX/Linux 系统中，可以通过 execve() 函数来启动加载器，其作用是在当前进程的上下文中加载并且运行一个新程序。</p>
 <h2 id="异常和中断"><a href="#异常和中断" class="headerlink" title="异常和中断"></a>异常和中断</h2><p>除了时间片到，当前进程的执行被新进程打断，还有用户按下 CTRL+C，当前执行执行中发生了不能使指令执行的意外事件，IO 设备完成了系统交给的任务需要进一步处理，这些特殊事件统称为<strong>异常</strong>或者<strong>中断</strong>。<br>当发生异常或者终端，正在执行进程的逻辑控制流被打断，CPU 转到具体的特殊处理事件的内核程序去执行。他与上下文切换有一个明显的不同：上下文切换后 CPU 执行另一个用户进程，但是，中断或异常处理程序执行的代码不是一个进程，而是一个<strong>内核控制路径</strong>，它代表异常或终端发生时正在运行的当前进程在内核态执行的一个独立的指令序列。作为一个内核控制路径，他比进程更轻，其上下文信息比一个进程的上下文信息少得多。</p>
 <h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p>异常是在 CPU 内部执行时发生的，中断是 CPU 外部的 IO 设备向 CPU 发出的请求，通常称异常为<strong>内部异常</strong>，而称中断为<strong>外部中断</strong>。</p>
-<img src="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%B8%AD%E6%96%AD%E5%A4%84%E7%90%86%E8%BF%87%E7%A8%8B.png" class="" title="中断处理过程">
+<p><img src="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/中断处理过程.png" alt="中断处理过程"></p>
 <p>大致处理流程如下：当 CPU 在执行当前程序或任务的第 i 条指令时检测到一个异常事件，或者在执行第 i 条指令后发现有一个中断请求信息，CPU 会打断当前用户进程，然后转到相应的异常或中断处理程序去执行。如果该处理程序能解决相应问题，则在该处理程序的最后，CPU 通过执行“异常/中断返回指令”回到被打断的用户进程的第 i 条指令或第 i+1 条指令继续执行。若异常或中断处理程序发现是不可恢复的知名错误，则中止用户进程。通常情况下，对于异常和中断事件的具体处理过程全部由操作系统（可能包括驱动程序）软件来完成。</p>
 <h3 id="异常的分类"><a href="#异常的分类" class="headerlink" title="异常的分类"></a>异常的分类</h3><p>intel 将内部异常分为三类</p>
 <p>故障</p>
@@ -298,7 +298,7 @@
 <p>终止</p>
 <p>如果在执行指令的过程中发生了严重错误，如控制器出现问题，访问 DRAM 或者 SRAM 时发生校验错误等，则程序无法继续执行，只好终止发生问题的进程。</p>
 <h3 id="中断的分类"><a href="#中断的分类" class="headerlink" title="中断的分类"></a>中断的分类</h3><p><strong>中断</strong> 是由外部 IO 设备请求处理器进行的一种信号。他不是由当前执行的指令引起的，外部 IO 设备通过特定的<strong>中断请求信号线</strong>向 CPU 提出中断申请。CPU 在执行指令过程中，每执行一条指令就查看中断请求引脚，如果中断请求引脚的信号有效，则进入中断响应周期。在<strong>中断响应周期</strong>中，CPU 先将当前 PC 值和当前机器状态保存到栈中，并设置成为<strong>关中断</strong>状态，然后从数据总线读取<strong>中断类型号</strong>，根据中断类型号跳转到对应的中断服务程序执行。中断响应过程由硬件完成，而中断服务程序执行具体的中断处理工作，中断处理完成后，再回到被打断程序的断点处继续执行。</p>
-<img src="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%A4%96%E9%83%A8%E4%B8%AD%E6%96%AD%E7%9A%84%E5%A4%84%E7%90%86%E8%BF%87%E7%A8%8B.png" class="" title="外部中断的处理过程">
+<p><img src="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/外部中断的处理过程.png" alt="外部中断的处理过程"></p>
 <p>可屏蔽中断</p>
 <p>是指通过<strong>可屏蔽中断请求线</strong>INTR 向 CPU 进行请求的中断，主要来自 IO 设备的中断请求。CPU 可以通过在中断控制器中设置相应的屏蔽字来屏蔽他或者不屏蔽他。若一个 IO 设备的中断请求被屏蔽，他的中断请求信号不会被送到 CPU。</p>
 <p>不可屏蔽中断</p>
