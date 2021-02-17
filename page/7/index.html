@@ -164,6 +164,394 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2019/04/22/misc/%E5%82%BB%E9%80%BC%E8%AE%B0%E5%BD%95%EF%BC%88%E4%B8%80%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content="记录编程学习路上的点滴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/04/22/misc/%E5%82%BB%E9%80%BC%E8%AE%B0%E5%BD%95%EF%BC%88%E4%B8%80%EF%BC%89/" class="post-title-link" itemprop="url">傻逼记录</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-04-22 02:01:20" itemprop="dateCreated datePublished" datetime="2019-04-22T02:01:20+08:00">2019-04-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-10-01 19:54:22" itemprop="dateModified" datetime="2020-10-01T19:54:22+08:00">2020-10-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9D%82%E9%A1%B9/" itemprop="url" rel="index"><span itemprop="name">杂项</span></a>
+                </span>
+            </span>
+
+          
+
+          <span class="post-time">
+            &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-bar-chart"></i>
+            </span>
+            <span class="post-meta-item-text">字数统计:</span>
+            <span class="post-count">543(字)</span>
+
+          </span>
+
+            <span class="post-time">
+          &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-clock-o"></i>
+            </span>
+            <span class="post-meta-item-text">阅读时长:</span>
+            <span class="post-count">1(分)</span>
+
+          </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>昨天新买的笔记本到了，折腾了一下午安装 windows 下的软件，尝试了把自己装了 archlinux 移动固态接到笔电上，提示找不到分区 UUID。因为之前一直接在台式用，所以 fstab 上有台式机硬盘的记录，于是换上台式进 arch，把 fstab 里台式的分区都注释了（伏笔）。折腾一番可以进系统了，输完账号密码后，黑屏，是的它黑屏了。<br>开始猜测是显卡驱动的问题，切到字符 tty，安装上 amd 的显卡驱动，重启，依然不行。之后就是漫长的百度与谷歌时间。gnome 桌面是跟着教程安装的，一直以来都是 gdm 启动，所以我对于 X11 的启动过程基本是一窍不通。尝试使用 startx 手动启动，发现 root 可以进入，自己的用户进去就是黑屏。网上的一些方案有删除 gnome 插件，检查 PATH 设置，检查.Xauthority 文件权限，我都尝试了。更令我不能理解的是我换回台式机，它也黑屏了，我只好把自己对系统作的更改一条一条还原。这时看到网上一条评论说 X11 启动会读取用户目录下.x 目录下配置文件，既然 root 能进说明驱动啥的都没问题啊，可能就是配置文件的问题。我看了一下，arch 下没有.x 文件夹，不过在.config 文件下有很多 gnome 的文件夹。我突然想到自己之前因为空间不足，把用户目录下的.cache 和.config 都挂载硬盘的另一个分区上了。cd 到挂载目录，ls 显示目录为空。果然人一傻逼起来是没有救的，看了一下 fstab，果然那个分区的挂载注释掉了。修改之后重启，一切正常，此时已经是夜里 2 点钟。<br>谨以此记录一下我因为傻逼而浪费掉的 4 个小时的人生。<br>另如果想要在移动存储设备上安装 linux，务必参考官方 wiki<a target="_blank" rel="noopener" href="https://wiki.archlinux.org/index.php/Installing_Arch_Linux_on_a_USB_key">在 USB 设备上安装 Arch Linux</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2019/04/20/%E7%AE%97%E6%B3%95/leetcodeP11-ContainerWithMostWater/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content="记录编程学习路上的点滴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/04/20/%E7%AE%97%E6%B3%95/leetcodeP11-ContainerWithMostWater/" class="post-title-link" itemprop="url">leetcodeP11-ContainerWithMostWater</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-04-20 19:39:45" itemprop="dateCreated datePublished" datetime="2019-04-20T19:39:45+08:00">2019-04-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-10-01 19:48:11" itemprop="dateModified" datetime="2020-10-01T19:48:11+08:00">2020-10-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+                </span>
+            </span>
+
+          
+
+          <span class="post-time">
+            &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-bar-chart"></i>
+            </span>
+            <span class="post-meta-item-text">字数统计:</span>
+            <span class="post-count">403(字)</span>
+
+          </span>
+
+            <span class="post-time">
+          &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-clock-o"></i>
+            </span>
+            <span class="post-meta-item-text">阅读时长:</span>
+            <span class="post-count">1(分)</span>
+
+          </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>这道题以前做过，但是忘记怎么做的了。第一次交了一个双重循环的暴力。查看题解一下就明白了正确的贪心算法。</p>
+<h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h3><p>给你 N 个非负的正整数 a1,a2,a3,…an，每个代表了坐标轴上的一个点(i，ai)。n 条垂直的线连接点和 x 轴，要求找出两条线，让它们和 x 轴组成的容器的容积最大。</p>
+<h3 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h3><p>正解是用两点逼近的算法。首先容器的高度是由最短的那条线决定的。<br>维护一个变量记录最大容积。记录所取的两端的端点位置，每次计算当前情况的容积，并更新最大容积。之后更新较短的那条线的端点位置(一定是更新较短的端点位置，否则容积一定小于当前容积，因为只有宽度减小)，更新方法为向另一端的方向遍历直到遇到一条比当前线高度高的线（比当前线高度低的线组成的容积一定小于当前情况的容积）。</p>
+<p>以下是代码</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">maxArea</span><span class="params">(height []<span class="keyword">int</span>)</span> <span class="title">int</span></span> &#123;</span><br><span class="line">    left, right := <span class="number">0</span>, <span class="built_in">len</span>(height)<span class="number">-1</span></span><br><span class="line">    res := <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> left &lt; right &#123;</span><br><span class="line">        minHeight := <span class="number">0</span></span><br><span class="line">        <span class="keyword">if</span> height[left] &lt; height[right] &#123;</span><br><span class="line">            minHeight = height[left]</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            minHeight = height[right]</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        newArea := (right - left) * minHeight</span><br><span class="line">        <span class="keyword">if</span> newArea &gt; res &#123;</span><br><span class="line">            res = newArea</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> height[left] &lt; height[right] &#123;</span><br><span class="line">            newLeft := left + <span class="number">1</span></span><br><span class="line">            <span class="keyword">for</span> newLeft &lt; right &amp;&amp; height[newLeft] &lt; height[left] &#123;</span><br><span class="line">                newLeft = newLeft + <span class="number">1</span></span><br><span class="line">            &#125;</span><br><span class="line">            left = newLeft</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            newRight := right - <span class="number">1</span></span><br><span class="line">            <span class="keyword">for</span> newRight &gt; left &amp;&amp; height[newRight] &lt; height[right] &#123;</span><br><span class="line">                newRight = newRight - <span class="number">1</span></span><br><span class="line">            &#125;</span><br><span class="line">            right = newRight</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2019/04/05/%E8%BF%90%E7%BB%B4/docker%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content="记录编程学习路上的点滴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/04/05/%E8%BF%90%E7%BB%B4/docker%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="post-title-link" itemprop="url">docker学习</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-04-05 15:37:07" itemprop="dateCreated datePublished" datetime="2019-04-05T15:37:07+08:00">2019-04-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-02-13 16:28:20" itemprop="dateModified" datetime="2021-02-13T16:28:20+08:00">2021-02-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%BF%90%E7%BB%B4/" itemprop="url" rel="index"><span itemprop="name">运维</span></a>
+                </span>
+            </span>
+
+          
+
+          <span class="post-time">
+            &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-bar-chart"></i>
+            </span>
+            <span class="post-meta-item-text">字数统计:</span>
+            <span class="post-count">3.9k(字)</span>
+
+          </span>
+
+            <span class="post-time">
+          &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-clock-o"></i>
+            </span>
+            <span class="post-meta-item-text">阅读时长:</span>
+            <span class="post-count">14(分)</span>
+
+          </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>强烈推荐这个博主的系列文章 <a target="_blank" rel="noopener" href="https://blog.csdn.net/u011541946/category_8605832.html">docker 基础</a></p>
+<h2 id="基础命令"><a href="#基础命令" class="headerlink" title="基础命令"></a>基础命令</h2><p>docker images 显示出所有的镜像<br>docker tag 给镜像打 tag eg docker tag unbuntu myubuntu:last<br>docker inspect 查看镜像信息<br>docker history 显示 layer 基础信息<br>docker search —filter=is-automated=true nginx<br>docker rmi [-f 强行删除] 镜像 tag/镜像 ID 删除镜像 当镜像有容器在运行时，会提示无法删除。当不加 tag 时默认为 latest<br>docker commit [OPTIONS]</p>
+<ul>
+<li>-a —author 作者信息</li>
+<li>-c —change = [] 提交的时候执行 dockerfile 指令</li>
+<li>-m —message 提交信息</li>
+<li>-p —pause=true 提交时暂停容器运行</li>
+</ul>
+<p>docker commit -a “xxx” -m “xxx” [容器名称 容器 id] 镜像名称 基于已有镜像的容器创建<br>docekr create [options] 镜像名 新建一个容器 此时容器处于停止状态<br>docker run [option] 镜像名 新建一个容器 并且容器处于运行状态</p>
+<ul>
+<li>-P 暴露在 Dockerfile 中 Expose 的端口</li>
+<li>-idt -i 让容器标准输入打开 -d 创建后台守护进程 -t 给 docker 分配一个伪终端</li>
+<li>—name 命名容器</li>
+<li>docker run -d -P —name web -v /src/webapp:/opt/webapp:ro [镜像 id 镜像名称] 容器名称 运行程序</li>
+<li>docker run -it -v /dbdata —name dbdata ubuntu 创建数据卷容器</li>
+<li>docker run -it —volumes-from dbdata —name db1 ubuntu 共享数据卷</li>
+<li>docker run -d -P —name web —link db:db 镜像名 程序名 —link name:alias</li>
+</ul>
+<p>docker start 容器名或容器 ID<br>docker restart 容器名或者容器 ID 先将一个运行态的容器先停止，然后重新启动它<br>docker attach 容器名称或容器 ID 所有窗口会同步显示，当有一个窗口阻塞的时候，其他窗口也会阻塞<br>docker exec -it 容器名或容器 id /bin/bash<br>docker rm 删除处于终止或者退出状态的容器<br>docker top 镜像名 查看镜像内的进程<br>docker logs 镜像名 获取容器的日志</p>
+<h2 id="Dockerfile-指令"><a href="#Dockerfile-指令" class="headerlink" title="Dockerfile 指令"></a>Dockerfile 指令</h2><p>可以查看这本 Gitbook <a target="_blank" rel="noopener" href="https://yeasy.gitbooks.io/docker_practice/image/dockerfile/copy.html">Docker 从入门到实践</a> 以下记录一些我不熟悉的知识点，便于复习</p>
+<h3 id="VOLUME-定义匿名卷"><a href="#VOLUME-定义匿名卷" class="headerlink" title="VOLUME 定义匿名卷"></a>VOLUME 定义匿名卷</h3><p>格式为：<br>VOLUME [“&lt;路径 1&gt;”, “&lt;路径 2&gt;”…]<br>VOLUME &lt;路径&gt;<br>容器运行时应该尽量保持容器存储层不发生写操作，对于数据库类需要保存动态数据的应用，其数据库文件应该保存于卷(volume)中，为了防止运行时用户忘记将动态文件所保存目录挂载为卷，在 Dockerfile 中，我们可以事先指定某些目录挂载为匿名卷，这样在运行时如果用户不指定挂载，其应用也可以正常运行，不会向容器存储层写入大量数据<br>VOLUME /data<br>这里的 /data 目录就会在运行时自动挂载为匿名卷，任何向 /data 中写入的信息都不会记录进容器存储层，从而保证了容器存储层的无状态化。当然，运行时可以覆盖这个挂载设置。比如：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -v mydata:/data xxxx</span><br></pre></td></tr></table></figure>
+<p>在这行命令中，就使用了 mydata 这个命名卷挂载到了 /data 这个位置，替代了 Dockerfile 中定义的匿名卷的挂载配置。<br>如果需要在删除容器的同时移除数据卷。可以在删除容器的时候使用 docker rm -v 这个命令</p>
+<p>docker volume prune 清理无主的数据卷</p>
+<h2 id="如何修改已存在容器的配置"><a href="#如何修改已存在容器的配置" class="headerlink" title="如何修改已存在容器的配置"></a>如何修改已存在容器的配置</h2><p>直接修改 /var/lib/docker/contains/[container_hash]/ 目录下的 config.v2.json 和 hostconfig.json 文件，修改之后需要重启 docker，再重新启动容器，就生效啦</p>
+<h2 id="docker-架构"><a href="#docker-架构" class="headerlink" title="docker 架构"></a>docker 架构</h2><p>docker 采用 C/S 架构，包含客户端和服务端，通过镜像仓库来存储镜像。客户端和服务端可以不在一个机器上，通过 socket 或者 restful api 来进行通信。</p>
+<h2 id="什么是镜像"><a href="#什么是镜像" class="headerlink" title="什么是镜像"></a>什么是镜像</h2><p>镜像是文件和 meta data 的集合 root filesystem</p>
+<p>如一个 centos 的镜像，里面包含一些最精简版的 centos 文件系统，还有其他软件包等。</p>
+<p>镜像是分层的，每层都可以添加删除改变文件，变成一个新的 image</p>
+<p>不同的 image 可以共享同一层 layer</p>
+<p>镜像本身是只读的</p>
+<h2 id="什么是容器"><a href="#什么是容器" class="headerlink" title="什么是容器"></a>什么是容器</h2><p>容器通过 image 创建</p>
+<p>在 image layer 之上创建了一个 container layer，这个容器层可以读写操作</p>
+<p>image 负责 app 的存储和分发，container 负责运行 app</p>
+<h3 id="容器的-created-状态"><a href="#容器的-created-状态" class="headerlink" title="容器的 created 状态"></a>容器的 created 状态</h3><p>docker create 只创建容器，但是不启动，docker run 是启动并且创建容器</p>
+<p>docker start 可以启动容器</p>
+<h2 id="ADD-和-COPY"><a href="#ADD-和-COPY" class="headerlink" title="ADD 和 COPY"></a>ADD 和 COPY</h2><p>ADD 功能更强大，会拷贝文件并且解压，COPY 只会拷贝文件</p>
+<h2 id="服务端"><a href="#服务端" class="headerlink" title="服务端"></a>服务端</h2><p>一般在宿主机后台运行， dockerd 作为服务端接受来自客户的请求，通过 containerd 具体处理与容器相关的请求。包括创建，运行，删除容器等。</p>
+<p>dockerd 为客户端提供 rest api，响应来自客户端的请求，采用模块化的解构，通过专门的 Engine 模块来分发管理各个来自客户端的任务。</p>
+<p>docker-proxy 是 dockerd 的子进程，当需要进行容器端口映射时，docker-proxy 完成网络映射配置。</p>
+<p>containerd 是 docker 的子进程，提供 gRPC 接口响应来自 dockerd 的请求，对下管理 runC 镜像和容器环境</p>
+<p>containerd——shim, containerd 的子进程，作为容器内进程的根进程。</p>
+<p>runC 是从 Docker 公司开源的 libcontainer 项目演化而来，。runC 支持 linux 系统中容器相关技术栈。</p>
+<p>dockerd 默认监听本地 unix:///var/run/docker.sock 套接字，只允许本地 root 用户或者 docker 用户组成员能访问。</p>
+<p>可以通过 -H 选项修改监听方式。</p>
+<p>Docker 还支持通过 TLS 认证方式来验证访问。</p>
+<p>docker-proxy 只有当启动容器并且开启端口映射才会执行，负责配置容器的端口映射规则。</p>
+<h2 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h2><p>默认通过本地的 unix:///var/run/docker.sock 套接字向服务端发出命令。如果服务端没有监听默认地址，需要手动指定。</p>
+<h2 id="命名空间"><a href="#命名空间" class="headerlink" title="命名空间"></a>命名空间</h2><p>namespace 是 linux 内核一个强大特性，利用这一特性，每个容器都可以拥有自己的单独命名空间。运行在其中的应用都像在独立的操作系统环境中一样。命名空间机制保证了容器之间彼此不受影响。</p>
+<h3 id="进程命名空间"><a href="#进程命名空间" class="headerlink" title="进程命名空间"></a>进程命名空间</h3><p>Linux 通过进程命名空间管理进程号。对于同一个进程在不同的命名空间中，看到的进程号不同。每个进程命名空间有一套自己的进程号管理方法。进程命名空间是一个父子关系的结构，子空间的进程对于父空间是可见的。新 fork 出来的一个进程，在父命名空间和子命名空间将分别对应不同的进程号。</p>
+<p>一般运行一个容器，以 docker run —name test -d ubuntu:18.04 sleep 9999 为例，相关进程关系如下：</p>
+<p>docker 服务主进程 dockerd 作为父进程启动了 docker-containerd 进程，docker-containerd 作为父进程启动了 docker-containerd-shim，其作为容器内所有进程的根进程。</p>
+<h3 id="IPC-命名空间"><a href="#IPC-命名空间" class="headerlink" title="IPC 命名空间"></a>IPC 命名空间</h3><p>容器内进程交互还是采用了 Linux 常见的进程间交互方法，包括信号量，消息队列和共享内存等方式.PID 命名空间和 IPC 命名空间可以组合起来使用，同一个 IPC 命名空间的进程可以交互，不同空间的进程则无法交互。</p>
+<h3 id="网络命名空间"><a href="#网络命名空间" class="headerlink" title="网络命名空间"></a>网络命名空间</h3><p>有了进程命名空间，不同命名空间中的进程号可以相互隔离，但是网络端口还是共享本地系统的端口。通过网络命名空间，可以实现网络隔离。一个网络命名空间为进程提供了一个完全独立的网络协议栈的视图。包括网络设备接口，IPV4 和 IPV6 协议栈，IP 路由表，防火墙规则，sockets 等。</p>
+<p>docker 采用虚拟网络设备 Virtual Network Device VND 的方式，将不同命名空间的网络设备连接到一起。默认情况下，Docker 在宿主机上创建多个虚拟网桥，如默认的 docker0 网桥，容器中的虚拟网卡通过网桥进行桥接。</p>
+<p>docker network ls 可以查看当前系统中的网桥。</p>
+<p><img src="/2019/04/05/%E8%BF%90%E7%BB%B4/docker%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/docker网桥.png" alt="docker网桥"></p>
+<p>使用 brctl 工具，可以看到连接到网桥上的虚拟网口信息。每个容器默认分配一个网桥上的虚拟网口，并将 docker0 的 IP 地址设置为默认的网关。容器发起的网络流量通过 宿主机的 iptables 规则进行转发。</p>
+<h4 id="虚拟网卡-veth"><a href="#虚拟网卡-veth" class="headerlink" title="虚拟网卡 veth"></a>虚拟网卡 veth</h4><p>这里参考了这篇文章 <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/369e50201bce">Linux 网络命名空间</a>，下面简述一下其中的内容。</p>
+<p>虚拟网卡成对出现，像一个管道的两端，从这个管道一端的 veth 进去的数会从另一端的 veth 出来，可以用 veth 接口把一个网络命名空间连接到外部的默认命名空间或者 global 命名空间，而物理网卡就存在这些命名空间里。</p>
+<p>创建一个网络命名空间，默认包含 lo 回环网络。然后创建一对虚拟网卡，将其中一端 veth1 加入命名空间中，设置该命名空间中的路由，使得找不到目的地址的数据包都通过 veth1 转发。这时就可以 ping 通 host 上的 veth0 网卡了。但是依然不能连接外部网络。</p>
+<p>Linux 中 IP 转发的意思是 Linux 主机存在多个网卡的时候，允许一个网卡的数据包转发到另外一张网卡。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -t nat -A POSTROUTING -s 10.1.1.0/255.255.255.0 -o ens160 -j MASQUERADE</span><br></pre></td></tr></table></figure>
+<p>添加了一条规则到 NAT 表的 POSTROUTING 链中，对于源 IP 地址为 10.1.1.0 网段的数据包，用 ens160 网口的 IP 地址替换并发送。这样在容器中就可以访问外部网络了。</p>
+<p><img src="/2019/04/05/%E8%BF%90%E7%BB%B4/docker%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/整个流程.png" alt="整个流程"></p>
+<h2 id="两个容器为什么能通信"><a href="#两个容器为什么能通信" class="headerlink" title="两个容器为什么能通信"></a>两个容器为什么能通信</h2><p>只要有容器运行，docker0 接口的状态就从 down 变成了 up。</p>
+<p>主机上的 veth 只能和 docker0 通信。容器内的 veth 可以和主机上的配对的 veth 通信。</p>
+<p>veth 成对出现，docker0 是多个容器之间能通信的关键。</p>
+<p><img src="/2019/04/05/%E8%BF%90%E7%BB%B4/docker%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/docker容器间通信.png" alt="docker容器间通信"></p>
+<h3 id="link"><a href="#link" class="headerlink" title="link"></a>link</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name=test2 --link test1 busybox /bin/sh -c <span class="string">&quot;while true; do sleep 3600; done&quot;</span></span><br></pre></td></tr></table></figure>
+<p>当于添加了 DNS 解析，同时 link 是单向的。只能在 test2 通过 test1 ping 通 test1。</p>
+<h2 id="none-和-host-网络"><a href="#none-和-host-网络" class="headerlink" title="none 和 host 网络"></a>none 和 host 网络</h2><p>连接到 none 网络</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d test1 --network none busybox /bin/sh</span><br></pre></td></tr></table></figure>
+<p>使用 none 模式，没有物理地址和 ip 地址，容器内只有 lo 回环网络，意味着容器不能被其他容器访问。</p>
+<p>连接到 host 网络</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d test1 --network host busybox /bin/sh</span><br></pre></td></tr></table></figure>
+<p>容器和外层 linux 共享一套网络接口</p>
+<h2 id="数据持久化-data-volume"><a href="#数据持久化-data-volume" class="headerlink" title="数据持久化 data volume"></a>数据持久化 data volume</h2><p>在 docker 中，默认数据存储在 container layer，也就是容器层中，因为只有这一层是可读可写的。但这样如果容器关闭了，并且被删除了，数据也就被删除了。docker 为了解决这种问题，出现一种机制。就是把数据转移到外挂或者 mount 的磁盘上。例如把容器里数据，同步到外层 linux 主机磁盘上。这样即使容器被删除了，容器里面数据还是保留在 linux 主机上，下次我们再启动一个容器，配置读取外层 linux 这个外挂的文件系统中数据，这个容器恢复正常服务功能。</p>
+<h2 id="VOLUME-的类型"><a href="#VOLUME-的类型" class="headerlink" title="VOLUME 的类型"></a>VOLUME 的类型</h2><p>有两种，第一种是受管理的 data Volume，由 docker 后台自动创建。第二种是绑定挂载的 Volume，具体挂载位置可以由用户指定。</p>
+<h2 id="安全防护与配置"><a href="#安全防护与配置" class="headerlink" title="安全防护与配置"></a>安全防护与配置</h2><p>Docker 是基于 Linux 操作系统实现的应用虚拟化。运行在容器内的进程，与运行在本地系统的进程在本质上没有区别。Docker 容器的安全性，很大程度上依赖于 Linux 系统自身。在评估 Linux 安全性上，主要考虑一下几个方面</p>
+<ul>
+<li>Linux 内核的命名空间机制提供的容器隔离安全</li>
+<li>Linux 控制组机制对容器资源的控制能力安全</li>
+<li>Linux 内核的能力机制所带来的操作权限安全</li>
+<li>Docker 程序本身的抗攻击性</li>
+<li>其他安全增强机制对容器安全性的影响</li>
+</ul>
+<p>从网络架构上来看，所有的容器实际上是通过本地主机的网络接口 docker0 来进行相互通信，就像物理机器通过物理交换机通信一样。</p>
+<p>与虚拟机方式相比，通过命名空间来实现的隔离并不那个绝对，运行在容器中的应用可以直接访问系统内核和部分系统文件。因此用户必须保证容器中的应用是安全可信的。</p>
+<p>控制组是 Linux 容器机制的另一个关键组件，它负责实现资源的审计和限制。当用户执行 docker run 启动一个 容器的时候，docker 将通过 Linux 相关的调用，在后台为容器创建一个独立的控制组策略集合，该集合将限制容器内应用对资源的消耗。</p>
+<p>控制组提供了很多有用的特性，他可以确保各个容器公平地分享主机的内存，cpu，磁盘 IO 等资源，当然，更重要的是，通过控制组可以限制容器对资源的占用，确保了当某个容器对资源消耗过大时，不会影响到本地主机系统和其他容器。</p>
+<p>Linux 内核自 2.2 版本起支持能力机制，将权限划分为更加细粒度的操作能力，默认情况下，Docker 启动的容器有严格限制，只允许使用内核的一部分能力。通常，在服务器上会运行一堆特权进程，包括 ssh，cron，syslogd 等，容器与这些进程是不同的，而容器大部分情况下不需要真正的 root 权限，为了加强安全，容器可以禁用一些没必要的权限，包括：</p>
+<ul>
+<li>完全禁止任何文件挂载操作</li>
+<li>禁止直接访问本地主机的套接字</li>
+<li>禁止访问一些文件系统的操作</li>
+<li>禁止模块加载</li>
+</ul>
+<h2 id="高级网络功能"><a href="#高级网络功能" class="headerlink" title="高级网络功能"></a>高级网络功能</h2><h3 id="容器内-dns"><a href="#容器内-dns" class="headerlink" title="容器内 dns"></a>容器内 dns</h3><p>docker 服务启动后悔默认启用一个内嵌的 DNS 服务，来自动解析同一个网络中的容器主机名和地址，如果无法解析，则通过容器内的 DNS 相关配置来进行解析。</p>
+<p>容器运行时，可以再运行中的容器直接编辑 /etc/hosts /etc/hostname /etc/resolve.conf 文件，但这种改动连 docker commit 也无法保存。</p>
+<h3 id="容器访问外部的实现"><a href="#容器访问外部的实现" class="headerlink" title="容器访问外部的实现"></a>容器访问外部的实现</h3><p>假设容器内部的网络地址为 172.17.0.2，本地网络地址为 10.0.2.2。容器要能访问外部网络，需要进行源地址映射（Source NAT），修改为本地系统的 IP 地址 10.0.2.2。</p>
+<p>映射是通过 iptables 的源地址伪装操作实现的。 主机 nat 表上的 POSTROUTING 链规则负责网包离开主机前，改写其源地址：</p>
+<h3 id="外部访问容器实现"><a href="#外部访问容器实现" class="headerlink" title="外部访问容器实现"></a>外部访问容器实现</h3><p>容器允许外部访问，可以再 docker run 时候通过 -p 或者 -P 参数来启用。其实也是在本地的 iptable 的 nat 表 中添加相应的规则，将访问外部 IP 地址的包进行目标地址 DNAT，将目标地址修改为容器的 IP 地址。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2019/03/27/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -685,7 +1073,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-01 20:33:49" itemprop="dateModified" datetime="2020-10-01T20:33:49+08:00">2020-10-01</time>
+                <time title="修改时间：2021-02-14 05:28:11" itemprop="dateModified" datetime="2021-02-14T05:28:11+08:00">2021-02-14</time>
               </span>
 
           
@@ -754,52 +1142,51 @@
 <h3 id="更新文档"><a href="#更新文档" class="headerlink" title="更新文档"></a>更新文档</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">db.collsetion.update(</span><br><span class="line">  &lt;query&gt;,</span><br><span class="line">  &lt;updateObj&gt;,</span><br><span class="line">  &#123;</span><br><span class="line">    upsert:<span class="xml"><span class="tag">&lt;<span class="name">boolean</span>&gt;</span>,</span></span><br><span class="line">    multi:&lt;boolean&gt;</span><br><span class="line">  &#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
 <p>update 更新后的对象或指定一些更新的操作符</p>
 <ul>
-<li>$set 直接指定更新后的值</li>
-<li>$inc 在原基础上累加</li>
+<li><code>$set</code> 直接指定更新后的值</li>
+<li><code>$inc</code> 在原基础上累加</li>
 </ul>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">db.students.update(&#123; <span class="attr">name</span>: <span class="string">&quot;zf&quot;</span> &#125;, &#123; <span class="attr">$set</span>: &#123; <span class="attr">age</span>: <span class="number">44</span> &#125; &#125;);</span><br><span class="line">db.students.update(&#123; <span class="attr">name</span>: <span class="string">&quot;zf&quot;</span> &#125;, &#123; <span class="attr">$inc</span>: &#123; <span class="attr">age</span>: <span class="number">1</span> &#125; &#125;);</span><br></pre></td></tr></table></figure>
 <ul>
-<li>$unset 删除字段，如果字段不存在不做处理</li>
-<li>$push 向数组添加数据</li>
-<li>$ne</li>
+<li><code>$unset</code> 删除字段，如果字段不存在不做处理</li>
+<li><code>$push</code> 向数组添加数据</li>
+<li><code>$ne</code></li>
 </ul>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.students.update(&#123; <span class="attr">hobby</span>: &#123; <span class="attr">$ne</span>: <span class="string">&quot;smoking&quot;</span> &#125; &#125;, &#123;&#125;);</span><br></pre></td></tr></table></figure>
 <ul>
-<li>$each</li>
+<li><code>$each</code></li>
 </ul>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">db.students.update(</span><br><span class="line">  &#123; <span class="attr">name</span>: <span class="string">&quot;zf&quot;</span> &#125;,</span><br><span class="line">  &#123; <span class="attr">$push</span>: &#123; <span class="attr">hobby</span>: &#123; <span class="attr">$each</span>: [<span class="string">&quot;smok&quot;</span>, <span class="string">&quot;dringing&quot;</span>] &#125; &#125; &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
 <ul>
-<li>$addToSet 插入到集合，可以保证唯一性，如果项是重复的，将不会被插入</li>
+<li><code>$addToSet</code> 插入到集合，可以保证唯一性，如果项是重复的，将不会被插入</li>
 </ul>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.students.update(&#123; <span class="attr">name</span>: <span class="string">&quot;zfpx&quot;</span> &#125;, &#123; <span class="attr">$addToSet</span>: &#123; <span class="attr">hobby</span>: <span class="string">&quot;drink&quot;</span> &#125; &#125;);</span><br></pre></td></tr></table></figure>
 <p>upsert 可选，不过不存在记录是否插入，默认不插入<br>muitl 可选，默认只更新找到的第一条记录，如果为 true，更新所有符合的记录</p>
-<h3 id="操作符"><a href="#操作符" class="headerlink" title="操作符"></a>操作符</h3><p>$eq：匹配字段值等于指定值的文档</p>
-<p>$gt：匹配字段值大于指定值的文档</p>
-<p>$gte：匹配字段值大于等于指定值的文档</p>
-<p>$lt：匹配字段值小于指定值的文档</p>
-<p>$lte：匹配字段值小于等于指定值的文档</p>
-<p>$ne：匹配字段值不等于指定值的文档，包括没有这个字段的文档</p>
-<p>$in ：匹配字段值等于指定数组中的任何值</p>
-<p>$nin ：字段值不在指定数组或者不存在</p>
-<p>$or ：文档至少满足其中的一个表达式</p>
-<p>$not ：字段值不匹配表达式或者字段值不存在</p>
-<p>$nor：字段值不匹配所有的表达式的文档，包括那些不包含这些字段的文档</p>
-<p>$exists：boolean 等于 true 时，字段存在，包括字段值为 null 的文档</p>
-<p>$type：匹配字段值为指定数据类型的文档</p>
-<p>$mod ：匹配字段值被除有指定的余数的文档</p>
-<p>$regex ：正则表达式可以匹配到的文档</p>
-<p>$text ：针对创建了全文索引的字段进行文本搜索</p>
-<p>$where ：可以通过 js 表达式或 js 函数来查询文档<br>$all :字段值是包含所有指定元素的数组的文档<br>$elemMatch：数组字段至少一个元素满足所有指定查询条件的文档<br>$size：匹配数组字段元素个数等于指定数量的文档<br>$ (projection)：限定查询结果中指定数组字段返回满足条件的第一个元素<br>$elemMatch (projection)：限定查询结果中指定数组字段返回满足条件的第一个元素<br>$slice (projection)：控制指定数组字段返回元素个数<br>$inc：给一个字段增加指定值<br>$setOnInsert ：upsert 为 true 时，有插入文档操作时插入指定字段值<br>$unset ：删除指定字段</p>
-<p>$min ：指定值小于当前值则更新为指定值<br>$max:指定值大于当前值则更新为指定值<br>$currentDate :设置字段值为当前日期</p>
-<p>$:更新指定数组的第一个元素<br>$addToSet:数组字段增加一个值<br>$pop:删除数组字段中的第一个或最后一个元素<br>$pullAll :删除数组字段中所有指定值，如果指定值为数组，则删除匹配数组内的元素<br>$pull :符合条件的值将被删除<br>$pushAll ：向数组中追加多个指定值<br>$push ：向数组中追加值<br>$each：用于 $addToSet 添加多个值到数组中</p>
+<h3 id="操作符"><a href="#操作符" class="headerlink" title="操作符"></a>操作符</h3><p><code>$eq</code>：匹配字段值等于指定值的文档</p>
+<p><code>$gt</code>：匹配字段值大于指定值的文档</p>
+<p><code>$gte</code>：匹配字段值大于等于指定值的文档</p>
+<p><code>$lt</code>：匹配字段值小于指定值的文档</p>
+<p><code>$lte</code>：匹配字段值小于等于指定值的文档</p>
+<p><code>$ne</code>：匹配字段值不等于指定值的文档，包括没有这个字段的文档</p>
+<p><code>$in</code>：匹配字段值等于指定数组中的任何值</p>
+<p><code>$nin</code>：字段值不在指定数组或者不存在</p>
+<p><code>$or</code>：文档至少满足其中的一个表达式</p>
+<p><code>$not</code>：字段值不匹配表达式或者字段值不存在</p>
+<p><code>$nor</code>：字段值不匹配所有的表达式的文档，包括那些不包含这些字段的文档</p>
+<p><code>$exists</code>：boolean 等于 true 时，字段存在，包括字段值为 null 的文档</p>
+<p><code>$type</code>：匹配字段值为指定数据类型的文档</p>
+<p><code>$mod</code>：匹配字段值被除有指定的余数的文档</p>
+<p><code>$regex</code>：正则表达式可以匹配到的文档</p>
+<p><code>$text</code>：针对创建了全文索引的字段进行文本搜索</p>
+<p><code>$where</code>：可以通过 js 表达式或 js 函数来查询文档<br><code>$all</code>: 字段值是包含所有指定元素的数组的文档<br><code>$elemMatch</code>：数组字段至少一个元素满足所有指定查询条件的文档<br><code>$size</code>：匹配数组字段元素个数等于指定数量的文档<br><code>$ (projection)</code>：限定查询结果中指定数组字段返回满足条件的第一个元素<br><code>$elemMatch (projection)</code>：限定查询结果中指定数组字段返回满足条件的第一个元素<br><code>$slice (projection)</code>：控制指定数组字段返回元素个数<br><code>$inc</code>：给一个字段增加指定值<br><code>$setOnInsert</code> ：upsert 为 true 时，有插入文档操作时插入指定字段值<br><code>$unset</code>：删除指定字段</p>
+<p><code>$min</code>：指定值小于当前值则更新为指定值<br><code>$max</code>: 指定值大于当前值则更新为指定值<br><code>$currentDate</code>:设置字段值为当前日期</p>
+<p><code>$</code>: 更新指定数组的第一个元素<br><code>$addToSet</code>:数组字段增加一个值<br><code>$pop</code>: 删除数组字段中的第一个或最后一个元素<br><code>$pullAll</code>: 删除数组字段中所有指定值，如果指定值为数组，则删除匹配数组内的元素<br><code>$pull</code>: 符合条件的值将被删除<br><code>$pushAll</code>：向数组中追加多个指定值<br><code>$push</code>：向数组中追加值<br><code>$each</code>：用于 <code>$addToSet</code> 添加多个值到数组中</p>
 <h3 id="高级知识"><a href="#高级知识" class="headerlink" title="高级知识"></a>高级知识</h3><h4 id="通过配置项启动数据库"><a href="#通过配置项启动数据库" class="headerlink" title="通过配置项启动数据库"></a>通过配置项启动数据库</h4><p>—dbpath 数据库文件的目录<br>—port 默认是 27017 28017<br>—fork 以后台守护方式运行<br>—logpath 日志目录<br>—config 指定一个配置文件<br>—auth 以安全参数启动</p>
 <h4 id="导入导出"><a href="#导入导出" class="headerlink" title="导入导出"></a>导入导出</h4><p>mongoimport 导出数据<br>mongoexport 导入数据</p>
 <p>mongodb 使用 mongorestore 来恢复备份的数据</p>
 <p>Mongodump 可以 backup 整个数据库，而 mongoexport 要对每个 conllection 进行操作。恢复使用 mongostore</p>
 <p>mongoexport 输出的 json 比 mongodump 的 bson 可读性高，进而可以直接对 json 文件进行操作然后还原数据（bson 转换 json 存在潜在兼容问题）</p>
 <h3 id="安全措施"><a href="#安全措施" class="headerlink" title="安全措施"></a>安全措施</h3><p>物理隔离<br>网络隔离<br>防火墙<br>用户名和密码验证</p>
-<h4 id="用户管理"><a href="#用户管理" class="headerlink" title="用户管理"></a>用户管理</h4><p>show roles 查看角色</p>
-<p>db.createUser({user:’zf’,pwd:’123’,roles:[{db:’school’},role:’read’]})</p>
+<h4 id="用户管理"><a href="#用户管理" class="headerlink" title="用户管理"></a>用户管理</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">show roles 查看角色</span><br><span class="line">db.createUser(&#123;<span class="attr">user</span>:<span class="string">&#x27;zf&#x27;</span>,<span class="attr">pwd</span>:<span class="string">&#x27;123&#x27;</span>,<span class="attr">roles</span>:[&#123;<span class="attr">db</span>:<span class="string">&#x27;school&#x27;</span>&#125;,<span class="attr">role</span>:<span class="string">&#x27;read&#x27;</span>]&#125;)</span><br></pre></td></tr></table></figure>
 <h3 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h3><p>ensure 表示升序</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.students.ensureIndex(&#123; <span class="attr">age</span>: <span class="number">1</span> &#125;);</span><br></pre></td></tr></table></figure>
 <h4 id="分析索引的执行过程"><a href="#分析索引的执行过程" class="headerlink" title="分析索引的执行过程"></a>分析索引的执行过程</h4><p>mongodb 提供了 explain 命令来分析查询过程</p>
@@ -882,11 +1269,11 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Tank.findByIdAndUpdate(</span><br><span class="line">  id,</span><br><span class="line">  &#123; <span class="attr">$set</span>: &#123; <span class="attr">size</span>: <span class="string">&quot;large&quot;</span> &#125; &#125;,</span><br><span class="line">  &#123; <span class="attr">new</span>: <span class="literal">true</span> &#125;,</span><br><span class="line">  <span class="function"><span class="keyword">function</span> (<span class="params">err, tank</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (err) <span class="keyword">return</span> handleError(err);</span><br><span class="line">    res.send(tank);</span><br><span class="line">  &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
 <h4 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h4><p>document 在被保存前会被验证</p>
 <h4 id="覆盖"><a href="#覆盖" class="headerlink" title="覆盖"></a>覆盖</h4><p>可以用 .set() 覆盖整个文档，如果要修改在中间件中被保存的文档，这样很方便</p>
-<h3 id="子文档-subdocument"><a href="#子文档-subdocument" class="headerlink" title="子文档 subdocument"></a>子文档 subdocument</h3><p>Mongoose 中子文档有俩 ing 中不同的概念 子文档数组和单个嵌套子文档。</p>
+<h3 id="子文档-subdocument"><a href="#子文档-subdocument" class="headerlink" title="子文档 subdocument"></a>子文档 subdocument</h3><p>Mongoose 中子文档有两种不同的概念 子文档数组和单个嵌套子文档。</p>
 <p>子文档与普通 document 类似。嵌套 schema 可以有自己的 中间件、自定义检验逻辑、 虚拟值以及其他顶层 schemas 可用的特性。两者主要的不同点是 子文档不能单独保存，他们会在他们的顶级文档保存时保存。</p>
 <p>子文档跟普通 document 一样有 save 和 validate 中间件。 调用父文档的 save() 会触发其所有子文档的 save() 中间件， validate() 中间件同理。</p>
 <p>子文档的 pre(‘save’) 和 pre(‘validate’) 中间件执行于 顶层 document 的 pre(‘save’) 之前， 顶层 document 的 pre(‘validate’) 之后。 因为 save() 前的验证就是一个内置中间件。（待修改）</p>
-<h4 id="查找子文档"><a href="#查找子文档" class="headerlink" title="查找子文档"></a>查找子文档</h4><p>每个子文档都有一个默认的 _id 。Mongoose document 数组有一个特别的 id 方法， 这个方法只要传入 _id 就能返回文档数组中特定文档。</p>
+<h4 id="查找子文档"><a href="#查找子文档" class="headerlink" title="查找子文档"></a>查找子文档</h4><p>每个子文档都有一个默认的 <code>_id</code> 。Mongoose document 数组有一个特别的 id 方法， 这个方法只要传入 <code>_id</code> 就能返回文档数组中特定文档。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> doc = parent.children.id(_id);</span><br></pre></td></tr></table></figure>
 <h4 id="添加子文档到数组"><a href="#添加子文档到数组" class="headerlink" title="添加子文档到数组"></a>添加子文档到数组</h4><p>Mongoose 数组方法有 push、 unshift、 addToSet、 及其他：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Parent = mongoose.model(<span class="string">&quot;Parent&quot;</span>);</span><br><span class="line"><span class="keyword">var</span> parent = <span class="keyword">new</span> Parent();</span><br><span class="line"></span><br><span class="line"><span class="comment">// create a comment</span></span><br><span class="line">parent.children.push(&#123; <span class="attr">name</span>: <span class="string">&quot;Liesl&quot;</span> &#125;);</span><br><span class="line"><span class="keyword">var</span> subdoc = parent.children[<span class="number">0</span>];</span><br><span class="line"><span class="built_in">console</span>.log(subdoc); <span class="comment">// &#123; _id: &#x27;501d86090d371bab2c0341c5&#x27;, name: &#x27;Liesl&#x27; &#125;</span></span><br><span class="line">subdoc.isNew; <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line">parent.save(<span class="function"><span class="keyword">function</span> (<span class="params">err</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (err) <span class="keyword">return</span> handleError(err);</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;Success!&quot;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
@@ -1564,356 +1951,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2018/12/05/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E6%B1%87%E7%BC%96%E4%B8%8E%E6%A0%88%E5%B8%A7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="jiezi19971225">
-      <meta itemprop="description" content="记录编程学习路上的点滴">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Jiez19971225‘s Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/12/05/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E6%B1%87%E7%BC%96%E4%B8%8E%E6%A0%88%E5%B8%A7/" class="post-title-link" itemprop="url">汇编与栈帧1</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-12-05 13:34:50" itemprop="dateCreated datePublished" datetime="2018-12-05T13:34:50+08:00">2018-12-05</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-01 19:45:16" itemprop="dateModified" datetime="2020-10-01T19:45:16+08:00">2020-10-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">计算机基础</span></a>
-                </span>
-            </span>
-
-          
-
-          <span class="post-time">
-            &nbsp; | &nbsp;
-            <span class="post-meta-item-icon">
-              <i class="fa fa-bar-chart"></i>
-            </span>
-            <span class="post-meta-item-text">字数统计:</span>
-            <span class="post-count">674(字)</span>
-
-          </span>
-
-            <span class="post-time">
-          &nbsp; | &nbsp;
-            <span class="post-meta-item-icon">
-              <i class="fa fa-clock-o"></i>
-            </span>
-            <span class="post-meta-item-text">阅读时长:</span>
-            <span class="post-count">3(分)</span>
-
-          </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>转自:</p>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/dormant/p/5059644.html">汇编与栈帧学习（一）</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/dormant/p/5079894.html">esp 和 ebp 详解</a></li>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/striver1205/article/details/25695437">Push, Pop, call, leave 和 Ret 指令图解</a></li>
-</ul>
-<p>参考以上博文的内容，写了一个简单的程序，说明一下汇编调用过程</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 源程序 test1.c</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> c = a + b;</span><br><span class="line">    <span class="keyword">return</span> c;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> sum = add(a, b);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 我的环境为64位linux系统，需要加上-m32指定以32位方式编译</span></span><br><span class="line">$ gcc -m32  -g test1.c</span><br><span class="line">$ gdb a.out</span><br><span class="line">(gdb) b main</span><br><span class="line">Breakpoint <span class="number">1</span> at <span class="number">0x80483f7</span>: file test1.c, line <span class="number">8.</span></span><br><span class="line">(gdb) b add</span><br><span class="line">Breakpoint <span class="number">2</span> at <span class="number">0x80483e1</span>: file test1.c, line <span class="number">3.</span></span><br><span class="line">(gdb) r</span><br><span class="line">Breakpoint <span class="number">1</span>, main () at test1.c:<span class="number">8</span></span><br><span class="line"><span class="number">8</span>         <span class="keyword">int</span> a = <span class="number">-1</span>;</span><br><span class="line">(gdb) disas main</span><br><span class="line">Dump of assembler code <span class="keyword">for</span> function main:</span><br><span class="line"><span class="number">0x080483f1</span> &lt;+<span class="number">0</span>&gt;:     push   %ebp <span class="comment">// ebp寄存器存储当前main栈帧栈底, 将ebp入栈，esp减去4字节</span></span><br><span class="line"><span class="number">0x080483f2</span> &lt;+<span class="number">1</span>&gt;:     mov    %esp,%ebp <span class="comment">// 把esp的数值赋给ebp</span></span><br><span class="line"><span class="number">0x080483f4</span> &lt;+<span class="number">3</span>&gt;:     sub    $<span class="number">0x10</span>,%esp <span class="comment">// 把esp减去16个字节</span></span><br><span class="line">=&gt; <span class="number">0x080483f7</span> &lt;+<span class="number">6</span>&gt;:     movl   $<span class="number">0xffffffff</span>,<span class="number">-0xc</span>(%ebp) <span class="comment">// ebp减去12字节的位置保存直接数-1</span></span><br><span class="line"><span class="number">0x080483fe</span> &lt;+<span class="number">13</span>&gt;:    movl   $<span class="number">0x0</span>,<span class="number">-0x8</span>(%ebp) <span class="comment">// ebp减去8字节的位置保存直接数0</span></span><br><span class="line"><span class="number">0x08048405</span> &lt;+<span class="number">20</span>&gt;:    pushl  <span class="number">-0x8</span>(%ebp) <span class="comment">// ebp减去8字节的位置的值（b的数值）入栈 同时esp减去4字节</span></span><br><span class="line"><span class="number">0x08048408</span> &lt;+<span class="number">23</span>&gt;:    pushl  <span class="number">-0xc</span>(%ebp) <span class="comment">// ebp减去12字节的位置的值入栈（a的数值） 同时esp减去4字节 说明参数是按照从右向左的顺序入栈的</span></span><br><span class="line"><span class="number">0x0804840b</span> &lt;+<span class="number">26</span>&gt;:    call   <span class="number">0x80483db</span> &lt;add&gt; <span class="comment">// 调用add函数 call指令将返回地址0x0804840b压入栈顶，esp减去4字节，然后程序跳转到add函数的起始地址</span></span><br><span class="line"><span class="number">0x08048410</span> &lt;+<span class="number">31</span>&gt;:    add    $<span class="number">0x8</span>,%esp <span class="comment">// esp加上8 清除局部变量占用的空间</span></span><br><span class="line"><span class="number">0x08048413</span> &lt;+<span class="number">34</span>&gt;:    mov    %eax,<span class="number">-0x4</span>(%ebp)</span><br><span class="line"><span class="number">0x08048416</span> &lt;+<span class="number">37</span>&gt;:    mov    $<span class="number">0x0</span>,%eax</span><br><span class="line"><span class="number">0x0804841b</span> &lt;+<span class="number">42</span>&gt;:    leave</span><br><span class="line"><span class="number">0x0804841c</span> &lt;+<span class="number">43</span>&gt;:    ret</span><br><span class="line">End of assembler dump.</span><br><span class="line">(gdb) p $esp</span><br><span class="line">$<span class="number">1</span> = (<span class="keyword">void</span> *) <span class="number">0xffffcc68</span></span><br><span class="line">(gdb) p $ebp</span><br><span class="line">$<span class="number">2</span> = (<span class="keyword">void</span> *) <span class="number">0xffffcc78</span></span><br><span class="line">(gdb) disas add</span><br><span class="line">Dump of assembler code <span class="keyword">for</span> function add:</span><br><span class="line"><span class="number">0x080483db</span> &lt;+<span class="number">0</span>&gt;:     push   %ebp <span class="comment">// ebp寄存器存储当前main栈帧栈底, 将ebp入栈，esp减去4字节</span></span><br><span class="line"><span class="number">0x080483dc</span> &lt;+<span class="number">1</span>&gt;:     mov    %esp,%ebp <span class="comment">// 把esp的数值赋给ebp</span></span><br><span class="line"><span class="number">0x080483de</span> &lt;+<span class="number">3</span>&gt;:     sub    $<span class="number">0x10</span>,%esp <span class="comment">// 把esp减去16个字节</span></span><br><span class="line">=&gt; <span class="number">0x080483e1</span> &lt;+<span class="number">6</span>&gt;:     mov    <span class="number">0x8</span>(%ebp),%edx <span class="comment">// ebp加上8个字节的位置的值 存入寄存器edx</span></span><br><span class="line"><span class="number">0x080483e4</span> &lt;+<span class="number">9</span>&gt;:     mov    <span class="number">0xc</span>(%ebp),%eax <span class="comment">// // ebp加上12个字节的位置的值 存入寄存器eax</span></span><br><span class="line"><span class="number">0x080483e7</span> &lt;+<span class="number">12</span>&gt;:    add    %edx,%eax <span class="comment">// edx的数值加上eax的数值存入eax</span></span><br><span class="line"><span class="number">0x080483e9</span> &lt;+<span class="number">14</span>&gt;:    mov    %eax,<span class="number">-0x4</span>(%ebp) <span class="comment">// ebx减去4字节的位置保存eax的值</span></span><br><span class="line"><span class="number">0x080483ec</span> &lt;+<span class="number">17</span>&gt;:    mov    <span class="number">-0x4</span>(%ebp),%eax <span class="comment">//</span></span><br><span class="line"><span class="number">0x080483ef</span> &lt;+<span class="number">20</span>&gt;:    leave <span class="comment">// LEAVE指令是将ebp的数值赋给esp，然后popl ebp， 即esp加上4字节</span></span><br><span class="line"><span class="number">0x080483f0</span> &lt;+<span class="number">21</span>&gt;:    ret <span class="comment">// RET指令则是将栈顶的返回地址弹出到EIP，esp+4 然后按照EIP此时指示的指令地址继续执行程序</span></span><br><span class="line">(gdb) p $ebp</span><br><span class="line">$<span class="number">6</span> = (<span class="keyword">void</span> *) <span class="number">0xffffcc58</span></span><br><span class="line">(gdb) p $esp</span><br><span class="line">$<span class="number">5</span> = (<span class="keyword">void</span> *) <span class="number">0xffffcc48</span></span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2018/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E6%A6%82%E8%BF%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="jiezi19971225">
-      <meta itemprop="description" content="记录编程学习路上的点滴">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Jiez19971225‘s Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E6%A6%82%E8%BF%B0/" class="post-title-link" itemprop="url">计算机网络学习笔记之概述</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-11-30 06:23:24" itemprop="dateCreated datePublished" datetime="2018-11-30T06:23:24+08:00">2018-11-30</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-31 09:47:14" itemprop="dateModified" datetime="2020-10-31T09:47:14+08:00">2020-10-31</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">计算机网络</span></a>
-                </span>
-            </span>
-
-          
-
-          <span class="post-time">
-            &nbsp; | &nbsp;
-            <span class="post-meta-item-icon">
-              <i class="fa fa-bar-chart"></i>
-            </span>
-            <span class="post-meta-item-text">字数统计:</span>
-            <span class="post-count">1.5k(字)</span>
-
-          </span>
-
-            <span class="post-time">
-          &nbsp; | &nbsp;
-            <span class="post-meta-item-icon">
-              <i class="fa fa-clock-o"></i>
-            </span>
-            <span class="post-meta-item-text">阅读时长:</span>
-            <span class="post-count">5(分)</span>
-
-          </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="互联网的组成"><a href="#互联网的组成" class="headerlink" title="互联网的组成"></a>互联网的组成</h3><ul>
-<li>对等连接 即 p2p（peer to peer），是指两台主机在通信时并不区分哪一个是服务请求方哪一个是服务提供方。只要两台主机都运行了对等连接软件（p2p 软件），他们就可以进行对等，平等连接通信，这时，双方下载对方已经存储在硬盘中的共享文档。对等连接工作方式可以支持大量对等用户同事工作</li>
-<li>在互联网的信息起特殊作用的是路由器，它是一种专用计算机，是实现分组交换（packet switching）的关键构建，其任务是转发收到的分组。</li>
-<li>电路交换的一个重要特点是，在通话的全部时间内，通话的两个用户始终占用端到端的通信资源。使用电路交换来传送计算机数据时，传输效率往往很低，因为计算机数据是突发地出现在传输线路上的，真正用来传送数据的时间很短，被用户占用的通信线路资源在大部分时间都是空闲的。</li>
-<li>分组交换采用存储转发技术，路由器收到一个分组，先暂时存储一下，检查其首部，查找转发表，按照首部中的目的地址，找到合适的接口转发出去。</li>
-<li>边缘部分 由所有连接在因特网上的主机组成，由用户直接使用，用来运行各种网络应用，为用户直接提供各种网络服务</li>
-<li>核心部分 由大量网络和连接这些网络的路由器组成，这部分是为边缘部分提供服务的</li>
-</ul>
-<h3 id="计算机网络的性能"><a href="#计算机网络的性能" class="headerlink" title="计算机网络的性能"></a>计算机网络的性能</h3><ul>
-<li>速率 指的是数据的传送速度，单位是 bit/s</li>
-<li>带宽 在计算机网络中，表示网络中某通道传送数据的能力，表示在单位时间内网络中某信道所能通过的“最高数据率”，单位是 bit/s</li>
-<li>吞吐量 表示在单位时间内通过某个网络（或者信道，接口）的实际的数据量 额定速度 1Gbit/s 的以太网，实际拓扑两可能只是 100Mbit/s</li>
-<li>时延（delay 或者 latency）是指数据（一个报文或分组，甚至比特）从网络（或者链路）的一个端传送到另一端所需的时间。<ul>
-<li>发送时延 是主机或路由器发送数据帧所需要的时间<br>发送时延 = 数据帧长度（bit）/ 发送速率（bit/s）</li>
-<li>传播时延 是电磁波在信道中传播一定的距离需要花费的时间<br>传播时延长 = 信道长度（m）/ 电磁波在信道上的传播速率（m/s）<br>电磁波在自由空间的传播速率是光速，在光纤中速率约为 2.0 * 10^5km/s，1000km 长的光纤线路的传播时延大约为 5ms</li>
-<li>处理时延 主机或路由器在收到分组时要花费一定的时间进行处理造成的时延</li>
-<li>排队时延 分组在经过网络传输时，要经过许多路由器，分组进入路由器后，要先在输入队列中排队等待处理</li>
-<li>时延带宽积 又称为以比特为单位的链路长度<br>时延带宽积 = 传播时延 * 带宽</li>
-<li>往返时间 RTT 即数据双向交互一次所需要的时间</li>
-<li>利用率 有信道利用率和网络利用率两种。信道或网络利用率过高会产生非常大的时延。</li>
-</ul>
-</li>
-<li>OSI（open system interconnection）开放系统互联标准，只是法律上的国际标准，TCP/IP 是实际上的国际标准<br>OSI 的七层模型包括应用层，表示层，会话层，运输层，网络层，数据链路层，物理层<br>TCP/IP 的四层模型包括应用层（TELNET，FTP，SMTP），传输层（TCP/UDP），网际层（IP），网络接口层<br>在学习计算机网络原理时，采取这种的办法，采用一种五层协议，包括应用层，运输层，网络层，数据链路层，物理层<ul>
-<li>应用层 任务是通过应用程序间的交互来完成特定网络应用。应用层协议定义的是应用进程间通信和交互的规则，对于不同的网络应用需要有不同的应用层协议，包括 HTTP 协议，域名系统 DNS，SMTP，应用层交互的数据单元称为报文</li>
-<li>运输层 任务是负责向两台主机中进程之间的通信提供通用的数据传输服务，主要使用两种协议<br>传输控制协议 TCP（Transmission Control Protocol），提供面向连接的，可靠的数据传输服务，其数据传输的单位是报文段（segment）<br>用户数据包协议 UDP（User Datagram Protocol），提供无连接的，尽最大努力的数据传输服务，不保证可靠性，传输的单位是用户数据报</li>
-<li>网络层 负责为分组交换网上的不同主机提供通信服务。在发送数据是，网络层把运输层产生的报文或用户数据报封装成分组或包进行传送。在 TCP/IP 体系中，网络层使用 IP 协议，因此分组也叫做 IP 数据报，或简称数据报。</li>
-<li>数据链路层 将网络层交下来的 IP 数据报组装成数据帧（framing），在两个相邻节点的链路上传送帧。每一帧包括数据和必要的控制信息（同步信息，地址信息，差错控制）。控制信息能使接受端能检测到所收到的帧有无差错，如果有差错，数据链路层就简单的丢弃这个出了差错的帧，如果有需要改正的数据在传输中出现了差错，就要采用可靠传输协议来纠错</li>
-<li>物理层 在物理层上所传数据的单位是比特</li>
-</ul>
-</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2018/11/25/%E8%BF%90%E7%BB%B4/oj%E8%BF%90%E7%BB%B4%E7%AC%94%E8%AE%B0-%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="jiezi19971225">
-      <meta itemprop="description" content="记录编程学习路上的点滴">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Jiez19971225‘s Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/11/25/%E8%BF%90%E7%BB%B4/oj%E8%BF%90%E7%BB%B4%E7%AC%94%E8%AE%B0-%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0/" class="post-title-link" itemprop="url">oj运维笔记-持续更新</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-11-25 13:59:10" itemprop="dateCreated datePublished" datetime="2018-11-25T13:59:10+08:00">2018-11-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-05 10:20:28" itemprop="dateModified" datetime="2020-10-05T10:20:28+08:00">2020-10-05</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%BF%90%E7%BB%B4/" itemprop="url" rel="index"><span itemprop="name">运维</span></a>
-                </span>
-            </span>
-
-          
-
-          <span class="post-time">
-            &nbsp; | &nbsp;
-            <span class="post-meta-item-icon">
-              <i class="fa fa-bar-chart"></i>
-            </span>
-            <span class="post-meta-item-text">字数统计:</span>
-            <span class="post-count">668(字)</span>
-
-          </span>
-
-            <span class="post-time">
-          &nbsp; | &nbsp;
-            <span class="post-meta-item-icon">
-              <i class="fa fa-clock-o"></i>
-            </span>
-            <span class="post-meta-item-text">阅读时长:</span>
-            <span class="post-count">2(分)</span>
-
-          </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>接到协会老师的任务，我负责了学校 oj 的开发和运维工作，这篇博客记录我在运维过程中遇到的一些问题和解决办法。</p>
-<ul>
-<li>重启容器 找不到 java，vi 等命令 使用 update update-alternatives —config 配置 java javac vi 等</li>
-<li>java 遇到　 OpenJDK 64-Bit Server VM warning: Can’t detect initial thread stack location - find_vma failed 　错误原因是 chroot 系统中，需要挂载/proc，只需要执行以下语句即可<br>mount -t proc none /proc</li>
-<li><p>php 下载 excel 文件 nginx 报错 502<br>首先查看 nginx 日志，发现在站点配置文件中没有设置输出日志，在站点配置文件末尾加入<br>error_log logs/errors.log error;<br>输入命令 nginx -t 发现报错<br>nginx: [emerg] open() “/usr/share/nginx/logs/errors.log” failed (2: No such file or directory)<br>使用 touch 创建日志文件，查看日志文件发现<br>*4 upstream sent too big header while reading response header from upstream<br>百度之后，说是 header 过大的问题，在 nginx.conf 的 http 段加入以下配置<br>proxy_buffer_size 128k;<br>proxy_buffers 32 32k;<br>proxy_busy_buffers_size 128k;</p>
-<pre><code>  fastcgi_buffer_size 128k;
-  fastcgi_buffers 4 256k;
-  fastcgi_busy_buffers_size 256k;
-</code></pre><p>问题搞定！</p>
-<ul>
-<li>手动执行 judge_client<br>judge_client 1000 1 /home/judge/hustoj_core debug</li>
-</ul>
-</li>
-<li><p>当 v-if 与 v-for 一起使用时，v-for 具有比 v-if 更高的优先级</p>
-</li>
-<li>supervisor 的使用 运行命令 supervisorctl 然后参照配置文件的写法运行命令</li>
-<li>docker-compose 要注意 services 不能重名，即使是在不同的目录下，如果 services 重名，会覆盖之前的容器，建议使用项目名+容器名进行命名</li>
-</ul>
-<h3 id="压力测试"><a href="#压力测试" class="headerlink" title="压力测试"></a>压力测试</h3><p>因为使用 redis 缓存了问题数据，我想要测试一下有没有带来性能上提升<br>首先我尝试的是 postman 的 runner，但是测试之后发现并没有什么区别。后来了解到 postman 的 runner 是串行的。<br>又看到 jMeter 这个工具，但是它在 linux 下没有 GUI，配置又很繁琐，直接劝退。<br>之后又看到 linux 下几款 命令行压力测试工具，最终选择使用 ab。</p>
-<h3 id="ab-的使用"><a href="#ab-的使用" class="headerlink" title="ab 的使用"></a>ab 的使用</h3><p>使用很简单，最基础的设置，请求 10000 次，并发数量 1000</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ab -n 10000 -c 1000 http:&#x2F;&#x2F;localhost:8080&#x2F;api&#x2F;problem&#x2F;1</span><br></pre></td></tr></table></figure>
-<h3 id="socket-Too-many-open-files-24-的解决办法"><a href="#socket-Too-many-open-files-24-的解决办法" class="headerlink" title="socket: Too many open files (24)的解决办法"></a>socket: Too many open files (24)的解决办法</h3><p>打开的文件太多了，超过了系统限制</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ulimit -n 204800</span><br></pre></td></tr></table></figure>
-<h3 id="redigo"><a href="#redigo" class="headerlink" title="redigo"></a>redigo</h3><p>文献 系统优点</p>
-<h3 id="nginx"><a href="#nginx" class="headerlink" title="nginx"></a>nginx</h3><p>nginx 容器配置反向代理，无法使用 localhost 访问主机，可以使用宿主机 docker 0 的网卡 ip 代替</p>
-<h3 id="mysql-相关"><a href="#mysql-相关" class="headerlink" title="mysql 相关"></a>mysql 相关</h3><p>innodb_lock_wait_timeout 和 lock_wait_timeout<br>前者是 innodb 的 dml 操作的行级锁的等待时间 后面是数据结构 ddl 操作的锁的等待时间</p>
-<p>减少锁等待时间，防止数据库卡死</p>
-<p>set GLOBAL innodb_lock_wait_timeout = 50;<br>set GLOBAL lock_wait_timeout = 10;</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/6/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span>
+    <a class="extend prev" rel="prev" href="/page/6/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/8/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1979,20 +2020,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-count">73</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">17</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-count">50</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
