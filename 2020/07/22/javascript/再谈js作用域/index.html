@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+<meta name="baidu-site-verification" content="5IfwMCE5hH" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.jiezi19971225.cn","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="缘起写这篇文章的契机，是最近有看 react 源码的想法。先是看了这篇文章 如何阅读大型前端开源项目的源码 学习了一波姿势，然后开始下载 react 工程鼓捣起来。源码打断点，构建 umd 代码，然后看函数调用栈，执行到这一步，看到了这个页面，发现都是我不熟悉的东西。比如这个 Scope，虽然大体知道是作用域，但是具体是按照什么规则得到的，就不是很清楚了。所以决定先搞清一下 js 的作用域问题。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="再谈js作用域">
+<meta property="og:url" content="http://www.jiezi19971225.cn/2020/07/22/javascript/%E5%86%8D%E8%B0%88js%E4%BD%9C%E7%94%A8%E5%9F%9F/index.html">
+<meta property="og:site_name" content="Jiez19971225‘s Blog">
+<meta property="og:description" content="缘起写这篇文章的契机，是最近有看 react 源码的想法。先是看了这篇文章 如何阅读大型前端开源项目的源码 学习了一波姿势，然后开始下载 react 工程鼓捣起来。源码打断点，构建 umd 代码，然后看函数调用栈，执行到这一步，看到了这个页面，发现都是我不熟悉的东西。比如这个 Scope，虽然大体知道是作用域，但是具体是按照什么规则得到的，就不是很清楚了。所以决定先搞清一下 js 的作用域问题。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://www.jiezi19971225.cn/2020/07/22/javascript/%E5%86%8D%E8%B0%88js%E4%BD%9C%E7%94%A8%E5%9F%9F/这都啥玩意啊.png">
+<meta property="og:image" content="http://www.jiezi19971225.cn/2020/07/22/javascript/%E5%86%8D%E8%B0%88js%E4%BD%9C%E7%94%A8%E5%9F%9F/预编译1.png">
+<meta property="og:image" content="http://www.jiezi19971225.cn/2020/07/22/javascript/%E5%86%8D%E8%B0%88js%E4%BD%9C%E7%94%A8%E5%9F%9F/预编译2.png">
+<meta property="og:image" content="http://www.jiezi19971225.cn/2020/07/22/javascript/%E5%86%8D%E8%B0%88js%E4%BD%9C%E7%94%A8%E5%9F%9F/预编译3.png">
+<meta property="og:image" content="http://www.jiezi19971225.cn/2020/07/22/javascript/%E5%86%8D%E8%B0%88js%E4%BD%9C%E7%94%A8%E5%9F%9F/闭包1.png">
+<meta property="og:image" content="http://www.jiezi19971225.cn/2020/07/22/javascript/%E5%86%8D%E8%B0%88js%E4%BD%9C%E7%94%A8%E5%9F%9F/闭包2.png">
+<meta property="article:published_time" content="2020-07-22T02:56:36.000Z">
+<meta property="article:modified_time" content="2021-10-21T16:45:16.135Z">
+<meta property="article:author" content="jiezi19971225">
+<meta property="article:tag" content="javascript">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://www.jiezi19971225.cn/2020/07/22/javascript/%E5%86%8D%E8%B0%88js%E4%BD%9C%E7%94%A8%E5%9F%9F/这都啥玩意啊.png">
+
+<link rel="canonical" href="http://www.jiezi19971225.cn/2020/07/22/javascript/%E5%86%8D%E8%B0%88js%E4%BD%9C%E7%94%A8%E5%9F%9F/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>再谈js作用域 | Jiez19971225‘s Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Jiez19971225‘s Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">做自己爱做的事</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/07/22/javascript/%E5%86%8D%E8%B0%88js%E4%BD%9C%E7%94%A8%E5%9F%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content="记录编程学习路上的点滴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          再谈js作用域
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-07-22 02:56:36" itemprop="dateCreated datePublished" datetime="2020-07-22T02:56:36+00:00">2020-07-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-10-21 16:45:16" itemprop="dateModified" datetime="2021-10-21T16:45:16+00:00">2021-10-21</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index"><span itemprop="name">javascript</span></a>
+                </span>
+            </span>
+
+          
+
+          <span class="post-time">
+            &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-bar-chart"></i>
+            </span>
+            <span class="post-meta-item-text">字数统计:</span>
+            <span class="post-count">1.6k(字)</span>
+
+          </span>
+
+            <span class="post-time">
+          &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-clock-o"></i>
+            </span>
+            <span class="post-meta-item-text">阅读时长:</span>
+            <span class="post-count">5(分)</span>
+
+          </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="缘起"><a href="#缘起" class="headerlink" title="缘起"></a>缘起</h2><p>写这篇文章的契机，是最近有看 react 源码的想法。先是看了这篇文章 <a target="_blank" rel="noopener" href="https://juejin.im/post/5afe3735518825426539afce">如何阅读大型前端开源项目的源码</a> 学习了一波姿势，然后开始下载 react 工程鼓捣起来。源码打断点，构建 umd 代码，然后看函数调用栈，执行到这一步，看到了这个页面，发现都是我不熟悉的东西。比如这个 Scope，虽然大体知道是作用域，但是具体是按照什么规则得到的，就不是很清楚了。所以决定先搞清一下 js 的作用域问题。</p>
+<p><img src="/2020/07/22/javascript/%E5%86%8D%E8%B0%88js%E4%BD%9C%E7%94%A8%E5%9F%9F/这都啥玩意啊.png" alt="这都啥玩意啊"></p>
+<p>js 的作用域，是一个老生常谈的问题了，也是面试常考的内容。以前也通过看 js 高程，你不知道的 js 这些书对此有过据较为深入的学习，刷一些面试题的时候也背了一些“标准答案”，但是时间一长，也忘掉大半了。现在要我真说道说道，大概是说不出个所以然来的。今天搜索相关信息时看到这个博客的一一系列博文讲的真不错 <a target="_blank" rel="noopener" href="https://blog.csdn.net/q1056843325/category_9267514.html">https://blog.csdn.net/q1056843325/category_9267514.html</a> ，自己对这一块其实挺欠缺的。纸上得来终觉浅，觉知此事要躬行。这次主要借鉴这位博主的文章内容，借助 Chrome 的开发者工具好好探究一下这个问题。</p>
+<h2 id="探究"><a href="#探究" class="headerlink" title="探究"></a>探究</h2><h3 id="预编译，变量提升与-let，const"><a href="#预编译，变量提升与-let，const" class="headerlink" title="预编译，变量提升与 let，const"></a>预编译，变量提升与 let，const</h3><p>脚本执行时，js 引擎会做下面三件事。</p>
+<ol>
+<li>语法分析 引擎检查代码是否包含低级语法错误</li>
+<li>预编译 在内存中开辟一些空间，存放变量与函数</li>
+<li>解释执行</li>
+</ol>
+<p>语法分析很简单，就是引擎检查你的代码有没有什么低级的语法错误<br>解释执行顾名思义便是执行代码了<br>预编译简单理解就是在内存中开辟一些空间，存放一些变量与函数</p>
+<h4 id="预编译的发生时间"><a href="#预编译的发生时间" class="headerlink" title="预编译的发生时间"></a>预编译的发生时间</h4><p>我之前也以为预编译主要就是做了变量提升这件工作，也就是在脚本解释执行前执行一次。但实际上，在函数执行前都会进行预编译。</p>
+<p>先看一下我之前理解的预编译，在 v8 引擎中时怎么做的。</p>
+<p><img src="/2020/07/22/javascript/%E5%86%8D%E8%B0%88js%E4%BD%9C%E7%94%A8%E5%9F%9F/预编译1.png" alt="预编译1"></p>
+<p>在脚本第一行执行前插入了 debugger 语句，这个时候预编译已经完成。我们看到 Scope 的 Global 作用域（浏览器中的 window 对象）中已经有了以下的属性，符合我们的认知，对于 let 声明的属性，预编译的时候是没有处理的。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">a</span>:<span class="literal">undefined</span>,</span><br><span class="line">  <span class="attr">b</span>:ƒ b(y),</span><br><span class="line">  <span class="attr">c</span>: <span class="literal">undefined</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后继续执行，直到执行完了，我们看到 Scope 中多了一个 Script 的标签，其中保存了 aa 的值。这个按我的理解，也可以把它当作全局作用域，与 Global 不同的是，你没法在 window 对象上访问它。</p>
+<p><img src="/2020/07/22/javascript/%E5%86%8D%E8%B0%88js%E4%BD%9C%E7%94%A8%E5%9F%9F/预编译2.png" alt="预编译2"></p>
+<p>接下来就要执行函数了，在此之前，需要插入一点另外的知识</p>
+<p><strong>函数的 <code>[[Scope]]</code> 属性</strong><br>函数是特殊的可执行对象。既然是对象，就可以拥有属性。函数中存在这一个内部属性<code>[[Scope]]</code>（我们不能使用，供 js 引擎使用）函数被创建时，这个内部属性就会包含函数被创建的作用域中对象的集合。这个集合呈链式链接，被称为函数的作用域链。按照我的理解，这和词法作用域是一个概念。这个 <code>[[Scope]]</code>是会随着代码执行动态变化的。在这个例子中，b 函数的 <code>[[Scope]]</code> 一开始是没有 Script 的，在 let 声明执行后，Script 就被添加上了。</p>
+<p><strong>函数的执行环境</strong><br>在函数执行时，会创建一个叫做执行环境/执行上下文（execution context）的内部对象，它定义了一个函数执行时的环境。函数每次执行时的执行环境独一无二，多次调用函数就多次创建执行环境，并且函数执行完毕后，执行环境就会被销毁，执行环境有自己的作用域链，用于解析标识符。</p>
+<p><code>[[Scope]]</code>和执行期上下文虽然保存的都是作用域链，但不是同一个东西。<code>[[Scope]]</code>属性是函数创建时产生的，会一直存在,而执行上下文在函数执行时产生，函数执行结束便会销毁。</p>
+<p><strong>预编译发生在每次函数执行前这个创建执行上下文的过程</strong><br>预编译生成了下图中的 Local 作用域。而 Script 和 Global 作用域，则是函数属性 <code>[[Scope]]</code>的拷贝。<br><img src="/2020/07/22/javascript/%E5%86%8D%E8%B0%88js%E4%BD%9C%E7%94%A8%E5%9F%9F/预编译3.png" alt="预编译3"></p>
+<p>这个博主的文章，里面多次提到了 AO 活动对象的概念，实际上这是 ES3 的说法了，还是以开发者工具的展现为准，这样更好理解一点。<br>至此，关于预编译的问题解决。</p>
+<p><strong>性能优化</strong></p>
+<p>js 引擎查找作用域链是为了解析标识符，变量在执行环境作用域链的位置越深，读写速度就越慢，因此应该多用局部变量（缓存）。</p>
+<h3 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h3><p>以前看过这样一个对于闭包的解释。当在一个函数中返回一个函数的时候，这个被返回的时候就可以保有当前函数作用域的变量的引用，这就形成了闭包。</p>
+<p>但这样的理解是不充分的。实际上，只要是在函数的作用域内定义了函数，这个被定义的函数就具有闭包作用域。</p>
+<p><img src="/2020/07/22/javascript/%E5%86%8D%E8%B0%88js%E4%BD%9C%E7%94%A8%E5%9F%9F/闭包1.png" alt="闭包1"></p>
+<p>因此闭包的一大用途，就是实现私有变量。我们知道函数如果返回一个对象，在对它进行构造调用时，结果返回的就是该对象。不过使用这种方式，this 赋值的属性和原型绑定就失效了。</p>
+<p><img src="/2020/07/22/javascript/%E5%86%8D%E8%B0%88js%E4%BD%9C%E7%94%A8%E5%9F%9F/闭包2.png" alt="闭包2"></p>
+<p>可以看到，当执行以这种方式返回的函数时，可以通过闭包的方式访问执行构造调用时的 Local 作用域。<br>再回想一下之前说过的，函数每次执行时的执行环境独一无二，多次调用函数就多次创建执行环境，和 settimeout 打印的经典问题，顿时感觉豁然开朗了啊。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/javascript/" rel="tag"># javascript</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/07/18/javascript/es6class%E7%9A%84%E4%B8%80%E4%BA%9B%E8%BF%B7%E6%83%91%E7%82%B9/" rel="prev" title="es6class的一些迷惑点">
+      <i class="fa fa-chevron-left"></i> es6class的一些迷惑点
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/10/01/java/javase/" rel="next" title="java基础">
+      java基础 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%98%E8%B5%B7"><span class="nav-number">1.</span> <span class="nav-text">缘起</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A2%E7%A9%B6"><span class="nav-number">2.</span> <span class="nav-text">探究</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%84%E7%BC%96%E8%AF%91%EF%BC%8C%E5%8F%98%E9%87%8F%E6%8F%90%E5%8D%87%E4%B8%8E-let%EF%BC%8Cconst"><span class="nav-number">2.1.</span> <span class="nav-text">预编译，变量提升与 let，const</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A2%84%E7%BC%96%E8%AF%91%E7%9A%84%E5%8F%91%E7%94%9F%E6%97%B6%E9%97%B4"><span class="nav-number">2.1.1.</span> <span class="nav-text">预编译的发生时间</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AD%E5%8C%85"><span class="nav-number">2.2.</span> <span class="nav-text">闭包</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">jiezi19971225</p>
+  <div class="site-description" itemprop="description">记录编程学习路上的点滴</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jiezi19971225</span>
+</div>
+  <img src="https://static.dy208.cn/o_1dfilp8ruo521thr1hvf18ji17soa.png"/>
+  <a href="http://www.beian.miit.gov.cn/"  style="color:#f72b07" target="_blank">皖ICP备17001385号-1</a>
+  <br/>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

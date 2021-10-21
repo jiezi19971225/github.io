@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+<meta name="baidu-site-verification" content="5IfwMCE5hH" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.jiezi19971225.cn","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="跟着官方文档学习 Getting Starteddb 显示当前数据库 插入文档12345678910111213141516db.inventory.insertMany([  &amp;#123;    item: &quot;journal&quot;,    qty: 25,    status: &quot;A&quot;,    size: &amp;#123; h: 14, w: 21, uom: &amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mongodb入门">
+<meta property="og:url" content="http://www.jiezi19971225.cn/2019/03/14/%E6%95%B0%E6%8D%AE%E5%BA%93/Mongodb%E5%85%A5%E9%97%A8/index.html">
+<meta property="og:site_name" content="Jiez19971225‘s Blog">
+<meta property="og:description" content="跟着官方文档学习 Getting Starteddb 显示当前数据库 插入文档12345678910111213141516db.inventory.insertMany([  &amp;#123;    item: &quot;journal&quot;,    qty: 25,    status: &quot;A&quot;,    size: &amp;#123; h: 14, w: 21, uom: &amp;">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-03-14T01:36:04.000Z">
+<meta property="article:modified_time" content="2021-10-21T16:45:16.147Z">
+<meta property="article:author" content="jiezi19971225">
+<meta property="article:tag" content="Mongodb">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://www.jiezi19971225.cn/2019/03/14/%E6%95%B0%E6%8D%AE%E5%BA%93/Mongodb%E5%85%A5%E9%97%A8/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Mongodb入门 | Jiez19971225‘s Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Jiez19971225‘s Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">做自己爱做的事</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2019/03/14/%E6%95%B0%E6%8D%AE%E5%BA%93/Mongodb%E5%85%A5%E9%97%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content="记录编程学习路上的点滴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Mongodb入门
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-03-14 01:36:04" itemprop="dateCreated datePublished" datetime="2019-03-14T01:36:04+00:00">2019-03-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-10-21 16:45:16" itemprop="dateModified" datetime="2021-10-21T16:45:16+00:00">2021-10-21</time>
+              </span>
+
+          
+
+          <span class="post-time">
+            &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-bar-chart"></i>
+            </span>
+            <span class="post-meta-item-text">字数统计:</span>
+            <span class="post-count">3.8k(字)</span>
+
+          </span>
+
+            <span class="post-time">
+          &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-clock-o"></i>
+            </span>
+            <span class="post-meta-item-text">阅读时长:</span>
+            <span class="post-count">15(分)</span>
+
+          </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>跟着官方文档学习</p>
+<h2 id="Getting-Started"><a href="#Getting-Started" class="headerlink" title="Getting Started"></a>Getting Started</h2><p>db 显示当前数据库</p>
+<h3 id="插入文档"><a href="#插入文档" class="headerlink" title="插入文档"></a>插入文档</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">db.inventory.insertMany([</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">item</span>: <span class="string">&quot;journal&quot;</span>,</span><br><span class="line">    <span class="attr">qty</span>: <span class="number">25</span>,</span><br><span class="line">    <span class="attr">status</span>: <span class="string">&quot;A&quot;</span>,</span><br><span class="line">    <span class="attr">size</span>: &#123; <span class="attr">h</span>: <span class="number">14</span>, <span class="attr">w</span>: <span class="number">21</span>, <span class="attr">uom</span>: <span class="string">&quot;cm&quot;</span> &#125;,</span><br><span class="line">    <span class="attr">tags</span>: [<span class="string">&quot;blank&quot;</span>, <span class="string">&quot;red&quot;</span>],</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">item</span>: <span class="string">&quot;notebook&quot;</span>,</span><br><span class="line">    <span class="attr">qty</span>: <span class="number">50</span>,</span><br><span class="line">    <span class="attr">status</span>: <span class="string">&quot;A&quot;</span>,</span><br><span class="line">    <span class="attr">size</span>: &#123; <span class="attr">h</span>: <span class="number">8.5</span>, <span class="attr">w</span>: <span class="number">11</span>, <span class="attr">uom</span>: <span class="string">&quot;in&quot;</span> &#125;,</span><br><span class="line">    <span class="attr">tags</span>: [<span class="string">&quot;red&quot;</span>, <span class="string">&quot;blank&quot;</span>],</span><br><span class="line">  &#125;,</span><br><span class="line">]);</span><br></pre></td></tr></table></figure>
+<h3 id="查询所有文档"><a href="#查询所有文档" class="headerlink" title="查询所有文档"></a>查询所有文档</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.inventory.find(&#123;&#125;);</span><br></pre></td></tr></table></figure>
+<p>美化查询结果</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.inventory.find(&#123;&#125;).pretty();</span><br></pre></td></tr></table></figure>
+<h3 id="相等匹配"><a href="#相等匹配" class="headerlink" title="相等匹配"></a>相等匹配</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.inventory.find(&#123; <span class="attr">status</span>: <span class="string">&quot;D&quot;</span> &#125;);</span><br></pre></td></tr></table></figure>
+<p>对于数组，严格相等，数组项的顺序也要一致</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 不匹配 &#123; tags: [&quot;blank&quot;, &quot;red&quot;] &#125;</span></span><br><span class="line">db.inventory.find(&#123; <span class="attr">tags</span>: [<span class="string">&quot;red&quot;</span>, <span class="string">&quot;blank&quot;</span>] &#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="定义返回结构-Projection"><a href="#定义返回结构-Projection" class="headerlink" title="定义返回结构 Projection"></a>定义返回结构 Projection</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.inventory.find( &#123; &#125;, &#123; item: 1, status: 1 &#125; );</span><br></pre></td></tr></table></figure>
+<p>默认全是 0 或者全是 1，不能既有 0 又有 1</p>
+<h2 id="database-and-collections"><a href="#database-and-collections" class="headerlink" title="database and collections"></a>database and collections</h2><p>MongoDB 在集合中存储 BSON 文档，即数据记录;数据库中的集合。</p>
+<h3 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h3><p>可以 使用 use 去切换到一个不存在的数据库</p>
+<p>如果数据库不存在，MongoDB 将在您第一次为该数据库存储数据时创建数据库。</p>
+<p>MongoDB 将文档存储在集合中。集合类似于关系数据库中的表。</p>
+<p>如果一个集合不存在，MongoDB 会在您第一次存储该集合的数据时创建该集合。</p>
+<h4 id="ObjectId"><a href="#ObjectId" class="headerlink" title="ObjectId"></a>ObjectId</h4><p>ObjectId 是一个 12 字节的 BSON 类型字符串。按照字节顺序，依次代表：</p>
+<ul>
+<li>4 字节 UNIX 时间戳</li>
+<li>3 字节 运行 MongoDB 的机器</li>
+<li>2 字节 代表生成次 id 的进程</li>
+<li>3 字节 由一个随机数开始的的计数器生成的值</li>
+</ul>
+<p>使用这种机制可以保证唯一性</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">db.myNewCollection2.insertOne(&#123; <span class="attr">x</span>: <span class="number">1</span> &#125;);</span><br><span class="line">db.myNewCollection3.createIndex(&#123; <span class="attr">y</span>: <span class="number">1</span> &#125;);</span><br></pre></td></tr></table></figure>
+<p>如果 insertOne()和 createIndex()操作还不存在，那么它们将创建各自的集合。确保集合名称遵循 MongoDB 命名限制。</p>
+<p>db.createCollection() 可以显式以指定的选项创建一个数据库</p>
+<h3 id="view"><a href="#view" class="headerlink" title="view"></a>view</h3><p>view 是一个可查询的对象，由其他集合或者视图聚合产生。</p>
+<p>MongoDB 并不在硬盘中保存 view，而是在需要的时候进行计算。view 不支持写操作</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">db.createCollection(</span><br><span class="line">  <span class="string">&quot;&lt;viewName&gt;&quot;</span>,</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="string">&quot;viewOn&quot;</span> : <span class="string">&quot;&lt;source&gt;&quot;</span>,</span><br><span class="line">    <span class="string">&quot;pipeline&quot;</span> : [&lt;pipeline&gt;],</span><br><span class="line">    <span class="string">&quot;collation&quot;</span> : &#123; &lt;collation&gt; &#125;</span><br><span class="line">  &#125;</span><br><span class="line">);</span><br><span class="line">db.createView(</span><br><span class="line">  <span class="string">&quot;&lt;viewName&gt;&quot;</span>,</span><br><span class="line">  <span class="string">&quot;&lt;source&gt;&quot;</span>,</span><br><span class="line">  [&lt;pipeline&gt;],</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="string">&quot;collation&quot;</span> : &#123; &lt;collation&gt; &#125;</span><br><span class="line">  &#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>view 支持以下方法</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">db.collection.find();</span><br><span class="line">db.collection.findOne();</span><br><span class="line">db.collection.aggregate();</span><br><span class="line">db.collection.countDocuments();</span><br><span class="line">db.collection.estimatedDocumentCount();</span><br><span class="line">db.collection.count();</span><br><span class="line">db.collection.distinct();</span><br></pre></td></tr></table></figure>
+<h3 id="更新文档"><a href="#更新文档" class="headerlink" title="更新文档"></a>更新文档</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">db.collsetion.update(</span><br><span class="line">  &lt;query&gt;,</span><br><span class="line">  &lt;updateObj&gt;,</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">upsert</span>:&lt;boolean&gt;,</span><br><span class="line">    multi:&lt;boolean&gt;</span><br><span class="line">  &#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>update 更新后的对象或指定一些更新的操作符</p>
+<ul>
+<li><code>$set</code> 直接指定更新后的值</li>
+<li><code>$inc</code> 在原基础上累加</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">db.students.update(&#123; <span class="attr">name</span>: <span class="string">&quot;zf&quot;</span> &#125;, &#123; <span class="attr">$set</span>: &#123; <span class="attr">age</span>: <span class="number">44</span> &#125; &#125;);</span><br><span class="line">db.students.update(&#123; <span class="attr">name</span>: <span class="string">&quot;zf&quot;</span> &#125;, &#123; <span class="attr">$inc</span>: &#123; <span class="attr">age</span>: <span class="number">1</span> &#125; &#125;);</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>$unset</code> 删除字段，如果字段不存在不做处理</li>
+<li><code>$push</code> 向数组添加数据</li>
+<li><code>$ne</code></li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.students.update(&#123; <span class="attr">hobby</span>: &#123; <span class="attr">$ne</span>: <span class="string">&quot;smoking&quot;</span> &#125; &#125;, &#123;&#125;);</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>$each</code></li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">db.students.update(</span><br><span class="line">  &#123; <span class="attr">name</span>: <span class="string">&quot;zf&quot;</span> &#125;,</span><br><span class="line">  &#123; <span class="attr">$push</span>: &#123; <span class="attr">hobby</span>: &#123; <span class="attr">$each</span>: [<span class="string">&quot;smok&quot;</span>, <span class="string">&quot;dringing&quot;</span>] &#125; &#125; &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>$addToSet</code> 插入到集合，可以保证唯一性，如果项是重复的，将不会被插入</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.students.update(&#123; <span class="attr">name</span>: <span class="string">&quot;zfpx&quot;</span> &#125;, &#123; <span class="attr">$addToSet</span>: &#123; <span class="attr">hobby</span>: <span class="string">&quot;drink&quot;</span> &#125; &#125;);</span><br></pre></td></tr></table></figure>
+<p>upsert 可选，不过不存在记录是否插入，默认不插入<br>muitl 可选，默认只更新找到的第一条记录，如果为 true，更新所有符合的记录</p>
+<h3 id="操作符"><a href="#操作符" class="headerlink" title="操作符"></a>操作符</h3><p><code>$eq</code>：匹配字段值等于指定值的文档</p>
+<p><code>$gt</code>：匹配字段值大于指定值的文档</p>
+<p><code>$gte</code>：匹配字段值大于等于指定值的文档</p>
+<p><code>$lt</code>：匹配字段值小于指定值的文档</p>
+<p><code>$lte</code>：匹配字段值小于等于指定值的文档</p>
+<p><code>$ne</code>：匹配字段值不等于指定值的文档，包括没有这个字段的文档</p>
+<p><code>$in</code>：匹配字段值等于指定数组中的任何值</p>
+<p><code>$nin</code>：字段值不在指定数组或者不存在</p>
+<p><code>$or</code>：文档至少满足其中的一个表达式</p>
+<p><code>$not</code>：字段值不匹配表达式或者字段值不存在</p>
+<p><code>$nor</code>：字段值不匹配所有的表达式的文档，包括那些不包含这些字段的文档</p>
+<p><code>$exists</code>：boolean 等于 true 时，字段存在，包括字段值为 null 的文档</p>
+<p><code>$type</code>：匹配字段值为指定数据类型的文档</p>
+<p><code>$mod</code>：匹配字段值被除有指定的余数的文档</p>
+<p><code>$regex</code>：正则表达式可以匹配到的文档</p>
+<p><code>$text</code>：针对创建了全文索引的字段进行文本搜索</p>
+<p><code>$where</code>：可以通过 js 表达式或 js 函数来查询文档<br><code>$all</code>: 字段值是包含所有指定元素的数组的文档<br><code>$elemMatch</code>：数组字段至少一个元素满足所有指定查询条件的文档<br><code>$size</code>：匹配数组字段元素个数等于指定数量的文档<br><code>$ (projection)</code>：限定查询结果中指定数组字段返回满足条件的第一个元素<br><code>$elemMatch (projection)</code>：限定查询结果中指定数组字段返回满足条件的第一个元素<br><code>$slice (projection)</code>：控制指定数组字段返回元素个数<br><code>$inc</code>：给一个字段增加指定值<br><code>$setOnInsert</code> ：upsert 为 true 时，有插入文档操作时插入指定字段值<br><code>$unset</code>：删除指定字段</p>
+<p><code>$min</code>：指定值小于当前值则更新为指定值<br><code>$max</code>: 指定值大于当前值则更新为指定值<br><code>$currentDate</code>:设置字段值为当前日期</p>
+<p><code>$</code>: 更新指定数组的第一个元素<br><code>$addToSet</code>:数组字段增加一个值<br><code>$pop</code>: 删除数组字段中的第一个或最后一个元素<br><code>$pullAll</code>: 删除数组字段中所有指定值，如果指定值为数组，则删除匹配数组内的元素<br><code>$pull</code>: 符合条件的值将被删除<br><code>$pushAll</code>：向数组中追加多个指定值<br><code>$push</code>：向数组中追加值<br><code>$each</code>：用于 <code>$addToSet</code> 添加多个值到数组中</p>
+<h3 id="高级知识"><a href="#高级知识" class="headerlink" title="高级知识"></a>高级知识</h3><h4 id="通过配置项启动数据库"><a href="#通过配置项启动数据库" class="headerlink" title="通过配置项启动数据库"></a>通过配置项启动数据库</h4><p>—dbpath 数据库文件的目录<br>—port 默认是 27017 28017<br>—fork 以后台守护方式运行<br>—logpath 日志目录<br>—config 指定一个配置文件<br>—auth 以安全参数启动</p>
+<h4 id="导入导出"><a href="#导入导出" class="headerlink" title="导入导出"></a>导入导出</h4><p>mongoimport 导出数据<br>mongoexport 导入数据</p>
+<p>mongodb 使用 mongorestore 来恢复备份的数据</p>
+<p>Mongodump 可以 backup 整个数据库，而 mongoexport 要对每个 conllection 进行操作。恢复使用 mongostore</p>
+<p>mongoexport 输出的 json 比 mongodump 的 bson 可读性高，进而可以直接对 json 文件进行操作然后还原数据（bson 转换 json 存在潜在兼容问题）</p>
+<h3 id="安全措施"><a href="#安全措施" class="headerlink" title="安全措施"></a>安全措施</h3><p>物理隔离<br>网络隔离<br>防火墙<br>用户名和密码验证</p>
+<h4 id="用户管理"><a href="#用户管理" class="headerlink" title="用户管理"></a>用户管理</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">show roles 查看角色</span><br><span class="line">db.createUser(&#123;<span class="attr">user</span>:<span class="string">&#x27;zf&#x27;</span>,<span class="attr">pwd</span>:<span class="string">&#x27;123&#x27;</span>,<span class="attr">roles</span>:[&#123;<span class="attr">db</span>:<span class="string">&#x27;school&#x27;</span>&#125;,<span class="attr">role</span>:<span class="string">&#x27;read&#x27;</span>]&#125;)</span><br></pre></td></tr></table></figure>
+<h3 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h3><p>ensure 表示升序</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.students.ensureIndex(&#123; <span class="attr">age</span>: <span class="number">1</span> &#125;);</span><br></pre></td></tr></table></figure>
+<h4 id="分析索引的执行过程"><a href="#分析索引的执行过程" class="headerlink" title="分析索引的执行过程"></a>分析索引的执行过程</h4><p>mongodb 提供了 explain 命令来分析查询过程</p>
+<h4 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h4><p>1 为正序 -1 为倒序<br>索引可以提升查询速度，但会降低插入速度<br>数据量不大时不需要使用索引，性能的提升不明显，反而大大增加了内存和硬盘的消耗<br>查询数据超过表数据量 30%时，不要使用索引字段查询<br>排序工作的时候可以建立索引提高排序速度<br>数字索引要比字符串索引快得多</p>
+<h3 id="集群技术"><a href="#集群技术" class="headerlink" title="集群技术"></a>集群技术</h3><h4 id="主从复制"><a href="#主从复制" class="headerlink" title="主从复制"></a>主从复制</h4><p>数据库集群中明确知道谁是主服务器，主服务器只有一台<br>从服务器要知道自己的数据源也就是主服务器是谁<br>—master 用来确定主服务器，—slave 和—source 来控制从服务器</p>
+<h5 id="其他选项"><a href="#其他选项" class="headerlink" title="其他选项"></a>其他选项</h5><p>-only 从节点 指定复制某个数据库<br>-slavedelay 从节点 设置主数据库同步数据的延迟<br>-fastsync 从节点 以主数据库的节点快照为节点启动从数据库<br>-autoresync 从节点 如果不同步则重新同步数据库<br>-oplogSize 主节点 设置 oplog 的大小</p>
+<h5 id="db-sources"><a href="#db-sources" class="headerlink" title="db.sources"></a>db.sources</h5><p>提供了 api 设置从服务器的 source</p>
+<h4 id="副本集"><a href="#副本集" class="headerlink" title="副本集"></a>副本集</h4><p>需要一台活跃服务器和两个备份服务器<br>当活跃服务器故障，集群根据权重算法推选出活跃服务器<br>当原来的主服务器恢复后又会变成从服务器</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dbpath=...</span><br><span class="line">prot=...</span><br><span class="line">replSet=group  // 每个副本集需要有一个名字</span><br></pre></td></tr></table></figure>
+<h2 id="mongoose"><a href="#mongoose" class="headerlink" title="mongoose"></a>mongoose</h2><h3 id="Schema"><a href="#Schema" class="headerlink" title="Schema"></a>Schema</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> personSchema = <span class="keyword">new</span> Schema(&#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="built_in">String</span>,</span><br><span class="line">  <span class="attr">binary</span>: Buffer,</span><br><span class="line">  <span class="attr">living</span>: <span class="built_in">Boolean</span>,</span><br><span class="line">  <span class="attr">birthday</span>: <span class="built_in">Date</span>,</span><br><span class="line">  <span class="attr">age</span>: <span class="built_in">Number</span>,</span><br><span class="line">  <span class="attr">_id</span>: Schema.Types.ObjectId,</span><br><span class="line">  <span class="attr">_fk</span>: Schema.Types.ObjectId,</span><br><span class="line">  <span class="attr">array</span>: [],</span><br><span class="line">  <span class="attr">arrOfString</span>: [<span class="built_in">String</span>],</span><br><span class="line">  <span class="attr">arrOfNumber</span>: [<span class="built_in">Number</span>],</span><br><span class="line">  <span class="comment">// 内嵌文档</span></span><br><span class="line">  <span class="attr">nested</span>: &#123;</span><br><span class="line">    <span class="attr">name</span>: <span class="built_in">String</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h4 id="SchemaType"><a href="#SchemaType" class="headerlink" title="SchemaType"></a>SchemaType</h4><p>以下是 mongoose 的所有合法 SchemaTypes：</p>
+<ul>
+<li>String</li>
+<li>Number</li>
+<li>Date</li>
+<li>Buffer</li>
+<li>Boolean</li>
+<li>Mixed</li>
+<li>ObjectId</li>
+<li>Array</li>
+<li>Decimal128<br>直接声明 schema type 为某一种 type，或者赋值一个含有 type 属性的对象。</li>
+</ul>
+<h5 id="全部可用"><a href="#全部可用" class="headerlink" title="全部可用"></a>全部可用</h5><ul>
+<li>required: 布尔值或函数 如果值为真，为此属性添加 required 验证器</li>
+<li>default: 任何值或函数 设置此路径默认值。如果是函数，函数返回值为默认值</li>
+<li>select: 布尔值 指定 query 的默认 projections 为 false 默认不返回该字段</li>
+<li>validate: 函数 adds a validator function for this property</li>
+<li>get: 函数 使用 Object.defineProperty() 定义自定义 getter 这个 getter 是在访问该属性时生效的 consolelog 打印的还是初始值</li>
+<li>set: 函数 使用 Object.defineProperty() 定义自定义 setter</li>
+<li>alias: 字符串 仅 mongoose &gt;= 4.10.0。 为该字段路径定义虚拟值 gets/sets</li>
+</ul>
+<h5 id="索引相关"><a href="#索引相关" class="headerlink" title="索引相关"></a>索引相关</h5><ul>
+<li>index: 布尔值 是否对这个属性创建索引</li>
+<li>unique: 布尔值 是否对这个属性创建唯一索引</li>
+<li>sparse: 布尔值 是否对这个属性创建稀疏索引</li>
+</ul>
+<h5 id="String"><a href="#String" class="headerlink" title="String"></a>String</h5><ul>
+<li>lowercase: 布尔值 是否在保存前对此值调用 .toLowerCase()</li>
+<li>uppercase: 布尔值 是否在保存前对此值调用 .toUpperCase()</li>
+<li>trim: 布尔值 是否在保存前对此值调用 .trim()</li>
+<li>match: 正则表达式 创建验证器检查这个值是否匹配给定正则表达式</li>
+<li>enum: 数组 创建验证器检查这个值是否包含于给定数组</li>
+</ul>
+<h5 id="Number"><a href="#Number" class="headerlink" title="Number"></a>Number</h5><ul>
+<li>min: 数值 创建验证器检查属性是否大于或等于该值</li>
+<li>max: 数值 创建验证器检查属性是否小于或等于该值</li>
+</ul>
+<h5 id="Date"><a href="#Date" class="headerlink" title="Date"></a>Date</h5><ul>
+<li>min: Date</li>
+<li>max: Date</li>
+</ul>
+<h5 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h5><p><strong>Dates</strong><br>内建 Date 方法 不会触发 mongoose 修改跟踪逻辑， 如果你对使用 setMonth() 修改文档里的 Date， mongoose 在 doc.save() 的时候是察觉不到这个文档发生了变化的，因此保存不到数据库。 如果你一定要用内建 Date 方法， 请手动调用 doc.markModified(‘pathToYourDate’) 告诉 mongoose 你修改了数据。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Assignment = mongoose.model(<span class="string">&quot;Assignment&quot;</span>, &#123; <span class="attr">dueDate</span>: <span class="built_in">Date</span> &#125;);</span><br><span class="line">Assignment.findOne(<span class="function"><span class="keyword">function</span> (<span class="params">err, doc</span>) </span>&#123;</span><br><span class="line">  doc.dueDate.setMonth(<span class="number">3</span>);</span><br><span class="line">  doc.save(callback); <span class="comment">// THIS DOES NOT SAVE YOUR CHANGE</span></span><br><span class="line"></span><br><span class="line">  doc.markModified(<span class="string">&quot;dueDate&quot;</span>);</span><br><span class="line">  doc.save(callback); <span class="comment">// works</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p><strong>Mixed</strong><br>一个啥都可以放的 SchemaType ， 虽然便利，但也会让数据难以维护。 Mixed 可以通过 Schema.Types.Mixed 或 传入一个空对象定义。以下三种方法效果一致：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Any = <span class="keyword">new</span> Schema(&#123; <span class="attr">any</span>: &#123;&#125; &#125;);</span><br><span class="line"><span class="keyword">var</span> Any = <span class="keyword">new</span> Schema(&#123; <span class="attr">any</span>: <span class="built_in">Object</span> &#125;);</span><br><span class="line"><span class="keyword">var</span> Any = <span class="keyword">new</span> Schema(&#123; <span class="attr">any</span>: Schema.Types.Mixed &#125;);</span><br></pre></td></tr></table></figure>
+<p><strong>ObjectIds</strong></p>
+<p>创造 SchemaTypes 或子文档数组。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> ToySchema = <span class="keyword">new</span> Schema(&#123; <span class="attr">name</span>: <span class="built_in">String</span> &#125;);</span><br><span class="line"><span class="keyword">var</span> ToyBox = <span class="keyword">new</span> Schema(&#123;</span><br><span class="line">  <span class="attr">toys</span>: [ToySchema],</span><br><span class="line">  <span class="attr">buffers</span>: [Buffer],</span><br><span class="line">  <span class="attr">string</span>: [<span class="built_in">String</span>],</span><br><span class="line">  <span class="attr">numbers</span>: [<span class="built_in">Number</span>],</span><br><span class="line">  <span class="comment">// ... etc</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>指定空数组相当于 Mixed</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Empty1 = <span class="keyword">new</span> Schema(&#123; <span class="attr">any</span>: [] &#125;);</span><br><span class="line"><span class="keyword">var</span> Empty2 = <span class="keyword">new</span> Schema(&#123; <span class="attr">any</span>: <span class="built_in">Array</span> &#125;);</span><br><span class="line"><span class="keyword">var</span> Empty3 = <span class="keyword">new</span> Schema(&#123; <span class="attr">any</span>: [Schema.Types.Mixed] &#125;);</span><br><span class="line"><span class="keyword">var</span> Empty4 = <span class="keyword">new</span> Schema(&#123; <span class="attr">any</span>: [&#123;&#125;] &#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="Connections"><a href="#Connections" class="headerlink" title="Connections"></a>Connections</h3><h4 id="连接"><a href="#连接" class="headerlink" title="连接"></a>连接</h4><p>mongoose.connect(‘mongodb://username:password@host:port/database?options…’);</p>
+<h4 id="操作缓存"><a href="#操作缓存" class="headerlink" title="操作缓存"></a>操作缓存</h4><p>不必等待连接建立成功就可以使用 mongoose models</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mongoose.connect(<span class="string">&quot;mongodb://localhost/myapp&quot;</span>);</span><br><span class="line"><span class="keyword">var</span> MyModel = mongoose.model(<span class="string">&quot;Test&quot;</span>, <span class="keyword">new</span> Schema(&#123; <span class="attr">name</span>: <span class="built_in">String</span> &#125;));</span><br><span class="line"><span class="comment">// 可行</span></span><br><span class="line">MyModel.findOne(<span class="function"><span class="keyword">function</span> (<span class="params">error, result</span>) </span>&#123;</span><br><span class="line">  <span class="comment">/* ... */</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>mongoose 会缓存操作，这样很方便，但有时也会造成疑惑，因为如果你没连上 ，Mongoose 不会 抛错。<br>要禁用缓存，请修改 bufferCommands 配置。 如果你打开了 bufferCommands 连接被挂起，尝试关闭 bufferCommands 检查你是否正确打开连接。 你也可以全局禁用 bufferCommands ：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mongoose.set(<span class="string">&quot;bufferCommands&quot;</span>, <span class="literal">false</span>);</span><br></pre></td></tr></table></figure>
+<h3 id="Model"><a href="#Model" class="headerlink" title="Model"></a>Model</h3><p>Model 是通过 Schema 构造而成的，除了具有 Schema 定义的数据库骨架以外，还可以操作数据库</p>
+<p>第一个参数是跟 model 对应的集合（ collection ）名字的 单数 形式。 Mongoose 会自动找到名称是 model 名字 复数 形式的 collection 。 对于上例，Tank 这个 model 就对应数据库中 tanks 这个 collection。.model() 这个函数是对 schema 做了拷贝（生成了 model）。 你要确保在调用 .model() 之前把所有需要的东西都加进 schema 里了！</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> schema = <span class="keyword">new</span> mongoose.Schema(&#123; <span class="attr">name</span>: <span class="string">&quot;string&quot;</span>, <span class="attr">size</span>: <span class="string">&quot;string&quot;</span> &#125;);</span><br><span class="line"><span class="keyword">var</span> Tank = mongoose.model(<span class="string">&quot;Tank&quot;</span>, schema);</span><br></pre></td></tr></table></figure>
+<h4 id="查询"><a href="#查询" class="headerlink" title="查询"></a>查询</h4><p>可以用 model 的 find，findById，findOne，where 这些静态方法</p>
+<h4 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h4><p>remove 方法</p>
+<h4 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h4><p>update 方法</p>
+<h3 id="Documents"><a href="#Documents" class="headerlink" title="Documents"></a>Documents</h3><p>Mongoose document 代表着 MongoDB 文档的一对一映射。 每个 document 都是他的 Model 的实例。</p>
+<h4 id="更新-1"><a href="#更新-1" class="headerlink" title="更新"></a>更新</h4><p>有很多方法可以更新文档</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Tank.findById(id, <span class="function"><span class="keyword">function</span> (<span class="params">err, tank</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (err) <span class="keyword">return</span> handleError(err);</span><br><span class="line"></span><br><span class="line">  tank.size = <span class="string">&quot;large&quot;</span>;</span><br><span class="line">  tank.save(<span class="function"><span class="keyword">function</span> (<span class="params">err, updatedTank</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (err) <span class="keyword">return</span> handleError(err);</span><br><span class="line">    res.send(updatedTank);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>用 .set() 修改 document，在底层 tank.size = ‘large’; 用 tank.set({ size: ‘large’ })实现。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Tank.findById(id, <span class="function"><span class="keyword">function</span> (<span class="params">err, tank</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (err) <span class="keyword">return</span> handleError(err);</span><br><span class="line"></span><br><span class="line">  tank.set(&#123; <span class="attr">size</span>: <span class="string">&quot;large&quot;</span> &#125;);</span><br><span class="line">  tank.save(<span class="function"><span class="keyword">function</span> (<span class="params">err, updatedTank</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (err) <span class="keyword">return</span> handleError(err);</span><br><span class="line">    res.send(updatedTank);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>如果我们仅仅需要更新而不需要获取该数据， Model#update 就很适合我们：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Tank.update(&#123; <span class="attr">_id</span>: id &#125;, &#123; <span class="attr">$set</span>: &#123; <span class="attr">size</span>: <span class="string">&quot;large&quot;</span> &#125; &#125;, callback);</span><br></pre></td></tr></table></figure>
+<p>如果我们确实需要返回文档</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Tank.findByIdAndUpdate(</span><br><span class="line">  id,</span><br><span class="line">  &#123; <span class="attr">$set</span>: &#123; <span class="attr">size</span>: <span class="string">&quot;large&quot;</span> &#125; &#125;,</span><br><span class="line">  &#123; <span class="attr">new</span>: <span class="literal">true</span> &#125;,</span><br><span class="line">  <span class="function"><span class="keyword">function</span> (<span class="params">err, tank</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (err) <span class="keyword">return</span> handleError(err);</span><br><span class="line">    res.send(tank);</span><br><span class="line">  &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<h4 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h4><p>document 在被保存前会被验证</p>
+<h4 id="覆盖"><a href="#覆盖" class="headerlink" title="覆盖"></a>覆盖</h4><p>可以用 .set() 覆盖整个文档，如果要修改在中间件中被保存的文档，这样很方便</p>
+<h3 id="子文档-subdocument"><a href="#子文档-subdocument" class="headerlink" title="子文档 subdocument"></a>子文档 subdocument</h3><p>Mongoose 中子文档有两种不同的概念 子文档数组和单个嵌套子文档。</p>
+<p>子文档与普通 document 类似。嵌套 schema 可以有自己的 中间件、自定义检验逻辑、 虚拟值以及其他顶层 schemas 可用的特性。两者主要的不同点是 子文档不能单独保存，他们会在他们的顶级文档保存时保存。</p>
+<p>子文档跟普通 document 一样有 save 和 validate 中间件。 调用父文档的 save() 会触发其所有子文档的 save() 中间件， validate() 中间件同理。</p>
+<p>子文档的 pre(‘save’) 和 pre(‘validate’) 中间件执行于 顶层 document 的 pre(‘save’) 之前， 顶层 document 的 pre(‘validate’) 之后。 因为 save() 前的验证就是一个内置中间件。（待修改）</p>
+<h4 id="查找子文档"><a href="#查找子文档" class="headerlink" title="查找子文档"></a>查找子文档</h4><p>每个子文档都有一个默认的 <code>_id</code> 。Mongoose document 数组有一个特别的 id 方法， 这个方法只要传入 <code>_id</code> 就能返回文档数组中特定文档。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> doc = parent.children.id(_id);</span><br></pre></td></tr></table></figure>
+<h4 id="添加子文档到数组"><a href="#添加子文档到数组" class="headerlink" title="添加子文档到数组"></a>添加子文档到数组</h4><p>Mongoose 数组方法有 push、 unshift、 addToSet、 及其他：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Parent = mongoose.model(<span class="string">&quot;Parent&quot;</span>);</span><br><span class="line"><span class="keyword">var</span> parent = <span class="keyword">new</span> Parent();</span><br><span class="line"></span><br><span class="line"><span class="comment">// create a comment</span></span><br><span class="line">parent.children.push(&#123; <span class="attr">name</span>: <span class="string">&quot;Liesl&quot;</span> &#125;);</span><br><span class="line"><span class="keyword">var</span> subdoc = parent.children[<span class="number">0</span>];</span><br><span class="line"><span class="built_in">console</span>.log(subdoc); <span class="comment">// &#123; _id: &#x27;501d86090d371bab2c0341c5&#x27;, name: &#x27;Liesl&#x27; &#125;</span></span><br><span class="line">subdoc.isNew; <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line">parent.save(<span class="function"><span class="keyword">function</span> (<span class="params">err</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (err) <span class="keyword">return</span> handleError(err);</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;Success!&quot;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h4 id="代替声明语法的写法"><a href="#代替声明语法的写法" class="headerlink" title="代替声明语法的写法"></a>代替声明语法的写法</h4><p>如果你用对象的数组创建 schema ，mongoose 会自动 为你把对象转换成 schema：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> parentSchema = <span class="keyword">new</span> Schema(&#123;</span><br><span class="line">  <span class="attr">children</span>: [&#123; <span class="attr">name</span>: <span class="string">&quot;string&quot;</span> &#125;],</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// Equivalent</span></span><br><span class="line"><span class="keyword">var</span> parentSchema = <span class="keyword">new</span> Schema(&#123;</span><br><span class="line">  <span class="attr">children</span>: [<span class="keyword">new</span> Schema(&#123; <span class="attr">name</span>: <span class="string">&quot;string&quot;</span> &#125;)],</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Mongodb/" rel="tag"># Mongodb</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/03/07/%E8%BF%90%E7%BB%B4/%E8%AE%B0%E4%BD%BF%E7%94%A8docker-compose%E5%AF%B9OJ%E7%B3%BB%E7%BB%9F%E9%83%A8%E7%BD%B2%E4%BC%98%E5%8C%96%E9%87%8D%E6%9E%84/" rel="prev" title="记使用docker-compose对OJ系统部署优化重构">
+      <i class="fa fa-chevron-left"></i> 记使用docker-compose对OJ系统部署优化重构
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/03/24/%E7%AE%97%E6%B3%95/leetcodeP10-RegularExpressionMatching/" rel="next" title="leetcodeP10-RegularExpressionMatching">
+      leetcodeP10-RegularExpressionMatching <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Getting-Started"><span class="nav-number">1.</span> <span class="nav-text">Getting Started</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%92%E5%85%A5%E6%96%87%E6%A1%A3"><span class="nav-number">1.1.</span> <span class="nav-text">插入文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E6%89%80%E6%9C%89%E6%96%87%E6%A1%A3"><span class="nav-number">1.2.</span> <span class="nav-text">查询所有文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%B8%E7%AD%89%E5%8C%B9%E9%85%8D"><span class="nav-number">1.3.</span> <span class="nav-text">相等匹配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E8%BF%94%E5%9B%9E%E7%BB%93%E6%9E%84-Projection"><span class="nav-number">1.4.</span> <span class="nav-text">定义返回结构 Projection</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#database-and-collections"><span class="nav-number">2.</span> <span class="nav-text">database and collections</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">2.1.</span> <span class="nav-text">数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ObjectId"><span class="nav-number">2.1.1.</span> <span class="nav-text">ObjectId</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#view"><span class="nav-number">2.2.</span> <span class="nav-text">view</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9B%B4%E6%96%B0%E6%96%87%E6%A1%A3"><span class="nav-number">2.3.</span> <span class="nav-text">更新文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="nav-number">2.4.</span> <span class="nav-text">操作符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E7%9F%A5%E8%AF%86"><span class="nav-number">2.5.</span> <span class="nav-text">高级知识</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E9%85%8D%E7%BD%AE%E9%A1%B9%E5%90%AF%E5%8A%A8%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">2.5.1.</span> <span class="nav-text">通过配置项启动数据库</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%BC%E5%85%A5%E5%AF%BC%E5%87%BA"><span class="nav-number">2.5.2.</span> <span class="nav-text">导入导出</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E5%85%A8%E6%8E%AA%E6%96%BD"><span class="nav-number">2.6.</span> <span class="nav-text">安全措施</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86"><span class="nav-number">2.6.1.</span> <span class="nav-text">用户管理</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95"><span class="nav-number">2.7.</span> <span class="nav-text">索引</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%86%E6%9E%90%E7%B4%A2%E5%BC%95%E7%9A%84%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B"><span class="nav-number">2.7.1.</span> <span class="nav-text">分析索引的执行过程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">2.7.2.</span> <span class="nav-text">注意事项</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9B%86%E7%BE%A4%E6%8A%80%E6%9C%AF"><span class="nav-number">2.8.</span> <span class="nav-text">集群技术</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6"><span class="nav-number">2.8.1.</span> <span class="nav-text">主从复制</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E9%80%89%E9%A1%B9"><span class="nav-number">2.8.1.1.</span> <span class="nav-text">其他选项</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#db-sources"><span class="nav-number">2.8.1.2.</span> <span class="nav-text">db.sources</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%89%AF%E6%9C%AC%E9%9B%86"><span class="nav-number">2.8.2.</span> <span class="nav-text">副本集</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mongoose"><span class="nav-number">3.</span> <span class="nav-text">mongoose</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Schema"><span class="nav-number">3.1.</span> <span class="nav-text">Schema</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SchemaType"><span class="nav-number">3.1.1.</span> <span class="nav-text">SchemaType</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%85%A8%E9%83%A8%E5%8F%AF%E7%94%A8"><span class="nav-number">3.1.1.1.</span> <span class="nav-text">全部可用</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E7%9B%B8%E5%85%B3"><span class="nav-number">3.1.1.2.</span> <span class="nav-text">索引相关</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#String"><span class="nav-number">3.1.1.3.</span> <span class="nav-text">String</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Number"><span class="nav-number">3.1.1.4.</span> <span class="nav-text">Number</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Date"><span class="nav-number">3.1.1.5.</span> <span class="nav-text">Date</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F"><span class="nav-number">3.1.1.6.</span> <span class="nav-text">注意</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Connections"><span class="nav-number">3.2.</span> <span class="nav-text">Connections</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%9E%E6%8E%A5"><span class="nav-number">3.2.1.</span> <span class="nav-text">连接</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E7%BC%93%E5%AD%98"><span class="nav-number">3.2.2.</span> <span class="nav-text">操作缓存</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Model"><span class="nav-number">3.3.</span> <span class="nav-text">Model</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2"><span class="nav-number">3.3.1.</span> <span class="nav-text">查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A0%E9%99%A4"><span class="nav-number">3.3.2.</span> <span class="nav-text">删除</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9B%B4%E6%96%B0"><span class="nav-number">3.3.3.</span> <span class="nav-text">更新</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Documents"><span class="nav-number">3.4.</span> <span class="nav-text">Documents</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9B%B4%E6%96%B0-1"><span class="nav-number">3.4.1.</span> <span class="nav-text">更新</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%AA%8C%E8%AF%81"><span class="nav-number">3.4.2.</span> <span class="nav-text">验证</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A6%86%E7%9B%96"><span class="nav-number">3.4.3.</span> <span class="nav-text">覆盖</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%90%E6%96%87%E6%A1%A3-subdocument"><span class="nav-number">3.5.</span> <span class="nav-text">子文档 subdocument</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9F%A5%E6%89%BE%E5%AD%90%E6%96%87%E6%A1%A3"><span class="nav-number">3.5.1.</span> <span class="nav-text">查找子文档</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E5%AD%90%E6%96%87%E6%A1%A3%E5%88%B0%E6%95%B0%E7%BB%84"><span class="nav-number">3.5.2.</span> <span class="nav-text">添加子文档到数组</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%A3%E6%9B%BF%E5%A3%B0%E6%98%8E%E8%AF%AD%E6%B3%95%E7%9A%84%E5%86%99%E6%B3%95"><span class="nav-number">3.5.3.</span> <span class="nav-text">代替声明语法的写法</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">jiezi19971225</p>
+  <div class="site-description" itemprop="description">记录编程学习路上的点滴</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jiezi19971225</span>
+</div>
+  <img src="https://static.dy208.cn/o_1dfilp8ruo521thr1hvf18ji17soa.png"/>
+  <a href="http://www.beian.miit.gov.cn/"  style="color:#f72b07" target="_blank">皖ICP备17001385号-1</a>
+  <br/>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

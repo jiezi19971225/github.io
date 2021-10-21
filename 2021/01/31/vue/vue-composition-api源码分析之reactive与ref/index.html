@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+<meta name="baidu-site-verification" content="5IfwMCE5hH" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.jiezi19971225.cn","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="分析的是 @vue&#x2F;composition-api 的代码，版本是 V1.0.0-rc.1vue 的版本是 2.6.12 因为对于 reactive 和 ref 各自的行为和用法尚有不明之处，所以看一下源码，记录一下笔记 文件结构 12345678910111213141516├─scripts├─src│  ├─apis│  ├─component│  ├─reactivity│  ├─type">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vue-composition-api源码分析之reactive与ref">
+<meta property="og:url" content="http://www.jiezi19971225.cn/2021/01/31/vue/vue-composition-api%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E4%B9%8Breactive%E4%B8%8Eref/index.html">
+<meta property="og:site_name" content="Jiez19971225‘s Blog">
+<meta property="og:description" content="分析的是 @vue&#x2F;composition-api 的代码，版本是 V1.0.0-rc.1vue 的版本是 2.6.12 因为对于 reactive 和 ref 各自的行为和用法尚有不明之处，所以看一下源码，记录一下笔记 文件结构 12345678910111213141516├─scripts├─src│  ├─apis│  ├─component│  ├─reactivity│  ├─type">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-01-31T22:17:55.000Z">
+<meta property="article:modified_time" content="2021-10-21T16:45:16.143Z">
+<meta property="article:author" content="jiezi19971225">
+<meta property="article:tag" content="vue">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://www.jiezi19971225.cn/2021/01/31/vue/vue-composition-api%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E4%B9%8Breactive%E4%B8%8Eref/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>vue-composition-api源码分析之reactive与ref | Jiez19971225‘s Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Jiez19971225‘s Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">做自己爱做的事</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2021/01/31/vue/vue-composition-api%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E4%B9%8Breactive%E4%B8%8Eref/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content="记录编程学习路上的点滴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          vue-composition-api源码分析之reactive与ref
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-31 22:17:55" itemprop="dateCreated datePublished" datetime="2021-01-31T22:17:55+00:00">2021-01-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-10-21 16:45:16" itemprop="dateModified" datetime="2021-10-21T16:45:16+00:00">2021-10-21</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/vue/" itemprop="url" rel="index"><span itemprop="name">vue</span></a>
+                </span>
+            </span>
+
+          
+
+          <span class="post-time">
+            &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-bar-chart"></i>
+            </span>
+            <span class="post-meta-item-text">字数统计:</span>
+            <span class="post-count">2.6k(字)</span>
+
+          </span>
+
+            <span class="post-time">
+          &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-clock-o"></i>
+            </span>
+            <span class="post-meta-item-text">阅读时长:</span>
+            <span class="post-count">13(分)</span>
+
+          </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>分析的是 @vue/composition-api 的代码，版本是 V1.0.0-rc.1<br>vue 的版本是 2.6.12</p>
+<p>因为对于 reactive 和 ref 各自的行为和用法尚有不明之处，所以看一下源码，记录一下笔记</p>
+<p>文件结构</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">├─scripts</span><br><span class="line">├─src</span><br><span class="line">│  ├─apis</span><br><span class="line">│  ├─component</span><br><span class="line">│  ├─reactivity</span><br><span class="line">│  ├─types</span><br><span class="line">│  └─utils</span><br><span class="line">├─test</span><br><span class="line">│  ├─apis</span><br><span class="line">│  ├─helpers</span><br><span class="line">│  ├─ssr</span><br><span class="line">│  ├─types</span><br><span class="line">│  └─v3</span><br><span class="line">│      ├─reactivity</span><br><span class="line">│      └─runtime-core</span><br><span class="line">└─test-dts</span><br></pre></td></tr></table></figure>
+<p>这次主要关注 src/reactivity 和 src/apis 中的代码</p>
+<h2 id="reactivity-reactive-ts"><a href="#reactivity-reactive-ts" class="headerlink" title="reactivity/reactive.ts"></a>reactivity/reactive.ts</h2><h3 id="reactive"><a href="#reactive" class="headerlink" title="reactive"></a>reactive</h3><p>reactive 和 ref 相关的方法在 reactivity 目录下</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// @vue/composition-api/src/reactivity/reactive.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">reactive</span>&lt;<span class="title">T</span> <span class="title">extends</span> <span class="title">object</span>&gt;(<span class="params">obj: T</span>): <span class="title">UnwrapRef</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (</span><br><span class="line">    !(isPlainObject(obj) || isArray(obj)) ||</span><br><span class="line">    isRaw(obj) ||</span><br><span class="line">    !<span class="built_in">Object</span>.isExtensible(obj)</span><br><span class="line">  ) &#123;</span><br><span class="line">    <span class="keyword">return</span> obj <span class="keyword">as</span> <span class="built_in">any</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> observed = observe(obj);</span><br><span class="line">  setupAccessControl(observed);</span><br><span class="line">  <span class="keyword">return</span> observed <span class="keyword">as</span> UnwrapRef&lt;T&gt;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后是看 observe 是啥</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// @vue/composition-api/src/reactivity/reactive.ts</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">observe</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> Vue = getRegisteredVueOrDefault();</span><br><span class="line">  <span class="keyword">var</span> observed;</span><br><span class="line">  <span class="keyword">if</span> (Vue.observable) &#123;</span><br><span class="line">    observed = Vue.observable(obj);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> vm = defineComponentInstance(Vue, &#123;</span><br><span class="line">      <span class="attr">data</span>: &#123;</span><br><span class="line">        <span class="attr">$$state</span>: obj,</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;);</span><br><span class="line">    observed = vm._data.$$state;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// in SSR, there is no __ob__. Mock for reactivity check</span></span><br><span class="line">  <span class="keyword">if</span> (!hasOwn(observed, <span class="string">&quot;__ob__&quot;</span>)) &#123;</span><br><span class="line">    def(observed, <span class="string">&quot;__ob__&quot;</span>, mockObserver(observed));</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> observed;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果 Vue 上有 Vue.observe，使用 Vue.observe</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// vue/src/core/global-api/index.js</span></span><br><span class="line">Vue.observable = <span class="function"><span class="keyword">function</span> (<span class="params">obj</span>) </span>&#123;</span><br><span class="line">  observe(obj);</span><br><span class="line">  <span class="keyword">return</span> obj;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>Vue.observe 直接返回了传入的对象，也就是说，<strong>reactive 的作用只是给对象增加响应式，返回的值是对象本身</strong></p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// vue/src/core/observer/index.js</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">observe</span>(<span class="params">value, asRootData</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (!isObject(value) || value <span class="keyword">instanceof</span> VNode) &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">var</span> ob;</span><br><span class="line">  <span class="keyword">if</span> (hasOwn(value, <span class="string">&quot;__ob__&quot;</span>) &amp;&amp; value.__ob__ <span class="keyword">instanceof</span> Observer) &#123;</span><br><span class="line">    ob = value.__ob__;</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (</span><br><span class="line">    shouldObserve &amp;&amp;</span><br><span class="line">    !isServerRendering() &amp;&amp;</span><br><span class="line">    (<span class="built_in">Array</span>.isArray(value) || isPlainObject(value)) &amp;&amp;</span><br><span class="line">    <span class="built_in">Object</span>.isExtensible(value) &amp;&amp;</span><br><span class="line">    !value._isVue</span><br><span class="line">  ) &#123;</span><br><span class="line">    ob = <span class="keyword">new</span> Observer(value);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (asRootData &amp;&amp; ob) &#123;</span><br><span class="line">    ob.vmCount++;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> ob;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果之前没有被 observe 过，使用 new Observer(value) 添加响应式属性，否则什么都不做</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// vue/src/core/observer/index.js</span></span><br><span class="line"><span class="keyword">var</span> Observer = <span class="function"><span class="keyword">function</span> <span class="title">Observer</span>(<span class="params">value</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">this</span>.value = value;</span><br><span class="line">  <span class="built_in">this</span>.dep = <span class="keyword">new</span> Dep();</span><br><span class="line">  <span class="built_in">this</span>.vmCount = <span class="number">0</span>;</span><br><span class="line">  def(value, <span class="string">&quot;__ob__&quot;</span>, <span class="built_in">this</span>);</span><br><span class="line">  <span class="keyword">if</span> (<span class="built_in">Array</span>.isArray(value)) &#123;</span><br><span class="line">    <span class="keyword">if</span> (hasProto) &#123;</span><br><span class="line">      protoAugment(value, arrayMethods);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      copyAugment(value, arrayMethods, arrayKeys);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">this</span>.observeArray(value);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.walk(value);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>可以看到这个构造方法给对象增加了 <code>__ob__</code>属性。</p>
+<p>那么看以下代码</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> a = &#123;</span><br><span class="line">  <span class="attr">a</span>: <span class="number">100</span>,</span><br><span class="line">);</span><br><span class="line"><span class="keyword">let</span> b = reactive(a);</span><br><span class="line">reactive(b)</span><br></pre></td></tr></table></figure>
+<p>这么使用 reactive 是没问题的，同时 a，b 这里指向的时同一个响应式对象，reactive(b) 这句实际上没有任何作用</p>
+<p>显然我们不能重新给 a 或 b 赋值，因为响应性是赋予在 a，b 指向的对象上的</p>
+<p>然后看下 setupAccessControl 干了什么</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// @vue/composition-api/src/reactivity/reactive.ts</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">setupAccessControl</span>(<span class="params">target: AnyObject</span>): <span class="title">void</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (</span><br><span class="line">    !isPlainObject(target) ||</span><br><span class="line">    isRaw(target) ||</span><br><span class="line">    <span class="built_in">Array</span>.isArray(target) ||</span><br><span class="line">    isRef(target) ||</span><br><span class="line">    isComponentInstance(target) ||</span><br><span class="line">    accessModifiedSet.has(target)</span><br><span class="line">  )</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">  accessModifiedSet.set(target, <span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> keys = <span class="built_in">Object</span>.keys(target);</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; keys.length; i++) &#123;</span><br><span class="line">    defineAccessControl(target, keys[i]);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>accessModifiedSet 是一个 weakmap，如果之前对对象设置过，就不再设置了<br>对对象的每一个属性调用 defineAccessControl</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// @vue/composition-api/src/reactivity/reactive.ts</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Auto unwrapping when access property</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">defineAccessControl</span>(<span class="params">target: AnyObject, key: <span class="built_in">any</span>, val?: <span class="built_in">any</span></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (key === <span class="string">&quot;__ob__&quot;</span>) <span class="keyword">return</span>;</span><br><span class="line">  <span class="keyword">if</span> (isRaw(target[key])) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> getter: (<span class="function">() =&gt;</span> <span class="built_in">any</span>) | <span class="literal">undefined</span>;</span><br><span class="line">  <span class="keyword">let</span> setter: (<span class="function">(<span class="params">x: <span class="built_in">any</span></span>) =&gt;</span> <span class="built_in">void</span>) | <span class="literal">undefined</span>;</span><br><span class="line">  <span class="keyword">const</span> property = <span class="built_in">Object</span>.getOwnPropertyDescriptor(target, key);</span><br><span class="line">  <span class="keyword">if</span> (property) &#123;</span><br><span class="line">    <span class="keyword">if</span> (property.configurable === <span class="literal">false</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    getter = property.get;</span><br><span class="line">    setter = property.set;</span><br><span class="line">    <span class="keyword">if</span> (</span><br><span class="line">      (!getter || setter) <span class="comment">/* not only have getter */</span> &amp;&amp;</span><br><span class="line">      <span class="built_in">arguments</span>.length === <span class="number">2</span></span><br><span class="line">    ) &#123;</span><br><span class="line">      val = target[key];</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 如果 val 是一个对象 递归调用 defineAccessControl</span></span><br><span class="line">  setupAccessControl(val);</span><br><span class="line">  <span class="built_in">Object</span>.defineProperty(target, key, &#123;</span><br><span class="line">    <span class="attr">enumerable</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">configurable</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">get</span>: <span class="function"><span class="keyword">function</span> <span class="title">getterHandler</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="keyword">const</span> value = getter ? getter.call(target) : val;</span><br><span class="line">      <span class="comment">// if the key is equal to RefKey, skip the unwrap logic</span></span><br><span class="line">      <span class="keyword">if</span> (key !== RefKey &amp;&amp; isRef(value)) &#123;</span><br><span class="line">        <span class="keyword">return</span> value.value;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> value;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">set</span>: <span class="function"><span class="keyword">function</span> <span class="title">setterHandler</span>(<span class="params">newVal</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">if</span> (getter &amp;&amp; !setter) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">const</span> value = getter ? getter.call(target) : val;</span><br><span class="line">      <span class="comment">// If the key is equal to RefKey, skip the unwrap logic</span></span><br><span class="line">      <span class="comment">// If and only if &quot;value&quot; is ref and &quot;newVal&quot; is not a ref,</span></span><br><span class="line">      <span class="comment">// the assignment should be proxied to &quot;value&quot; ref.</span></span><br><span class="line">      <span class="keyword">if</span> (key !== RefKey &amp;&amp; isRef(value) &amp;&amp; !isRef(newVal)) &#123;</span><br><span class="line">        value.value = newVal;</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (setter) &#123;</span><br><span class="line">        setter.call(target, newVal);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        val = newVal;</span><br><span class="line">      &#125;</span><br><span class="line">      setupAccessControl(newVal);</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">setupAccessControl</span>(<span class="params">target: AnyObject</span>): <span class="title">void</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (</span><br><span class="line">    !isPlainObject(target) ||</span><br><span class="line">    isRaw(target) ||</span><br><span class="line">    <span class="built_in">Array</span>.isArray(target) ||</span><br><span class="line">    isRef(target) ||</span><br><span class="line">    isComponentInstance(target) ||</span><br><span class="line">    accessModifiedSet.has(target)</span><br><span class="line">  )</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">  accessModifiedSet.set(target, <span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> keys = <span class="built_in">Object</span>.keys(target);</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; keys.length; i++) &#123;</span><br><span class="line">    defineAccessControl(target, keys[i]);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果 val 是一个对象 递归调用 defineAccessControl<br>defineAccessControl 的作用是 reactive 对象在读写属性时，如果属性是一个 Ref 对象，可以自动拆装箱</p>
+<h3 id="shallowReactive"><a href="#shallowReactive" class="headerlink" title="shallowReactive"></a>shallowReactive</h3><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// @vue/composition-api/src/reactivity/reactive.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">shallowReactive</span>(<span class="params">obj: <span class="built_in">any</span></span>): <span class="title">any</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (</span><br><span class="line">    !(isPlainObject(obj) || isArray(obj)) ||</span><br><span class="line">    isRaw(obj) ||</span><br><span class="line">    !<span class="built_in">Object</span>.isExtensible(obj)</span><br><span class="line">  ) &#123;</span><br><span class="line">    <span class="keyword">return</span> obj <span class="keyword">as</span> <span class="built_in">any</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> observed = observe(&#123;&#125;);</span><br><span class="line">  setupAccessControl(observed);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> ob = (observed <span class="keyword">as</span> <span class="built_in">any</span>).__ob__;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> key <span class="keyword">of</span> <span class="built_in">Object</span>.keys(obj)) &#123;</span><br><span class="line">    <span class="keyword">let</span> val = obj[key];</span><br><span class="line">    <span class="keyword">let</span> getter: (<span class="function">() =&gt;</span> <span class="built_in">any</span>) | <span class="literal">undefined</span>;</span><br><span class="line">    <span class="keyword">let</span> setter: (<span class="function">(<span class="params">x: <span class="built_in">any</span></span>) =&gt;</span> <span class="built_in">void</span>) | <span class="literal">undefined</span>;</span><br><span class="line">    <span class="keyword">const</span> property = <span class="built_in">Object</span>.getOwnPropertyDescriptor(obj, key);</span><br><span class="line">    <span class="keyword">if</span> (property) &#123;</span><br><span class="line">      <span class="keyword">if</span> (property.configurable === <span class="literal">false</span>) &#123;</span><br><span class="line">        <span class="keyword">continue</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      getter = property.get;</span><br><span class="line">      setter = property.set;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">Object</span>.defineProperty(observed, key, &#123;</span><br><span class="line">      <span class="attr">enumerable</span>: <span class="literal">true</span>,</span><br><span class="line">      <span class="attr">configurable</span>: <span class="literal">true</span>,</span><br><span class="line">      <span class="attr">get</span>: <span class="function"><span class="keyword">function</span> <span class="title">getterHandler</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">const</span> value = getter ? getter.call(obj) : val;</span><br><span class="line">        ob.dep?.depend();</span><br><span class="line">        <span class="keyword">return</span> value;</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">set</span>: <span class="function"><span class="keyword">function</span> <span class="title">setterHandler</span>(<span class="params">newVal</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (getter &amp;&amp; !setter) <span class="keyword">return</span>;</span><br><span class="line">        <span class="keyword">if</span> (setter) &#123;</span><br><span class="line">          setter.call(obj, newVal);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          val = newVal;</span><br><span class="line">        &#125;</span><br><span class="line">        ob.dep?.notify();</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> observed;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>只对响应式对象的属性手动设置响应式并管理依赖收集，如果属性是对象，不会深度添加响应式</p>
+<h3 id="isReactive"><a href="#isReactive" class="headerlink" title="isReactive"></a>isReactive</h3><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// @vue/composition-api/src/reactivity/reactive.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">isReactive</span>(<span class="params">obj: <span class="built_in">any</span></span>): <span class="title">boolean</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">Boolean</span>(obj?.__ob__ &amp;&amp; !obj.__ob__?.__raw__);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>就是看对象是否有 <code>__ob__</code> 属性并且没有使用 markRaw 标记</p>
+<h3 id="markRaw-amp-amp-isRaw-amp-amp-toRaw"><a href="#markRaw-amp-amp-isRaw-amp-amp-toRaw" class="headerlink" title="markRaw &amp;&amp; isRaw &amp;&amp; toRaw"></a>markRaw &amp;&amp; isRaw &amp;&amp; toRaw</h3><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// @vue/composition-api/src/reactivity/reactive.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">markRaw</span>&lt;<span class="title">T</span> <span class="title">extends</span> <span class="title">object</span>&gt;(<span class="params">obj: T</span>): <span class="title">T</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (!(isPlainObject(obj) || isArray(obj)) || !<span class="built_in">Object</span>.isExtensible(obj)) &#123;</span><br><span class="line">    <span class="keyword">return</span> obj;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// set the vue observable flag at obj</span></span><br><span class="line">  <span class="keyword">const</span> ob = createObserver();</span><br><span class="line">  ob.__raw__ = <span class="literal">true</span>;</span><br><span class="line">  def(obj, <span class="string">&quot;__ob__&quot;</span>, ob);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// mark as Raw</span></span><br><span class="line">  rawSet.set(obj, <span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> obj;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">isRaw</span>(<span class="params">obj: <span class="built_in">any</span></span>): <span class="title">boolean</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">Boolean</span>(obj?.__ob__ &amp;&amp; obj.__ob__?.__raw__);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">toRaw</span>&lt;<span class="title">T</span>&gt;(<span class="params">observed: T</span>): <span class="title">T</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (isRaw(observed) || !<span class="built_in">Object</span>.isExtensible(observed)) &#123;</span><br><span class="line">    <span class="keyword">return</span> observed;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (observed <span class="keyword">as</span> <span class="built_in">any</span>)?.__ob__?.value || observed;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>markRaw 给目标添加了 vue observable 的 flag，这样 Vue 应该就不会再给对象添加响应式属性了<br>rawSet 也是一个 weakmap<br>isRaw 通过 markRaw 设置的 <code>__ob__.__raw__</code> flag 来判断<br>toRaw 是获取响应式对象的原本对象<br>这里 和 vue3 实现的有些差异，通过之前我们知道 reactive 是在原对象上增加响应式属性<code>__ob__</code>的，而 vue3 是通过 proxy 实现的，所以 toRaw 拿到的是被代理的原始对象,而这里这个 toRaw 有点意义不明</p>
+<h2 id="reactivity-ref-ts"><a href="#reactivity-ref-ts" class="headerlink" title="reactivity/ref.ts"></a>reactivity/ref.ts</h2><p>这个文件上来就是一堆类型定义，看的我人晕掉了。。</p>
+<h3 id="ref-amp-amp-isRef"><a href="#ref-amp-amp-isRef" class="headerlink" title="ref &amp;&amp; isRef"></a>ref &amp;&amp; isRef</h3><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// @vue/composition-api/src/reactivity/ref.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> RefKey = <span class="string">&quot;composition-api.refKey&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">ref</span>&lt;<span class="title">T</span> <span class="title">extends</span> <span class="title">object</span>&gt;(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">  raw: T</span></span></span><br><span class="line"><span class="params"><span class="function"></span>): <span class="title">T</span> <span class="title">extends</span> <span class="title">Ref</span> ? <span class="title">T</span> : <span class="title">Ref</span>&lt;<span class="title">UnwrapRef</span>&lt;<span class="title">T</span>&gt;&gt;</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">ref</span>&lt;<span class="title">T</span>&gt;(<span class="params">raw: T</span>): <span class="title">Ref</span>&lt;<span class="title">UnwrapRef</span>&lt;<span class="title">T</span>&gt;&gt;</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">ref</span>&lt;<span class="title">T</span> = <span class="title">any</span>&gt;(<span class="params"></span>): <span class="title">Ref</span>&lt;<span class="title">T</span> | <span class="title">undefined</span>&gt;</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">ref</span>(<span class="params">raw?: unknown</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (isRef(raw)) &#123;</span><br><span class="line">    <span class="keyword">return</span> raw;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> value = reactive(&#123; [RefKey]: raw &#125;);</span><br><span class="line">  <span class="keyword">return</span> createRef(&#123;</span><br><span class="line">    <span class="attr">get</span>: <span class="function">() =&gt;</span> value[RefKey] <span class="keyword">as</span> <span class="built_in">any</span>,</span><br><span class="line">    <span class="attr">set</span>: <span class="function">(<span class="params">v</span>) =&gt;</span> ((value[RefKey] <span class="keyword">as</span> <span class="built_in">any</span>) = v),</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>好家伙，上来就是三个重载，然后 <code>Ref&lt;UnwrapRef&lt;T&gt;&gt;</code>这玩意好绕，先不管了<br>如果传入的对象已经是 Ref 对象，直接返回，否则通过 reactive 创建一个响应式对象，然后返回通过 createRef 创建的对象</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// @vue/composition-api/src/reactivity/ref.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">isRef</span>&lt;<span class="title">T</span>&gt;(<span class="params">value: <span class="built_in">any</span></span>): <span class="title">value</span> <span class="title">is</span> <span class="title">Ref</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> value <span class="keyword">instanceof</span> RefImpl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过 instanceOf 判断是否是 Ref 对象是</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// @vue/composition-api/src/reactivity/ref.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">createRef</span>&lt;<span class="title">T</span>&gt;(<span class="params">options: RefOption&lt;T&gt;, <span class="keyword">readonly</span> = <span class="literal">false</span></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> r = <span class="keyword">new</span> RefImpl&lt;T&gt;(options);</span><br><span class="line">  <span class="comment">// seal the ref, this could prevent ref from being observed</span></span><br><span class="line">  <span class="comment">// It&#x27;s safe to seal the ref, since we really shouldn&#x27;t extend it.</span></span><br><span class="line">  <span class="comment">// related issues: #79</span></span><br><span class="line">  <span class="keyword">const</span> sealed = <span class="built_in">Object</span>.seal(r);</span><br><span class="line"></span><br><span class="line">  readonlySet.set(sealed, <span class="literal">true</span>);</span><br><span class="line">  <span class="keyword">return</span> sealed;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RefImpl</span>&lt;<span class="title">T</span>&gt; <span class="title">implements</span> <span class="title">Ref</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">  <span class="keyword">readonly</span> [_refBrand]!: <span class="literal">true</span>;</span><br><span class="line">  <span class="keyword">public</span> value!: T;</span><br><span class="line">  <span class="function"><span class="title">constructor</span>(<span class="params">&#123; get, set &#125;: RefOption&lt;T&gt;</span>)</span> &#123;</span><br><span class="line">    proxy(<span class="built_in">this</span>, <span class="string">&quot;value&quot;</span>, &#123;</span><br><span class="line">      get,</span><br><span class="line">      set,</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> sharedPropertyDefinition = &#123;</span><br><span class="line">  <span class="attr">enumerable</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">configurable</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">get</span>: noopFn,</span><br><span class="line">  <span class="attr">set</span>: noopFn,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">proxy</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">  target: <span class="built_in">any</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">  key: <span class="built_in">string</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">  &#123; get, set &#125;: &#123; get?: <span class="built_in">Function</span>; set?: <span class="built_in">Function</span> &#125;</span></span></span><br><span class="line"><span class="params"><span class="function"></span>) </span>&#123;</span><br><span class="line">  sharedPropertyDefinition.get = get || noopFn;</span><br><span class="line">  sharedPropertyDefinition.set = set || noopFn;</span><br><span class="line">  <span class="built_in">Object</span>.defineProperty(target, key, sharedPropertyDefinition);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>createRef 就是创建一个 RefImpl 对象，然后代理了其中 value 属性的 getter 和 setter<br>Object.seal 让一个对象密封，并返回被密封后的对象。密封对象是指那些不能添加新的属性，不能删除已有属性，以及不能修改已有属性的可枚举性、可配置性、可写性，但可以修改已有属性的值的对象。</p>
+<h3 id="toRef-amp-amp-toRefs"><a href="#toRef-amp-amp-toRefs" class="headerlink" title="toRef &amp;&amp; toRefs"></a>toRef &amp;&amp; toRefs</h3><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// @vue/composition-api/src/reactivity/ref.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">toRef</span>&lt;<span class="title">T</span> <span class="title">extends</span> <span class="title">object</span>, <span class="title">K</span> <span class="title">extends</span> <span class="title">keyof</span> <span class="title">T</span>&gt;(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">  <span class="built_in">object</span>: T,</span></span></span><br><span class="line"><span class="params"><span class="function">  key: K</span></span></span><br><span class="line"><span class="params"><span class="function"></span>): <span class="title">Ref</span>&lt;<span class="title">T</span>[<span class="title">K</span>]&gt; </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> v = <span class="built_in">object</span>[key];</span><br><span class="line">  <span class="keyword">if</span> (isRef&lt;T[K]&gt;(v)) <span class="keyword">return</span> v;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> createRef(&#123;</span><br><span class="line">    <span class="attr">get</span>: <span class="function">() =&gt;</span> <span class="built_in">object</span>[key],</span><br><span class="line">    <span class="attr">set</span>: <span class="function">(<span class="params">v</span>) =&gt;</span> (<span class="built_in">object</span>[key] = v),</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">toRefs</span>&lt;<span class="title">T</span> <span class="title">extends</span> <span class="title">Data</span> = <span class="title">Data</span>&gt;(<span class="params">obj: T</span>): <span class="title">ToRefs</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (!isPlainObject(obj)) <span class="keyword">return</span> obj <span class="keyword">as</span> <span class="built_in">any</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> ret: <span class="built_in">any</span> = &#123;&#125;;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> key <span class="keyword">in</span> obj) &#123;</span><br><span class="line">    ret[key] = toRef(obj, key);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>把对象的某个属性变成 Ref 类型<br>如果已经是 Ref 类型了，直接返回，否则返回通过 createRef 创建的对象<br>需要注意传入的 object 必须是一个响应式对象，否则返回的 Ref 是不具有响应式特性的，因为无法进行依赖收集相关的操作。</p>
+<h3 id="unref"><a href="#unref" class="headerlink" title="unref"></a>unref</h3><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// @vue/composition-api/src/reactivity/ref.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">unref</span>&lt;<span class="title">T</span>&gt;(<span class="params">ref: T</span>): <span class="title">T</span> <span class="title">extends</span> <span class="title">Ref</span>&lt;<span class="title">infer</span> <span class="title">V</span>&gt; ? <span class="title">V</span> : <span class="title">T</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> isRef(ref) ? (ref.value <span class="keyword">as</span> <span class="built_in">any</span>) : ref;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>返回 Ref 的 value 属性</p>
+<h3 id="shallowRef"><a href="#shallowRef" class="headerlink" title="shallowRef"></a>shallowRef</h3><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// @vue/composition-api/src/reactivity/ref.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">shallowRef</span>(<span class="params">raw?: unknown</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (isRef(raw)) &#123;</span><br><span class="line">    <span class="keyword">return</span> raw;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">const</span> value = shallowReactive(&#123; [RefKey]: raw &#125;);</span><br><span class="line">  <span class="keyword">return</span> createRef(&#123;</span><br><span class="line">    <span class="attr">get</span>: <span class="function">() =&gt;</span> value[RefKey] <span class="keyword">as</span> <span class="built_in">any</span>,</span><br><span class="line">    <span class="attr">set</span>: <span class="function">(<span class="params">v</span>) =&gt;</span> ((value[RefKey] <span class="keyword">as</span> <span class="built_in">any</span>) = v),</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>很好理解，这里的 reactive 对象是通过 shallowReactive 创建的</p>
+<h3 id="customRef"><a href="#customRef" class="headerlink" title="customRef"></a>customRef</h3><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// @vue/composition-api/src/reactivity/ref.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">customRef</span>&lt;<span class="title">T</span>&gt;(<span class="params">factory: CustomRefFactory&lt;T&gt;</span>): <span class="title">Ref</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> version = ref(<span class="number">0</span>);</span><br><span class="line">  <span class="keyword">return</span> createRef(</span><br><span class="line">    factory(</span><br><span class="line">      <span class="function">() =&gt;</span> <span class="built_in">void</span> version.value,</span><br><span class="line">      <span class="function">() =&gt;</span> &#123;</span><br><span class="line">        ++version.value;</span><br><span class="line">      &#125;</span><br><span class="line">    )</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>允许传入一个工厂方法，属于比较高级的应用，略过</p>
+<h3 id="triggerRef"><a href="#triggerRef" class="headerlink" title="triggerRef"></a>triggerRef</h3><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// @vue/composition-api/src/reactivity/ref.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">triggerRef</span>(<span class="params">value: <span class="built_in">any</span></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (!isRef(value)) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">  value.value = value.value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>vue3 文档上的例子，手动触发响应式侦测</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> shallow = shallowRef(&#123;</span><br><span class="line">  <span class="attr">greet</span>: <span class="string">&quot;Hello, world&quot;</span>,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Logs &quot;Hello, world&quot; once for the first run-through</span></span><br><span class="line">watchEffect(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(shallow.value.greet);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// This won&#x27;t trigger the effect because the ref is shallow</span></span><br><span class="line">shallow.value.greet = <span class="string">&quot;Hello, universe&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Logs &quot;Hello, universe&quot;</span></span><br><span class="line">triggerRef(shallow);</span><br></pre></td></tr></table></figure>
+<h3 id="proxyRefs"><a href="#proxyRefs" class="headerlink" title="proxyRefs"></a>proxyRefs</h3><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// @vue/composition-api/src/reactivity/ref.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">proxyRefs</span>&lt;<span class="title">T</span> <span class="title">extends</span> <span class="title">object</span>&gt;(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">  objectWithRefs: T</span></span></span><br><span class="line"><span class="params"><span class="function"></span>): <span class="title">ShallowUnwrapRef</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (isReactive(objectWithRefs)) &#123;</span><br><span class="line">    <span class="keyword">return</span> objectWithRefs <span class="keyword">as</span> ShallowUnwrapRef&lt;T&gt;;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">const</span> value: Record&lt;<span class="built_in">string</span>, <span class="built_in">any</span>&gt; = reactive(&#123; [RefKey]: objectWithRefs &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> key <span class="keyword">of</span> <span class="built_in">Object</span>.keys(objectWithRefs)) &#123;</span><br><span class="line">    proxy(value, key, &#123;</span><br><span class="line">      <span class="function"><span class="title">get</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (isRef(value[key])) &#123;</span><br><span class="line">          <span class="keyword">return</span> value[key].value;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> value[key];</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="function"><span class="title">set</span>(<span class="params">v: unknown</span>)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (isRef(value[key])) &#123;</span><br><span class="line">          <span class="keyword">return</span> (value[key].value = unref(v));</span><br><span class="line">        &#125;</span><br><span class="line">        value[key] = unref(v);</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> value <span class="keyword">as</span> ShallowUnwrapRef&lt;T&gt;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>看了一下，是 vue3 的新特性方法，这里也跟进了<br>如果 objectWithRefs 的属性是 Ref 的话，自动进行拆装箱</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/vue/" rel="tag"># vue</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/javascript/%E6%89%8B%E5%86%99%E4%BB%A3%E7%A0%81/" rel="prev" title="手写代码">
+      <i class="fa fa-chevron-left"></i> 手写代码
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/01/31/vue/vue-composition-api%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E4%B9%8Bwatch%E4%B8%8Ecomputed/" rel="next" title="vue-composition-api源码分析之watch与computed">
+      vue-composition-api源码分析之watch与computed <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#reactivity-reactive-ts"><span class="nav-number">1.</span> <span class="nav-text">reactivity&#x2F;reactive.ts</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#reactive"><span class="nav-number">1.1.</span> <span class="nav-text">reactive</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#shallowReactive"><span class="nav-number">1.2.</span> <span class="nav-text">shallowReactive</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#isReactive"><span class="nav-number">1.3.</span> <span class="nav-text">isReactive</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#markRaw-amp-amp-isRaw-amp-amp-toRaw"><span class="nav-number">1.4.</span> <span class="nav-text">markRaw &amp;&amp; isRaw &amp;&amp; toRaw</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#reactivity-ref-ts"><span class="nav-number">2.</span> <span class="nav-text">reactivity&#x2F;ref.ts</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ref-amp-amp-isRef"><span class="nav-number">2.1.</span> <span class="nav-text">ref &amp;&amp; isRef</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#toRef-amp-amp-toRefs"><span class="nav-number">2.2.</span> <span class="nav-text">toRef &amp;&amp; toRefs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#unref"><span class="nav-number">2.3.</span> <span class="nav-text">unref</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#shallowRef"><span class="nav-number">2.4.</span> <span class="nav-text">shallowRef</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#customRef"><span class="nav-number">2.5.</span> <span class="nav-text">customRef</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#triggerRef"><span class="nav-number">2.6.</span> <span class="nav-text">triggerRef</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#proxyRefs"><span class="nav-number">2.7.</span> <span class="nav-text">proxyRefs</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">jiezi19971225</p>
+  <div class="site-description" itemprop="description">记录编程学习路上的点滴</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jiezi19971225</span>
+</div>
+  <img src="https://static.dy208.cn/o_1dfilp8ruo521thr1hvf18ji17soa.png"/>
+  <a href="http://www.beian.miit.gov.cn/"  style="color:#f72b07" target="_blank">皖ICP备17001385号-1</a>
+  <br/>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

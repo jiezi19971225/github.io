@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+<meta name="baidu-site-verification" content="5IfwMCE5hH" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.jiezi19971225.cn","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="正常控制流正常控制流包含两种顺序  按照指令存放的顺序执行，新的 PC 数值为当前指令地址加上指令长度 跳转到由于转移类指令指出的转移目标地址处执行，新的 PC 数值为转移目标地址  进程与进程上下文的切换进程的概念进程是资源分配的最小单位，每个应用程序在运行时均有自己的存储空间，用来存储自己的程序代码和数据，包括只读区（代码和只读数据），可读可写数据区（初始化数据和未初始化数据），动态的堆区和">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机基础之异常控制流学习笔记">
+<meta property="og:url" content="http://www.jiezi19971225.cn/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="Jiez19971225‘s Blog">
+<meta property="og:description" content="正常控制流正常控制流包含两种顺序  按照指令存放的顺序执行，新的 PC 数值为当前指令地址加上指令长度 跳转到由于转移类指令指出的转移目标地址处执行，新的 PC 数值为转移目标地址  进程与进程上下文的切换进程的概念进程是资源分配的最小单位，每个应用程序在运行时均有自己的存储空间，用来存储自己的程序代码和数据，包括只读区（代码和只读数据），可读可写数据区（初始化数据和未初始化数据），动态的堆区和">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://www.jiezi19971225.cn/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/思维导图.png">
+<meta property="og:image" content="http://www.jiezi19971225.cn/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/多个逻辑控制流.png">
+<meta property="og:image" content="http://www.jiezi19971225.cn/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/进程的存储映像.png">
+<meta property="og:image" content="http://www.jiezi19971225.cn/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/虚拟地址空间映像.png">
+<meta property="og:image" content="http://www.jiezi19971225.cn/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/中断处理过程.png">
+<meta property="og:image" content="http://www.jiezi19971225.cn/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/外部中断的处理过程.png">
+<meta property="article:published_time" content="2020-03-21T22:04:59.000Z">
+<meta property="article:modified_time" content="2021-10-21T16:45:16.171Z">
+<meta property="article:author" content="jiezi19971225">
+<meta property="article:tag" content="进程">
+<meta property="article:tag" content="异常和中断">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://www.jiezi19971225.cn/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/思维导图.png">
+
+<link rel="canonical" href="http://www.jiezi19971225.cn/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>计算机基础之异常控制流学习笔记 | Jiez19971225‘s Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Jiez19971225‘s Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">做自己爱做的事</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content="记录编程学习路上的点滴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          计算机基础之异常控制流学习笔记
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-03-21 22:04:59" itemprop="dateCreated datePublished" datetime="2020-03-21T22:04:59+00:00">2020-03-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-10-21 16:45:16" itemprop="dateModified" datetime="2021-10-21T16:45:16+00:00">2021-10-21</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">计算机基础</span></a>
+                </span>
+            </span>
+
+          
+
+          <span class="post-time">
+            &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-bar-chart"></i>
+            </span>
+            <span class="post-meta-item-text">字数统计:</span>
+            <span class="post-count">4.1k(字)</span>
+
+          </span>
+
+            <span class="post-time">
+          &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-clock-o"></i>
+            </span>
+            <span class="post-meta-item-text">阅读时长:</span>
+            <span class="post-count">13(分)</span>
+
+          </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/思维导图.png" alt="思维导图"></p>
+<h2 id="正常控制流"><a href="#正常控制流" class="headerlink" title="正常控制流"></a>正常控制流</h2><p>正常控制流包含两种顺序</p>
+<ul>
+<li>按照指令存放的顺序执行，新的 PC 数值为当前指令地址加上指令长度</li>
+<li>跳转到由于转移类指令指出的转移目标地址处执行，新的 PC 数值为转移目标地址</li>
+</ul>
+<h2 id="进程与进程上下文的切换"><a href="#进程与进程上下文的切换" class="headerlink" title="进程与进程上下文的切换"></a>进程与进程上下文的切换</h2><h3 id="进程的概念"><a href="#进程的概念" class="headerlink" title="进程的概念"></a>进程的概念</h3><p>进程是资源分配的最小单位，每个应用程序在运行时均有自己的存储空间，用来存储自己的程序代码和数据，包括只读区（代码和只读数据），可读可写数据区（初始化数据和未初始化数据），动态的堆区和栈区</p>
+<p>进程的引入为程序提供了以下两方面的抽象。一个独立的逻辑控制流和一个私有的虚拟内存地址。每个进程拥有一个独立的逻辑，使得程序员以为程序似在执行过程中独占处理器。一个私有的虚拟地址空间，使得程序员以为程序在执行过程中独占存储器。</p>
+<p>为了实现以上两方面的抽象，操作系统必须提供一整套管理机制，包括处理器调度、进程上下文切换、虚拟存储管理等。</p>
+<h3 id="逻辑控制流"><a href="#逻辑控制流" class="headerlink" title="逻辑控制流"></a>逻辑控制流</h3><p>一个可执行目标文件被加载并启动执行后，就成为一个进程。他们代码段中的每一条指令都有一个确定的地址，在这些指令的执行过程中，会形成一个指令执行的地址序列，对于确定的输入数据，其指令的地址序列也是确定的。这个确定的指令执行地址序列被称为进程的<strong>逻辑控制流</strong>。</p>
+<p>对于一个具有单核处理器的系统，如果有多个进程运行，这些进程会轮流使用处理器，处理器的<strong>物理控制流</strong>是由多个逻辑控制流组成。<br><img src="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/多个逻辑控制流.png" alt="多个逻辑控制流"></p>
+<p>图中可以看出有些进程的逻辑控制流在时间上有交错，通常把这种不同进程的逻辑控制流在时间上交错或者重叠称为<strong>并发</strong>。而<strong>并行</strong>则是并发执行的一个特例，我们称两个进程是并行的，是指他们并发的运行在不同的处理器或者处理器核中。</p>
+<p>连续执行同一个进程的时间段称为时间片，每个时间片结束时，通过进程的上下文切换，换一个新的进程到处理器上执行，开始一个新的时间片，这个过程称为<strong>时间片轮转处理器调度</strong>。</p>
+<h3 id="进程的上下文切换"><a href="#进程的上下文切换" class="headerlink" title="进程的上下文切换"></a>进程的上下文切换</h3><p>实现不同进程中指令交替执行的机制称为<strong>进程的上下文切换</strong>。</p>
+<p>进程的物理实体（代码和数据）和支持进程运行的环境合称为<strong>进程的上下文</strong>，可以细分为</p>
+<ul>
+<li>由用户进程的程序块，数据块，运行时的堆和用户栈等组成的用户空间信息被称为<strong>用户级上下文</strong>。</li>
+<li>进程表示信息，进程现场信息，进程控制信息和系统内核堆栈组成的<strong>内核空间信息</strong>被称为<strong>系统级上下文</strong>。</li>
+<li>处理器中各个寄存器的内存被称为<strong>寄存器上下文</strong>。</li>
+</ul>
+<p>用户级上下文和系统级上下文地址空间一起构成了一个进程的整个存储器映像。进程控制信息包含各种内核数据结构，如有关进程信息的进程表，页表，文件表等。<br><img src="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/进程的存储映像.png" alt="进程的存储映像"></p>
+<p>上下文切换发生在操作系统调度一个新进程到处理器上运行，他需要完成以下三件事</p>
+<ul>
+<li>将当前进程的寄存器上下文保存到当前进程的系统级上下文的现场信息中</li>
+<li>将新进程系统上下文中的现场信息作为新的寄存器上下文恢复到处理器的各个寄存器中</li>
+<li>将控制转移到新进程执行</li>
+</ul>
+<p>一个重要的上下文信息是 PC，当前进程被打断的断点处的 PC 作为寄存器上下文的一部分被保存在进程现场信息中。</p>
+<h3 id="进程的私有地址空间"><a href="#进程的私有地址空间" class="headerlink" title="进程的私有地址空间"></a>进程的私有地址空间</h3><p><img src="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/虚拟地址空间映像.png" alt="虚拟地址空间映像"></p>
+<p>整个虚拟地址空间分为两大部分。<strong>内核虚拟存储空间</strong>（简称内核空间）和<strong>进程虚拟内存空间</strong>（简称用户空间）。在采用虚拟存储机制的系统中，每个程序的可执行目标文件在装入时都被映射到同样的虚拟地址空间上，即所有用户进程的虚拟地址空间是一致的，只是在相应的制度区域和可读写数据区域中映射的信息不同而已。</p>
+<p>linux 将用户空间对应的进程虚拟存储空间组织成若干“区域”的集合，<br>内核为每个进程维护了一个进程描述符，记录或者指向内核运行该进程所需要的所有信息，如进程 pid，指向用户栈的指针，可执行目标文件的文件名，程序计数器 PC 等。</p>
+<h3 id="程序的加载和运行"><a href="#程序的加载和运行" class="headerlink" title="程序的加载和运行"></a>程序的加载和运行</h3><p>当启动一个可以行目标文件执行时，首先会通过某种方式调出常驻内存的一个称为加载器的操作系统程序来处理。在 UNIX/Linux 系统中，可以通过 execve() 函数来启动加载器，其作用是在当前进程的上下文中加载并且运行一个新程序。</p>
+<h2 id="异常和中断"><a href="#异常和中断" class="headerlink" title="异常和中断"></a>异常和中断</h2><p>除了时间片到，当前进程的执行被新进程打断，还有用户按下 CTRL+C，当前执行执行中发生了不能使指令执行的意外事件，IO 设备完成了系统交给的任务需要进一步处理，这些特殊事件统称为<strong>异常</strong>或者<strong>中断</strong>。<br>当发生异常或者终端，正在执行进程的逻辑控制流被打断，CPU 转到具体的特殊处理事件的内核程序去执行。他与上下文切换有一个明显的不同：上下文切换后 CPU 执行另一个用户进程，但是，中断或异常处理程序执行的代码不是一个进程，而是一个<strong>内核控制路径</strong>，它代表异常或终端发生时正在运行的当前进程在内核态执行的一个独立的指令序列。作为一个内核控制路径，他比进程更轻，其上下文信息比一个进程的上下文信息少得多。</p>
+<h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p>异常是在 CPU 内部执行时发生的，中断是 CPU 外部的 IO 设备向 CPU 发出的请求，通常称异常为<strong>内部异常</strong>，而称中断为<strong>外部中断</strong>。</p>
+<p><img src="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/中断处理过程.png" alt="中断处理过程"></p>
+<p>大致处理流程如下：当 CPU 在执行当前程序或任务的第 i 条指令时检测到一个异常事件，或者在执行第 i 条指令后发现有一个中断请求信息，CPU 会打断当前用户进程，然后转到相应的异常或中断处理程序去执行。如果该处理程序能解决相应问题，则在该处理程序的最后，CPU 通过执行“异常/中断返回指令”回到被打断的用户进程的第 i 条指令或第 i+1 条指令继续执行。若异常或中断处理程序发现是不可恢复的知名错误，则中止用户进程。通常情况下，对于异常和中断事件的具体处理过程全部由操作系统（可能包括驱动程序）软件来完成。</p>
+<h3 id="异常的分类"><a href="#异常的分类" class="headerlink" title="异常的分类"></a>异常的分类</h3><p>intel 将内部异常分为三类</p>
+<p>故障</p>
+<p><strong>故障</strong>是在引起故障的指令被启动后但未结束执行时 CPU 检测到的一类与指令执行相关的意外事件。这种意外事件有些可以回复，有些不能回复。如指令译码出现的非法操作码；取指令或者取数据时发生页故障，执行触发操作时发现除数为 0.</p>
+<p>对于像溢出和非法操作码等这类故障，因为无法通过异常处理程序回复，会调用内核的 abort 例程，以中止发生故障的当前进程。</p>
+<p>对于页故障。cpu 在指令执行过程中需要访问存储器，首先进行地址转换，在查页表进行地址转换时，判断相应页表项中的有效位是否是 1，并且确定是否地址越界或访问越权，如果检测到有效位不为 1 或者地址越界或者访问越权，都会产生页故障异常。页故障异常包含多种不同情况：处理程序首先检测是否发生地址越界或访问越权，如果是的话，故障不可恢复，否则是缺陷故障，可通过从磁盘读入页面来恢复。Linux 中不可恢复的访存故障（地址越界和访问越权）都称为<strong>段故障</strong>。</p>
+<p>陷阱</p>
+<p><strong>陷阱</strong>也成为自陷或者陷入，与故障等其他异常事件不同，是预先安排的一种异常事件，就像预先设定的陷阱一样，当执行到陷阱指令，CPU 就调出特定的程序进行相应的处理，处理结束后返回到陷阱指令的下一条指令执行。</p>
+<p>陷阱的重要作之一是在用户程序和内核之间提供一个像过程调用一样的接口，这个接口称为<strong>系统调用</strong>。操作系统给每个服务编一个号，称为系统调用号，每个服务功能通过一个对应的<strong>系统调用服务例程</strong>提供。如在 linux 中就提供了创建子线程（fork），读文件（read），加载并且运行新程序（execve）等服务功能。</p>
+<p>用于程序调试的<strong>断点设置</strong>也是一种陷阱指令。</p>
+<p>在 IA-32 中，陷阱指令引擎的异常称为编程异常，这些指令包括 INT n，int 3，into（溢出检查），bound（地址越界检查）,通常将 INT n 称为软中断指令，该指令引起的异常通常也称为<strong>软中断</strong>。在 IA-32/Linux 中可以使用快速系统调用指令 sysenter 或者软中断指令 int $0x80 进行系统调用。</p>
+<p>终止</p>
+<p>如果在执行指令的过程中发生了严重错误，如控制器出现问题，访问 DRAM 或者 SRAM 时发生校验错误等，则程序无法继续执行，只好终止发生问题的进程。</p>
+<h3 id="中断的分类"><a href="#中断的分类" class="headerlink" title="中断的分类"></a>中断的分类</h3><p><strong>中断</strong> 是由外部 IO 设备请求处理器进行的一种信号。他不是由当前执行的指令引起的，外部 IO 设备通过特定的<strong>中断请求信号线</strong>向 CPU 提出中断申请。CPU 在执行指令过程中，每执行一条指令就查看中断请求引脚，如果中断请求引脚的信号有效，则进入中断响应周期。在<strong>中断响应周期</strong>中，CPU 先将当前 PC 值和当前机器状态保存到栈中，并设置成为<strong>关中断</strong>状态，然后从数据总线读取<strong>中断类型号</strong>，根据中断类型号跳转到对应的中断服务程序执行。中断响应过程由硬件完成，而中断服务程序执行具体的中断处理工作，中断处理完成后，再回到被打断程序的断点处继续执行。</p>
+<p><img src="/2020/03/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/外部中断的处理过程.png" alt="外部中断的处理过程"></p>
+<p>可屏蔽中断</p>
+<p>是指通过<strong>可屏蔽中断请求线</strong>INTR 向 CPU 进行请求的中断，主要来自 IO 设备的中断请求。CPU 可以通过在中断控制器中设置相应的屏蔽字来屏蔽他或者不屏蔽他。若一个 IO 设备的中断请求被屏蔽，他的中断请求信号不会被送到 CPU。</p>
+<p>不可屏蔽中断</p>
+<p>通常是非常紧急的硬件故障，通过专门的<strong>不可屏蔽中断请求线</strong>NMI 向 CPU 发出中断请求。</p>
+<h3 id="异常和中断的响应过程"><a href="#异常和中断的响应过程" class="headerlink" title="异常和中断的响应过程"></a>异常和中断的响应过程</h3><p>CPU 从检测到异常或中断事件，到调出响应的异常或中断处理程序开始执行，整个过程称为<strong>异常和中断的响应</strong>。主要分为以下三个步骤：</p>
+<ul>
+<li>保护断点和程序状态</li>
+<li>关中断</li>
+<li>识别异常和中断事件并转到响应处理程序执行</li>
+</ul>
+<p>保护断点和程序状态</p>
+<p>对于不同的异常事件，其返回地址不同。如却也故障异常的断点是发生页故障的当前指令的地址。陷阱的断点是陷阱指令后面一条指令的地址。</p>
+<p>为了能够支持异常或者中断的嵌套处理，大多数处理器将断点保存到栈中，如 IA-32 处理器的断点被保存到栈中，如果系统不支持桥套处理，则可以将断点保存到特定寄存器中。MIPS 处理器用 EPC 寄存器专门存放断点，其 CPU 用于中断的开销较小。</p>
+<p>被中断时源程序状态（如产生的各种标志信息，允许自陷标志等）都必须保存起来。每个正在运行程序的状态信息存放在一个专门的寄存器中，这些专门寄存器统称为<strong>程序状态字寄存器</strong>（PSWR），存放在 PSWR 中的信息称为<strong>程序状态字</strong>。</p>
+<p>关中断</p>
+<p>应有一种机制来禁止在处理异常或中断时再响应新的异常或中断，通常通过设置<strong>中断允许位</strong>来实现。</p>
+<p>识别异常和中断事件并转到响应处理程序执行</p>
+<p>在调出异常和中断你处理程序之前，必须知道发生了什么异常或者那个 IO 设备发出了中断请求。一般来说，内部异常事件和外部中断源的识别方式不同，大多数处理器会将二者分开来处理。</p>
+<p>内部异常事件的识别很简单，只要 CPU 在执行期间把检测到的事件对应的异常类型或者表示异常类型的信息记录到特定的内部寄存器中即可。</p>
+<p>外部中断源的识别比较复杂，只能通过在每条指令执行完成后，取下条指令之前去查询是否有中断请求。通常 CPU 通过采样对应的中断请求引脚来进行查询。但是到底是那个 IO 设备发出的请求，还需要进一步识别。</p>
+<p>异常中断的识别可以采用软件识别和硬件识别两种方式。</p>
+<p>软件识别是指，CPU 中设置一个原因寄存器，该寄存器中有一些标识异常原因或终端类型的标志信息。操作系统使用一个统一的异常或中断查询程序，按一定的优先级顺序查询原因寄存器，先查询到的先处理。MIPS 采用软件识别方式</p>
+<p>硬件识别方式称为<strong>向量中断方式</strong>，这种方式下，异常或中断处理程序的首地址称为<strong>中断向量</strong>，所有中断向量存放在一个表中，称为<strong>中断向量表</strong>。每个异常和中断都被设定一个<strong>中断类型号</strong>，中断向量存放的位置与对应的中断类型号相关。可以根据类型号快速找到对应的处理程序。IA-32 中的异常和中断识别就采用这种方式。</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>BIOS（Basic Input/Output System）是基本输入/输出系统的简称</p>
+<p>Intel 从奔二处理器开始，引入了指令 sysenter 和 sysexit，sysenter 被称为<strong>快速系统调用指令</strong>，他提供了从用户态到内核态的快速切换方式。</p>
+<p>页的大小是 4kb，当对于页起始地址的发起第一次访问时，会发生缺页异常。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%BF%9B%E7%A8%8B/" rel="tag"># 进程</a>
+              <a href="/tags/%E5%BC%82%E5%B8%B8%E5%92%8C%E4%B8%AD%E6%96%AD/" rel="tag"># 异常和中断</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/03/17/%E7%AE%97%E6%B3%95/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/" rel="prev" title="二叉搜索树">
+      <i class="fa fa-chevron-left"></i> 二叉搜索树
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/03/24/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E4%B9%8B%E6%9C%89%E7%A9%B7%E8%87%AA%E5%8A%A8%E6%9C%BA/" rel="next" title="有穷自动机">
+      有穷自动机 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A3%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81"><span class="nav-number">1.</span> <span class="nav-text">正常控制流</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E4%B8%8E%E8%BF%9B%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E7%9A%84%E5%88%87%E6%8D%A2"><span class="nav-number">2.</span> <span class="nav-text">进程与进程上下文的切换</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="nav-number">2.1.</span> <span class="nav-text">进程的概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%BB%E8%BE%91%E6%8E%A7%E5%88%B6%E6%B5%81"><span class="nav-number">2.2.</span> <span class="nav-text">逻辑控制流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E7%9A%84%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2"><span class="nav-number">2.3.</span> <span class="nav-text">进程的上下文切换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E7%9A%84%E7%A7%81%E6%9C%89%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4"><span class="nav-number">2.4.</span> <span class="nav-text">进程的私有地址空间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%8A%A0%E8%BD%BD%E5%92%8C%E8%BF%90%E8%A1%8C"><span class="nav-number">2.5.</span> <span class="nav-text">程序的加载和运行</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%82%E5%B8%B8%E5%92%8C%E4%B8%AD%E6%96%AD"><span class="nav-number">3.</span> <span class="nav-text">异常和中断</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">3.1.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%82%E5%B8%B8%E7%9A%84%E5%88%86%E7%B1%BB"><span class="nav-number">3.2.</span> <span class="nav-text">异常的分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E6%96%AD%E7%9A%84%E5%88%86%E7%B1%BB"><span class="nav-number">3.3.</span> <span class="nav-text">中断的分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%82%E5%B8%B8%E5%92%8C%E4%B8%AD%E6%96%AD%E7%9A%84%E5%93%8D%E5%BA%94%E8%BF%87%E7%A8%8B"><span class="nav-number">3.4.</span> <span class="nav-text">异常和中断的响应过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">3.5.</span> <span class="nav-text">其他</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">jiezi19971225</p>
+  <div class="site-description" itemprop="description">记录编程学习路上的点滴</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jiezi19971225</span>
+</div>
+  <img src="https://static.dy208.cn/o_1dfilp8ruo521thr1hvf18ji17soa.png"/>
+  <a href="http://www.beian.miit.gov.cn/"  style="color:#f72b07" target="_blank">皖ICP备17001385号-1</a>
+  <br/>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

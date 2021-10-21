@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+<meta name="baidu-site-verification" content="5IfwMCE5hH" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.jiezi19971225.cn","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="最近一周一直在研究在公司的 rancher k8s 环境下搭建前端错误监控平台 sentry。首先介绍一下 sentry，这是一个非常强大的错误收集框架，可以收集众多语言的运行错误日志，其在前端错误的监控上应用的比较多。配合上传 sourceMap可以快速准确定位到源代码错误位置。 为什么它来监控前端错误呢？我们的测试无法覆盖到应用的方方面面，很多线上错误，往往是用户反馈到了客服人员，然后技术人员">
+<meta property="og:type" content="article">
+<meta property="og:title" content="helm安装sentry踩坑">
+<meta property="og:url" content="http://www.jiezi19971225.cn/2020/10/27/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/helm%E5%AE%89%E8%A3%85sentry%E8%B8%A9%E5%9D%91/index.html">
+<meta property="og:site_name" content="Jiez19971225‘s Blog">
+<meta property="og:description" content="最近一周一直在研究在公司的 rancher k8s 环境下搭建前端错误监控平台 sentry。首先介绍一下 sentry，这是一个非常强大的错误收集框架，可以收集众多语言的运行错误日志，其在前端错误的监控上应用的比较多。配合上传 sourceMap可以快速准确定位到源代码错误位置。 为什么它来监控前端错误呢？我们的测试无法覆盖到应用的方方面面，很多线上错误，往往是用户反馈到了客服人员，然后技术人员">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://www.jiezi19971225.cn/2020/10/27/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/helm%E5%AE%89%E8%A3%85sentry%E8%B8%A9%E5%9D%91/默认存储类.png">
+<meta property="article:published_time" content="2020-10-27T22:40:49.000Z">
+<meta property="article:modified_time" content="2021-10-21T16:45:16.147Z">
+<meta property="article:author" content="jiezi19971225">
+<meta property="article:tag" content="k8s">
+<meta property="article:tag" content="rancher">
+<meta property="article:tag" content="sentry">
+<meta property="article:tag" content="前端基建">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://www.jiezi19971225.cn/2020/10/27/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/helm%E5%AE%89%E8%A3%85sentry%E8%B8%A9%E5%9D%91/默认存储类.png">
+
+<link rel="canonical" href="http://www.jiezi19971225.cn/2020/10/27/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/helm%E5%AE%89%E8%A3%85sentry%E8%B8%A9%E5%9D%91/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>helm安装sentry踩坑 | Jiez19971225‘s Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Jiez19971225‘s Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">做自己爱做的事</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/10/27/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/helm%E5%AE%89%E8%A3%85sentry%E8%B8%A9%E5%9D%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content="记录编程学习路上的点滴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          helm安装sentry踩坑
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-10-27 22:40:49" itemprop="dateCreated datePublished" datetime="2020-10-27T22:40:49+00:00">2020-10-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-10-21 16:45:16" itemprop="dateModified" datetime="2021-10-21T16:45:16+00:00">2021-10-21</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/" itemprop="url" rel="index"><span itemprop="name">开发工具</span></a>
+                </span>
+            </span>
+
+          
+
+          <span class="post-time">
+            &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-bar-chart"></i>
+            </span>
+            <span class="post-meta-item-text">字数统计:</span>
+            <span class="post-count">1.5k(字)</span>
+
+          </span>
+
+            <span class="post-time">
+          &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-clock-o"></i>
+            </span>
+            <span class="post-meta-item-text">阅读时长:</span>
+            <span class="post-count">5(分)</span>
+
+          </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>最近一周一直在研究在公司的 rancher k8s 环境下搭建前端错误监控平台 sentry。首先介绍一下 sentry，这是一个非常强大的错误收集框架，可以收集众多语言的运行错误日志，其在前端错误的监控上应用的比较多。配合上传 sourceMap可以快速准确定位到源代码错误位置。</p>
+<p>为什么它来监控前端错误呢？我们的测试无法覆盖到应用的方方面面，很多线上错误，往往是用户反馈到了客服人员，然后技术人员才能知晓，同时由于前端运行环境复杂，问题可能很难复现，技术人员定位错误需要不少的时间，这段时间就可能造成不小的损失了，如果解决问题花费的时间很久，用户对于这家公司的技术力也会产生质疑。应用前端错误监控之后，当线上有高频错误发生时，可以立即通过钉钉或者邮件的方式通知到开发人员，开发人员通过错误日志信息可以快速定位到错误点，这带来的好处是不言而喻的。</p>
+<p>sentry 提供 saas 的服务，同时也提供开源的私有化部署版本，提供相同的服务体验。官方维护的是 docker-compose 的一键式部署方式，但是公司的云服务器都在 k8s 的集群，因此我考虑采用的是基于 k8s 的安装方式。然而公司并没有专业的运维人员，想折腾，只能自己动手了。最为一个一周前对 k8s 还是一窍不通的小白，踩坑是避免不了的，写这篇文章就是记录下踩的那些坑。</p>
+<h2 id="错误方式-rancher-ui-商店方式安装"><a href="#错误方式-rancher-ui-商店方式安装" class="headerlink" title="错误方式 rancher ui 商店方式安装"></a>错误方式 rancher ui 商店方式安装</h2><p>一开始知道可以在 rancher 上安装 sentry，是在 v 站看到的一个回复，说是起个部署 sentry 会方便很多。然后知道了 rancher 的商店里可以找到 sentry，然后一键安装。这里需要开启 rancher 商店的 helm 官方仓库，结果商店死活刷不出来应用列表，后来才知道国内的云主机是无法访问 google 的 helm 仓库的，需要使用国内加速的仓库 <a target="_blank" rel="noopener" href="http://mirror.azure.cn/kubernetes/charts。">http://mirror.azure.cn/kubernetes/charts。</a></p>
+<p>换了加速地址后，可以顺利使用 rancher 商店启动应用了，工作负载一堆爆红，web，db和redis都没起来，这是因为没有设置默认存储类，导致 pvc 没有 绑定到 pv。刚一开始我可不知道 pv 和 pvc 的概念，更不用说默认存储类，总之是又百度又google又看官方文档的，算是稍稍搞明白了这块。这个在安装要求里已经说明了，k8s集群应该有一个默认存储类，用来动态分配pv。rancher ui 里像下图一样。</p>
+<p><img src="/2020/10/27/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/helm%E5%AE%89%E8%A3%85sentry%E8%B8%A9%E5%9D%91/默认存储类.png" alt="默认存储类"></p>
+<p>配置好了这个，按理说通过 rancher ui 的商店应该可以正常安装了吧，然而答案是并不能。这时候所有组件都能正常创建，除了一个 pending 的 loadbalance Service，这个我一开始没管它，自己又创建了一个 Ingress 配置，总算是可以访问 sentry 的 web 页面了。但是我按照文档的方法，输入用户名和密码，一直提示登录失败。我重装了几次，一直如此，折腾了几个小时，才发现了原因。</p>
+<p>rancher ui 也是通过 helm 工具安装 chart 的，helm 默认的等待事件是 5分钟，超过了就认为安装失败了。而 sentry 的安装是包含了两个 job 的，db_init 和 user_create。db_init 用时很长，已经超过了5分钟，helm 认为安装失败了，就不继续调用 user_create 的 job了，导致初始用户根本没有被初始化进去。</p>
+<h2 id="正确方式-helm-方式安装"><a href="#正确方式-helm-方式安装" class="headerlink" title="正确方式 helm 方式安装"></a>正确方式 helm 方式安装</h2><p>rancher ui中并没有方式去设置 helm 的等待时间，因此只能采用 helm 的方式进行安装了。这里感谢这位仁兄的文章 <a target="_blank" rel="noopener" href="https://www.imooc.com/article/303501">Sentry实时应用错误跟踪系统在Kubernetes中私有化部署</a>，给予了我很大的帮助。</p>
+<p>先简单介绍一下 helm，helm 是一个 k8s 的应用管理工具。helm 的 chart 我理解和 docker-compose 的 compose.yaml 类似，但是比后者更强大，通过预先配置的一组文件，来一键式部署k8s应用。helm现在有helm2和helm3两个版本，其中helm2需要在k8s中安装 helm2 服务端 Tiller，麻烦不说，还有潜在的后门隐患。helm3取消了这一步，因此这里使用的是helm3。</p>
+<p>这里还踩了一个坑，一开始 helm 方式，连 db_init 的 job 都不运行。检查了以下各个组件，只有名为 sentry 的 service 处于 pending状态。它的 serviceType 是 loadbalance。尝试删掉它，helm 直接返回错误，我感觉是helm要等待所有组件就绪，才会调度job。我看了下文档，service 主要是负责外网连接功能的，它有两种类型 loadbalance 和 nodeport，loadbalance 只有使用 gce（谷歌的云服务） 的服务才能正常工作。后来把他改成 nodeport 果然正常了。db_init 后，user_create 也正常调度了。<br>最后摸索出来的命令是这样的。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">helm --kubeconfig  D:\bins\kubeconfig install sentry stable/sentry -n sentry --set persistenc</span><br><span class="line">e.enabled=true --set user.email=你的用户名 --set user.password=你的密码 --set email.host=你的邮箱host --set email.port=25 --set email.user=你的邮箱服务用户 --set email.password=你的邮箱服务密码 --set service.type=NodePort --set email.use_tls=false --wait --timeout=800s</span><br></pre></td></tr></table></figure>
+<p>稍微等待个10分钟作用， sentry服务就部署完成了，确实是很简单。。。</p>
+<p>明天研究一下将 sentry 引入项目，然后在下篇博客再总结一下 sentry 的前端监控应用。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/k8s/" rel="tag"># k8s</a>
+              <a href="/tags/rancher/" rel="tag"># rancher</a>
+              <a href="/tags/sentry/" rel="tag"># sentry</a>
+              <a href="/tags/%E5%89%8D%E7%AB%AF%E5%9F%BA%E5%BB%BA/" rel="tag"># 前端基建</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/10/09/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/npm%E7%A7%81%E4%BB%93%E6%90%AD%E5%BB%BA%E5%B9%B6%E5%88%B6%E4%BD%9C%E5%8F%91%E5%B8%83npm%E5%8C%85/" rel="prev" title="npm私仓搭建并制作发布npm包">
+      <i class="fa fa-chevron-left"></i> npm私仓搭建并制作发布npm包
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/10/31/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E7%BD%91%E7%BB%9C%E5%B1%82/" rel="next" title="计算机网络学习笔记之网络层">
+      计算机网络学习笔记之网络层 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%94%99%E8%AF%AF%E6%96%B9%E5%BC%8F-rancher-ui-%E5%95%86%E5%BA%97%E6%96%B9%E5%BC%8F%E5%AE%89%E8%A3%85"><span class="nav-number">1.</span> <span class="nav-text">错误方式 rancher ui 商店方式安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A3%E7%A1%AE%E6%96%B9%E5%BC%8F-helm-%E6%96%B9%E5%BC%8F%E5%AE%89%E8%A3%85"><span class="nav-number">2.</span> <span class="nav-text">正确方式 helm 方式安装</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">jiezi19971225</p>
+  <div class="site-description" itemprop="description">记录编程学习路上的点滴</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jiezi19971225</span>
+</div>
+  <img src="https://static.dy208.cn/o_1dfilp8ruo521thr1hvf18ji17soa.png"/>
+  <a href="http://www.beian.miit.gov.cn/"  style="color:#f72b07" target="_blank">皖ICP备17001385号-1</a>
+  <br/>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

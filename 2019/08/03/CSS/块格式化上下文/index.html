@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+<meta name="baidu-site-verification" content="5IfwMCE5hH" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.jiezi19971225.cn","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="一致性 要求和建议CSS 渲染模型中不考虑替换元素的内容。 在 CSS 2.1 中，只有替换元素才能具有内在维度。对于没有可靠分辨率信息的光栅图像，必须假设每个图像源像素的大小为 1 像素单位。 HTML 的元素名是大小写不敏感的 但是在 XML 中是大小写敏感的 0 长度单位后的单位是可选的 选择器E[foo] 匹配设置了”foo”属性（无论值是什么）的 E 元素 E[foo&#x3D;”warning”">
+<meta property="og:type" content="article">
+<meta property="og:title" content="块格式化上下文">
+<meta property="og:url" content="http://www.jiezi19971225.cn/2019/08/03/CSS/%E5%9D%97%E6%A0%BC%E5%BC%8F%E5%8C%96%E4%B8%8A%E4%B8%8B%E6%96%87/index.html">
+<meta property="og:site_name" content="Jiez19971225‘s Blog">
+<meta property="og:description" content="一致性 要求和建议CSS 渲染模型中不考虑替换元素的内容。 在 CSS 2.1 中，只有替换元素才能具有内在维度。对于没有可靠分辨率信息的光栅图像，必须假设每个图像源像素的大小为 1 像素单位。 HTML 的元素名是大小写不敏感的 但是在 XML 中是大小写敏感的 0 长度单位后的单位是可选的 选择器E[foo] 匹配设置了”foo”属性（无论值是什么）的 E 元素 E[foo&#x3D;”warning”">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-08-03T20:13:10.000Z">
+<meta property="article:modified_time" content="2021-10-21T16:45:16.135Z">
+<meta property="article:author" content="jiezi19971225">
+<meta property="article:tag" content="CSS">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://www.jiezi19971225.cn/2019/08/03/CSS/%E5%9D%97%E6%A0%BC%E5%BC%8F%E5%8C%96%E4%B8%8A%E4%B8%8B%E6%96%87/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>块格式化上下文 | Jiez19971225‘s Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Jiez19971225‘s Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">做自己爱做的事</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2019/08/03/CSS/%E5%9D%97%E6%A0%BC%E5%BC%8F%E5%8C%96%E4%B8%8A%E4%B8%8B%E6%96%87/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content="记录编程学习路上的点滴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          块格式化上下文
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-08-03 20:13:10" itemprop="dateCreated datePublished" datetime="2019-08-03T20:13:10+00:00">2019-08-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-10-21 16:45:16" itemprop="dateModified" datetime="2021-10-21T16:45:16+00:00">2021-10-21</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CSS/" itemprop="url" rel="index"><span itemprop="name">CSS</span></a>
+                </span>
+            </span>
+
+          
+
+          <span class="post-time">
+            &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-bar-chart"></i>
+            </span>
+            <span class="post-meta-item-text">字数统计:</span>
+            <span class="post-count">2.3k(字)</span>
+
+          </span>
+
+            <span class="post-time">
+          &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-clock-o"></i>
+            </span>
+            <span class="post-meta-item-text">阅读时长:</span>
+            <span class="post-count">8(分)</span>
+
+          </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="一致性-要求和建议"><a href="#一致性-要求和建议" class="headerlink" title="一致性 要求和建议"></a>一致性 要求和建议</h2><p>CSS 渲染模型中不考虑替换元素的内容。</p>
+<p>在 CSS 2.1 中，只有替换元素才能具有内在维度。对于没有可靠分辨率信息的光栅图像，必须假设每个图像源像素的大小为 1 像素单位。</p>
+<p>HTML 的元素名是大小写不敏感的 但是在 XML 中是大小写敏感的</p>
+<p>0 长度单位后的单位是可选的</p>
+<h2 id="选择器"><a href="#选择器" class="headerlink" title="选择器"></a>选择器</h2><p>E[foo] 匹配设置了”foo”属性（无论值是什么）的 E 元素</p>
+<p>E[foo=”warning”] 匹配所有”foo”属性值恰好是”wraning”的 E 元素</p>
+<p>E[foo~=”warning”] 匹配所有”foo”属性值为一列空格分隔的值，且其中之一恰好是”warning”的 E 元素</p>
+<p>E[lang|=”en”] 匹配所有”lang”属性值为一列以”en”开头（从左向右）用连字符分隔的值的 E 元素</p>
+<p>link 伪类：:link 与:visited</p>
+<p>动态伪类： :hover，:active 与:focus</p>
+<p>:first-line 伪元素对段落内容的第一个格式化行应用特殊样式(选择器”P:first-line”不会匹配任何真实 HTML 元素。它匹配一个（与 CSS 规范）一致的用户代理将在每个段落的开头插入的伪元素) :first-line 伪元素只能用于块容器元素</p>
+<p>:first-letter 伪元素必须选择一个块的第一行的第一个字母</p>
+<p>当:first-letter 和:first-line 伪元素被应用在一个具有使用:before 和:after 生成内容的元素，它们应用于元素包括生成的内容在内的首字母或首行</p>
+<h2 id="层叠和继承"><a href="#层叠和继承" class="headerlink" title="层叠和继承"></a>层叠和继承</h2><p>为了让用户代理能够避免为不支持的媒体类型检索资源，编写者可以指定带媒体依赖（media-dependent）的@import 规则。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@import</span> url(<span class="string">&quot;fineprint.css&quot;</span>) print;</span><br></pre></td></tr></table></figure>
+<p>用户样式表，简单来说就是浏览器的使用者自己编写的一份默认样式表，编写者样式表，是网页的编写者编写的样式表，第一次听说这种说法</p>
+<h2 id="视觉格式化模型"><a href="#视觉格式化模型" class="headerlink" title="视觉格式化模型"></a>视觉格式化模型</h2><p>Block-level 块级元素 包含以下类型 block list-item table list-item 会生成附加的盒子，相对于主盒子放置</p>
+<p>block container box 只包含块级元素或者内联块级元素，</p>
+<p>匿名块级盒子 当块级盒子同时包含内联的文本和块级元素时，我们认为这里有一个匿名的盒子包围了这些文本，如果一个块级盒子包含了块级盒子，我们强制让他只包含块级盒子</p>
+<p>以@开头的规则（At-rules）需要以分号来结尾</p>
+<p>CSS 2.1 用户代理必须忽略在块内或在除@cherset 或@import 规则之外的任何非忽略语句之后发生的任何“@import”规则。一下是非法的，解决方法是将样式的语法放在 At-rules 之后</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@import</span> <span class="string">&quot;subs.css&quot;</span>;</span><br><span class="line"><span class="selector-tag">h1</span> &#123;</span><br><span class="line">  <span class="attribute">color</span>: blue;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@import</span> <span class="string">&quot;list.css&quot;</span>;</span><br></pre></td></tr></table></figure>
+<h2 id="盒模型"><a href="#盒模型" class="headerlink" title="盒模型"></a>盒模型</h2><p><code>margin-top</code>, <code>margin-bottom</code> 这两个属性对非替换的行内元素无效</p>
+<p>两个 margin 是相邻的，当且仅当</p>
+<p>都属于流内（in-flow）块级盒，处于同一个块格式化上下文</p>
+<ul>
+<li>没有行框（line box），空隙，内边距和边框把它们隔开（注意，因此某些 0 高度行框（见 9.4.2）会被忽略）</li>
+<li>都属于垂直相邻框边界（vertically-adjacent box edges），即形成下列某一对：<ul>
+<li>盒的上边距与其第一个流内（in-flow）孩子的上边距</li>
+<li>盒的下边距与其下一个流内紧挨着的兄弟的上边距</li>
+<li>最后一个流内孩子的下边距与其 height 计算值为’auto’的父元素的下边距</li>
+<li>盒的上边距和下边距，要求该盒没有建立新的块格式化上下文，并且’min-height’计算值为 0，’height’计算值为 0 或’auto’，还没有流内孩子</li>
+</ul>
+</li>
+<li>margin 和 padding 的百分比数值都相对于包含块，border 不能设置百分比数值</li>
+</ul>
+<h2 id="块格式化上下文"><a href="#块格式化上下文" class="headerlink" title="块格式化上下文"></a>块格式化上下文</h2><p>以下方式会创建块格式化上下文</p>
+<ul>
+<li>根元素或包含根元素的元素</li>
+<li>浮动元素（元素的 float 不是 none）</li>
+<li>绝对定位元素（元素的 position 为 absolute 或 fixed）</li>
+<li>行内块元素（元素的 display 为 inline-block）</li>
+<li>表格单元格（元素的 display 为 table-cell，HTML 表格单元格默认为该值）</li>
+<li>表格标题（元素的 display 为 table-caption，HTML 表格标题默认为该值）</li>
+<li>匿名表格单元格元素（元素的 display 为 table、table-row、 table-row-group、table-header-group、table-footer-group（分别是 HTML table、row、tbody、thead、tfoot 的默认属性）或 inline-table）</li>
+<li>overflow 值不为 visible 的块元素</li>
+<li>display 值为 flow-root 的元素</li>
+<li>contain 值为 layout、content 或 strict 的元素</li>
+<li>弹性元素（display 为 flex 或 inline-flex 元素的直接子元素）</li>
+<li>网格元素（display 为 grid 或 inline-grid 元素的直接子元素）</li>
+<li>多列容器（元素的 column-count 或 column-width 不为 auto，包括 column-count 为 1）</li>
+<li>column-span 为 all 的元素始终会创建一个新的 BFC，即使该元素没有包裹在一个多列容器中</li>
+<li>块格式化上下文对浮动定位（参见 float）与清除浮动（参见 clear）都很重要。浮动定位和清除浮动时只会应用于同一个 BFC 内的元素。浮动不会影响其它 BFC 中元素的布局，而清除浮动只能清除同一 BFC 中在它前面的元素的浮动。外边距折叠（Margin collapsing）也只会发生在属于同一 BFC 的块级元素之间。</li>
+<li>行内级元素是源文档中那些不会形成新内容块的元素，内容分布于多行 ‘display’属性的下列值能让一个元素变成行内级：’inline’，’inline-table’和’inline-block’。一个 inline-block 的内部会被格式化成一个块盒，而该元素本身会被格式化成一个原子行内级盒</li>
+<li>display 为 table 系的元素的 postion:relative 效果是未定义的</li>
+<li>盒偏移：’top’，’right’，’bottom’，’left’ 如果元素的’position’属性有一个除’static’外的值，就说它是定位元素（positioned） 百分比数值参照包含块的宽度</li>
+<li>如果’left’和’right’都不是’auto’，位置就被过度约束（over-constrained）了，它们（’left’和’right’）其中有一个会被忽略。如果包含块的’direction’属性是’ltr’，那么’left’有效，’right’变成-‘left’（负的’left’）。如果包含块的’direction’属性是’rtl’，那么’right’有效，’left’被忽略</li>
+<li>清除浮动的方法 overflow-hidden 创建了一个 BFC，BFC 在计算高度的 也计算浮动元素的高度</li>
+<li>注意 ‘direction’属性，给表格列元素指定时，不会被列中的单元格继承，因为在文档树中，列不是单元格的祖先。因此，CSS 无法轻易获知[HTML4]的 11.3.2.1 节中”dir”属性的继承规则</li>
+<li>direction 和 unicode-bidi 属性结合处理文本流方向问题（不仅，而且句子从右向左，单词也倒着写）</li>
+</ul>
+<h2 id="视觉格式化模型细节"><a href="#视觉格式化模型细节" class="headerlink" title="视觉格式化模型细节"></a>视觉格式化模型细节</h2><p>width 应用于除了非替换的行内元素，表格行和行组（row group） 外的所有元素,非替换的行内元素盒的内容宽度是它里面渲染的内容（的内容宽度）负值对于 width 是非法的。</p>
+<p>行内非替换（non-replaced）元素 ‘width’属性不适用，其计算值为’auto’的’margin-left’或者’margin-right’对应的应用值为’0’。</p>
+<p>行内替换元素 计算值为’auto’的’margin-left’或者’margin-right’对应的应用值为’0’ 如果’height’和’width’计算值都是’auto’，并且该元素还具有固有宽度，那么这个固有宽度就是’width’的应用值。</p>
+<p>height 指定一个百分比高度。百分比参照生成盒的包含块的高度。如果包含块的高度没有显式指定（即取决于内容高度），并且该元素不是绝对定位的，则计算值为’auto’。根元素上的百分比高度是相对于初始包含块的 注意：对于那些包含块基于一个块级元素的绝对定位元素，百分比根据这个元素的内边距框（padding box）的高度来计算。这与 CSS1 不同，（CSS1 中）百分比总是根据父级元素的内容框（content box）来计算</p>
+<p>line-height 的百分比参考元素自身的字体大小</p>
+<p>vertical-align 的百分比是行高</p>
+<h2 id="可视化效果"><a href="#可视化效果" class="headerlink" title="可视化效果"></a>可视化效果</h2><p><code>visibility hidden</code> 生成的盒是不可见的（完全透明，什么都不绘制），但仍然会影响布局。而且该元素具有<code>visibility: visible</code> 的后代将是可见的</p>
+<h2 id="颜色与背景"><a href="#颜色与背景" class="headerlink" title="颜色与背景"></a>颜色与背景</h2><p>background-attachment 指定了它应该相对视口固定，还是随包含块滚动<br>文本<br>字母与单词间距 <code>letter-spacing’和’word-spacing</code><br><code>text-transform</code>属性 转换单词大小写<br><code>white-space</code>属性 决定如何处置换行符</p>
+<h2 id="用户界面"><a href="#用户界面" class="headerlink" title="用户界面"></a>用户界面</h2><p>cursor crosshair 简单十字 move 暗示可移动 text 暗示可选中的文本 wait 暗示正忙<br>outline 当元素具有焦点时，可应用轮廓属性，该属性不占用空间</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CSS/" rel="tag"># CSS</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/06/06/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="prev" title="计算机系统基础学习笔记">
+      <i class="fa fa-chevron-left"></i> 计算机系统基础学习笔记
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/08/03/CSS/CSS2%E8%A7%84%E8%8C%83%E7%AC%94%E8%AE%B0/" rel="next" title="块格式化上下文">
+      块格式化上下文 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E8%87%B4%E6%80%A7-%E8%A6%81%E6%B1%82%E5%92%8C%E5%BB%BA%E8%AE%AE"><span class="nav-number">1.</span> <span class="nav-text">一致性 要求和建议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%89%E6%8B%A9%E5%99%A8"><span class="nav-number">2.</span> <span class="nav-text">选择器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B1%82%E5%8F%A0%E5%92%8C%E7%BB%A7%E6%89%BF"><span class="nav-number">3.</span> <span class="nav-text">层叠和继承</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%86%E8%A7%89%E6%A0%BC%E5%BC%8F%E5%8C%96%E6%A8%A1%E5%9E%8B"><span class="nav-number">4.</span> <span class="nav-text">视觉格式化模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%92%E6%A8%A1%E5%9E%8B"><span class="nav-number">5.</span> <span class="nav-text">盒模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9D%97%E6%A0%BC%E5%BC%8F%E5%8C%96%E4%B8%8A%E4%B8%8B%E6%96%87"><span class="nav-number">6.</span> <span class="nav-text">块格式化上下文</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%86%E8%A7%89%E6%A0%BC%E5%BC%8F%E5%8C%96%E6%A8%A1%E5%9E%8B%E7%BB%86%E8%8A%82"><span class="nav-number">7.</span> <span class="nav-text">视觉格式化模型细节</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AF%E8%A7%86%E5%8C%96%E6%95%88%E6%9E%9C"><span class="nav-number">8.</span> <span class="nav-text">可视化效果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%9C%E8%89%B2%E4%B8%8E%E8%83%8C%E6%99%AF"><span class="nav-number">9.</span> <span class="nav-text">颜色与背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E7%95%8C%E9%9D%A2"><span class="nav-number">10.</span> <span class="nav-text">用户界面</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">jiezi19971225</p>
+  <div class="site-description" itemprop="description">记录编程学习路上的点滴</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jiezi19971225</span>
+</div>
+  <img src="https://static.dy208.cn/o_1dfilp8ruo521thr1hvf18ji17soa.png"/>
+  <a href="http://www.beian.miit.gov.cn/"  style="color:#f72b07" target="_blank">皖ICP备17001385号-1</a>
+  <br/>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+<meta name="baidu-site-verification" content="5IfwMCE5hH" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.jiezi19971225.cn","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="大三数据库考试前记的考点 起步 修改密码 alter user identified by 123456; 解锁用户 alter user scott account unlock; 用户登录 connect 用户名&#x2F;密码 修改 sqlplus 默认命令提示符 set sqlprompt jieziSQL&gt;  sqlplus 基本命令 show user 显示当前用户 select * fr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="oracle复习考点">
+<meta property="og:url" content="http://www.jiezi19971225.cn/2020/04/18/%E6%95%B0%E6%8D%AE%E5%BA%93/oracle%E5%A4%8D%E4%B9%A0%E8%80%83%E7%82%B9/index.html">
+<meta property="og:site_name" content="Jiez19971225‘s Blog">
+<meta property="og:description" content="大三数据库考试前记的考点 起步 修改密码 alter user identified by 123456; 解锁用户 alter user scott account unlock; 用户登录 connect 用户名&#x2F;密码 修改 sqlplus 默认命令提示符 set sqlprompt jieziSQL&gt;  sqlplus 基本命令 show user 显示当前用户 select * fr">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-04-18T23:45:14.000Z">
+<meta property="article:modified_time" content="2021-10-21T16:45:16.151Z">
+<meta property="article:author" content="jiezi19971225">
+<meta property="article:tag" content="oracle">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://www.jiezi19971225.cn/2020/04/18/%E6%95%B0%E6%8D%AE%E5%BA%93/oracle%E5%A4%8D%E4%B9%A0%E8%80%83%E7%82%B9/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>oracle复习考点 | Jiez19971225‘s Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Jiez19971225‘s Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">做自己爱做的事</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/04/18/%E6%95%B0%E6%8D%AE%E5%BA%93/oracle%E5%A4%8D%E4%B9%A0%E8%80%83%E7%82%B9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content="记录编程学习路上的点滴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          oracle复习考点
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-04-18 23:45:14" itemprop="dateCreated datePublished" datetime="2020-04-18T23:45:14+00:00">2020-04-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-10-21 16:45:16" itemprop="dateModified" datetime="2021-10-21T16:45:16+00:00">2021-10-21</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">数据库</span></a>
+                </span>
+            </span>
+
+          
+
+          <span class="post-time">
+            &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-bar-chart"></i>
+            </span>
+            <span class="post-meta-item-text">字数统计:</span>
+            <span class="post-count">1k(字)</span>
+
+          </span>
+
+            <span class="post-time">
+          &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-clock-o"></i>
+            </span>
+            <span class="post-meta-item-text">阅读时长:</span>
+            <span class="post-count">4(分)</span>
+
+          </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>大三数据库考试前记的考点</p>
+<h2 id="起步"><a href="#起步" class="headerlink" title="起步"></a>起步</h2><ul>
+<li>修改密码 alter user identified by 123456;</li>
+<li>解锁用户 alter user scott account unlock;</li>
+<li>用户登录 connect 用户名/密码</li>
+<li>修改 sqlplus 默认命令提示符 set sqlprompt jieziSQL&gt;</li>
+</ul>
+<h2 id="sqlplus-基本命令"><a href="#sqlplus-基本命令" class="headerlink" title="sqlplus 基本命令"></a>sqlplus 基本命令</h2><ul>
+<li>show user 显示当前用户</li>
+<li>select * from tab 当前用户下的表和视图</li>
+<li>set linesize 150 设置行宽</li>
+<li>col ename for[mat] a10 设置列宽</li>
+<li>set pagesize 30 设置页大小</li>
+<li>set newpage 5 设置一页中空行的数量</li>
+<li>define 定义变量</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">lj<span class="operator">&gt;</span><span class="keyword">define</span> var <span class="operator">=</span> &quot;test&quot;;</span><br><span class="line">lj<span class="operator">&gt;</span><span class="keyword">define</span> var;</span><br><span class="line"><span class="keyword">DEFINE</span> VAR	       <span class="operator">=</span> &quot;test&quot; (<span class="type">CHAR</span>)</span><br></pre></td></tr></table></figure>
+<p>save,get,/,start,@</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> myemp;</span><br><span class="line">save o1;    <span class="operator">/</span><span class="operator">/</span> 保存到o1.sql</span><br><span class="line"><span class="keyword">get</span> o1; <span class="operator">/</span><span class="operator">/</span> 显示o1.sql</span><br><span class="line"><span class="operator">/</span>   <span class="operator">/</span><span class="operator">/</span> 执行上一条<span class="keyword">sql</span>命令</span><br><span class="line"><span class="keyword">start</span> o1;  <span class="operator">/</span><span class="operator">/</span> 执行方式<span class="number">1</span></span><br><span class="line"><span class="variable">@o1</span> <span class="operator">/</span><span class="operator">/</span> 执行方式<span class="number">2</span></span><br></pre></td></tr></table></figure>
+<p>numformat<br>有如下占位符<br><em> 9 对应数字存在则显示，如果位数不足会显示乱码，如 56 在 999 掩码下会乱码
+</em> 0 对应数字不存在补 0<br><em> $ 添加美元符号
+</em> S 强制显示符号，正数会显示+ * , 对应位置添加,</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span> numformat $<span class="number">999</span>,<span class="number">999</span>,<span class="number">999</span>,<span class="number">999.00</span></span><br></pre></td></tr></table></figure>
+<p>desc</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">desc</span> dba_tablespaces;</span><br><span class="line"><span class="operator">/</span><span class="operator">/</span> 在查询过程中使用</span><br><span class="line"> <span class="keyword">select</span> empno,ename,</span><br><span class="line"> #<span class="keyword">desc</span> job</span><br><span class="line"> job <span class="keyword">from</span> emp;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>spool<br>spool filename [create | replace | append] 可使用简写 cre 新建 rep 替换 app 追加<br>spool out | off 关闭 spool 输出</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">lj<span class="operator">&gt;</span>spool <span class="operator">/</span>home<span class="operator">/</span>jiezi19971225<span class="operator">/</span><span class="keyword">result</span> app;</span><br><span class="line">lj<span class="operator">&gt;</span><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> emp;</span><br><span class="line">lj<span class="operator">&gt;</span>spool off;</span><br></pre></td></tr></table></figure>
+<p>ed[it] filename<br>上一条执行的 SQL 或者 PL/SQL 执行完毕后，可以用该命令编辑<br>col[umn]</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">lj<span class="operator">&gt;</span> col ename heading 姓名;</span><br><span class="line">lj<span class="operator">&gt;</span> col comm <span class="keyword">null</span> <span class="keyword">empty</span>; <span class="operator">/</span><span class="operator">/</span> 该列<span class="keyword">null</span>值显示为设定的字符串</span><br><span class="line">lj<span class="operator">&gt;</span>col sal off;</span><br><span class="line">lj<span class="operator">&gt;</span>col job justify [<span class="keyword">left</span><span class="operator">|</span>center<span class="operator">|</span><span class="keyword">right</span>];</span><br><span class="line">lj<span class="operator">&gt;</span>col job [print<span class="operator">|</span>noprint]; <span class="operator">/</span><span class="operator">/</span> 控制是否显示该列</span><br><span class="line">lj<span class="operator">&gt;</span>col job [wrapped<span class="operator">|</span>word_wrapped]; <span class="operator">/</span><span class="operator">/</span> 按照长度、单词折行</span><br></pre></td></tr></table></figure>
+<p>ttitle 和 btitle</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">lj<span class="operator">&gt;</span>ttitle <span class="keyword">left</span> 我是表头标题  <span class="operator">/</span><span class="operator">/</span> 参数可选<span class="keyword">left</span> center <span class="keyword">right</span> col n(在第n列打印)  <span class="keyword">skip</span> n (跳到下一行开始的第几行) bold 以黑体打印 可以使用变量</span><br><span class="line">lj<span class="operator">&gt;</span>btitle <span class="keyword">left</span> 我是表尾标题</span><br><span class="line">lj<span class="operator">&gt;</span>btitle [<span class="keyword">on</span><span class="operator">|</span>off] 切换显示</span><br><span class="line"></span><br><span class="line"><span class="operator">/</span><span class="operator">/</span> 使用变量</span><br><span class="line">lj<span class="operator">&gt;</span><span class="keyword">define</span> varT<span class="operator">=</span><span class="string">&#x27;table header&#x27;</span></span><br><span class="line">lj<span class="operator">&gt;</span>ttitle <span class="keyword">left</span> varT</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>设置空白行数为 4</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span> <span class="keyword">new</span> page <span class="number">4</span></span><br></pre></td></tr></table></figure>
+<h2 id="用户管理与权限分配"><a href="#用户管理与权限分配" class="headerlink" title="用户管理与权限分配"></a>用户管理与权限分配</h2><h3 id="用户相关"><a href="#用户相关" class="headerlink" title="用户相关"></a>用户相关</h3><p>创建用户</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">user</span> user_name [identified <span class="keyword">by</span> pass_word <span class="operator">|</span> identified exeternally]</span><br><span class="line"><span class="keyword">default</span> tablespace uses</span><br><span class="line">temporary tablespaces temp</span><br><span class="line">quota <span class="number">10</span>m <span class="keyword">on</span> tbsp_1;   <span class="operator">/</span><span class="operator">/</span> 置顶用户在tbsp_1表空间最多可使用的大小为<span class="number">10</span>MB</span><br></pre></td></tr></table></figure>
+<p>删除用户</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> <span class="keyword">user</span> user_name [cascade]; <span class="operator">/</span><span class="operator">/</span> 如果用户包含数据库对象必须加cascade</span><br></pre></td></tr></table></figure>
+<h3 id="权限管理"><a href="#权限管理" class="headerlink" title="权限管理"></a>权限管理</h3><p>如果不知道权限，可以 select * from system_privilege_map where privilege_name = ? 进行模糊查找</p>
+<h2 id="概要文件"><a href="#概要文件" class="headerlink" title="概要文件"></a>概要文件</h2><p>概要文件：<br>是一个命名的资源限制的集合。系统资源的使用、口令的限制。<br>创建：</p>
+<p>create profile 概要文件名 limit<br>sessions_per_user : 限制用户当前会话的数量<br>cpu_per_session： 限制一个会话使用的 cpu 时间<br>cpu_per_call ：限制一个 sql 语句使用的 cpu 时间<br>logical_reads_per_session：限制每个会话读取的数据库数据块数，包括从内存和磁盘读取的总和<br>logical_reads_per_call：限制 sql 语句读取的数据库数据块数，包括从内存和磁盘读取的总和<br>private_sga ：sga 中私有区域的大小<br>connect_time ：指定一个会话连接到数据库的最大时间<br>idle_time default：指定一个会话可以连续空闲的最长时间，单位：分钟<br>composite_limit：设置用户对系统资源的综合消耗。由： cpu_per_session、logical_reads_per_session、private_sga、connect_time 综合决定<br>failed_login_attempts: 最大错误登录次数<br>password_lock_time:登录失败后账户被锁天数<br>password_life_time:密码有效天数<br>password_grace_time：用户密码被中止前多少天提醒用户修改密码<br>password_reuse_time：用户修改密码后多少天，用户才可以再次使用原来的密码<br>password_reuse_max：密码被重新使用后，可修改的次数<br>password_verify_function：密码复杂度审计函数</p>
+<p>修改：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">alter</span> profile 概要文件名 limit </span><br><span class="line">sessions_per_user <span class="number">20</span></span><br><span class="line">failed_login_attemps <span class="number">3</span>;</span><br></pre></td></tr></table></figure>
+<p>删除：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> profile 概要文件名；</span><br></pre></td></tr></table></figure>
+<p>说明：<br>一个用户所使用的概要文件被删除，则此用户使用默认的概要文件。<br>使某个用户使用某个用户配置文件<br>aler user 用户名 profile 概要文件名;<br>要使上面的限制生效，需要修改初始化参数 resource_limit<br>alter system set resource_limit=true;(11g)</p>
+<h2 id="权限相关"><a href="#权限相关" class="headerlink" title="权限相关"></a>权限相关</h2><p>创建用户</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">user</span> jiezi19971225 identified <span class="keyword">by</span> <span class="number">123456</span>;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/oracle/" rel="tag"># oracle</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/04/18/react/reactRouter%E5%AD%A6%E4%B9%A0/" rel="prev" title="reactRouter学习">
+      <i class="fa fa-chevron-left"></i> reactRouter学习
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/06/25/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E7%BE%8E%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/" rel="next" title="设计模式之美学习笔记1">
+      设计模式之美学习笔记1 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B5%B7%E6%AD%A5"><span class="nav-number">1.</span> <span class="nav-text">起步</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sqlplus-%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4"><span class="nav-number">2.</span> <span class="nav-text">sqlplus 基本命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86%E4%B8%8E%E6%9D%83%E9%99%90%E5%88%86%E9%85%8D"><span class="nav-number">3.</span> <span class="nav-text">用户管理与权限分配</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E7%9B%B8%E5%85%B3"><span class="nav-number">3.1.</span> <span class="nav-text">用户相关</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86"><span class="nav-number">3.2.</span> <span class="nav-text">权限管理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%A6%81%E6%96%87%E4%BB%B6"><span class="nav-number">4.</span> <span class="nav-text">概要文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%83%E9%99%90%E7%9B%B8%E5%85%B3"><span class="nav-number">5.</span> <span class="nav-text">权限相关</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">jiezi19971225</p>
+  <div class="site-description" itemprop="description">记录编程学习路上的点滴</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jiezi19971225</span>
+</div>
+  <img src="https://static.dy208.cn/o_1dfilp8ruo521thr1hvf18ji17soa.png"/>
+  <a href="http://www.beian.miit.gov.cn/"  style="color:#f72b07" target="_blank">皖ICP备17001385号-1</a>
+  <br/>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

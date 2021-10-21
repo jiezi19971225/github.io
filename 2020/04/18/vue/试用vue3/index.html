@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+<meta name="baidu-site-verification" content="5IfwMCE5hH" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.jiezi19971225.cn","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="vue 3.0 在 2020.4.17 发布了 beta 版本，可以说离正式发布已经很近了，是时候学习一波新姿势了。 composition api目前 vue 3.0 的文档还未更新，可以先看这个了解 vue3.0 的新语法 vue composition api rfc以下是我的学习笔记。 核心概念 响应性响应性 vue 3.0 最重要的概念，vue3.0 使用 proxy 赋予对象响应性，一">
+<meta property="og:type" content="article">
+<meta property="og:title" content="试用vue3">
+<meta property="og:url" content="http://www.jiezi19971225.cn/2020/04/18/vue/%E8%AF%95%E7%94%A8vue3/index.html">
+<meta property="og:site_name" content="Jiez19971225‘s Blog">
+<meta property="og:description" content="vue 3.0 在 2020.4.17 发布了 beta 版本，可以说离正式发布已经很近了，是时候学习一波新姿势了。 composition api目前 vue 3.0 的文档还未更新，可以先看这个了解 vue3.0 的新语法 vue composition api rfc以下是我的学习笔记。 核心概念 响应性响应性 vue 3.0 最重要的概念，vue3.0 使用 proxy 赋予对象响应性，一">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-04-18T23:36:48.000Z">
+<meta property="article:modified_time" content="2021-10-21T16:45:16.147Z">
+<meta property="article:author" content="jiezi19971225">
+<meta property="article:tag" content="vue">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://www.jiezi19971225.cn/2020/04/18/vue/%E8%AF%95%E7%94%A8vue3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>试用vue3 | Jiez19971225‘s Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Jiez19971225‘s Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">做自己爱做的事</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/04/18/vue/%E8%AF%95%E7%94%A8vue3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content="记录编程学习路上的点滴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          试用vue3
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-04-18 23:36:48" itemprop="dateCreated datePublished" datetime="2020-04-18T23:36:48+00:00">2020-04-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-10-21 16:45:16" itemprop="dateModified" datetime="2021-10-21T16:45:16+00:00">2021-10-21</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/vue/" itemprop="url" rel="index"><span itemprop="name">vue</span></a>
+                </span>
+            </span>
+
+          
+
+          <span class="post-time">
+            &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-bar-chart"></i>
+            </span>
+            <span class="post-meta-item-text">字数统计:</span>
+            <span class="post-count">2.5k(字)</span>
+
+          </span>
+
+            <span class="post-time">
+          &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-clock-o"></i>
+            </span>
+            <span class="post-meta-item-text">阅读时长:</span>
+            <span class="post-count">11(分)</span>
+
+          </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>vue 3.0 在 2020.4.17 发布了 beta 版本，可以说离正式发布已经很近了，是时候学习一波新姿势了。</p>
+<h2 id="composition-api"><a href="#composition-api" class="headerlink" title="composition api"></a>composition api</h2><p>目前 vue 3.0 的文档还未更新，可以先看这个了解 vue3.0 的新语法 <a target="_blank" rel="noopener" href="https://vue-composition-api-rfc.netlify.app/">vue composition api rfc</a><br>以下是我的学习笔记。</p>
+<h2 id="核心概念-响应性"><a href="#核心概念-响应性" class="headerlink" title="核心概念 响应性"></a>核心概念 响应性</h2><p>响应性 vue 3.0 最重要的概念，vue3.0 使用 proxy 赋予对象响应性，一个对象具有响应性，那么当这个对象发生改变的时候，就可以自动触发视图的更新或者 watchEffect 中的副作用。</p>
+<h3 id="proxy"><a href="#proxy" class="headerlink" title="proxy"></a>proxy</h3><h4 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h4><p>Proxy 用于修改某些操作的默认行为，等同于在语言层面做出修改，所以属于一种“元编程”（meta programming），即对编程语言进行编程。Proxy 实际上重载（overload）了点运算符，即用自己的定义覆盖了语言的原始定义。所以可以实现 Object.defineProperty 做不到的对于对象新增属性，数组下标的响应式操作。</p>
+<h4 id="构造"><a href="#构造" class="headerlink" title="构造"></a>构造</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> proxy = <span class="keyword">new</span> <span class="built_in">Proxy</span>(target, handler);</span><br></pre></td></tr></table></figure>
+<p>要使得 proxy 起作用，必须针对 Proxy 实例（上例中是 proxy）进行操作，而不是对目标对象 target 进行操作，如果 handler 没有设置任何拦截，那么等同于直接通向原对象</p>
+<p>proxy 实例也可以作为其他对象的原型对象</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> proxy = <span class="keyword">new</span> <span class="built_in">Proxy</span>(</span><br><span class="line">  &#123;&#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">get</span>: <span class="function"><span class="keyword">function</span> (<span class="params">target, propKey</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="number">35</span>;</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> obj = <span class="built_in">Object</span>.create(proxy);</span><br><span class="line">obj.time; <span class="comment">// 35</span></span><br></pre></td></tr></table></figure>
+<p>proxy 对象是 obj 对象的原型，obj 对象本身没有 time 属性，所以根据原型链，会在 proxy 对象上读取该属性，导致被拦截</p>
+<h4 id="支持的操作"><a href="#支持的操作" class="headerlink" title="支持的操作"></a>支持的操作</h4><p>几乎可以支持全部对于对象的访问操作，甚至包括 函数的调用，constructor 的调用，具体看文档就好。</p>
+<h3 id="setup"><a href="#setup" class="headerlink" title="setup"></a>setup</h3><p>回到 Vue3 这里</p>
+<p>setup 相当于原来的 options，可以接受两个参数</p>
+<p>第一个参数 props，props 是响应性的，可以触发 watchEffect，注意 props 不能被解构，否则会失去响应性。</p>
+<p>第二个参数 context 是一个不可变对象。它有以下属性，其实也都对应了 2.0 中的 api。</p>
+<ul>
+<li>context.attrs 就是组件上的 attrs，等同于 2.0 的 $attrs</li>
+<li>context.slots 可访问通过组件插槽分发的的内容，等同于 2.0 的 $slots</li>
+<li>context.emit 就是 2.0 的 $emit 方法</li>
+</ul>
+<h3 id="setup-中的-this"><a href="#setup-中的-this" class="headerlink" title="setup 中的 this"></a>setup 中的 this</h3><p>setup 中不支持使用 this</p>
+<h3 id="reactive"><a href="#reactive" class="headerlink" title="reactive"></a>reactive</h3><p>赋予一个对象响应性，相当于 2.0 中的 Vue.observable()</p>
+<h3 id="ref"><a href="#ref" class="headerlink" title="ref"></a>ref</h3><p>接受一个非引用类型值，返回一个 reactive 的可变 ref 对象，对象有一个唯一的 value 属性</p>
+<p>当其作为一个 reactive 对象的属性的时候，会自动 unwrap 内部的值，使它的行为与普通属性一致</p>
+<h3 id="toRefs"><a href="#toRefs" class="headerlink" title="toRefs"></a>toRefs</h3><p>接受一个 reactive 对象，返回一个对象，对象中每个属性都是 ref 对象<br>这在函数返回一个对象的时候很有用，返回值可以被解构而不失响应特性</p>
+<h3 id="computed"><a href="#computed" class="headerlink" title="computed"></a>computed</h3><p>接受一个 getter 函数，返回一个不可变的响应 ref 对象</p>
+<h3 id="readonly"><a href="#readonly" class="headerlink" title="readonly"></a>readonly</h3><p>接受一个对象（reactive 或者 朴素的）或者一个 ref，返回一个 readonly 的 proxy</p>
+<h3 id="watchEffect"><a href="#watchEffect" class="headerlink" title="watchEffect"></a>watchEffect</h3><p>立即运行一个函数，同时动态地跟踪它的依赖项，并在依赖项发生变化时重新运行它。</p>
+<p>当 watchEffect 在 setup 中或者生命周期钩子中被调用，watcher 会被链接到组件的生命周期中，会在组件卸载的时候自动停止</p>
+<p>watchEffect 也会返回一个 stop 函数，可以手动调用</p>
+<h3 id="side-effect"><a href="#side-effect" class="headerlink" title="side effect"></a>side effect</h3><p>有时在 watchEffect 中需要执行一些异步的方法，当再次触发 watchEffect 但是异步操作还未完成，就需要清理一些操作。</p>
+<p>watchEffect 可以接受一个 onInvalidate 参数，大致形式如下</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">watchEffect(<span class="function">(<span class="params">onInvalidate</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> token = performAsyncOperation(id.value);</span><br><span class="line">  onInvalidate(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// id has changed or watcher is stopped.</span></span><br><span class="line">    <span class="comment">// invalidate previously pending async operation</span></span><br><span class="line">    token.cancel();</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>不像是 react 中 useEffect 返回一个函数的原因是，异步函数的返回值是很重要的。<br>vue 会缓冲无效的副作用，当在一个 tick 中多次发生副作用的时候，避免不必要的重复调用。一个组件的 update 钩子也是一个副作用。watchEffect 会在 update 钩子触发前触发。触发的顺序是 beforeUpdate=》watchEffect=》onUpdate</p>
+<h3 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h3><p>Vue 3.0 提供了在 setup 中使用的生命周期的钩子函数，与 2.0 的对应关系如下</p>
+<p><del>beforeCreate</del> -&gt; use setup()<br><del>created</del> -&gt; use setup()<br>beforeMount -&gt; onBeforeMount<br>mounted -&gt; onMounted<br>beforeUpdate -&gt; onBeforeUpdate<br>updated -&gt; onUpdated<br>beforeDestroy -&gt; onBeforeUnmount<br>destroyed -&gt; onUnmounted<br>errorCaptured -&gt; onErrorCaptured</p>
+<p>新提供了一下供调试使用的钩子<br>onRenderTracked<br>onRenderTriggered</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  <span class="function"><span class="title">onRenderTriggered</span>(<span class="params">e</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">debugger</span>;</span><br><span class="line">    <span class="comment">// inspect which dependency is causing the component to re-render</span></span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="inject-provide"><a href="#inject-provide" class="headerlink" title="inject provide"></a>inject provide</h3><p>在 vue 3.0 中的使用方式如下，provide 可以注入普通数据，也可以注入响应性数据。官方的例子，provide 的键值用的是 Symbol，当然也可以用字符串。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Parent.vue</span></span><br><span class="line">&lt;template&gt;</span><br><span class="line">  <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>parent<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;<span class="name">slot</span>&gt;</span><span class="tag">&lt;/<span class="name">slot</span>&gt;</span></span></span><br><span class="line"><span class="xml">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></span></span><br><span class="line"><span class="javascript"><span class="xml"><span class="keyword">import</span> &#123; provide, ref &#125; <span class="keyword">from</span> <span class="string">&quot;vue&quot;</span>;</span></span></span><br><span class="line"><span class="javascript"><span class="xml"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span></span><br><span class="line"><span class="javascript"><span class="xml">  <span class="function"><span class="title">setup</span>(<span class="params"></span>)</span> &#123;</span></span></span><br><span class="line"><span class="javascript"><span class="xml">    <span class="keyword">const</span> themeRef = ref(<span class="string">&quot;dark&quot;</span>);</span></span></span><br><span class="line"><span class="javascript"><span class="xml">    provide(<span class="string">&quot;ThemeSymbol&quot;</span>, themeRef);</span></span></span><br><span class="line"><span class="javascript"><span class="xml">  &#125;,</span></span></span><br><span class="line"><span class="javascript"><span class="xml">&#125;;</span></span></span><br><span class="line"><span class="javascript"><span class="xml"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Son.vue</span></span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span></span><br><span class="line"><span class="xml">  <span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>son<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>&#123;&#123; theme &#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="xml">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="xml"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></span></span><br><span class="line"><span class="javascript"><span class="xml"><span class="keyword">import</span> &#123; watchEffect, inject, ref &#125; <span class="keyword">from</span> <span class="string">&quot;vue&quot;</span>;</span></span></span><br><span class="line"><span class="javascript"><span class="xml"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span></span><br><span class="line"><span class="javascript"><span class="xml">  <span class="function"><span class="title">setup</span>(<span class="params"></span>)</span> &#123;</span></span></span><br><span class="line"><span class="javascript"><span class="xml">    <span class="keyword">const</span> theme = inject(<span class="string">&quot;ThemeSymbol&quot;</span>, ref(<span class="string">&quot;light&quot;</span>));</span></span></span><br><span class="line"><span class="javascript"><span class="xml">    watchEffect(<span class="function">() =&gt;</span> &#123;</span></span></span><br><span class="line"><span class="javascript"><span class="xml">      <span class="built_in">console</span>.log(<span class="string">`theme set to: <span class="subst">$&#123;theme.value&#125;</span>`</span>);</span></span></span><br><span class="line"><span class="javascript"><span class="xml">    &#125;);</span></span></span><br><span class="line"><span class="javascript"><span class="xml">    <span class="keyword">return</span> &#123;</span></span></span><br><span class="line"><span class="javascript"><span class="xml">      theme,</span></span></span><br><span class="line"><span class="javascript"><span class="xml">    &#125;;</span></span></span><br><span class="line"><span class="javascript"><span class="xml">  &#125;,</span></span></span><br><span class="line"><span class="javascript"><span class="xml">&#125;;</span></span></span><br><span class="line"><span class="javascript"><span class="xml"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="template-Refs"><a href="#template-Refs" class="headerlink" title="template Refs"></a>template Refs</h3><p>在 vue2.0 中，通过 ref 可以获取到 虚拟 dom 的引用。3.0 中也是如此，但是有一些变化。<br>下面的代码中，我们在 setep 创建了一个名叫 root 的 ref，同时在 template 的 div 的 ref 属性值为 root，那么在<strong>初次渲染</strong>后，root 的值将会指向虚拟 dom 引用。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  <span class="xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">ref</span>=<span class="string">&quot;root&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></span></span><br><span class="line"><span class="javascript"><span class="xml">  <span class="keyword">import</span> &#123; ref, onMounted &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span></span></span><br><span class="line"><span class="javascript"><span class="xml"></span></span></span><br><span class="line"><span class="javascript"><span class="xml">  <span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span></span><br><span class="line"><span class="javascript"><span class="xml">    <span class="function"><span class="title">setup</span>(<span class="params"></span>)</span> &#123;</span></span></span><br><span class="line"><span class="javascript"><span class="xml">      <span class="keyword">const</span> root = ref(<span class="literal">null</span>)</span></span></span><br><span class="line"><span class="javascript"><span class="xml"></span></span></span><br><span class="line"><span class="javascript"><span class="xml">      onMounted(<span class="function">() =&gt;</span> &#123;</span></span></span><br><span class="line"><span class="javascript"><span class="xml">        <span class="comment">// the DOM element will be assigned to the ref after initial render</span></span></span></span><br><span class="line"><span class="javascript"><span class="xml">        <span class="built_in">console</span>.log(root.value) <span class="comment">// &lt;div/&gt;</span></span></span></span><br><span class="line"><span class="javascript"><span class="xml">      &#125;)</span></span></span><br><span class="line"><span class="javascript"><span class="xml"></span></span></span><br><span class="line"><span class="javascript"><span class="xml">      <span class="keyword">return</span> &#123;</span></span></span><br><span class="line"><span class="javascript"><span class="xml">        root</span></span></span><br><span class="line"><span class="javascript"><span class="xml">      &#125;</span></span></span><br><span class="line"><span class="javascript"><span class="xml">    &#125;</span></span></span><br><span class="line"><span class="javascript"><span class="xml">  &#125;</span></span></span><br><span class="line"><span class="javascript"><span class="xml"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+<h2 id="Reactivity-Utilities"><a href="#Reactivity-Utilities" class="headerlink" title="Reactivity Utilities"></a>Reactivity Utilities</h2><h3 id="unref"><a href="#unref" class="headerlink" title="unref"></a>unref</h3><p>如果参数是一个 ref，返回它的内部值，否则返回参数自身，实际上是 val = isRef(val) ? val.value : val 的语法糖</p>
+<h3 id="toRef"><a href="#toRef" class="headerlink" title="toRef"></a>toRef</h3><p>被用来从 reactive 对象中的属性中 创建一个 ref</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> state = reactive(&#123;</span><br><span class="line">  <span class="attr">foo</span>: <span class="number">1</span>,</span><br><span class="line">  <span class="attr">bar</span>: <span class="number">2</span>,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> fooRef = toRef(state, <span class="string">&quot;foo&quot;</span>);</span><br></pre></td></tr></table></figure>
+<h3 id="toRefs-这个之前已经写了"><a href="#toRefs-这个之前已经写了" class="headerlink" title="toRefs 这个之前已经写了"></a>toRefs 这个之前已经写了</h3><p>将一个 reactive 对象转换为 普通对象，对象的每一个属性都是一个 ref 对象</p>
+<h3 id="isRef-amp-amp-isProxy-amp-amp-isReactive-amp-amp-isReadonly"><a href="#isRef-amp-amp-isProxy-amp-amp-isReactive-amp-amp-isReadonly" class="headerlink" title="isRef &amp;&amp; isProxy &amp;&amp; isReactive &amp;&amp; isReadonly"></a>isRef &amp;&amp; isProxy &amp;&amp; isReactive &amp;&amp; isReadonly</h3><p>都是一些顾名思义的方法了，不赘述了</p>
+<h2 id="Advanced-Reactivity-APIs"><a href="#Advanced-Reactivity-APIs" class="headerlink" title="Advanced Reactivity APIs"></a>Advanced Reactivity APIs</h2><h3 id="customRef"><a href="#customRef" class="headerlink" title="customRef"></a>customRef</h3><p>平时应该很少用到，知道有这个方法就好了。允许你定义自己的 ref 方法，可以加入额外的操作</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">useDebouncedRef</span>(<span class="params">value, delay = <span class="number">200</span></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> timeout;</span><br><span class="line">  <span class="keyword">return</span> customRef(<span class="function">(<span class="params">track, trigger</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      <span class="function"><span class="title">get</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">        track();</span><br><span class="line">        <span class="keyword">return</span> value;</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="function"><span class="title">set</span>(<span class="params">newValue</span>)</span> &#123;</span><br><span class="line">        <span class="built_in">clearTimeout</span>(timeout);</span><br><span class="line">        timeout = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">          value = newValue;</span><br><span class="line">          trigger();</span><br><span class="line">        &#125;, delay);</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  <span class="function"><span class="title">setup</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      <span class="attr">text</span>: useDebouncedRef(<span class="string">&quot;hello&quot;</span>),</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="markRaw"><a href="#markRaw" class="headerlink" title="markRaw"></a>markRaw</h3><p>标记一个对象，这个对象不会被添加响应性</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> foo = markRaw(&#123;&#125;);</span><br><span class="line"><span class="built_in">console</span>.log(isReactive(reactive(foo))); <span class="comment">// false</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// also works when nested inside other reactive objects</span></span><br><span class="line"><span class="keyword">const</span> bar = reactive(&#123; foo &#125;);</span><br><span class="line"><span class="built_in">console</span>.log(isReactive(bar.foo)); <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+<h3 id="shallowReactive"><a href="#shallowReactive" class="headerlink" title="shallowReactive"></a>shallowReactive</h3><p>创建一个只追踪它自己的属性的响应性的对象（不会深度追踪嵌套的对象）</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> state = shallowReactive(&#123;</span><br><span class="line">  <span class="attr">foo</span>: <span class="number">1</span>,</span><br><span class="line">  <span class="attr">nested</span>: &#123;</span><br><span class="line">    <span class="attr">bar</span>: <span class="number">2</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// mutating state&#x27;s own properties is reactive</span></span><br><span class="line">state.foo++;</span><br><span class="line"><span class="comment">// ...but does not convert nested objects</span></span><br><span class="line">isReactive(state.nested); <span class="comment">// false</span></span><br><span class="line">state.nested.bar++; <span class="comment">// non-reactive</span></span><br></pre></td></tr></table></figure>
+<h3 id="shallowReadonly"><a href="#shallowReadonly" class="headerlink" title="shallowReadonly"></a>shallowReadonly</h3><p>创建一个只使得它自己的属性是只读的对象（不会深度使嵌套的对象只读）</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> state = shallowReadonly(&#123;</span><br><span class="line">  <span class="attr">foo</span>: <span class="number">1</span>,</span><br><span class="line">  <span class="attr">nested</span>: &#123;</span><br><span class="line">    <span class="attr">bar</span>: <span class="number">2</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// mutating state&#x27;s own properties will fail</span></span><br><span class="line">state.foo++;</span><br><span class="line"><span class="comment">// ...but works on nested objects</span></span><br><span class="line">isReadonly(state.nested); <span class="comment">// false</span></span><br><span class="line">state.nested.bar++; <span class="comment">// works</span></span><br></pre></td></tr></table></figure>
+<h3 id="shallowRef"><a href="#shallowRef" class="headerlink" title="shallowRef"></a>shallowRef</h3><p>创建一个 ref，只使得它自身的 value 属性是响应性的</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> foo = shallowRef(&#123;&#125;);</span><br><span class="line"><span class="comment">// mutating the ref&#x27;s value is reactive</span></span><br><span class="line">foo.value = &#123;&#125;;</span><br><span class="line"><span class="comment">// but the value will not be converted.</span></span><br><span class="line">isReactive(foo.value); <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+<h3 id="toRaw"><a href="#toRaw" class="headerlink" title="toRaw"></a>toRaw</h3><p>可以获得 reactive 或者 readonly 的原始对象，允许你对原始对象进行操作。这是一个你没有其他方法时的逃生舱，可以被用来临时读取或者写入而不会触发响应追踪。这个方式是不推荐使用的，当你使用这个方法的时候，会给与警告。</p>
+<h2 id="vuex"><a href="#vuex" class="headerlink" title="vuex"></a>vuex</h2><p>vue3.0 搭配的是 vuex 的 4.0 版本，大部分 api 的用法都没有改变。</p>
+<p>创建 store 的方法现在使用 creatStore。<br>vue3.0 的写法套路如下，首先需要用 useStore() 方法（和 react hooks 一模一样啊）获取 store 对象，如果返回 store 中的属性，用 computed 处理，如果返回 action，需要用 store 手动 dispatch。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="xml">    Clicked: times, count is &#123;&#123; counter.count &#125;&#125;.</span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;<span class="name">button</span> @<span class="attr">click</span>=<span class="string">&quot;increment&quot;</span>&gt;</span>+<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;<span class="name">button</span> @<span class="attr">click</span>=<span class="string">&quot;decrement&quot;</span>&gt;</span>-<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;<span class="name">button</span> @<span class="attr">click</span>=<span class="string">&quot;incrementSync&quot;</span>&gt;</span>-<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span></span><br><span class="line"><span class="xml">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></span></span><br><span class="line"><span class="javascript"><span class="xml"><span class="keyword">import</span> &#123; computed, watchEffect, onUpdated, onBeforeUpdate &#125; <span class="keyword">from</span> <span class="string">&quot;vue&quot;</span>;</span></span></span><br><span class="line"><span class="javascript"><span class="xml"><span class="keyword">import</span> &#123; useStore &#125; <span class="keyword">from</span> <span class="string">&quot;vuex&quot;</span>;</span></span></span><br><span class="line"><span class="javascript"><span class="xml"></span></span></span><br><span class="line"><span class="javascript"><span class="xml"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span></span><br><span class="line"><span class="javascript"><span class="xml">  <span class="function"><span class="title">setup</span>(<span class="params"></span>)</span> &#123;</span></span></span><br><span class="line"><span class="javascript"><span class="xml">    <span class="keyword">const</span> store = useStore();</span></span></span><br><span class="line"><span class="javascript"><span class="xml">    <span class="keyword">return</span> &#123;</span></span></span><br><span class="line"><span class="javascript"><span class="xml">      <span class="attr">counter</span>:computed(<span class="function">() =&gt;</span> store.state.counter)</span></span></span><br><span class="line"><span class="javascript"><span class="xml">      <span class="attr">increment</span>: <span class="function">() =&gt;</span> store.dispatch(<span class="string">&quot;counter/increment&quot;</span>),</span></span></span><br><span class="line"><span class="javascript"><span class="xml">      <span class="attr">decrement</span>: <span class="function">() =&gt;</span> store.dispatch(<span class="string">&quot;counter/decrement&quot;</span>),</span></span></span><br><span class="line"><span class="javascript"><span class="xml">      <span class="attr">incrementSync</span>: <span class="function">() =&gt;</span> store.dispatch(<span class="string">&quot;counter/incrementSync&quot;</span>),</span></span></span><br><span class="line"><span class="javascript"><span class="xml">    &#125;;</span></span></span><br><span class="line"><span class="javascript"><span class="xml">  &#125;,</span></span></span><br><span class="line"><span class="javascript"><span class="xml">&#125;;</span></span></span><br><span class="line"><span class="javascript"><span class="xml"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+<p>mapState，mapGetters，mapActions 这些辅助方法在 Vue3.0 写法下是无法使用的。因为 setup 中无法使用 this ，而这些辅助方法在 2.0 中是需要访问 this.$store 的。当然我们完全可以用 2.0 的写法用这些辅助方法。</p>
+<h2 id="vue-router"><a href="#vue-router" class="headerlink" title="vue-router"></a>vue-router</h2><p>主要的破坏性更新是</p>
+<ul>
+<li>使用历史模式 从 mode:’history’ 改为 history: createWebHistory()</li>
+<li>捕获所有路由的写法现在应该是 /:catchAll(.*)</li>
+<li>router.match 和 router.resolve 方法被合并到 router.resolve</li>
+<li>router.getMathedComponents 这个方法被移除了<br>可以通过以下代码实现这个方法</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">router.currentRoute.value.matched</span><br><span class="line">  .map(<span class="function">(<span class="params">record</span>) =&gt;</span> <span class="built_in">Object</span>.values(record.components))</span><br><span class="line">  .flat();</span><br></pre></td></tr></table></figure>
+<p>目前合并了四个 rfc</p>
+<p>动态路由 实现了以下 API</p>
+<ul>
+<li>router.addRoute(route: RouteRecord) Add a new route</li>
+<li>router.removeRoute(name: string | symbol) Remove an existing route</li>
+<li>router.hasRoute(name: string | symbol): boolean Check if a route exists</li>
+<li>router.getRoutes(): RouteRecord[] Get the current list of routes</li>
+</ul>
+<p>移除了 router-link 的 tag 和 event prop，不再自动给内部 a 元素添加点击事件，增加了 scoped-slot api</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/vue/" rel="tag"># vue</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/04/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA%E4%B8%8E%E5%A4%84%E7%90%86/" rel="prev" title="计算机基础之数据的机器级表示与处理">
+      <i class="fa fa-chevron-left"></i> 计算机基础之数据的机器级表示与处理
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/04/18/react/reactRouter%E5%AD%A6%E4%B9%A0/" rel="next" title="reactRouter学习">
+      reactRouter学习 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#composition-api"><span class="nav-number">1.</span> <span class="nav-text">composition api</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5-%E5%93%8D%E5%BA%94%E6%80%A7"><span class="nav-number">2.</span> <span class="nav-text">核心概念 响应性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#proxy"><span class="nav-number">2.1.</span> <span class="nav-text">proxy</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5"><span class="nav-number">2.1.1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9E%84%E9%80%A0"><span class="nav-number">2.1.2.</span> <span class="nav-text">构造</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%94%AF%E6%8C%81%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="nav-number">2.1.3.</span> <span class="nav-text">支持的操作</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setup"><span class="nav-number">2.2.</span> <span class="nav-text">setup</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setup-%E4%B8%AD%E7%9A%84-this"><span class="nav-number">2.3.</span> <span class="nav-text">setup 中的 this</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#reactive"><span class="nav-number">2.4.</span> <span class="nav-text">reactive</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ref"><span class="nav-number">2.5.</span> <span class="nav-text">ref</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#toRefs"><span class="nav-number">2.6.</span> <span class="nav-text">toRefs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#computed"><span class="nav-number">2.7.</span> <span class="nav-text">computed</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#readonly"><span class="nav-number">2.8.</span> <span class="nav-text">readonly</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#watchEffect"><span class="nav-number">2.9.</span> <span class="nav-text">watchEffect</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#side-effect"><span class="nav-number">2.10.</span> <span class="nav-text">side effect</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="nav-number">2.11.</span> <span class="nav-text">生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#inject-provide"><span class="nav-number">2.12.</span> <span class="nav-text">inject provide</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#template-Refs"><span class="nav-number">2.13.</span> <span class="nav-text">template Refs</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reactivity-Utilities"><span class="nav-number">3.</span> <span class="nav-text">Reactivity Utilities</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#unref"><span class="nav-number">3.1.</span> <span class="nav-text">unref</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#toRef"><span class="nav-number">3.2.</span> <span class="nav-text">toRef</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#toRefs-%E8%BF%99%E4%B8%AA%E4%B9%8B%E5%89%8D%E5%B7%B2%E7%BB%8F%E5%86%99%E4%BA%86"><span class="nav-number">3.3.</span> <span class="nav-text">toRefs 这个之前已经写了</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#isRef-amp-amp-isProxy-amp-amp-isReactive-amp-amp-isReadonly"><span class="nav-number">3.4.</span> <span class="nav-text">isRef &amp;&amp; isProxy &amp;&amp; isReactive &amp;&amp; isReadonly</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Advanced-Reactivity-APIs"><span class="nav-number">4.</span> <span class="nav-text">Advanced Reactivity APIs</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#customRef"><span class="nav-number">4.1.</span> <span class="nav-text">customRef</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#markRaw"><span class="nav-number">4.2.</span> <span class="nav-text">markRaw</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#shallowReactive"><span class="nav-number">4.3.</span> <span class="nav-text">shallowReactive</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#shallowReadonly"><span class="nav-number">4.4.</span> <span class="nav-text">shallowReadonly</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#shallowRef"><span class="nav-number">4.5.</span> <span class="nav-text">shallowRef</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#toRaw"><span class="nav-number">4.6.</span> <span class="nav-text">toRaw</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vuex"><span class="nav-number">5.</span> <span class="nav-text">vuex</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vue-router"><span class="nav-number">6.</span> <span class="nav-text">vue-router</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">jiezi19971225</p>
+  <div class="site-description" itemprop="description">记录编程学习路上的点滴</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jiezi19971225</span>
+</div>
+  <img src="https://static.dy208.cn/o_1dfilp8ruo521thr1hvf18ji17soa.png"/>
+  <a href="http://www.beian.miit.gov.cn/"  style="color:#f72b07" target="_blank">皖ICP备17001385号-1</a>
+  <br/>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

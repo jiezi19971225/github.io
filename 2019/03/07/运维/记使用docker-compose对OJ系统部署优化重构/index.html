@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+<meta name="baidu-site-verification" content="5IfwMCE5hH" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.jiezi19971225.cn","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="这几天研究了一下用把上学期写的 oj 部署在 docker 容器中，自己编写了 Dockerfile 构建主容器，并将数据库容器分离，使用了 docker-compose 对容器进行管理，实现了自动化的部署，感觉收获挺多的。写下这篇博客记录一下自己新 get 到的技能。 重构原因其实我接触到 docker 这门技术已经很久了。在学习 Laravel 的时候使用了 laradock 快速构建开发环境">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记使用docker-compose对OJ系统部署优化重构">
+<meta property="og:url" content="http://www.jiezi19971225.cn/2019/03/07/%E8%BF%90%E7%BB%B4/%E8%AE%B0%E4%BD%BF%E7%94%A8docker-compose%E5%AF%B9OJ%E7%B3%BB%E7%BB%9F%E9%83%A8%E7%BD%B2%E4%BC%98%E5%8C%96%E9%87%8D%E6%9E%84/index.html">
+<meta property="og:site_name" content="Jiez19971225‘s Blog">
+<meta property="og:description" content="这几天研究了一下用把上学期写的 oj 部署在 docker 容器中，自己编写了 Dockerfile 构建主容器，并将数据库容器分离，使用了 docker-compose 对容器进行管理，实现了自动化的部署，感觉收获挺多的。写下这篇博客记录一下自己新 get 到的技能。 重构原因其实我接触到 docker 这门技术已经很久了。在学习 Laravel 的时候使用了 laradock 快速构建开发环境">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-03-07T21:11:59.000Z">
+<meta property="article:modified_time" content="2021-10-21T16:45:16.179Z">
+<meta property="article:author" content="jiezi19971225">
+<meta property="article:tag" content="OJ">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://www.jiezi19971225.cn/2019/03/07/%E8%BF%90%E7%BB%B4/%E8%AE%B0%E4%BD%BF%E7%94%A8docker-compose%E5%AF%B9OJ%E7%B3%BB%E7%BB%9F%E9%83%A8%E7%BD%B2%E4%BC%98%E5%8C%96%E9%87%8D%E6%9E%84/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>记使用docker-compose对OJ系统部署优化重构 | Jiez19971225‘s Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Jiez19971225‘s Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">做自己爱做的事</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2019/03/07/%E8%BF%90%E7%BB%B4/%E8%AE%B0%E4%BD%BF%E7%94%A8docker-compose%E5%AF%B9OJ%E7%B3%BB%E7%BB%9F%E9%83%A8%E7%BD%B2%E4%BC%98%E5%8C%96%E9%87%8D%E6%9E%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content="记录编程学习路上的点滴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          记使用docker-compose对OJ系统部署优化重构
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-03-07 21:11:59" itemprop="dateCreated datePublished" datetime="2019-03-07T21:11:59+00:00">2019-03-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-10-21 16:45:16" itemprop="dateModified" datetime="2021-10-21T16:45:16+00:00">2021-10-21</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%BF%90%E7%BB%B4/" itemprop="url" rel="index"><span itemprop="name">运维</span></a>
+                </span>
+            </span>
+
+          
+
+          <span class="post-time">
+            &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-bar-chart"></i>
+            </span>
+            <span class="post-meta-item-text">字数统计:</span>
+            <span class="post-count">2.1k(字)</span>
+
+          </span>
+
+            <span class="post-time">
+          &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-clock-o"></i>
+            </span>
+            <span class="post-meta-item-text">阅读时长:</span>
+            <span class="post-count">7(分)</span>
+
+          </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>这几天研究了一下用把上学期写的 oj 部署在 docker 容器中，自己编写了 Dockerfile 构建主容器，并将数据库容器分离，使用了 docker-compose 对容器进行管理，实现了自动化的部署，感觉收获挺多的。写下这篇博客记录一下自己新 get 到的技能。</p>
+<h3 id="重构原因"><a href="#重构原因" class="headerlink" title="重构原因"></a>重构原因</h3><p>其实我接触到 docker 这门技术已经很久了。在学习 Laravel 的时候使用了 laradock 快速构建开发环境，那时候感觉 docker 真是太方便了。不过长久以来，我对于 docker 的了解，仅仅停留在基础的使用上，也没有尝试过自己编写 Dockerfile 构建镜像，对于 docker 中一些基础的概念都很模糊，像什么端口映射啊，数据持久化啊，都不了解，结果在部署应用的时候，白白费了很多功夫，实在是得不偿失。这就不得不说之前部署 OJ 的血泪史（菜啊(⊙﹏⊙)b）。我校 OJ 是基于 HUSTOJ 进行二次开发的，在本地开发的时候使用了作者的一键部署脚本，没有使用容器构建。之前学长在学校的服务器上用 docker 跑了一个 hustoj 的镜像。本地开发倒是没有什么问题，但是怎么部署到服务器的 docker 上？我的做法现在看来非常的傻逼，把项目改动部分的代码上传到 github 仓库，然后进入到学校 oj 的 hustoj 容器中，把其中 web 部分的代码删除，再从 github 上 pull 下我的代码。我想的是很简单，实际操作起来。先是部署上去就花了将近一整天，而之后像是 OJ 判不了 JAVA，文件权限不对，配置文件不对等各种问题等前前后后修复了好几次才搞定，一点都不<strong>优雅</strong>。之后过了一个寒假，倒是一直稳定运行到现在。但是我觉得不能就这样放着，因为这系统除了我自己。趁开学事情少，我学习了一下怎么编写 Dockerfile，以及编写 docker-compose 的配置脚本，实现了 OJ 的自动化部署。</p>
+<h3 id="编写-Dockerfile"><a href="#编写-Dockerfile" class="headerlink" title="编写 Dockerfile"></a>编写 Dockerfile</h3><p>之前看 docker 的书的时候，是有看过怎么编写 Dockerfile 的，但是没有自己写过。所以一上来就陷入了僵局。基础镜像选择我比较熟悉的 ubuntu，但之后该干嘛啊。百度学习一番后，我了解到 docker 有 history 这个命令，其加上—no-trunc 可以完整显示镜像构建每个步骤执行的命令（但是后来我才意识到 hustoj 的项目中就有 Dockerfile 文件，僵）。先复制过来，然后看着基础镜像 ubuntu:Trusty，不明所以，百度了一下才知道这个 ubuntu14 的代号，这也太老了吧。直接换成 ubuntu18.04，把里面的软件都换成了比较新的版本，把 php5 换成了 php7，去掉了 mysql，因为要放到单独的容器中。就这样小改了一下，感觉没啥问题，那就构建一下试试吧。<br>进行构建，显示命令报错，很多软件包都不存在。果断开一个 ubuntu 的容器，一个个测试能不能下载，确认没问题再次构建。然后 apt 能下载了，但是官方源的速度实在是太慢了。因此添加了<code>COPY sources.list /etc/apt/sources.list</code>命令到最前面。这下下载速度没问题了，但是在安装某个依赖 tzdata 时，需要手动选择时区，但是我按照指令选择并没有相应，重新构建了几次，都是如此。百度解决办法，需要这样来安装</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">RUN</span><span class="bash"> <span class="built_in">set</span> -ex \</span></span><br><span class="line"><span class="bash">    &amp;&amp; <span class="built_in">export</span> DEBIAN_FRONTEND=noninteractive \</span></span><br><span class="line"><span class="bash">    &amp;&amp; apt-get update \</span></span><br><span class="line"><span class="bash">    &amp;&amp; apt-get install -y tzdata</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> <span class="built_in">set</span> -ex \</span></span><br><span class="line"><span class="bash">    &amp;&amp; ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \</span></span><br><span class="line"><span class="bash">    &amp;&amp; dpkg-reconfigure -f noninteractive tzdata</span></span><br></pre></td></tr></table></figure>
+<p>我把它放在安装其他软件之前。docker 的构建步骤是有缓存的，之前成功构建的步骤会缓存起来，每一个步骤对应一个镜像层，下次不需要再次构建。一条 RUN 语句的执行就创建了一个镜像层。如果构建步骤发生了改变，就从开始改变的那一步开始重新构建。开始构建的时候，往往少安装很多软件包，可以把新添加的包放在新的 RUN 语句下安装，避免把原先安装的包再下载一遍。<br>hustoj 的构建镜像的项目代码是从 github 上 clone 下来的，我最开始也是这么写的，后来发现有更好的方法，这个后面再说。</p>
+<h3 id="使用-docker-compose"><a href="#使用-docker-compose" class="headerlink" title="使用 docker-compose"></a>使用 docker-compose</h3><p>因为打算把 mysql 容器分离，所以要使用 docker-compose 进行容器的管理。laradock 就是基于 docker-compose 的一个项目。在配置文件中，我们需要定义服务，每个服务对应一个容器，服务的选项对应了 docekr 启动是的各种启动选项。将其写在配置文件中，我们只要简单的两行命令就可以了，非常高效。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker-compose build</span><br><span class="line">docker-compose up -d</span><br></pre></td></tr></table></figure>
+<p>下面记录几个我认为重要的点</p>
+<ul>
+<li>tty 选项，主容器应该设置为 true，否则会因为确实控制终端的配置导致启动失败</li>
+<li>ports 选项，设置容器的端口映射，按照 主机端口：容器端口 的顺序映射</li>
+<li>expose，说明容器暴露的端口，但没有实际作用，仍需要设置 ports 选项才能让映射生效</li>
+<li>links，容器间数据互联，容器的中会解析服务名为对应的 ip 地址，我让主容器连接到了 mysql 容器</li>
+<li>depends_on 依赖，被依赖的服务会现行构建</li>
+<li>enviroment 环境变量，对于 mysql 可以通过环境变量设置管理员密码，新建用户和新建数据库</li>
+<li>volumes，数据卷，像/var/lib/mysql 这样存放数据的目录应该放在可持久化的数据卷中，也可以映射本机目录到容器</li>
+<li>.env 文件可以定义当前目录中的环境变量，这是 linux 系统的特性，会自动读取.env 中定义的变量到环境变量</li>
+<li>entrypoint，容器<strong>启动</strong>时自动运行的脚本，一般用于启动后台服务进程。是启动而不是构建时，每次<code>docker-compose start</code>时都会运行，Dockerfile 中也有 ENTRYPOINT 选项，也是在每次容器启动的时候运行。</li>
+</ul>
+<p>总结一下，Dockerfile 中 RUN 命令只在构建的时候运行，用于安装软件包，和简单的一些配置。两个 entrypoint 区别不大，都是容器启动时运行，一般用于启动后台服务。而对于只需要进行一次的操作，比如运行 sql 建库，修改文件权限，可以编写一个 shell 脚本，在容器创建之后手动执行一次</p>
+<h3 id="整合到项目"><a href="#整合到项目" class="headerlink" title="整合到项目"></a>整合到项目</h3><p>这样构建起来的项目，代码是保存在镜像中的，没办法用 vscode 打开。回想起来之前用 laradock 的经历，似乎可以将本地项目目录映射到容器，看了 laradock 的配置文件，果然如此。于是把项目代码文件目录也整合了进来，在 volumes 选项中设置映射代码目录。目录结构是这样的</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">├── docker</span><br><span class="line">│   ├── ahpuoj</span><br><span class="line">│   └── docker-compose.yml</span><br><span class="line">├── README.md</span><br><span class="line">└── src</span><br><span class="line">    ├── core</span><br><span class="line">    ├── install</span><br><span class="line">    └── web</span><br></pre></td></tr></table></figure>
+<p>这样只要 clone 到本地，简单构建一下容器，就可以进行开发了。<br>对于不要提交的配置文件，我将其放在 install 文件夹中，并且在创建后执行的安装脚本中设置了软连接指向本该所在的目录。个人认为是个不错的方法。</p>
+<h3 id="一些问题"><a href="#一些问题" class="headerlink" title="一些问题"></a>一些问题</h3><ul>
+<li>depends_on 虽然决定了容器创建的顺序，但是容器中的服务启动仍然需要时间。因此在 entrypoint.sh 中访问数据库会失败，因为这时候数据库容器中的服务可能还没有启动完成</li>
+<li>sed 修改软连接文件会将其变成真正的文件，需要添加<code>--follow-symlinks</code>选项</li>
+<li>entrypoint.sh 文件的最后应加上<code>/bin/bash</code>,运行 bash 前台应用，否则也会造成容器启动后就停止</li>
+</ul>
+<h3 id="项目地址"><a href="#项目地址" class="headerlink" title="项目地址"></a>项目地址</h3><p>最后是<a target="_blank" rel="noopener" href="https://github.com/jiezi19971225/ahpuoj-docker">项目的地址</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/OJ/" rel="tag"># OJ</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/03/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E7%89%A9%E7%90%86%E5%B1%82/" rel="prev" title="计算机网络学习笔记之物理层">
+      <i class="fa fa-chevron-left"></i> 计算机网络学习笔记之物理层
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/03/14/%E6%95%B0%E6%8D%AE%E5%BA%93/Mongodb%E5%85%A5%E9%97%A8/" rel="next" title="Mongodb入门">
+      Mongodb入门 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8D%E6%9E%84%E5%8E%9F%E5%9B%A0"><span class="nav-number">1.</span> <span class="nav-text">重构原因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E5%86%99-Dockerfile"><span class="nav-number">2.</span> <span class="nav-text">编写 Dockerfile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-docker-compose"><span class="nav-number">3.</span> <span class="nav-text">使用 docker-compose</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B4%E5%90%88%E5%88%B0%E9%A1%B9%E7%9B%AE"><span class="nav-number">4.</span> <span class="nav-text">整合到项目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98"><span class="nav-number">5.</span> <span class="nav-text">一些问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%E5%9C%B0%E5%9D%80"><span class="nav-number">6.</span> <span class="nav-text">项目地址</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">jiezi19971225</p>
+  <div class="site-description" itemprop="description">记录编程学习路上的点滴</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jiezi19971225</span>
+</div>
+  <img src="https://static.dy208.cn/o_1dfilp8ruo521thr1hvf18ji17soa.png"/>
+  <a href="http://www.beian.miit.gov.cn/"  style="color:#f72b07" target="_blank">皖ICP备17001385号-1</a>
+  <br/>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

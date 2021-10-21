@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+<meta name="baidu-site-verification" content="5IfwMCE5hH" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.jiezi19971225.cn","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="记录一下自己不太清楚的知识点 第二章 URL 与资源URLurl 的语法 &lt;scheme&gt;:&#x2F;&#x2F;&lt;user&gt;:&lt;password&gt;@&lt;host&gt;:&lt;port&gt;&#x2F;&lt;path&gt;;&lt;params&gt;?&lt;query&gt;#&lt;frag&gt; 基础 URL HTML 标记&lt;BASE&gt;，可以设定基础 U">
+<meta property="og:type" content="article">
+<meta property="og:title" content="http权威指南">
+<meta property="og:url" content="http://www.jiezi19971225.cn/2020/04/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/http%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="Jiez19971225‘s Blog">
+<meta property="og:description" content="记录一下自己不太清楚的知识点 第二章 URL 与资源URLurl 的语法 &lt;scheme&gt;:&#x2F;&#x2F;&lt;user&gt;:&lt;password&gt;@&lt;host&gt;:&lt;port&gt;&#x2F;&lt;path&gt;;&lt;params&gt;?&lt;query&gt;#&lt;frag&gt; 基础 URL HTML 标记&lt;BASE&gt;，可以设定基础 U">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-04-04T22:37:18.000Z">
+<meta property="article:modified_time" content="2021-10-21T16:45:16.171Z">
+<meta property="article:author" content="jiezi19971225">
+<meta property="article:tag" content="计算机网络">
+<meta property="article:tag" content="HTTP">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://www.jiezi19971225.cn/2020/04/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/http%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>http权威指南 | Jiez19971225‘s Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Jiez19971225‘s Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">做自己爱做的事</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/04/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/http%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content="记录编程学习路上的点滴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          http权威指南
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-04-04 22:37:18" itemprop="dateCreated datePublished" datetime="2020-04-04T22:37:18+00:00">2020-04-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-10-21 16:45:16" itemprop="dateModified" datetime="2021-10-21T16:45:16+00:00">2021-10-21</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">计算机网络</span></a>
+                </span>
+            </span>
+
+          
+
+          <span class="post-time">
+            &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-bar-chart"></i>
+            </span>
+            <span class="post-meta-item-text">字数统计:</span>
+            <span class="post-count">1.8k(字)</span>
+
+          </span>
+
+            <span class="post-time">
+          &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-clock-o"></i>
+            </span>
+            <span class="post-meta-item-text">阅读时长:</span>
+            <span class="post-count">7(分)</span>
+
+          </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>记录一下自己不太清楚的知识点</p>
+<h2 id="第二章-URL-与资源"><a href="#第二章-URL-与资源" class="headerlink" title="第二章 URL 与资源"></a>第二章 URL 与资源</h2><h3 id="URL"><a href="#URL" class="headerlink" title="URL"></a>URL</h3><p>url 的语法 <code>&lt;scheme&gt;://&lt;user&gt;:&lt;password&gt;@&lt;host&gt;:&lt;port&gt;/&lt;path&gt;;&lt;params&gt;?&lt;query&gt;#&lt;frag&gt;</code></p>
+<p>基础 URL HTML 标记<code>&lt;BASE&gt;</code>，可以设定基础 URL</p>
+<p>URL 编码机制 urlencode 通过转义表示不安全的字符 包含一个百分号(%)，后面跟着两个表示字符 ASCII 码的十六进制数</p>
+<h2 id="第三章-HTTP-报文"><a href="#第三章-HTTP-报文" class="headerlink" title="第三章 HTTP 报文"></a>第三章 HTTP 报文</h2><h3 id="报文的组成"><a href="#报文的组成" class="headerlink" title="报文的组成"></a>报文的组成</h3><p>组成 对报文进行描述的其实航 包含属性的首部块 可选的包含数据的主题 body<br>一般只有 PUT 和 POST 方法包含 body<br>PUT 方法的语义是让服务器用请求的主体部分来创建一个由所请求的 URL 命名的新文档，如果那个 URL 已经存在的话，就用这个主题来替代它</p>
+<p>Http 协议中的 Header 与 Body。Header 的每行最后要加\r\n。Header 与 Body 之间要用\r\n 隔开。Body 后无需加\r\n。</p>
+<p>ACSII 码中</p>
+<p>‘\n’ 10 换行</p>
+<p>‘\r’ 13 回车</p>
+<p>也可以表示为’\x0a’和’\x0d’.(16 进制)</p>
+<p>示例：HTTP 开始部分为 header，html 部分为 body。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK\r\n</span><br><span class="line">Content-Encoding: gzip\r\n</span><br><span class="line">Content-Type: text/xml\r\n</span><br><span class="line">Content-Length: 399\r\n</span><br><span class="line">Connection: keep-alive\r\n</span><br><span class="line">X-Varnish-Cache: HIT\r\n</span><br><span class="line">X-Varnish-Cache-Hits: 1241\r\n</span><br><span class="line">\r\n</span><br><span class="line">&lt;html.....&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="状态码"><a href="#状态码" class="headerlink" title="状态码"></a>状态码</h3><ul>
+<li>101 Switching Protocols</li>
+<li>300 Multiple Choices 请求一个实际指向多个资源的 URL</li>
+<li>301 Moved Permanently 响应的 Location 首部包含资源现在所处的 URL</li>
+<li>302 Found 响应的 Location 首部的 URL 来临时定位资源 HTTP 1.0</li>
+<li>303 See Other HTTP 1.1</li>
+<li>307 Temporary Redirect POST 不会转为 GET</li>
+</ul>
+<p>当 HTTP/1.0 客户端发起一个 POST 请求,并在响应中收到 302 重定向状态码时,它会接受 Location 首部的重定向 URL,并向那个 URL 发起一个 GET 请求(而不会像原始请求中那样发起 POST 请求)。<br>问题出在 HTTP/1.1。HTTP/1.1 规范使用 303 状态码来实现同样的行为(服务器发送 303 状态码来重定向客户端的 POST 请求,在它后面跟上一个 GET 请求)。<br>为了避开这个问题,HTTP/1.1 规范指出,对于 HTTP/1.1 客户端,用 307 状态码取代 302 状态码来进行临时重定向。这样服务器就可以将 302 状态码保留起来,为 HTTP/1.0 客户端使用了。</p>
+<h3 id="Keep-Alive"><a href="#Keep-Alive" class="headerlink" title="Keep-Alive"></a>Keep-Alive</h3><p>在 HTTP1.1 中默认开启，可以用 Connection:close 关闭，在 HTTP1.0 默认关闭，通过 Connection:keep-alive 开启</p>
+<p>哑代理问题，所谓哑代理，是不会处理 Keep-Alive 连接，而是直接将其转发的代理。<br>在网景的变通做法是,浏览器会向代理发送非标准的 Proxy-Connection 扩展首部,而不是官方支持的著名的 Connection 首部。如果代理是盲中继,它会将无意义的 Proxy-Connection 首部转发给 Web 服务器,服务器会忽略此首部,不会带<br>来任何问题。但如果代理是个聪明的代理(能够理解持久连接的握手动作),就用一个 Connection 首部取代无意义的 Proxy-Connection 首部,然后将其发送给服务器,以收到预期的效果。</p>
+<p>HTTP1.1 会使用管道优化，将一连串请求放入管道中，但是对于 POST 这个样非幂等的请求不应该放在管道中</p>
+<h3 id="代理和网关的区别"><a href="#代理和网关的区别" class="headerlink" title="代理和网关的区别"></a>代理和网关的区别</h3><p>严格来说,代理连接的是两个或多个使用相同协议的应用程序,而网关连接的则是两个或多个使用不同协议的端点。网关扮演的是“协议转换器”的角色,即使客户端和服务器使用的是不同的协议,客户端也可以通过它完成与服务器之间的事务处理。</p>
+<h3 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h3><p>缓存有两种，强缓存和协商缓存<br>强缓存使用 Expired 和 Cache Control 字段，不需要向服务器通信<br>协商缓存需要携带协商字段与服务器通信，如果服务器返回 304 NOT Modified 信息，就使用缓存中的资源，并在相应中插入新鲜度信息<br>no-store 不缓存<br>no-cache 在与服务器进行新鲜度验证前不使用缓存</p>
+<h4 id="代理缓存"><a href="#代理缓存" class="headerlink" title="代理缓存"></a>代理缓存</h4><h5 id="为什么要有代理缓存"><a href="#为什么要有代理缓存" class="headerlink" title="为什么要有代理缓存"></a>为什么要有代理缓存</h5><p>对于源服务器，它是有缓存的，如 Redis，Memcache。但对于 HTTP 缓存来说，如果每次客户端缓存失效都从源服务器获取，那么给源服务器的压力是很大的。<br>由此引入了<strong>缓存代理</strong>机制，让代理服务器接管一部分的服务端 HTTP 缓存。客户端缓存过期后就近到代理服务器缓存中获取，代理缓存过期了才请求源服务器。</p>
+<p>缓存代理的控制分为两部分，一部分是源服务器的控制，一部分是客户端的控制。</p>
+<h5 id="源服务器的缓存控制"><a href="#源服务器的缓存控制" class="headerlink" title="源服务器的缓存控制"></a>源服务器的缓存控制</h5><h6 id="private-和-public"><a href="#private-和-public" class="headerlink" title="private 和 public"></a>private 和 public</h6><p>在源服务器的响应头中，会加上 Cache-Control 字段进行缓存的控制，它的值中可以加入 private 或 public 表示是否允许代理服务器缓存。public 表示允许。</p>
+<h6 id="proxy-revalidate"><a href="#proxy-revalidate" class="headerlink" title="proxy-revalidate"></a>proxy-revalidate</h6><p>must-revalidate 的意思是<strong>客户端</strong>缓存过期就去源服务器获取，而<strong>proxy-revalidate</strong>表示<strong>代理服务器</strong>的缓存过期后到源服务器获取</p>
+<p>前者使用范围主体更广，后者不应用于用户代理的本地缓存，应用在缓存服务器上</p>
+<h6 id="s-maxage"><a href="#s-maxage" class="headerlink" title="s-maxage"></a>s-maxage</h6><p>s 是 share 的意思，限定了缓存在代理服务器中可以存放多久，和限制客户端缓存时间的 max-age 并不冲突</p>
+<h5 id="客户端的缓存控制"><a href="#客户端的缓存控制" class="headerlink" title="客户端的缓存控制"></a>客户端的缓存控制</h5><h6 id="客户端宽容设置"><a href="#客户端宽容设置" class="headerlink" title="客户端宽容设置"></a>客户端宽容设置</h6><p>在客户端的请求中，可以加入这两个字段，来对代理服务器上的缓存进行宽容和限制操作</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">max-stale:5</span><br></pre></td></tr></table></figure>
+<p>表示客户端到代理服务器上拿缓存的时候，只要过期时间在 5s 之内，依然可以从代理中获取</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">min-fresh:5</span><br></pre></td></tr></table></figure>
+<p>表示客户端到代理服务器上拿缓存的时候，一定要在过期前 5s 之前的时间内</p>
+<h6 id="only-if-cached"><a href="#only-if-cached" class="headerlink" title="only-if-cached"></a>only-if-cached</h6><p>表示客户端只会接受代理缓存，而不会接受源服务器的响应，如果代理缓存无效，则直接返回 504</p>
+<h3 id="安全"><a href="#安全" class="headerlink" title="安全"></a>安全</h3><p>CSRF Cross Site Request Forgery<br>点击劫持 设置 X-FRAME-OPTIONS</p>
+<h3 id="cookie"><a href="#cookie" class="headerlink" title="cookie"></a>cookie</h3><h4 id="cookie-的域名属性"><a href="#cookie-的域名属性" class="headerlink" title="cookie 的域名属性"></a>cookie 的域名属性</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set-cookie: user=&quot;mary17&quot;; domain=&quot;airtravelbargains.com&quot;</span><br></pre></td></tr></table></figure>
+<p>将 cookie user=”mary17” 发送给域 “.airtravelbargains.com” 中的所有站点:</p>
+<h4 id="cookie-的路径属性"><a href="#cookie-的路径属性" class="headerlink" title="cookie 的路径属性"></a>cookie 的路径属性</h4><p>cookie 规范允许用户将 cookie 与部分 Web 站点关联起来</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set-cookie: pref=compact; domain=&quot;airtravelbargains.com&quot;; path=/autos/</span><br></pre></td></tr></table></figure>
+<p>如果用户访问 <code>http://www.airtravelbargains.com/specials.html</code>,就只会获得这个 cookie:<br>Cookie: user=”mary17”<br>但 如 果 访 问 <code>http://www.airtravelbargains.com/autos/cheapo/index.html</code>, 就会获得这两个 cookie:<br>Cookie: user=”mary17”<br>Cookie: pref=compact<br>Cache-Control:no-cache=” Set-Cookie” 除了 cookie 以外是可以缓存的</p>
+<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><h3 id="HTTP-首部参考"><a href="#HTTP-首部参考" class="headerlink" title="HTTP 首部参考"></a>HTTP 首部参考</h3><ul>
+<li>Accept</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Accept */* 表示所有类型</span><br><span class="line">Accept: text/*, image/* 图片</span><br><span class="line">Accept: text/*, image/gif, image/jpeg; q=1 图片 q表示质量</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Age HTTP/1.1 缓存必须在发送的每条响应中都包含一个 Age 首部</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag"># 计算机网络</a>
+              <a href="/tags/HTTP/" rel="tag"># HTTP</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/03/30/react/react%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/" rel="prev" title="react基础学习">
+      <i class="fa fa-chevron-left"></i> react基础学习
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/04/04/javascript/%E5%AE%9E%E7%8E%B0Promise/" rel="next" title="Promise">
+      Promise <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0-URL-%E4%B8%8E%E8%B5%84%E6%BA%90"><span class="nav-number">1.</span> <span class="nav-text">第二章 URL 与资源</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#URL"><span class="nav-number">1.1.</span> <span class="nav-text">URL</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-HTTP-%E6%8A%A5%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">第三章 HTTP 报文</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8A%A5%E6%96%87%E7%9A%84%E7%BB%84%E6%88%90"><span class="nav-number">2.1.</span> <span class="nav-text">报文的组成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E7%A0%81"><span class="nav-number">2.2.</span> <span class="nav-text">状态码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Keep-Alive"><span class="nav-number">2.3.</span> <span class="nav-text">Keep-Alive</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%90%86%E5%92%8C%E7%BD%91%E5%85%B3%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">2.4.</span> <span class="nav-text">代理和网关的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%93%E5%AD%98"><span class="nav-number">2.5.</span> <span class="nav-text">缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%A3%E7%90%86%E7%BC%93%E5%AD%98"><span class="nav-number">2.5.1.</span> <span class="nav-text">代理缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%9C%89%E4%BB%A3%E7%90%86%E7%BC%93%E5%AD%98"><span class="nav-number">2.5.1.1.</span> <span class="nav-text">为什么要有代理缓存</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%BA%90%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E7%BC%93%E5%AD%98%E6%8E%A7%E5%88%B6"><span class="nav-number">2.5.1.2.</span> <span class="nav-text">源服务器的缓存控制</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#private-%E5%92%8C-public"><span class="nav-number">2.5.1.2.1.</span> <span class="nav-text">private 和 public</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#proxy-revalidate"><span class="nav-number">2.5.1.2.2.</span> <span class="nav-text">proxy-revalidate</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#s-maxage"><span class="nav-number">2.5.1.2.3.</span> <span class="nav-text">s-maxage</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E7%9A%84%E7%BC%93%E5%AD%98%E6%8E%A7%E5%88%B6"><span class="nav-number">2.5.1.3.</span> <span class="nav-text">客户端的缓存控制</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%AE%BD%E5%AE%B9%E8%AE%BE%E7%BD%AE"><span class="nav-number">2.5.1.3.1.</span> <span class="nav-text">客户端宽容设置</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#only-if-cached"><span class="nav-number">2.5.1.3.2.</span> <span class="nav-text">only-if-cached</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E5%85%A8"><span class="nav-number">2.6.</span> <span class="nav-text">安全</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cookie"><span class="nav-number">2.7.</span> <span class="nav-text">cookie</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#cookie-%E7%9A%84%E5%9F%9F%E5%90%8D%E5%B1%9E%E6%80%A7"><span class="nav-number">2.7.1.</span> <span class="nav-text">cookie 的域名属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cookie-%E7%9A%84%E8%B7%AF%E5%BE%84%E5%B1%9E%E6%80%A7"><span class="nav-number">2.7.2.</span> <span class="nav-text">cookie 的路径属性</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%84%E5%BD%95"><span class="nav-number">3.</span> <span class="nav-text">附录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP-%E9%A6%96%E9%83%A8%E5%8F%82%E8%80%83"><span class="nav-number">3.1.</span> <span class="nav-text">HTTP 首部参考</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">jiezi19971225</p>
+  <div class="site-description" itemprop="description">记录编程学习路上的点滴</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jiezi19971225</span>
+</div>
+  <img src="https://static.dy208.cn/o_1dfilp8ruo521thr1hvf18ji17soa.png"/>
+  <a href="http://www.beian.miit.gov.cn/"  style="color:#f72b07" target="_blank">皖ICP备17001385号-1</a>
+  <br/>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

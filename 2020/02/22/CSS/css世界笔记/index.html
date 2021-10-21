@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+<meta name="baidu-site-verification" content="5IfwMCE5hH" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.jiezi19971225.cn","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="chapter3 流，元素与基本尺寸外在盒子与内在盒子-外在盒子负责元素是可以一行显示,还是只能换行显示;内在盒子负责宽高、内容呈现什么的。内在盒子专业的名称是“容器盒子”。y 属性值是 inline-block 的元素既能和图文一行显示,又能直接设置 width&#x2F;height。 width:auto 的四种表现  充分利用可用空间，即 fill-available， 4 。比方说,&lt;div">
+<meta property="og:type" content="article">
+<meta property="og:title" content="css世界笔记">
+<meta property="og:url" content="http://www.jiezi19971225.cn/2020/02/22/CSS/css%E4%B8%96%E7%95%8C%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="Jiez19971225‘s Blog">
+<meta property="og:description" content="chapter3 流，元素与基本尺寸外在盒子与内在盒子-外在盒子负责元素是可以一行显示,还是只能换行显示;内在盒子负责宽高、内容呈现什么的。内在盒子专业的名称是“容器盒子”。y 属性值是 inline-block 的元素既能和图文一行显示,又能直接设置 width&#x2F;height。 width:auto 的四种表现  充分利用可用空间，即 fill-available， 4 。比方说,&lt;div">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-02-22T02:33:37.000Z">
+<meta property="article:modified_time" content="2021-10-21T16:45:16.135Z">
+<meta property="article:author" content="jiezi19971225">
+<meta property="article:tag" content="CSS">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://www.jiezi19971225.cn/2020/02/22/CSS/css%E4%B8%96%E7%95%8C%E7%AC%94%E8%AE%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>css世界笔记 | Jiez19971225‘s Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Jiez19971225‘s Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">做自己爱做的事</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/02/22/CSS/css%E4%B8%96%E7%95%8C%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content="记录编程学习路上的点滴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          css世界笔记
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-02-22 02:33:37" itemprop="dateCreated datePublished" datetime="2020-02-22T02:33:37+00:00">2020-02-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-10-21 16:45:16" itemprop="dateModified" datetime="2021-10-21T16:45:16+00:00">2021-10-21</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CSS/" itemprop="url" rel="index"><span itemprop="name">CSS</span></a>
+                </span>
+            </span>
+
+          
+
+          <span class="post-time">
+            &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-bar-chart"></i>
+            </span>
+            <span class="post-meta-item-text">字数统计:</span>
+            <span class="post-count">3k(字)</span>
+
+          </span>
+
+            <span class="post-time">
+          &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-clock-o"></i>
+            </span>
+            <span class="post-meta-item-text">阅读时长:</span>
+            <span class="post-count">11(分)</span>
+
+          </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="chapter3-流，元素与基本尺寸"><a href="#chapter3-流，元素与基本尺寸" class="headerlink" title="chapter3 流，元素与基本尺寸"></a>chapter3 流，元素与基本尺寸</h2><p>外在盒子与内在盒子-外在盒子负责元素是可以一行显示,还是只能换行显示;内在盒子负责宽高、内容呈现什么的。内在盒子专业的名称是“容器盒子”。y 属性值是 inline-block 的元素既能和图文一行显示,又能直接设置 width/height。</p>
+<p>width:auto 的四种表现</p>
+<ul>
+<li>充分利用可用空间，即 fill-available， 4 。比方说,<code>&lt;div&gt;</code>;、 <code>&lt;p&gt;</code>;这些元素的宽度默认是 100% 于父级容器的。</li>
+<li>收缩与包裹。典型代表就是浮动、绝对定位、inline-block 元素或 table 元素,<br>英文称为 shrink-to-fit,可简单理解为“包裹性”。CSS3 中的 fit-content 指的就是这种宽度表现。</li>
+<li>收缩到最小。这个最容易出现在 table-layout 为 auto 的表格中,</li>
+<li>超出容器限制。除非有明确的 width 相关设置,否则上面 3 种情况尺寸都不会主动<br>超过父级容器宽度的,但是存在一些特殊情况。例如,内容很长的连续的英文和数字,或者内联<br>元素被设置了 white-space:nowarp。</li>
+</ul>
+<p>唯一的外部尺寸是 div 的宽，外部尺寸是指宽度由外部元素决定</p>
+<h3 id="外部尺寸与流体特性"><a href="#外部尺寸与流体特性" class="headerlink" title="外部尺寸与流体特性"></a>外部尺寸与流体特性</h3><p>正常流宽度</p>
+<p>正常填充满盒子。</p>
+<p>格式化宽度</p>
+<p>格式化宽度仅出现在“绝对定位模型”中,也就是出现在 position 属性值为 absolute 或 fixed 的元素中。在默认情况下,绝对定位元素的宽度表现是“包裹性”,宽度由于内部尺寸决定。但有一种情况例外。对于非替换元素，,当 left/top 或 top/bottom 对立方位的属性值同时存在的时候,元素的宽度表现为“格式化宽度”,其宽度大小相对于最近的具有定位特性<br>(position 属性值不是 static)的祖先元素计算。</p>
+<h3 id="内部尺寸与流体特性"><a href="#内部尺寸与流体特性" class="headerlink" title="内部尺寸与流体特性"></a>内部尺寸与流体特性</h3><p>包裹性</p>
+<p>自适应性 元素尺寸是元素尺寸由内部元素决定,但永远小于“包含块”容器的尺寸。因此,对于一个元素,如果其 display 属性值是 inline-block,那么即使其里面内容再多,只要是正常文本,宽度也不会超过容器。</p>
+<p>文字少的时候居中显示,文字超过一行的时候居左显示</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.box</span> &#123;</span><br><span class="line">  <span class="attribute">text-align</span>: center;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.content</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: inline-block;</span><br><span class="line">  <span class="attribute">text-align</span>: left;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首选最小宽度 对于东亚文字，最小宽度为每个字的宽度，西方文字的最小宽度是由特定的连续的英文字符单元决定的，利用首选最小宽度可以实现</p>
+<h3 id="宽度分离原则"><a href="#宽度分离原则" class="headerlink" title="宽度分离原则"></a>宽度分离原则</h3><p>width 属性不与 padding/border 共存，更好的方式是使用 box-sizing:border-box</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.father</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">180px</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.son</span> &#123;</span><br><span class="line">  <span class="attribute">margin</span>: <span class="number">0</span> <span class="number">20px</span>;</span><br><span class="line">  <span class="attribute">padding</span>: <span class="number">20px</span>;</span><br><span class="line">  <span class="attribute">border</span>: <span class="number">1px</span> solid;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="height-auto"><a href="#height-auto" class="headerlink" title="height:auto"></a>height:auto</h3><p>对于 height 属性,如果父元素 height 为 auto,只要子元素在文档流中,其百分比值完全就被忽略了</p>
+<p>如果包含块的高度没有显式指定(即高度由内容决定),并且该元素不是绝对定位,则计算值为 auto，auto 无法进行百分比计算</p>
+<p>height:100% 的两种计算，绝对定位的宽高百分比计算是相对于 padding box ，,非绝对定位元素则是相对于 content box 计算的。</p>
+<h3 id="min-width-max-width"><a href="#min-width-max-width" class="headerlink" title="min-width/max-width"></a>min-width/max-width</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">img</span> &#123;</span><br><span class="line">  <span class="attribute">max-width</span>: <span class="number">100%</span>;</span><br><span class="line">  <span class="attribute">height</span>: auto <span class="meta">!important</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>height:auto 是必需的,否则,如果原始图片有设定 height, max-width 生效的时候,图片就会被水平压缩。</p>
+<p>max-*初始值是 none，min-*初始值是 auto</p>
+<p>数值变化无动画，需要设置初始值为 0</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.box</span> &#123;</span><br><span class="line">  <span class="attribute">min-height</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">transition</span>: min-height <span class="number">0.3s</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.box</span><span class="selector-pseudo">:hover</span> &#123;</span><br><span class="line">  <span class="attribute">min-height</span>: <span class="number">300px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>max-*</code>会覆盖 !important 的 width/height</p>
+<p>::selection 选择器匹配被用户选取的选取是部分。即对选中文本的操作。<br>只能向 ::selection 选择器应用少量 CSS 属性：color、background、cursor 以及 outline。</p>
+<h2 id="chapter4-盒尺寸四大家族"><a href="#chapter4-盒尺寸四大家族" class="headerlink" title="chapter4 盒尺寸四大家族"></a>chapter4 盒尺寸四大家族</h2><h3 id="content-与替换元素"><a href="#content-与替换元素" class="headerlink" title="content 与替换元素"></a>content 与替换元素</h3><p><code>&lt;img&gt;</code>、<code>&lt;object&gt;</code>、<code>&lt;video&gt;</code>、<code>&lt;iframe&gt;</code>或者表单元素<code>&lt;textarea&gt;</code>和<code>&lt;input&gt;</code>都是典型的替换元素</p>
+<p>vertical-align 在替换元素的基线定义为元素的下边缘</p>
+<p><code>&lt;select&gt;</code> 也是替换元素</p>
+<p><code>&lt;input&gt;</code>和<code>&lt;button&gt;</code>按钮的区别在钮默认的 white-space 值不一样,前者是 pre,后者是 normal</p>
+<p>透明图片占位的替代方法</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">img</span> &#123;</span><br><span class="line">  <span class="attribute">visibility</span>: hidden;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-tag">img</span><span class="selector-attr">[src]</span> &#123;</span><br><span class="line">  <span class="attribute">visibility</span>: visible;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对于 Firefox 浏览器,src 缺省的\<img\>不是替换元素,而是一个普通的内联元素,所以使用的就不是替换元素的尺寸规则,而是类似\<span\>的内联元素尺寸规则,宽高会无效。因此可以在 CSS 重置时加上下面一条</span\></img\></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">img</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: inline-block;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>:before,:after 伪元素是非替换元素，其 content 属性若显示图片则显示的是图片的固有尺寸，不会因 width 和 height 更改</li>
+<li>基于伪元素的图片内容生成技术 <a target="_blank" rel="noopener" href="https://demo.cssworld.cn/4/1-2.php">链接</a></li>
+<li>,使用 content 属性,我们还可以让普通标签元素变成替换元素。一般网站的标志使用的是 h1 标签，可以用 content 改变图片</li>
+<li>使用 content 属性生成的文本无法选中，无法复制，像设置了 user-select:none 一样</li>
+<li>:empty 伪元素依然会选取 有 content 属性的元素</li>
+<li>动态加载效果</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">dot &#123;</span><br><span class="line">  <span class="attribute">display</span>: inline-block;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">1em</span>;</span><br><span class="line">  <span class="attribute">line-height</span>: <span class="number">1</span>;</span><br><span class="line">  <span class="attribute">text-align</span>: left;</span><br><span class="line">  <span class="attribute">vertical-align</span>: -<span class="number">0.25em</span>;</span><br><span class="line">  <span class="attribute">overflow</span>: hidden;</span><br><span class="line">&#125;</span><br><span class="line">dot<span class="selector-pseudo">::before</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: block;</span><br><span class="line">  <span class="attribute">content</span>: <span class="string">&quot;...\A..\A.&quot;</span>;</span><br><span class="line">  <span class="attribute">white-space</span>: pre-wrap;</span><br><span class="line">  <span class="attribute">animation</span>: dot <span class="number">3s</span> infinite step-start both;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@keyframes</span> dot &#123;</span><br><span class="line">  <span class="number">33%</span> &#123;</span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">translateY</span>(-<span class="number">2em</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="number">66%</span> &#123;</span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">translateY</span>(-<span class="number">1em</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="padding-属性"><a href="#padding-属性" class="headerlink" title="padding 属性"></a>padding 属性</h3><ul>
+<li>内联的元素设置垂直 padding 依然有效果，如果父元素设置 overflow: auto，会显示滚动条。id 锚点元素可以设置为内联元素然后设置 padding-top 使得定位位置偏下</li>
+<li>实际上,对于非替换元素的内联元素,不仅 padding 不会加入行盒高度的计算,margin 和 border 也都是如此,都是不计算高度,但实际上在内联盒周围发生了渲染。</li>
+<li>padding 的百分比数值无论水平竖直都是相对父元素宽度计算的</li>
+</ul>
+<h3 id="margin-与元素尺寸以及相关布局"><a href="#margin-与元素尺寸以及相关布局" class="headerlink" title="margin 与元素尺寸以及相关布局"></a>margin 与元素尺寸以及相关布局</h3><ul>
+<li>只有元素是“充分利用可用空间”状态的时候,margin 才可以改变元素的可视尺寸。因为只要宽度设定,margin 就无法改变元素尺寸。对于水平排列的列表，采用 float 方案，可以在 ul 设置负的 margin 数值，来增加可用宽度。</li>
+<li>由于 Firefox 和 Chrome 浏览器对于子元素触发滚动条的方式不一样，滚动容器底部留白使用 padding 是不推荐的，可以接触 margin 的外部尺寸特性来实现底部留白</li>
+<li>两栏等高</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.column-box</span> &#123;</span><br><span class="line">  <span class="attribute">overflow</span>: hidden;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.column-left</span>,</span><br><span class="line"><span class="selector-class">.column-right</span> &#123;</span><br><span class="line">  <span class="attribute">margin-bottom</span>: -<span class="number">9999px</span>;</span><br><span class="line">  <span class="attribute">padding-bottom</span>: <span class="number">9999px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>视觉层多了 9999px 高度可以使用的背景色，当任一栏的高度增加时，父元素总的高度增加</p>
+<ul>
+<li>margin 的百分比数值无论水平竖直都是相对父元素宽度计算的</li>
+<li>margin 合并的 3 种场景<ul>
+<li>相邻兄弟元素 margin 合并</li>
+<li>父级和第一个/最后一个子元素</li>
+<li>空块级元素的 margin 合并</li>
+</ul>
+</li>
+<li>margin 合并的计算规则 “正正取大值”<br>“正负值相加”<br>“负负最负值”</li>
+<li>由于 css 中 margin 初始值是 0，实现块级元素右对齐可以使用 margin-left:auto</li>
+<li>实现块级元素垂直居中 绝对定位元素的格式化高度即使父元素 height:auto 也是支持的,</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.father</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">300px</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">150px</span>;</span><br><span class="line">  <span class="attribute">background-color</span>: <span class="number">#f0f3f9</span>;</span><br><span class="line">  <span class="attribute">position</span>: relative;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.son</span> &#123;</span><br><span class="line">  <span class="attribute">position</span>: absolute;</span><br><span class="line">  <span class="attribute">top</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">right</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">bottom</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">left</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">200px</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">100px</span>;</span><br><span class="line">  <span class="attribute">background-color</span>: <span class="number">#cd0000</span>;</span><br><span class="line">  <span class="attribute">margin</span>: auto;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>margin 无效<ul>
+<li>display 计算值 inline 的非替换元素的垂直 margin 是无效的</li>
+<li>表格中的<tr>和<td>元素或者设置 display 计算值是 table-cell 或 table-row 的 margin 是无效的</td></tr></li>
+<li>margin 合并的时候,更改 margin 值可能是没有效果的</li>
+<li>绝对定位元素非定位方位的 margin 值“无效”</li>
+<li>定高容器的子元素的 margin-bottom 或者宽度定死的子元素的 margin-right 的失效</li>
+</ul>
+</li>
+</ul>
+<h3 id="border-属性"><a href="#border-属性" class="headerlink" title="border 属性"></a>border 属性</h3><ul>
+<li>border-width 不支持半分比</li>
+<li>透明边框技巧 使用透明 border 增加点击区域</li>
+<li>图形构建 三角形效果</li>
+<li>登高布局技术 <a target="_blank" rel="noopener" href="http://demo.cssworld.cn/4/4-4.php">http://demo.cssworld.cn/4/4-4.php</a></li>
+</ul>
+<h2 id="charpter5-内联元素与流"><a href="#charpter5-内联元素与流" class="headerlink" title="charpter5 内联元素与流"></a>charpter5 内联元素与流</h2><p>ex 单位 对应 x-height，可用于图标与文字的对齐</p>
+<p>line-height 的默认值是 normal,还支持数值、百分比值以及长度值。</p>
+<p>无论内联元素 line-height 如何设置,最终父级元素的高度都是由数值大的<br>那个 line-height 决定的,我称之为“内联元素 line-height 的大值特性”</p>
+<p>table-cell 元素设置 vertical-align 垂直对齐的是子元素,但是其作用的并不是子元素,而是 table-cell 元素自身</p>
+<p>消除 strut 的影响 图片块状化 设置 lineheight 为 0 fontsize 足够小 图片设置 vertical-align</p>
+<p>text-align:justify 文字向两侧对齐，对最后一行无效。</p>
+<p>一个 inline-block 元素,如果里面没有内联元素,或者 overflow 不是 visible,<br>则该元素的基线就是其 margin 底边缘;否则其基线就是元素里面最后一行内联元素的基线。</p>
+<p>vertical-align 的百分比数值是按照行高计算的</p>
+<p>改造“幽灵空白节点”的基线位置可以使用 font-size：0</p>
+<p>基于 vertical-align 属性的水平垂直居中弹框 <a target="_blank" rel="noopener" href="http://demo.cssworld.cn/5/3-10.php">链接</a></p>
+<h2 id="charpter6-流的破坏与保护"><a href="#charpter6-流的破坏与保护" class="headerlink" title="charpter6 流的破坏与保护"></a>charpter6 流的破坏与保护</h2><h3 id="float"><a href="#float" class="headerlink" title="float"></a>float</h3><ul>
+<li>float 导致的。float 都有哪些有意思的特性呢?具体如下:<ul>
+<li>包裹性;</li>
+<li>块状化并格式化上下文;</li>
+<li>破坏文档流;</li>
+<li>没有任何 margin 合并;</li>
+</ul>
+</li>
+<li>设定了 float 的 inline-table 计算为 table，其他都为 block</li>
+<li>clearfix</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.father</span>:after &#123;</span><br><span class="line">  content: <span class="string">&quot;&quot;</span>;</span><br><span class="line">  <span class="attribute">display</span>: table;</span><br><span class="line">  <span class="attribute">clear</span>: both;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="bfc"><a href="#bfc" class="headerlink" title="bfc"></a>bfc</h3><ul>
+<li>那什么时候会触发 BFC 呢?常见的情况如下:<ul>
+<li><code>&lt;html&gt;</code>根元素;</li>
+<li>float 的值不为 none;</li>
+<li>overflow 的值为 auto、scroll 或 hidden;</li>
+<li>display 的值为 table-cell、table-caption 和 inline-block 中的任何一个</li>
+<li>position 的值不为 relative 和 static。</li>
+</ul>
+</li>
+<li>尽量避免滚动容器设置 padding-bottom 值</li>
+<li>永远不可能实现一个方向溢出剪裁或滚动,另一方向内容溢出显示的效果</li>
+</ul>
+<h3 id="overflow"><a href="#overflow" class="headerlink" title="overflow"></a>overflow</h3><ul>
+<li>则当子元素内容超出容器宽度高度限制的时候, 剪裁的边界是 border box 的内边缘,而非 padding,box 的内边缘</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.ell</span> &#123;</span><br><span class="line">  <span class="attribute">text-overflow</span>: ellipsis;</span><br><span class="line">  <span class="attribute">white-space</span>: nowrap;</span><br><span class="line">  <span class="attribute">overflow</span>: hidden;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="scrollbar"><a href="#scrollbar" class="headerlink" title="scrollbar"></a>scrollbar</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">我们平时开发中只用下面 <span class="number">3</span> 个属性:</span><br><span class="line">::-webkit-scrollbar &#123;</span><br><span class="line">  /* 血槽宽度 */</span><br><span class="line">  width: <span class="number">8px</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">8px</span>;</span><br><span class="line">&#125;</span><br><span class="line">::-webkit-scrollbar-thumb &#123;</span><br><span class="line">  /* 拖动条 */</span><br><span class="line">  background-color: <span class="built_in">rgba</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0.3</span>);</span><br><span class="line">  <span class="attribute">border-radius</span>: <span class="number">6px</span>;</span><br><span class="line">&#125;</span><br><span class="line">::-webkit-scrollbar-track &#123;</span><br><span class="line">  /* 背景槽 */</span><br><span class="line">  background-color: <span class="number">#ddd</span>;</span><br><span class="line">  <span class="attribute">border-radius</span>: <span class="number">6px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="chapter7-css-层叠规则"><a href="#chapter7-css-层叠规则" class="headerlink" title="chapter7 css 层叠规则"></a>chapter7 css 层叠规则</h2><p>!!!z-index 仅可以在定位元素上生效</p>
+<ul>
+<li>background/border 是装饰属性，浮动和块用作布局，而内联元素作为内容，自然在上面显示</li>
+</ul>
+<h3 id="层叠顺序"><a href="#层叠顺序" class="headerlink" title="层叠顺序"></a>层叠顺序</h3><p>层叠上下文 background/border<br>负 z-index<br>block 块状水平盒子<br>float 浮动盒子<br>inline/inline-block 水平盒子<br>z-index:auto/z-index:0<br>正 index</p>
+<h3 id="层叠上下文"><a href="#层叠上下文" class="headerlink" title="层叠上下文"></a>层叠上下文</h3><h4 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h4><ul>
+<li>页面根元素称为根层叠上下文</li>
+<li>z-index 为数值的定位元素是传统层叠上下文</li>
+<li><p>css3 属性</p>
+<ul>
+<li>flex 的布局元素同时 z-index 不为 auto</li>
+<li>opacity 不为 1</li>
+<li>mix-blend-mode 不是 normal</li>
+</ul>
+</li>
+<li><p>定位元素会层叠在普通元素的上面的原因是元素一旦成为定位元素， 其 z-index 就会自动生效，此时其 z-index 就是默认的 auto，也就是 0 级别。</p>
+</li>
+<li><p>opacity 动画问题，当 opacity 不为 1 的时候，其具有层叠上下文 z-index:auto，导致其显示于文字之上，解决方法是设置文字的 z-index 为正数值</p>
+</li>
+</ul>
+<h4 id="负-index-应用"><a href="#负-index-应用" class="headerlink" title="负 index 应用"></a>负 index 应用</h4><ul>
+<li>可访问性隐藏，可以隐藏元素，只需要层叠上下文内某一个父元素加背景色</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CSS/" rel="tag"># CSS</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/09/16/CSS/Sass%E5%AD%A6%E4%B9%A0/" rel="prev" title="Sass学习">
+      <i class="fa fa-chevron-left"></i> Sass学习
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/03/17/%E7%AE%97%E6%B3%95/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/" rel="next" title="二叉搜索树">
+      二叉搜索树 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#chapter3-%E6%B5%81%EF%BC%8C%E5%85%83%E7%B4%A0%E4%B8%8E%E5%9F%BA%E6%9C%AC%E5%B0%BA%E5%AF%B8"><span class="nav-number">1.</span> <span class="nav-text">chapter3 流，元素与基本尺寸</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%96%E9%83%A8%E5%B0%BA%E5%AF%B8%E4%B8%8E%E6%B5%81%E4%BD%93%E7%89%B9%E6%80%A7"><span class="nav-number">1.1.</span> <span class="nav-text">外部尺寸与流体特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E9%83%A8%E5%B0%BA%E5%AF%B8%E4%B8%8E%E6%B5%81%E4%BD%93%E7%89%B9%E6%80%A7"><span class="nav-number">1.2.</span> <span class="nav-text">内部尺寸与流体特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%BD%E5%BA%A6%E5%88%86%E7%A6%BB%E5%8E%9F%E5%88%99"><span class="nav-number">1.3.</span> <span class="nav-text">宽度分离原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#height-auto"><span class="nav-number">1.4.</span> <span class="nav-text">height:auto</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#min-width-max-width"><span class="nav-number">1.5.</span> <span class="nav-text">min-width&#x2F;max-width</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#chapter4-%E7%9B%92%E5%B0%BA%E5%AF%B8%E5%9B%9B%E5%A4%A7%E5%AE%B6%E6%97%8F"><span class="nav-number">2.</span> <span class="nav-text">chapter4 盒尺寸四大家族</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#content-%E4%B8%8E%E6%9B%BF%E6%8D%A2%E5%85%83%E7%B4%A0"><span class="nav-number">2.1.</span> <span class="nav-text">content 与替换元素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#padding-%E5%B1%9E%E6%80%A7"><span class="nav-number">2.2.</span> <span class="nav-text">padding 属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#margin-%E4%B8%8E%E5%85%83%E7%B4%A0%E5%B0%BA%E5%AF%B8%E4%BB%A5%E5%8F%8A%E7%9B%B8%E5%85%B3%E5%B8%83%E5%B1%80"><span class="nav-number">2.3.</span> <span class="nav-text">margin 与元素尺寸以及相关布局</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#border-%E5%B1%9E%E6%80%A7"><span class="nav-number">2.4.</span> <span class="nav-text">border 属性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#charpter5-%E5%86%85%E8%81%94%E5%85%83%E7%B4%A0%E4%B8%8E%E6%B5%81"><span class="nav-number">3.</span> <span class="nav-text">charpter5 内联元素与流</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#charpter6-%E6%B5%81%E7%9A%84%E7%A0%B4%E5%9D%8F%E4%B8%8E%E4%BF%9D%E6%8A%A4"><span class="nav-number">4.</span> <span class="nav-text">charpter6 流的破坏与保护</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#float"><span class="nav-number">4.1.</span> <span class="nav-text">float</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bfc"><span class="nav-number">4.2.</span> <span class="nav-text">bfc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#overflow"><span class="nav-number">4.3.</span> <span class="nav-text">overflow</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#scrollbar"><span class="nav-number">4.4.</span> <span class="nav-text">scrollbar</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#chapter7-css-%E5%B1%82%E5%8F%A0%E8%A7%84%E5%88%99"><span class="nav-number">5.</span> <span class="nav-text">chapter7 css 层叠规则</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%82%E5%8F%A0%E9%A1%BA%E5%BA%8F"><span class="nav-number">5.1.</span> <span class="nav-text">层叠顺序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%82%E5%8F%A0%E4%B8%8A%E4%B8%8B%E6%96%87"><span class="nav-number">5.2.</span> <span class="nav-text">层叠上下文</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA"><span class="nav-number">5.2.1.</span> <span class="nav-text">创建</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%B4%9F-index-%E5%BA%94%E7%94%A8"><span class="nav-number">5.2.2.</span> <span class="nav-text">负 index 应用</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">jiezi19971225</p>
+  <div class="site-description" itemprop="description">记录编程学习路上的点滴</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jiezi19971225</span>
+</div>
+  <img src="https://static.dy208.cn/o_1dfilp8ruo521thr1hvf18ji17soa.png"/>
+  <a href="http://www.beian.miit.gov.cn/"  style="color:#f72b07" target="_blank">皖ICP备17001385号-1</a>
+  <br/>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

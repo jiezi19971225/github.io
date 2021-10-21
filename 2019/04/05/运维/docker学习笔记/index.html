@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+<meta name="baidu-site-verification" content="5IfwMCE5hH" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.jiezi19971225.cn","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="强烈推荐这个博主的系列文章 docker 基础 基础命令docker images 显示出所有的镜像docker tag 给镜像打 tag eg docker tag unbuntu myubuntu:lastdocker inspect 查看镜像信息docker history 显示 layer 基础信息docker search —filter&#x3D;is-automated&#x3D;true nginxd">
+<meta property="og:type" content="article">
+<meta property="og:title" content="docker学习">
+<meta property="og:url" content="http://www.jiezi19971225.cn/2019/04/05/%E8%BF%90%E7%BB%B4/docker%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="Jiez19971225‘s Blog">
+<meta property="og:description" content="强烈推荐这个博主的系列文章 docker 基础 基础命令docker images 显示出所有的镜像docker tag 给镜像打 tag eg docker tag unbuntu myubuntu:lastdocker inspect 查看镜像信息docker history 显示 layer 基础信息docker search —filter&#x3D;is-automated&#x3D;true nginxd">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://www.jiezi19971225.cn/2019/04/05/%E8%BF%90%E7%BB%B4/docker%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/docker网桥.png">
+<meta property="og:image" content="http://www.jiezi19971225.cn/2019/04/05/%E8%BF%90%E7%BB%B4/docker%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/整个流程.png">
+<meta property="og:image" content="http://www.jiezi19971225.cn/2019/04/05/%E8%BF%90%E7%BB%B4/docker%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/docker容器间通信.png">
+<meta property="article:published_time" content="2019-04-05T15:37:07.000Z">
+<meta property="article:modified_time" content="2021-10-21T16:45:16.179Z">
+<meta property="article:author" content="jiezi19971225">
+<meta property="article:tag" content="docker">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://www.jiezi19971225.cn/2019/04/05/%E8%BF%90%E7%BB%B4/docker%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/docker网桥.png">
+
+<link rel="canonical" href="http://www.jiezi19971225.cn/2019/04/05/%E8%BF%90%E7%BB%B4/docker%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>docker学习 | Jiez19971225‘s Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Jiez19971225‘s Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">做自己爱做的事</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2019/04/05/%E8%BF%90%E7%BB%B4/docker%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content="记录编程学习路上的点滴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          docker学习
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-04-05 15:37:07" itemprop="dateCreated datePublished" datetime="2019-04-05T15:37:07+00:00">2019-04-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-10-21 16:45:16" itemprop="dateModified" datetime="2021-10-21T16:45:16+00:00">2021-10-21</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%BF%90%E7%BB%B4/" itemprop="url" rel="index"><span itemprop="name">运维</span></a>
+                </span>
+            </span>
+
+          
+
+          <span class="post-time">
+            &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-bar-chart"></i>
+            </span>
+            <span class="post-meta-item-text">字数统计:</span>
+            <span class="post-count">3.9k(字)</span>
+
+          </span>
+
+            <span class="post-time">
+          &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-clock-o"></i>
+            </span>
+            <span class="post-meta-item-text">阅读时长:</span>
+            <span class="post-count">14(分)</span>
+
+          </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>强烈推荐这个博主的系列文章 <a target="_blank" rel="noopener" href="https://blog.csdn.net/u011541946/category_8605832.html">docker 基础</a></p>
+<h2 id="基础命令"><a href="#基础命令" class="headerlink" title="基础命令"></a>基础命令</h2><p>docker images 显示出所有的镜像<br>docker tag 给镜像打 tag eg docker tag unbuntu myubuntu:last<br>docker inspect 查看镜像信息<br>docker history 显示 layer 基础信息<br>docker search —filter=is-automated=true nginx<br>docker rmi [-f 强行删除] 镜像 tag/镜像 ID 删除镜像 当镜像有容器在运行时，会提示无法删除。当不加 tag 时默认为 latest<br>docker commit [OPTIONS]</p>
+<ul>
+<li>-a —author 作者信息</li>
+<li>-c —change = [] 提交的时候执行 dockerfile 指令</li>
+<li>-m —message 提交信息</li>
+<li>-p —pause=true 提交时暂停容器运行</li>
+</ul>
+<p>docker commit -a “xxx” -m “xxx” [容器名称 容器 id] 镜像名称 基于已有镜像的容器创建<br>docekr create [options] 镜像名 新建一个容器 此时容器处于停止状态<br>docker run [option] 镜像名 新建一个容器 并且容器处于运行状态</p>
+<ul>
+<li>-P 暴露在 Dockerfile 中 Expose 的端口</li>
+<li>-idt -i 让容器标准输入打开 -d 创建后台守护进程 -t 给 docker 分配一个伪终端</li>
+<li>—name 命名容器</li>
+<li>docker run -d -P —name web -v /src/webapp:/opt/webapp:ro [镜像 id 镜像名称] 容器名称 运行程序</li>
+<li>docker run -it -v /dbdata —name dbdata ubuntu 创建数据卷容器</li>
+<li>docker run -it —volumes-from dbdata —name db1 ubuntu 共享数据卷</li>
+<li>docker run -d -P —name web —link db:db 镜像名 程序名 —link name:alias</li>
+</ul>
+<p>docker start 容器名或容器 ID<br>docker restart 容器名或者容器 ID 先将一个运行态的容器先停止，然后重新启动它<br>docker attach 容器名称或容器 ID 所有窗口会同步显示，当有一个窗口阻塞的时候，其他窗口也会阻塞<br>docker exec -it 容器名或容器 id /bin/bash<br>docker rm 删除处于终止或者退出状态的容器<br>docker top 镜像名 查看镜像内的进程<br>docker logs 镜像名 获取容器的日志</p>
+<h2 id="Dockerfile-指令"><a href="#Dockerfile-指令" class="headerlink" title="Dockerfile 指令"></a>Dockerfile 指令</h2><p>可以查看这本 Gitbook <a target="_blank" rel="noopener" href="https://yeasy.gitbooks.io/docker_practice/image/dockerfile/copy.html">Docker 从入门到实践</a> 以下记录一些我不熟悉的知识点，便于复习</p>
+<h3 id="VOLUME-定义匿名卷"><a href="#VOLUME-定义匿名卷" class="headerlink" title="VOLUME 定义匿名卷"></a>VOLUME 定义匿名卷</h3><p>格式为：<br>VOLUME [“&lt;路径 1&gt;”, “&lt;路径 2&gt;”…]<br>VOLUME &lt;路径&gt;<br>容器运行时应该尽量保持容器存储层不发生写操作，对于数据库类需要保存动态数据的应用，其数据库文件应该保存于卷(volume)中，为了防止运行时用户忘记将动态文件所保存目录挂载为卷，在 Dockerfile 中，我们可以事先指定某些目录挂载为匿名卷，这样在运行时如果用户不指定挂载，其应用也可以正常运行，不会向容器存储层写入大量数据<br>VOLUME /data<br>这里的 /data 目录就会在运行时自动挂载为匿名卷，任何向 /data 中写入的信息都不会记录进容器存储层，从而保证了容器存储层的无状态化。当然，运行时可以覆盖这个挂载设置。比如：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -v mydata:/data xxxx</span><br></pre></td></tr></table></figure>
+<p>在这行命令中，就使用了 mydata 这个命名卷挂载到了 /data 这个位置，替代了 Dockerfile 中定义的匿名卷的挂载配置。<br>如果需要在删除容器的同时移除数据卷。可以在删除容器的时候使用 docker rm -v 这个命令</p>
+<p>docker volume prune 清理无主的数据卷</p>
+<h2 id="如何修改已存在容器的配置"><a href="#如何修改已存在容器的配置" class="headerlink" title="如何修改已存在容器的配置"></a>如何修改已存在容器的配置</h2><p>直接修改 /var/lib/docker/contains/[container_hash]/ 目录下的 config.v2.json 和 hostconfig.json 文件，修改之后需要重启 docker，再重新启动容器，就生效啦</p>
+<h2 id="docker-架构"><a href="#docker-架构" class="headerlink" title="docker 架构"></a>docker 架构</h2><p>docker 采用 C/S 架构，包含客户端和服务端，通过镜像仓库来存储镜像。客户端和服务端可以不在一个机器上，通过 socket 或者 restful api 来进行通信。</p>
+<h2 id="什么是镜像"><a href="#什么是镜像" class="headerlink" title="什么是镜像"></a>什么是镜像</h2><p>镜像是文件和 meta data 的集合 root filesystem</p>
+<p>如一个 centos 的镜像，里面包含一些最精简版的 centos 文件系统，还有其他软件包等。</p>
+<p>镜像是分层的，每层都可以添加删除改变文件，变成一个新的 image</p>
+<p>不同的 image 可以共享同一层 layer</p>
+<p>镜像本身是只读的</p>
+<h2 id="什么是容器"><a href="#什么是容器" class="headerlink" title="什么是容器"></a>什么是容器</h2><p>容器通过 image 创建</p>
+<p>在 image layer 之上创建了一个 container layer，这个容器层可以读写操作</p>
+<p>image 负责 app 的存储和分发，container 负责运行 app</p>
+<h3 id="容器的-created-状态"><a href="#容器的-created-状态" class="headerlink" title="容器的 created 状态"></a>容器的 created 状态</h3><p>docker create 只创建容器，但是不启动，docker run 是启动并且创建容器</p>
+<p>docker start 可以启动容器</p>
+<h2 id="ADD-和-COPY"><a href="#ADD-和-COPY" class="headerlink" title="ADD 和 COPY"></a>ADD 和 COPY</h2><p>ADD 功能更强大，会拷贝文件并且解压，COPY 只会拷贝文件</p>
+<h2 id="服务端"><a href="#服务端" class="headerlink" title="服务端"></a>服务端</h2><p>一般在宿主机后台运行， dockerd 作为服务端接受来自客户的请求，通过 containerd 具体处理与容器相关的请求。包括创建，运行，删除容器等。</p>
+<p>dockerd 为客户端提供 rest api，响应来自客户端的请求，采用模块化的解构，通过专门的 Engine 模块来分发管理各个来自客户端的任务。</p>
+<p>docker-proxy 是 dockerd 的子进程，当需要进行容器端口映射时，docker-proxy 完成网络映射配置。</p>
+<p>containerd 是 docker 的子进程，提供 gRPC 接口响应来自 dockerd 的请求，对下管理 runC 镜像和容器环境</p>
+<p>containerd——shim, containerd 的子进程，作为容器内进程的根进程。</p>
+<p>runC 是从 Docker 公司开源的 libcontainer 项目演化而来，。runC 支持 linux 系统中容器相关技术栈。</p>
+<p>dockerd 默认监听本地 unix:///var/run/docker.sock 套接字，只允许本地 root 用户或者 docker 用户组成员能访问。</p>
+<p>可以通过 -H 选项修改监听方式。</p>
+<p>Docker 还支持通过 TLS 认证方式来验证访问。</p>
+<p>docker-proxy 只有当启动容器并且开启端口映射才会执行，负责配置容器的端口映射规则。</p>
+<h2 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h2><p>默认通过本地的 unix:///var/run/docker.sock 套接字向服务端发出命令。如果服务端没有监听默认地址，需要手动指定。</p>
+<h2 id="命名空间"><a href="#命名空间" class="headerlink" title="命名空间"></a>命名空间</h2><p>namespace 是 linux 内核一个强大特性，利用这一特性，每个容器都可以拥有自己的单独命名空间。运行在其中的应用都像在独立的操作系统环境中一样。命名空间机制保证了容器之间彼此不受影响。</p>
+<h3 id="进程命名空间"><a href="#进程命名空间" class="headerlink" title="进程命名空间"></a>进程命名空间</h3><p>Linux 通过进程命名空间管理进程号。对于同一个进程在不同的命名空间中，看到的进程号不同。每个进程命名空间有一套自己的进程号管理方法。进程命名空间是一个父子关系的结构，子空间的进程对于父空间是可见的。新 fork 出来的一个进程，在父命名空间和子命名空间将分别对应不同的进程号。</p>
+<p>一般运行一个容器，以 docker run —name test -d ubuntu:18.04 sleep 9999 为例，相关进程关系如下：</p>
+<p>docker 服务主进程 dockerd 作为父进程启动了 docker-containerd 进程，docker-containerd 作为父进程启动了 docker-containerd-shim，其作为容器内所有进程的根进程。</p>
+<h3 id="IPC-命名空间"><a href="#IPC-命名空间" class="headerlink" title="IPC 命名空间"></a>IPC 命名空间</h3><p>容器内进程交互还是采用了 Linux 常见的进程间交互方法，包括信号量，消息队列和共享内存等方式.PID 命名空间和 IPC 命名空间可以组合起来使用，同一个 IPC 命名空间的进程可以交互，不同空间的进程则无法交互。</p>
+<h3 id="网络命名空间"><a href="#网络命名空间" class="headerlink" title="网络命名空间"></a>网络命名空间</h3><p>有了进程命名空间，不同命名空间中的进程号可以相互隔离，但是网络端口还是共享本地系统的端口。通过网络命名空间，可以实现网络隔离。一个网络命名空间为进程提供了一个完全独立的网络协议栈的视图。包括网络设备接口，IPV4 和 IPV6 协议栈，IP 路由表，防火墙规则，sockets 等。</p>
+<p>docker 采用虚拟网络设备 Virtual Network Device VND 的方式，将不同命名空间的网络设备连接到一起。默认情况下，Docker 在宿主机上创建多个虚拟网桥，如默认的 docker0 网桥，容器中的虚拟网卡通过网桥进行桥接。</p>
+<p>docker network ls 可以查看当前系统中的网桥。</p>
+<p><img src="/2019/04/05/%E8%BF%90%E7%BB%B4/docker%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/docker网桥.png" alt="docker网桥"></p>
+<p>使用 brctl 工具，可以看到连接到网桥上的虚拟网口信息。每个容器默认分配一个网桥上的虚拟网口，并将 docker0 的 IP 地址设置为默认的网关。容器发起的网络流量通过 宿主机的 iptables 规则进行转发。</p>
+<h4 id="虚拟网卡-veth"><a href="#虚拟网卡-veth" class="headerlink" title="虚拟网卡 veth"></a>虚拟网卡 veth</h4><p>这里参考了这篇文章 <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/369e50201bce">Linux 网络命名空间</a>，下面简述一下其中的内容。</p>
+<p>虚拟网卡成对出现，像一个管道的两端，从这个管道一端的 veth 进去的数会从另一端的 veth 出来，可以用 veth 接口把一个网络命名空间连接到外部的默认命名空间或者 global 命名空间，而物理网卡就存在这些命名空间里。</p>
+<p>创建一个网络命名空间，默认包含 lo 回环网络。然后创建一对虚拟网卡，将其中一端 veth1 加入命名空间中，设置该命名空间中的路由，使得找不到目的地址的数据包都通过 veth1 转发。这时就可以 ping 通 host 上的 veth0 网卡了。但是依然不能连接外部网络。</p>
+<p>Linux 中 IP 转发的意思是 Linux 主机存在多个网卡的时候，允许一个网卡的数据包转发到另外一张网卡。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -t nat -A POSTROUTING -s 10.1.1.0/255.255.255.0 -o ens160 -j MASQUERADE</span><br></pre></td></tr></table></figure>
+<p>添加了一条规则到 NAT 表的 POSTROUTING 链中，对于源 IP 地址为 10.1.1.0 网段的数据包，用 ens160 网口的 IP 地址替换并发送。这样在容器中就可以访问外部网络了。</p>
+<p><img src="/2019/04/05/%E8%BF%90%E7%BB%B4/docker%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/整个流程.png" alt="整个流程"></p>
+<h2 id="两个容器为什么能通信"><a href="#两个容器为什么能通信" class="headerlink" title="两个容器为什么能通信"></a>两个容器为什么能通信</h2><p>只要有容器运行，docker0 接口的状态就从 down 变成了 up。</p>
+<p>主机上的 veth 只能和 docker0 通信。容器内的 veth 可以和主机上的配对的 veth 通信。</p>
+<p>veth 成对出现，docker0 是多个容器之间能通信的关键。</p>
+<p><img src="/2019/04/05/%E8%BF%90%E7%BB%B4/docker%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/docker容器间通信.png" alt="docker容器间通信"></p>
+<h3 id="link"><a href="#link" class="headerlink" title="link"></a>link</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name=test2 --link test1 busybox /bin/sh -c <span class="string">&quot;while true; do sleep 3600; done&quot;</span></span><br></pre></td></tr></table></figure>
+<p>当于添加了 DNS 解析，同时 link 是单向的。只能在 test2 通过 test1 ping 通 test1。</p>
+<h2 id="none-和-host-网络"><a href="#none-和-host-网络" class="headerlink" title="none 和 host 网络"></a>none 和 host 网络</h2><p>连接到 none 网络</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d test1 --network none busybox /bin/sh</span><br></pre></td></tr></table></figure>
+<p>使用 none 模式，没有物理地址和 ip 地址，容器内只有 lo 回环网络，意味着容器不能被其他容器访问。</p>
+<p>连接到 host 网络</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d test1 --network host busybox /bin/sh</span><br></pre></td></tr></table></figure>
+<p>容器和外层 linux 共享一套网络接口</p>
+<h2 id="数据持久化-data-volume"><a href="#数据持久化-data-volume" class="headerlink" title="数据持久化 data volume"></a>数据持久化 data volume</h2><p>在 docker 中，默认数据存储在 container layer，也就是容器层中，因为只有这一层是可读可写的。但这样如果容器关闭了，并且被删除了，数据也就被删除了。docker 为了解决这种问题，出现一种机制。就是把数据转移到外挂或者 mount 的磁盘上。例如把容器里数据，同步到外层 linux 主机磁盘上。这样即使容器被删除了，容器里面数据还是保留在 linux 主机上，下次我们再启动一个容器，配置读取外层 linux 这个外挂的文件系统中数据，这个容器恢复正常服务功能。</p>
+<h2 id="VOLUME-的类型"><a href="#VOLUME-的类型" class="headerlink" title="VOLUME 的类型"></a>VOLUME 的类型</h2><p>有两种，第一种是受管理的 data Volume，由 docker 后台自动创建。第二种是绑定挂载的 Volume，具体挂载位置可以由用户指定。</p>
+<h2 id="安全防护与配置"><a href="#安全防护与配置" class="headerlink" title="安全防护与配置"></a>安全防护与配置</h2><p>Docker 是基于 Linux 操作系统实现的应用虚拟化。运行在容器内的进程，与运行在本地系统的进程在本质上没有区别。Docker 容器的安全性，很大程度上依赖于 Linux 系统自身。在评估 Linux 安全性上，主要考虑一下几个方面</p>
+<ul>
+<li>Linux 内核的命名空间机制提供的容器隔离安全</li>
+<li>Linux 控制组机制对容器资源的控制能力安全</li>
+<li>Linux 内核的能力机制所带来的操作权限安全</li>
+<li>Docker 程序本身的抗攻击性</li>
+<li>其他安全增强机制对容器安全性的影响</li>
+</ul>
+<p>从网络架构上来看，所有的容器实际上是通过本地主机的网络接口 docker0 来进行相互通信，就像物理机器通过物理交换机通信一样。</p>
+<p>与虚拟机方式相比，通过命名空间来实现的隔离并不那个绝对，运行在容器中的应用可以直接访问系统内核和部分系统文件。因此用户必须保证容器中的应用是安全可信的。</p>
+<p>控制组是 Linux 容器机制的另一个关键组件，它负责实现资源的审计和限制。当用户执行 docker run 启动一个 容器的时候，docker 将通过 Linux 相关的调用，在后台为容器创建一个独立的控制组策略集合，该集合将限制容器内应用对资源的消耗。</p>
+<p>控制组提供了很多有用的特性，他可以确保各个容器公平地分享主机的内存，cpu，磁盘 IO 等资源，当然，更重要的是，通过控制组可以限制容器对资源的占用，确保了当某个容器对资源消耗过大时，不会影响到本地主机系统和其他容器。</p>
+<p>Linux 内核自 2.2 版本起支持能力机制，将权限划分为更加细粒度的操作能力，默认情况下，Docker 启动的容器有严格限制，只允许使用内核的一部分能力。通常，在服务器上会运行一堆特权进程，包括 ssh，cron，syslogd 等，容器与这些进程是不同的，而容器大部分情况下不需要真正的 root 权限，为了加强安全，容器可以禁用一些没必要的权限，包括：</p>
+<ul>
+<li>完全禁止任何文件挂载操作</li>
+<li>禁止直接访问本地主机的套接字</li>
+<li>禁止访问一些文件系统的操作</li>
+<li>禁止模块加载</li>
+</ul>
+<h2 id="高级网络功能"><a href="#高级网络功能" class="headerlink" title="高级网络功能"></a>高级网络功能</h2><h3 id="容器内-dns"><a href="#容器内-dns" class="headerlink" title="容器内 dns"></a>容器内 dns</h3><p>docker 服务启动后悔默认启用一个内嵌的 DNS 服务，来自动解析同一个网络中的容器主机名和地址，如果无法解析，则通过容器内的 DNS 相关配置来进行解析。</p>
+<p>容器运行时，可以再运行中的容器直接编辑 /etc/hosts /etc/hostname /etc/resolve.conf 文件，但这种改动连 docker commit 也无法保存。</p>
+<h3 id="容器访问外部的实现"><a href="#容器访问外部的实现" class="headerlink" title="容器访问外部的实现"></a>容器访问外部的实现</h3><p>假设容器内部的网络地址为 172.17.0.2，本地网络地址为 10.0.2.2。容器要能访问外部网络，需要进行源地址映射（Source NAT），修改为本地系统的 IP 地址 10.0.2.2。</p>
+<p>映射是通过 iptables 的源地址伪装操作实现的。 主机 nat 表上的 POSTROUTING 链规则负责网包离开主机前，改写其源地址：</p>
+<h3 id="外部访问容器实现"><a href="#外部访问容器实现" class="headerlink" title="外部访问容器实现"></a>外部访问容器实现</h3><p>容器允许外部访问，可以再 docker run 时候通过 -p 或者 -P 参数来启用。其实也是在本地的 iptable 的 nat 表 中添加相应的规则，将访问外部 IP 地址的包进行目标地址 DNAT，将目标地址修改为容器的 IP 地址。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/docker/" rel="tag"># docker</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/03/27/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82/" rel="prev" title="计算机网络学习笔记之数据链路层">
+      <i class="fa fa-chevron-left"></i> 计算机网络学习笔记之数据链路层
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/04/20/%E7%AE%97%E6%B3%95/leetcodeP11-ContainerWithMostWater/" rel="next" title="leetcodeP11-ContainerWithMostWater">
+      leetcodeP11-ContainerWithMostWater <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E5%91%BD%E4%BB%A4"><span class="nav-number">1.</span> <span class="nav-text">基础命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dockerfile-%E6%8C%87%E4%BB%A4"><span class="nav-number">2.</span> <span class="nav-text">Dockerfile 指令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#VOLUME-%E5%AE%9A%E4%B9%89%E5%8C%BF%E5%90%8D%E5%8D%B7"><span class="nav-number">2.1.</span> <span class="nav-text">VOLUME 定义匿名卷</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%BF%AE%E6%94%B9%E5%B7%B2%E5%AD%98%E5%9C%A8%E5%AE%B9%E5%99%A8%E7%9A%84%E9%85%8D%E7%BD%AE"><span class="nav-number">3.</span> <span class="nav-text">如何修改已存在容器的配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-%E6%9E%B6%E6%9E%84"><span class="nav-number">4.</span> <span class="nav-text">docker 架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E9%95%9C%E5%83%8F"><span class="nav-number">5.</span> <span class="nav-text">什么是镜像</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%AE%B9%E5%99%A8"><span class="nav-number">6.</span> <span class="nav-text">什么是容器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%B9%E5%99%A8%E7%9A%84-created-%E7%8A%B6%E6%80%81"><span class="nav-number">6.1.</span> <span class="nav-text">容器的 created 状态</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ADD-%E5%92%8C-COPY"><span class="nav-number">7.</span> <span class="nav-text">ADD 和 COPY</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E7%AB%AF"><span class="nav-number">8.</span> <span class="nav-text">服务端</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="nav-number">9.</span> <span class="nav-text">客户端</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4"><span class="nav-number">10.</span> <span class="nav-text">命名空间</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4"><span class="nav-number">10.1.</span> <span class="nav-text">进程命名空间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IPC-%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4"><span class="nav-number">10.2.</span> <span class="nav-text">IPC 命名空间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4"><span class="nav-number">10.3.</span> <span class="nav-text">网络命名空间</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E7%BD%91%E5%8D%A1-veth"><span class="nav-number">10.3.1.</span> <span class="nav-text">虚拟网卡 veth</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%A4%E4%B8%AA%E5%AE%B9%E5%99%A8%E4%B8%BA%E4%BB%80%E4%B9%88%E8%83%BD%E9%80%9A%E4%BF%A1"><span class="nav-number">11.</span> <span class="nav-text">两个容器为什么能通信</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#link"><span class="nav-number">11.1.</span> <span class="nav-text">link</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#none-%E5%92%8C-host-%E7%BD%91%E7%BB%9C"><span class="nav-number">12.</span> <span class="nav-text">none 和 host 网络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96-data-volume"><span class="nav-number">13.</span> <span class="nav-text">数据持久化 data volume</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VOLUME-%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="nav-number">14.</span> <span class="nav-text">VOLUME 的类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E5%85%A8%E9%98%B2%E6%8A%A4%E4%B8%8E%E9%85%8D%E7%BD%AE"><span class="nav-number">15.</span> <span class="nav-text">安全防护与配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E7%BD%91%E7%BB%9C%E5%8A%9F%E8%83%BD"><span class="nav-number">16.</span> <span class="nav-text">高级网络功能</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%B9%E5%99%A8%E5%86%85-dns"><span class="nav-number">16.1.</span> <span class="nav-text">容器内 dns</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%B9%E5%99%A8%E8%AE%BF%E9%97%AE%E5%A4%96%E9%83%A8%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">16.2.</span> <span class="nav-text">容器访问外部的实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%96%E9%83%A8%E8%AE%BF%E9%97%AE%E5%AE%B9%E5%99%A8%E5%AE%9E%E7%8E%B0"><span class="nav-number">16.3.</span> <span class="nav-text">外部访问容器实现</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">jiezi19971225</p>
+  <div class="site-description" itemprop="description">记录编程学习路上的点滴</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jiezi19971225</span>
+</div>
+  <img src="https://static.dy208.cn/o_1dfilp8ruo521thr1hvf18ji17soa.png"/>
+  <a href="http://www.beian.miit.gov.cn/"  style="color:#f72b07" target="_blank">皖ICP备17001385号-1</a>
+  <br/>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

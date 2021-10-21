@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+<meta name="baidu-site-verification" content="5IfwMCE5hH" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.jiezi19971225.cn","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="物理层的基本概念 物理层的作用是尽可能屏蔽掉传输媒体和通信手段的差异，用于物理层的协议常称为规程（procedure） 数据在通信线路上的传输方式一般都是串行传输 可以将物理层的主要任务描述为与传输媒体的接口有关的一些特性 机械特性 电气特性 功能特性 过程特性    数据通信的基本知识数据通信的基本模型 一个数据通信系统可以分为三大部分，即源系统（发送端，发送方）、传输系统（或传输网络）和目的系">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机网络学习笔记之物理层">
+<meta property="og:url" content="http://www.jiezi19971225.cn/2019/03/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E7%89%A9%E7%90%86%E5%B1%82/index.html">
+<meta property="og:site_name" content="Jiez19971225‘s Blog">
+<meta property="og:description" content="物理层的基本概念 物理层的作用是尽可能屏蔽掉传输媒体和通信手段的差异，用于物理层的协议常称为规程（procedure） 数据在通信线路上的传输方式一般都是串行传输 可以将物理层的主要任务描述为与传输媒体的接口有关的一些特性 机械特性 电气特性 功能特性 过程特性    数据通信的基本知识数据通信的基本模型 一个数据通信系统可以分为三大部分，即源系统（发送端，发送方）、传输系统（或传输网络）和目的系">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://www.jiezi19971225.cn/2019/03/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E7%89%A9%E7%90%86%E5%B1%82/编码方式.jpg">
+<meta property="og:image" content="http://www.jiezi19971225.cn/2019/03/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E7%89%A9%E7%90%86%E5%B1%82/带通调制方法.jpg">
+<meta property="article:published_time" content="2019-03-03T19:20:07.000Z">
+<meta property="article:modified_time" content="2021-10-21T16:45:16.179Z">
+<meta property="article:author" content="jiezi19971225">
+<meta property="article:tag" content="计算机网络">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://www.jiezi19971225.cn/2019/03/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E7%89%A9%E7%90%86%E5%B1%82/编码方式.jpg">
+
+<link rel="canonical" href="http://www.jiezi19971225.cn/2019/03/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E7%89%A9%E7%90%86%E5%B1%82/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>计算机网络学习笔记之物理层 | Jiez19971225‘s Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Jiez19971225‘s Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">做自己爱做的事</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2019/03/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E7%89%A9%E7%90%86%E5%B1%82/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content="记录编程学习路上的点滴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          计算机网络学习笔记之物理层
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-03-03 19:20:07" itemprop="dateCreated datePublished" datetime="2019-03-03T19:20:07+00:00">2019-03-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-10-21 16:45:16" itemprop="dateModified" datetime="2021-10-21T16:45:16+00:00">2021-10-21</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">计算机网络</span></a>
+                </span>
+            </span>
+
+          
+
+          <span class="post-time">
+            &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-bar-chart"></i>
+            </span>
+            <span class="post-meta-item-text">字数统计:</span>
+            <span class="post-count">3.2k(字)</span>
+
+          </span>
+
+            <span class="post-time">
+          &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-clock-o"></i>
+            </span>
+            <span class="post-meta-item-text">阅读时长:</span>
+            <span class="post-count">11(分)</span>
+
+          </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="物理层的基本概念"><a href="#物理层的基本概念" class="headerlink" title="物理层的基本概念"></a>物理层的基本概念</h3><ul>
+<li>物理层的作用是尽可能屏蔽掉传输媒体和通信手段的差异，用于物理层的协议常称为规程（procedure）</li>
+<li>数据在通信线路上的传输方式一般都是串行传输</li>
+<li>可以将物理层的主要任务描述为与传输媒体的接口有关的一些特性<ul>
+<li>机械特性</li>
+<li>电气特性</li>
+<li>功能特性</li>
+<li>过程特性</li>
+</ul>
+</li>
+</ul>
+<h3 id="数据通信的基本知识"><a href="#数据通信的基本知识" class="headerlink" title="数据通信的基本知识"></a>数据通信的基本知识</h3><h4 id="数据通信的基本模型"><a href="#数据通信的基本模型" class="headerlink" title="数据通信的基本模型"></a>数据通信的基本模型</h4><ul>
+<li>一个数据通信系统可以分为三大部分，即源系统（发送端，发送方）、传输系统（或传输网络）和目的系统（接受端、接收方）。<ul>
+<li><strong>源点</strong> 源点设备产生要传输的数据，如从计算机的键盘输入汉字，计算机产生输出的数字比特流。又称源站或者信源。</li>
+<li><strong>发送器</strong> 源点生成的数字比特流要通过发送器编码后才能在传输系统中进行传输。典型的发送器是调制器。</li>
+<li><strong>接收器</strong> 接受传输系统传送过来的信号，把它转换为能够被目的设备处理的信息。典型的接收器就是解除调器。它把模拟信号解调，还原成数字信号</li>
+<li><strong>终点</strong> 终点设备从接收器获取传送来的数字比特流，然后把信息输出（例如，把汉字在计算机屏幕上显示出来）。终点站又称目的站，或信宿。</li>
+</ul>
+</li>
+<li>通信的目的是传送<strong>消息（message）</strong>，如话音，文字，图像，视频都是消息</li>
+<li><strong>数据（data）</strong>是运送消息的实体，通常是有意义的符号序列</li>
+<li>信号是数据的电气或者电磁的表现</li>
+<li><strong>模拟信号</strong>，或<strong>连续信号</strong>，代表消息的参数的取值是连续的</li>
+<li><strong>数字信号</strong>，或<strong>离散信号</strong>，代表消息的参数的取值是离散的</li>
+</ul>
+<h4 id="有关信道的几个基本概念"><a href="#有关信道的几个基本概念" class="headerlink" title="有关信道的几个基本概念"></a>有关信道的几个基本概念</h4><ul>
+<li><strong>信道</strong>（channel）表示向某一个方向传送消息的媒体</li>
+<li><strong>单向通信</strong>，又称为<strong>单工通信</strong>，只有一个方向的通信而没有反方向的交互，代表有无线电广播或者有线电广播</li>
+<li><strong>双向交替通信</strong>，又称为<strong>半双工通信</strong>，通信的双方都可以发送消息，但不能双方同时发送或接受</li>
+<li><strong>双向同时通信</strong>，又称为<strong>全双工通信</strong>，通信的双方可以同时发送和接收信息</li>
+<li>来自信源的信号常称为<strong>基带信号</strong>，即基本频带信号。基带信号往往包含较多低频成分，甚至有直流成分，许多信道并不能传输这种低频分量或者直流分量，因此必须对基带信号进行<strong>调制（modulation）</strong><ul>
+<li><strong>基带调制</strong>，仅仅对基带信号的波形进行变换，使它能够与信道的特性相适应，这种过程是把狮子信号转换成另一种形式的数字信号，也称为<strong>编码</strong></li>
+<li>使用<strong>载波（carrier）</strong>进行调制，把基带信号的频率范围搬移到较高的频段，并且转换为模拟信号，这样就能够更好地在模拟信道中传输，经过载波调制后的信号称为<strong>带通信号</strong>（仅在一段频率范围内能够通过信道，可以被正弦公式描述，又叫做宽带信号，其携带的数据量更多），使用载波的调制称为带通调制。</li>
+<li>对模拟信号数字化取样，将抽样信号变为离散时间，离散幅度的数字化信号，编码后称为一个二进制码组输出，这种方式叫做<strong>脉编调制</strong>，是 VCD 和 DVD 的视频编码原理。</li>
+</ul>
+</li>
+<li>常用编码方式<br><img src="/2019/03/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E7%89%A9%E7%90%86%E5%B1%82/编码方式.jpg" alt="常用的编码方式"><br><em> <strong>不归零制</strong> 正电平代表 1 复电平代表 0
+</em> <strong>归零制</strong> 正脉冲代表 1，负脉冲代表 0<br><em> <strong>曼彻斯特编码</strong> 位周期中心的向上跳代表 0，向下跳代表 1，也可以反过来定义
+</em> <strong>差分曼彻斯特编码</strong> 在每一位的中心处都有跳变，位开始边界有跳变代表 0，位开始边界没有跳变代表 1 * 不归零不能从波形本身提取信号时钟频率，这叫做没有自同步能力，而曼彻斯特编码具有自同步能力</li>
+<li>基本的带通调制方法<br><img src="/2019/03/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E7%89%A9%E7%90%86%E5%B1%82/带通调制方法.jpg" alt="基本的带通调制方法"><br><em> <strong>调幅（AM）</strong> 载波的振幅随着基带数字信号而变化，如 0 或者 1 分别对应无载波或者有载波输出
+</em> <strong>调频（FM）</strong> 载波的频率随着基带数字信号而变化，如 0 或者 1 分别对应于频率 f1 或者 f2 * <strong>调相（PM）</strong> 载波的初始相位随着基带数字变化而变化，如 0 或者 1 分别对应于相位 0 或者 180 度</li>
+<li>为了达到更高的信息传输速率，必须采用技术上更为复杂的多元制的振幅相位混合调制方法，例如<strong>正交振幅调制 QAM（Quadrature Amplitede Modulation）</strong></li>
+</ul>
+<h4 id="信道的极限容量"><a href="#信道的极限容量" class="headerlink" title="信道的极限容量"></a>信道的极限容量</h4><ul>
+<li><strong>码间串扰</strong>是指信号中的高频分量在传输时收到缩减，接收端收到的波形前沿和后沿不再那么陡峭，码元之间的时间间隔也不明确，码元之间失去了清晰的界限</li>
+<li><strong>奈氏准则</strong>给出了假定的理想条件下，为了避免码间串扰，码元的传输速率的上限值。我们需要知道，在任何信道，码元传输的速率是有上限的，传输速率超过此上限，就会出现严重的码间串扰问题，使接收端对码元的识别称为不可能</li>
+<li><strong>信噪比</strong> 是信号的平均功率和噪声的平均功率之比，常记为 S/N，并用分贝作为度量<script type="math/tex; mode=display">信噪比(dB) = 10 log_{10}(S/N)</script></li>
+<li>香农公式指出 信道的极限信息传输速率 C 是，W 是信道的带宽，S 是信道内所传信号的平均速率，N 为信道内部的高斯噪声功率，它表明信道的带宽或信道中的信噪比越大，信息的极限传输速率就越高<script type="math/tex; mode=display">C = W log_{2}(1+S/N) (bit/s)</script></li>
+<li>对于频带宽度已经确定的信道，如果信噪比不能再提高，码元传输速率也达到了上限，可以用编码的方法让每一个码元携带更多比特的信息量</li>
+</ul>
+<h4 id="物理层下面的传输媒体"><a href="#物理层下面的传输媒体" class="headerlink" title="物理层下面的传输媒体"></a>物理层下面的传输媒体</h4><ul>
+<li><strong>传输媒体</strong>也称为传输介质或者传播媒介<ul>
+<li><strong>导引型传输媒体</strong> 电磁波沿着固定媒介（铜线或者光纤）传播</li>
+<li><strong>非导引型传输媒体</strong> 媒介是自由空间，称为无线传输</li>
+</ul>
+</li>
+</ul>
+<h4 id="导引型传输媒体"><a href="#导引型传输媒体" class="headerlink" title="导引型传输媒体"></a>导引型传输媒体</h4><ul>
+<li>导引型传输媒体<ul>
+<li>双绞线 把两根互相绝缘的铜导线并排放在一起，然后<strong>绞合（twist）</strong>起来。绞合可以减少对相邻导线的电磁干扰</li>
+<li>同轴电缆 由内导体铜质芯线（单股实心线或多股绞合线），绝缘层，网状编织体的外导体屏蔽层（也可以是单股的）以及保护塑料外层所组成，具有很好的抗干扰特性</li>
+<li>光缆</li>
+</ul>
+</li>
+</ul>
+<h4 id="非导引型传输媒体"><a href="#非导引型传输媒体" class="headerlink" title="非导引型传输媒体"></a>非导引型传输媒体</h4><ul>
+<li>非导引型传输媒体<ul>
+<li>甚高频</li>
+<li>特高频</li>
+<li>超高频</li>
+<li>极高频</li>
+</ul>
+</li>
+<li>短波通信（高频通信）主要靠电离层的反射。但电离层不稳定所产生的衰落现象和电离层反射产生的多径效应，使得短波信道的通话质量较差，因此短波无线电台传输数据一般都是低速传输</li>
+<li>传统的微波通信主要有两种方式，地面微波接力通信（通过中继站）和卫星通信</li>
+</ul>
+<h3 id="信道复用技术"><a href="#信道复用技术" class="headerlink" title="信道复用技术"></a>信道复用技术</h3><h4 id="频分复用，时分复用和统计时分复用"><a href="#频分复用，时分复用和统计时分复用" class="headerlink" title="频分复用，时分复用和统计时分复用"></a>频分复用，时分复用和统计时分复用</h4><ul>
+<li><strong>频分复用</strong>的所有用户在同样的时间占用不同的带宽资源</li>
+<li><strong>时分复用</strong>是所有的用户在不同的时间占用同样的频带宽度</li>
+<li>复用器和分用器成对地使用</li>
+<li>分用器的作用和复用器相反，它把高速信道传送过来的数据进行分用，分别送交到相应的用户</li>
+<li><strong>统计时分复用（Statistic TDM）</strong>是一种改进的时分复用，它能明显地提高信道的利用率，集中器常使用这种统计时分复用。其用 STDM 帧传送复用的数据，每一个 STDM 帧小于连接在集中器上的用户数。各个用户有了数据就随时发往集中器的输入缓存，然后集中器按顺序依次扫描输入缓存，把缓存中的输入数据放入 STDM 帧中，对没有数据的缓存就跳过去，当一个帧的数据放满了，就发送出去。因此 STDM 帧不是固定分配时间间隙，而是按需动态的分配时间间隙。</li>
+</ul>
+<h4 id="波分复用"><a href="#波分复用" class="headerlink" title="波分复用"></a>波分复用</h4><ul>
+<li><strong>波分复用（Wavelength Division Multiplexing）</strong>就是光的频分复用。</li>
+</ul>
+<h4 id="码分复用"><a href="#码分复用" class="headerlink" title="码分复用"></a>码分复用</h4><ul>
+<li><strong>码分复用（Code Division Multiplexing）</strong> 更常用的名词是<strong>码分多址 CDMA（Code Division Multiple Access）</strong>。各用户使用经过特殊挑选的不同码型，因此各用户之间不会造成干扰，这种系统有很强的抗干扰能力</li>
+<li>CDMA 使用了<strong>扩频（spread spectrum）</strong>的方式，属于<strong>直接序列扩频 DSSS（Direct Sequence Spread Spectrum）</strong>，另一种是<strong>跳频扩频 FHSS（Frequency Hopping Spread Spectrum）</strong></li>
+</ul>
+<h3 id="数字传输系统"><a href="#数字传输系统" class="headerlink" title="数字传输系统"></a>数字传输系统</h3><ul>
+<li>最初在数字传输系统中使用的传输标准是<strong>脉冲编码调制 PCM</strong>，现在的高速数字传输系统使用同步光纤网<strong>SONET</strong>（美国标准）或者<strong>同步数字系列 SDH（Synchronous Digital Hierarchy）</strong>（国际标准）</li>
+</ul>
+<h3 id="宽带接入技术"><a href="#宽带接入技术" class="headerlink" title="宽带接入技术"></a>宽带接入技术</h3><h4 id="ADSL"><a href="#ADSL" class="headerlink" title="ADSL"></a>ADSL</h4><ul>
+<li><strong>非对称数字用户线 ADSL（Asymmetric Digital Subscriber LIne）</strong>是用数字技术对现有的模拟电话用户线进行改造，使其能够承载数字宽带业务。他需要在用户线的两端各安装一个 ADSL 调制解调器，我国采用的是<strong>离散多音调 DMT（Discrete Multi-Tone）</strong>调制技术。ADSL 不能保证固定的数据率。</li>
+<li>基于 ADSL 的接入网由数字用户线接入复用器，用户线和用户家中的一些设施三部分组成<ul>
+<li><strong>数字用户线接入复用器 ASLAM（DSL Access Multiplexer）</strong>，包括许多 ADSL 调制解调器，ADSL 调制解调器又称为<strong>接入端单元 ATU（Access Termination Unit）</strong></li>
+<li>用户电话通过<strong>电话分离器</strong>和 ATU-R（远端站的调制解调器）连接，它利用低通滤波器将电话信号和数字信号分开。</li>
+<li>ADSL 有两个接口，较大的 RJ-45 和计算机相连，较小的 RJ-11 和电话分离器项链。</li>
+</ul>
+</li>
+</ul>
+<h4 id="光纤同轴混合网（HFC-网）"><a href="#光纤同轴混合网（HFC-网）" class="headerlink" title="光纤同轴混合网（HFC 网）"></a>光纤同轴混合网（HFC 网）</h4><ul>
+<li><strong>光纤同轴混合网 HFC（Hybird Fiber Coax）</strong>是在有线电视网的基础，对有线电视网进行了改造，将有线电视网中的同轴电缆主干部分改换为光纤。光纤藏头端连接到<strong>光纤节点（fiber node）</strong>，在光纤节点被转换为电信号，然后通过同轴电缆传输到每个用户家庭。</li>
+<li>为了使现有的模拟电视机能够接受数字电视信号，需要<strong>机顶盒（set-top box）</strong>。为了用户利用 HFC 网接入互联网，还需要增加<strong>电缆调制解调器（cable modem）</strong></li>
+</ul>
+<h4 id="光纤入户（FTTX）"><a href="#光纤入户（FTTX）" class="headerlink" title="光纤入户（FTTX）"></a>光纤入户（FTTX）</h4><ul>
+<li><strong>光纤入户（Fiber To The Home）</strong>是技术上的最好选择，将光纤一直铺设到用户家庭，在光纤入户后，才将光信号转换为电信号。</li>
+<li>一个家庭远用不了一根光纤的通信容量，在光纤干线和广大用户之间，还铺设一段中间的转换装置即<strong>光配线网 ODN（Optical Distribution Network）</strong>，使数十个家庭能够共享一根光纤干线。</li>
+<li><strong>光线路终端 OLT（Optical Line Terminal）</strong>是连接到光纤干线的终端设备，OLT 把收到的下行数据发往无源的 1：N 的<strong>光分路器（splitter）</strong>，然后用广播的方式向所有用户端的<strong>光网络单元 ONU（Optical Network Unit）</strong>发送。当 ONU 发送上行数据术，先将电信号转换为光信号，光分路器把各 ONU 发来的上行数据汇总后，以 TDMA 的方式发往 OLT，发送时间和长度都有 OLT 集中控制。</li>
+<li>光配线网采用波分复用，上行和下行分别使用不同的波长</li>
+<li>最流行的无源光配线网络是以太网无源光网络 EPON 和吉比特无源光网络 GPON</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag"># 计算机网络</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/03/02/go/go%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%9F%BA%E7%A1%80%E4%B8%8E%E7%89%B9%E6%80%A7%E6%80%BB%E7%BB%93/" rel="prev" title="go学习笔记-基础与特性总结">
+      <i class="fa fa-chevron-left"></i> go学习笔记-基础与特性总结
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/03/07/%E8%BF%90%E7%BB%B4/%E8%AE%B0%E4%BD%BF%E7%94%A8docker-compose%E5%AF%B9OJ%E7%B3%BB%E7%BB%9F%E9%83%A8%E7%BD%B2%E4%BC%98%E5%8C%96%E9%87%8D%E6%9E%84/" rel="next" title="记使用docker-compose对OJ系统部署优化重构">
+      记使用docker-compose对OJ系统部署优化重构 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%A9%E7%90%86%E5%B1%82%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">物理层的基本概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%80%9A%E4%BF%A1%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86"><span class="nav-number">2.</span> <span class="nav-text">数据通信的基本知识</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%80%9A%E4%BF%A1%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.1.</span> <span class="nav-text">数据通信的基本模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%89%E5%85%B3%E4%BF%A1%E9%81%93%E7%9A%84%E5%87%A0%E4%B8%AA%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">2.2.</span> <span class="nav-text">有关信道的几个基本概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%A1%E9%81%93%E7%9A%84%E6%9E%81%E9%99%90%E5%AE%B9%E9%87%8F"><span class="nav-number">2.3.</span> <span class="nav-text">信道的极限容量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%89%A9%E7%90%86%E5%B1%82%E4%B8%8B%E9%9D%A2%E7%9A%84%E4%BC%A0%E8%BE%93%E5%AA%92%E4%BD%93"><span class="nav-number">2.4.</span> <span class="nav-text">物理层下面的传输媒体</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%BC%E5%BC%95%E5%9E%8B%E4%BC%A0%E8%BE%93%E5%AA%92%E4%BD%93"><span class="nav-number">2.5.</span> <span class="nav-text">导引型传输媒体</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9D%9E%E5%AF%BC%E5%BC%95%E5%9E%8B%E4%BC%A0%E8%BE%93%E5%AA%92%E4%BD%93"><span class="nav-number">2.6.</span> <span class="nav-text">非导引型传输媒体</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E9%81%93%E5%A4%8D%E7%94%A8%E6%8A%80%E6%9C%AF"><span class="nav-number">3.</span> <span class="nav-text">信道复用技术</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A2%91%E5%88%86%E5%A4%8D%E7%94%A8%EF%BC%8C%E6%97%B6%E5%88%86%E5%A4%8D%E7%94%A8%E5%92%8C%E7%BB%9F%E8%AE%A1%E6%97%B6%E5%88%86%E5%A4%8D%E7%94%A8"><span class="nav-number">3.1.</span> <span class="nav-text">频分复用，时分复用和统计时分复用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B3%A2%E5%88%86%E5%A4%8D%E7%94%A8"><span class="nav-number">3.2.</span> <span class="nav-text">波分复用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%A0%81%E5%88%86%E5%A4%8D%E7%94%A8"><span class="nav-number">3.3.</span> <span class="nav-text">码分复用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E5%AD%97%E4%BC%A0%E8%BE%93%E7%B3%BB%E7%BB%9F"><span class="nav-number">4.</span> <span class="nav-text">数字传输系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%BD%E5%B8%A6%E6%8E%A5%E5%85%A5%E6%8A%80%E6%9C%AF"><span class="nav-number">5.</span> <span class="nav-text">宽带接入技术</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ADSL"><span class="nav-number">5.1.</span> <span class="nav-text">ADSL</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%89%E7%BA%A4%E5%90%8C%E8%BD%B4%E6%B7%B7%E5%90%88%E7%BD%91%EF%BC%88HFC-%E7%BD%91%EF%BC%89"><span class="nav-number">5.2.</span> <span class="nav-text">光纤同轴混合网（HFC 网）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%89%E7%BA%A4%E5%85%A5%E6%88%B7%EF%BC%88FTTX%EF%BC%89"><span class="nav-number">5.3.</span> <span class="nav-text">光纤入户（FTTX）</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">jiezi19971225</p>
+  <div class="site-description" itemprop="description">记录编程学习路上的点滴</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jiezi19971225</span>
+</div>
+  <img src="https://static.dy208.cn/o_1dfilp8ruo521thr1hvf18ji17soa.png"/>
+  <a href="http://www.beian.miit.gov.cn/"  style="color:#f72b07" target="_blank">皖ICP备17001385号-1</a>
+  <br/>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+<meta name="baidu-site-verification" content="5IfwMCE5hH" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.jiezi19971225.cn","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="typescript 深入理解装饰器 这篇文章总结的很好 装饰器使用一种特殊的 @expression 声明使用，它必须被解析为一个函数，以在运行时调用 装饰器工厂如果你想要更灵活的使用装饰器，可以使用装饰器工厂方式，装饰器工厂返回一个装饰器函数，以在运行时被调用。使用装饰器工厂意味着你可以向装饰器工厂函数传入参数，以生成不同行为的装饰器函数 1234567function color(value">
+<meta property="og:type" content="article">
+<meta property="og:title" content="decorator">
+<meta property="og:url" content="http://www.jiezi19971225.cn/2020/10/01/javascript/decorator/index.html">
+<meta property="og:site_name" content="Jiez19971225‘s Blog">
+<meta property="og:description" content="typescript 深入理解装饰器 这篇文章总结的很好 装饰器使用一种特殊的 @expression 声明使用，它必须被解析为一个函数，以在运行时调用 装饰器工厂如果你想要更灵活的使用装饰器，可以使用装饰器工厂方式，装饰器工厂返回一个装饰器函数，以在运行时被调用。使用装饰器工厂意味着你可以向装饰器工厂函数传入参数，以生成不同行为的装饰器函数 1234567function color(value">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-10-01T20:25:22.000Z">
+<meta property="article:modified_time" content="2021-10-21T16:45:16.135Z">
+<meta property="article:author" content="jiezi19971225">
+<meta property="article:tag" content="javascript">
+<meta property="article:tag" content="es6">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://www.jiezi19971225.cn/2020/10/01/javascript/decorator/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>decorator | Jiez19971225‘s Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Jiez19971225‘s Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">做自己爱做的事</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/10/01/javascript/decorator/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content="记录编程学习路上的点滴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          decorator
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-10-01 20:25:22" itemprop="dateCreated datePublished" datetime="2020-10-01T20:25:22+00:00">2020-10-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-10-21 16:45:16" itemprop="dateModified" datetime="2021-10-21T16:45:16+00:00">2021-10-21</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index"><span itemprop="name">javascript</span></a>
+                </span>
+            </span>
+
+          
+
+          <span class="post-time">
+            &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-bar-chart"></i>
+            </span>
+            <span class="post-meta-item-text">字数统计:</span>
+            <span class="post-count">2.1k(字)</span>
+
+          </span>
+
+            <span class="post-time">
+          &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-clock-o"></i>
+            </span>
+            <span class="post-meta-item-text">阅读时长:</span>
+            <span class="post-count">9(分)</span>
+
+          </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/lyt_angularjs/article/details/101061998">typescript 深入理解装饰器</a></p>
+<p>这篇文章总结的很好</p>
+<p>装饰器使用一种特殊的 @expression 声明使用，它必须被解析为一个函数，以在运行时调用</p>
+<h2 id="装饰器工厂"><a href="#装饰器工厂" class="headerlink" title="装饰器工厂"></a>装饰器工厂</h2><p>如果你想要更灵活的使用装饰器，可以使用装饰器工厂方式，装饰器工厂返回一个装饰器函数，以在运行时被调用。使用装饰器工厂意味着你可以向装饰器工厂函数传入参数，以生成不同行为的装饰器函数</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">color</span>(<span class="params">value: string</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// this is the decorator factory</span></span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">target</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// this is the decorator</span></span><br><span class="line">    <span class="comment">// do something with &#x27;target&#x27; and &#x27;value&#x27;...</span></span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="多个装饰器"><a href="#多个装饰器" class="headerlink" title="多个装饰器"></a>多个装饰器</h2><p>装饰器调用顺序<br>实例属性的方法参数装饰器，方法装饰器，存取装饰器，属性装饰器<br>静态属性的方法参数装饰器，方法装饰器，存取装饰器，属性装饰器<br>构造函数的参数装饰器<br>类装饰器</p>
+<hr>
+<blockquote>
+<ol>
+<li>Parameter Decorators, followed by Method, Accessor, or Property Decorators are applied for each instance member.</li>
+<li>Parameter Decorators, followed by Method, Accessor, or Property Decorators are applied for each static member.</li>
+<li>Parameter Decorators are applied for the constructor.</li>
+<li>Class Decorators are applied for the class.</li>
+</ol>
+</blockquote>
+<p>定义（工厂方法）：相同装饰器按从上到下方式执行工厂方法返回装饰器函数前的语句<br>执行：相同装饰器在运行时按照从下到上的顺序执行</p>
+<blockquote>
+<ol>
+<li>The expressions for each decorator are evaluated top-to-bottom.</li>
+<li>The results are then called as functions from bottom-to-top.</li>
+</ol>
+</blockquote>
+<h2 id="PropertyDescriptor"><a href="#PropertyDescriptor" class="headerlink" title="PropertyDescriptor"></a>PropertyDescriptor</h2><p>允许对一个属性的描述进行检索，在 js 中属性由一个字符串类型的名字和一个属性描述符构成</p>
+<blockquote>
+<ol>
+<li>value 该属性的值</li>
+<li>writable 当且仅当属性的值可以被改变时为 true。(仅针对数据属性描述有效)</li>
+<li>get 获取该属性的访问器函数（getter）。如果没有访问器， 该值为 undefined。(仅针对包含访问器或设置器的属性描述有效)</li>
+<li>set 获取该属性的设置器函数（setter）。 如果没有设置器， 该值为 undefined。(仅针对包含访问器或设置器的属性描述有效)</li>
+<li>configurable 当且仅当指定对象的属性描述可以被改变或者属性可被删除时，为 true。</li>
+<li>enumerable 当且仅当指定对象的属性可以被枚举出时，为 true。</li>
+</ol>
+</blockquote>
+<h2 id="类装饰器"><a href="#类装饰器" class="headerlink" title="类装饰器"></a>类装饰器</h2><p>被应用于类的构造函数并且可以被用来观察，修改或者替换类的定义。类修饰器不能被用在声明文件中。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">- 属性装饰器</span></span><br><span class="line"><span class="comment">- <span class="doctag">@param </span>targetPrototype 构造函数的原型</span></span><br><span class="line"><span class="comment">- <span class="doctag">@param </span>propName 属性名称</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">propDecorator1</span>(<span class="params">targetPrototype: any, propName: string</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;属性装饰器 1:&quot;</span>, targetPrototype, propName);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">propDecorator2</span>(<span class="params">params: string</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;属性装饰器 2 before:&quot;</span>, params);</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">targetPrototype: any, propName: string</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// targetPrototype[propName]是在原型链上查找实例属性，永远为 undefined</span></span><br><span class="line">    <span class="built_in">console</span>.log(</span><br><span class="line">      <span class="string">&quot;属性装饰器 2:&quot;</span>,</span><br><span class="line">      targetPrototype,</span><br><span class="line">      propName,</span><br><span class="line">      targetPrototype[propName]</span><br><span class="line">    );</span><br><span class="line">    targetPrototype[propName] = <span class="string">&quot;会在原型上面添加该属性并赋值，不是实例对象&quot;</span>;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">propDecorator3</span>(<span class="params">params: string</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;属性装饰器 3 before:&quot;</span>, params);</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">targetPrototype: any, propName: string</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;属性装饰器 3:&quot;</span>, targetPrototype, propName);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">- 方法装饰器</span></span><br><span class="line"><span class="comment">- <span class="doctag">@param </span>targetPrototype 构造函数的原型</span></span><br><span class="line"><span class="comment">- <span class="doctag">@param </span>methodName 方法名称</span></span><br><span class="line"><span class="comment">- <span class="doctag">@param </span>descr 方法的描述</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">methodDecorator1</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">  targetPrototype: any,</span></span></span><br><span class="line"><span class="params"><span class="function">  methodName: string,</span></span></span><br><span class="line"><span class="params"><span class="function">  descriptor: PropertyDescriptor</span></span></span><br><span class="line"><span class="params"><span class="function"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;方法装饰器 1:&quot;</span>, targetPrototype, methodName, descriptor);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> methodDecorator2: any = <span class="function"><span class="keyword">function</span> (<span class="params">params: string</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;方法装饰器 2 before:&quot;</span>, params);</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">    targetPrototype: any,</span></span></span><br><span class="line"><span class="params"><span class="function">    methodName: string,</span></span></span><br><span class="line"><span class="params"><span class="function">    descriptor: PropertyDescriptor</span></span></span><br><span class="line"><span class="params"><span class="function">  </span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;方法装饰器 2:&quot;</span>, targetPrototype, methodName, descriptor);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> methodDecorator3: any = <span class="function"><span class="keyword">function</span> (<span class="params">params: string</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;方法装饰器 3 before:&quot;</span>, params);</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">    targetPrototype: any,</span></span></span><br><span class="line"><span class="params"><span class="function">    methodName: string,</span></span></span><br><span class="line"><span class="params"><span class="function">    descriptor: PropertyDescriptor</span></span></span><br><span class="line"><span class="params"><span class="function">  </span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;方法装饰器 3:&quot;</span>, targetPrototype, methodName, descriptor);</span><br><span class="line">    <span class="keyword">let</span> originalMethod = descriptor.value;</span><br><span class="line">    descriptor.value = <span class="function"><span class="keyword">function</span> (<span class="params">...args: any[]</span>) </span>&#123;</span><br><span class="line">      args = args.map(<span class="function">(<span class="params">item</span>) =&gt;</span> (item += <span class="string">&quot; test&quot;</span>));</span><br><span class="line">      <span class="keyword">return</span> originalMethod.apply(<span class="built_in">this</span>, args);</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">return</span> descriptor;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">- 方法参数装饰器</span></span><br><span class="line"><span class="comment">- <span class="doctag">@param </span>targetPrototype 构造函数的原型</span></span><br><span class="line"><span class="comment">- <span class="doctag">@param </span>methodName 方法名称</span></span><br><span class="line"><span class="comment">- <span class="doctag">@param </span>paramIndex 参数在 arguments 中的下标</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">paramDecorator1</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">  targetPrototype: any,</span></span></span><br><span class="line"><span class="params"><span class="function">  methodName: string,</span></span></span><br><span class="line"><span class="params"><span class="function">  paramIndex: number</span></span></span><br><span class="line"><span class="params"><span class="function"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;方法参数装饰器 1:&quot;</span>, targetPrototype, methodName, paramIndex);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">paramDecorator2</span>(<span class="params">params: string</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;方法参数装饰器 2 before:&quot;</span>, params);</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">    targetPrototype: any,</span></span></span><br><span class="line"><span class="params"><span class="function">    methodName: string,</span></span></span><br><span class="line"><span class="params"><span class="function">    paramIndex: number</span></span></span><br><span class="line"><span class="params"><span class="function">  </span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;方法参数装饰器 2:&quot;</span>, targetPrototype, methodName, paramIndex);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">paramDecorator3</span>(<span class="params">params: string</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;方法参数装饰器 3 before:&quot;</span>, params);</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">    targetPrototype: any,</span></span></span><br><span class="line"><span class="params"><span class="function">    methodName: string,</span></span></span><br><span class="line"><span class="params"><span class="function">    paramIndex: number</span></span></span><br><span class="line"><span class="params"><span class="function">  </span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;方法参数装饰器 3:&quot;</span>, targetPrototype, methodName, paramIndex);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">- 静态属性修饰器</span></span><br><span class="line"><span class="comment">- <span class="doctag">@param <span class="variable">targetPrototype</span></span></span></span><br><span class="line"><span class="comment">- <span class="doctag">@param <span class="variable">propName</span></span></span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">staticPropDecorator</span>(<span class="params">param: string</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;静态属性修饰器 before:&quot;</span>, param);</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">targetPrototype: any, propName: string</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(</span><br><span class="line">      <span class="string">&quot;静态属性修饰器:&quot;</span>,</span><br><span class="line">      targetPrototype,</span><br><span class="line">      propName,</span><br><span class="line">      targetPrototype[propName]</span><br><span class="line">    );</span><br><span class="line">    targetPrototype[propName] = <span class="string">&quot;静态属性初始值被修改了！&quot;</span>;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">- 静态方法修饰器</span></span><br><span class="line"><span class="comment">- <span class="doctag">@param <span class="variable">targetPrototype</span></span></span></span><br><span class="line"><span class="comment">- <span class="doctag">@param <span class="variable">methodName</span></span></span></span><br><span class="line"><span class="comment">- <span class="doctag">@param <span class="variable">descriptor</span></span></span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">staticMethodDecorator</span>(<span class="params">param: string</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;静态方法修饰器 before:&quot;</span>, param);</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">    targetPrototype: any,</span></span></span><br><span class="line"><span class="params"><span class="function">    methodName: string,</span></span></span><br><span class="line"><span class="params"><span class="function">    descriptor: PropertyDescriptor</span></span></span><br><span class="line"><span class="params"><span class="function">  </span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;静态方法修饰器:&quot;</span>, targetPrototype, methodName, descriptor);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">- 类装饰器</span></span><br><span class="line"><span class="comment">- <span class="doctag">@param <span class="variable">targetClass</span></span></span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">classDecorator1</span>(<span class="params">constructor: <span class="built_in">Function</span></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;类装饰器 1:&quot;</span>, <span class="title">constructor</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">classDecorator2</span>(<span class="params">params: string</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;类装饰器 2 before:&quot;</span>, params);</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">constructor: <span class="built_in">Function</span></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;类装饰器 2:&quot;</span>, <span class="title">constructor</span>);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">classDecorator3</span>(<span class="params">params: string</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;类装饰器 3 before:&quot;</span>, params);</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">constructor: <span class="built_in">Function</span></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;类装饰器 3:&quot;</span>, <span class="title">constructor</span>);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">- 存取器装饰器</span></span><br><span class="line"><span class="comment">- <span class="doctag">@param <span class="variable">target</span></span></span></span><br><span class="line"><span class="comment">- <span class="doctag">@param <span class="variable">propertyKey</span></span></span></span><br><span class="line"><span class="comment">- <span class="doctag">@param <span class="variable">PropertyDescriptor</span></span></span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">accessorDecorator</span>(<span class="params">target: any, propertyKey: string, descriptor: PropertyDescriptor</span>) </span>&#123;</span><br><span class="line">  descriptor.get = <span class="function">() =&gt;</span> <span class="string">&quot;存取器修饰后的值&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@classDecorator1</span><br><span class="line">@classDecorator2(<span class="string">&quot;params2&quot;</span>)</span><br><span class="line">@classDecorator3(<span class="string">&quot;params3&quot;</span>)</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">  @propDecorator1</span><br><span class="line">  @propDecorator2(<span class="string">&quot;param2&quot;</span>)</span><br><span class="line">  @propDecorator3(<span class="string">&quot;param3&quot;</span>)</span><br><span class="line">  public msg: string = <span class="string">&quot;属性初始值&quot;</span>;</span><br><span class="line"></span><br><span class="line">  @staticPropDecorator(<span class="string">&quot;静态属性&quot;</span>)</span><br><span class="line">  <span class="keyword">static</span> title: string = <span class="string">&quot;静态属性初始值&quot;</span>;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="title">constructor</span>(<span class="params">msg: string</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.msg = msg;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  @methodDecorator1</span><br><span class="line">  @methodDecorator2(<span class="string">&quot;param2&quot;</span>)</span><br><span class="line">  @methodDecorator3(<span class="string">&quot;param3&quot;</span>)</span><br><span class="line">  <span class="function"><span class="title">toString</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">    @paramDecorator1 str1: string,</span></span></span><br><span class="line"><span class="params"><span class="function">    @paramDecorator2(<span class="string">&quot;param2&quot;</span>) str2: string,</span></span></span><br><span class="line"><span class="params"><span class="function">    @paramDecorator3(<span class="string">&quot;param3&quot;</span>) str3: string</span></span></span><br><span class="line"><span class="params"><span class="function">  </span>)</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;toString:&quot;</span>, str1, str2, str3);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  @staticMethodDecorator(<span class="string">&quot;静态方法&quot;</span>)</span><br><span class="line">  <span class="keyword">static</span> <span class="function"><span class="title">staticToString</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">this</span>.title);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  @accessorDecorator</span><br><span class="line">  <span class="keyword">get</span> <span class="title">msg1</span>() &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.msg</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> t: any = <span class="keyword">new</span> Test(<span class="string">&quot;this is a msg.&quot;</span>);</span><br><span class="line">t.toString(<span class="string">&quot;ss&quot;</span>, <span class="string">&quot;dd&quot;</span>, <span class="string">&quot;ff&quot;</span>); <span class="comment">//methodDecorator3 装饰器对该方法进行了重写</span></span><br><span class="line"><span class="built_in">console</span>.log(t.msg, t.proto, t.msg, t.msg1);</span><br><span class="line">Test.staticToString();</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">属性装饰器2 before: param2</span><br><span class="line">属性装饰器3 before: param3</span><br><span class="line">属性装饰器3: Test &#123; toString: [Function] &#125; msg</span><br><span class="line">属性装饰器2: Test &#123; toString: [Function] &#125; msg undefined</span><br><span class="line">属性装饰器1: Test &#123; toString: [Function], msg: &#x27;会在原型上面添加该属性并赋值，不是实例对象&#x27; &#125; msg</span><br><span class="line">方法装饰器2 before: param2</span><br><span class="line">方法装饰器3 before: param3</span><br><span class="line">方法参数装饰器2 before: param2</span><br><span class="line">方法参数装饰器3 before: param3</span><br><span class="line">方法参数装饰器3: Test &#123; toString: [Function], msg: &#x27;会在原型上面添加该属性并赋值，不是实例对象&#x27; &#125; toString 2</span><br><span class="line">方法参数装饰器2: Test &#123; toString: [Function], msg: &#x27;会在原型上面添加该属性并赋值，不是实例对象&#x27; &#125; toString 1</span><br><span class="line">方法参数装饰器1: Test &#123; toString: [Function], msg: &#x27;会在原型上面添加该属性并赋值，不是实例对象&#x27; &#125; toString 0</span><br><span class="line">方法装饰器3: Test &#123; toString: [Function], msg: &#x27;会在原型上面添加该属性并赋值，不是实例对象&#x27; &#125; toString &#123; value: [Function],</span><br><span class="line">  writable: true,</span><br><span class="line">  enumerable: true,</span><br><span class="line">  configurable: true &#125;</span><br><span class="line">方法装饰器2: Test &#123; toString: [Function], msg: &#x27;会在原型上面添加该属性并赋值，不是实例对象&#x27; &#125; toString &#123; value: [Function],</span><br><span class="line">  writable: true,</span><br><span class="line">  enumerable: true,</span><br><span class="line">  configurable: true &#125;</span><br><span class="line">方法装饰器1: Test &#123; toString: [Function], msg: &#x27;会在原型上面添加该属性并赋值，不是实例对象&#x27; &#125; toString &#123; value: [Function],</span><br><span class="line">  writable: true,</span><br><span class="line">  enumerable: true,</span><br><span class="line">  configurable: true &#125;</span><br><span class="line">静态属性修饰器 before: 静态属性</span><br><span class="line">静态属性修饰器: function Test(msg) &#123;</span><br><span class="line">        this.msg = &quot;属性初始值&quot;;</span><br><span class="line">        this.msg = msg;</span><br><span class="line">    &#125; title 静态属性初始值</span><br><span class="line">静态方法修饰器 before: 静态方法</span><br><span class="line">静态方法修饰器: function Test(msg) &#123;</span><br><span class="line">        this.msg = &quot;属性初始值&quot;;</span><br><span class="line">        this.msg = msg;</span><br><span class="line">    &#125; staticToString &#123; value: [Function],</span><br><span class="line">  writable: true,</span><br><span class="line">  enumerable: true,</span><br><span class="line">  configurable: true &#125;</span><br><span class="line">类装饰器2 before: params2</span><br><span class="line">类装饰器3 before: params3</span><br><span class="line">类装饰器3: function Test(msg) &#123;</span><br><span class="line">        this.msg = &quot;属性初始值&quot;;</span><br><span class="line">        this.msg = msg;</span><br><span class="line">    &#125;</span><br><span class="line">类装饰器2: function Test(msg) &#123;</span><br><span class="line">        this.msg = &quot;属性初始值&quot;;</span><br><span class="line">        this.msg = msg;</span><br><span class="line">    &#125;</span><br><span class="line">类装饰器1: function Test(msg) &#123;</span><br><span class="line">        this.msg = &quot;属性初始值&quot;;</span><br><span class="line">        this.msg = msg;</span><br><span class="line">    &#125;</span><br><span class="line">toString: ss test dd test ff test</span><br><span class="line">this is a msg. undefined this is a msg. 存取器修饰后的值</span><br><span class="line">静态属性初始值被修改了！</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/javascript/" rel="tag"># javascript</a>
+              <a href="/tags/es6/" rel="tag"># es6</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/10/01/vue/%E7%9C%8Bvue-router%E6%BA%90%E7%A0%81%E7%9A%84%E4%B8%80%E4%BA%9B%E6%94%B6%E8%8E%B7/" rel="prev" title="看vue-router源码的一些收获">
+      <i class="fa fa-chevron-left"></i> 看vue-router源码的一些收获
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/10/09/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/npm%E7%A7%81%E4%BB%93%E6%90%AD%E5%BB%BA%E5%B9%B6%E5%88%B6%E4%BD%9C%E5%8F%91%E5%B8%83npm%E5%8C%85/" rel="next" title="npm私仓搭建并制作发布npm包">
+      npm私仓搭建并制作发布npm包 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A3%85%E9%A5%B0%E5%99%A8%E5%B7%A5%E5%8E%82"><span class="nav-number">1.</span> <span class="nav-text">装饰器工厂</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E4%B8%AA%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-number">2.</span> <span class="nav-text">多个装饰器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PropertyDescriptor"><span class="nav-number">3.</span> <span class="nav-text">PropertyDescriptor</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-number">4.</span> <span class="nav-text">类装饰器</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">jiezi19971225</p>
+  <div class="site-description" itemprop="description">记录编程学习路上的点滴</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jiezi19971225</span>
+</div>
+  <img src="https://static.dy208.cn/o_1dfilp8ruo521thr1hvf18ji17soa.png"/>
+  <a href="http://www.beian.miit.gov.cn/"  style="color:#f72b07" target="_blank">皖ICP备17001385号-1</a>
+  <br/>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

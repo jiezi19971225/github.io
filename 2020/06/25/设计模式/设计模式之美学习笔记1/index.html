@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+<meta name="baidu-site-verification" content="5IfwMCE5hH" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.jiezi19971225.cn","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="面向对象封装、抽象、继承、多态面向对象的关键是其四大特性 封装 Encapsulation也叫作信息隐藏或者数据访问保护。类通过暴露有限的访问接口，授权外部仅能通过类提供的方式（或者叫函数）来访问内部信息或者数据。课程中提供的代码是 java，我用 ts 重新实现了一遍，当做是练习 ts 的熟练度了 1234567891011121314151617181920212223242526272829">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计模式之美学习笔记1">
+<meta property="og:url" content="http://www.jiezi19971225.cn/2020/06/25/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E7%BE%8E%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/index.html">
+<meta property="og:site_name" content="Jiez19971225‘s Blog">
+<meta property="og:description" content="面向对象封装、抽象、继承、多态面向对象的关键是其四大特性 封装 Encapsulation也叫作信息隐藏或者数据访问保护。类通过暴露有限的访问接口，授权外部仅能通过类提供的方式（或者叫函数）来访问内部信息或者数据。课程中提供的代码是 java，我用 ts 重新实现了一遍，当做是练习 ts 的熟练度了 1234567891011121314151617181920212223242526272829">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-06-25T09:04:17.000Z">
+<meta property="article:modified_time" content="2021-10-21T16:45:16.179Z">
+<meta property="article:author" content="jiezi19971225">
+<meta property="article:tag" content="设计模式">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://www.jiezi19971225.cn/2020/06/25/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E7%BE%8E%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>设计模式之美学习笔记1 | Jiez19971225‘s Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Jiez19971225‘s Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">做自己爱做的事</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/06/25/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E7%BE%8E%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content="记录编程学习路上的点滴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          设计模式之美学习笔记1
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-06-25 09:04:17" itemprop="dateCreated datePublished" datetime="2020-06-25T09:04:17+00:00">2020-06-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-10-21 16:45:16" itemprop="dateModified" datetime="2021-10-21T16:45:16+00:00">2021-10-21</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">设计模式</span></a>
+                </span>
+            </span>
+
+          
+
+          <span class="post-time">
+            &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-bar-chart"></i>
+            </span>
+            <span class="post-meta-item-text">字数统计:</span>
+            <span class="post-count">2.8k(字)</span>
+
+          </span>
+
+            <span class="post-time">
+          &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-clock-o"></i>
+            </span>
+            <span class="post-meta-item-text">阅读时长:</span>
+            <span class="post-count">10(分)</span>
+
+          </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="面向对象"><a href="#面向对象" class="headerlink" title="面向对象"></a>面向对象</h2><h3 id="封装、抽象、继承、多态"><a href="#封装、抽象、继承、多态" class="headerlink" title="封装、抽象、继承、多态"></a>封装、抽象、继承、多态</h3><p>面向对象的关键是其四大特性</p>
+<h4 id="封装-Encapsulation"><a href="#封装-Encapsulation" class="headerlink" title="封装 Encapsulation"></a>封装 Encapsulation</h4><p>也叫作信息隐藏或者数据访问保护。类通过暴露有限的访问接口，授权外部仅能通过类提供的方式（或者叫函数）来访问内部信息或者数据。<br>课程中提供的代码是 java，我用 ts 重新实现了一遍，当做是练习 ts 的熟练度了</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> id = <span class="number">0</span>;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Wallet</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> id: <span class="built_in">number</span>;</span><br><span class="line">  <span class="keyword">private</span> createTime: <span class="built_in">Date</span>;</span><br><span class="line">  <span class="keyword">private</span> balance: <span class="built_in">number</span>;</span><br><span class="line">  <span class="keyword">private</span> balanceLastModifiedTime: <span class="built_in">Date</span>;</span><br><span class="line">  <span class="function"><span class="title">constructor</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.id = id += <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">this</span>.createTime = <span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">    <span class="built_in">this</span>.balance = <span class="number">0</span>;</span><br><span class="line">    <span class="built_in">this</span>.balanceLastModifiedTime = <span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> getId(): <span class="built_in">number</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.id;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> getCreateTime(): <span class="built_in">Date</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.createTime;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> getBalance(): <span class="built_in">number</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.balance;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> getBalanceLastModifiedTime(): <span class="built_in">Date</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.balanceLastModifiedTime;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> increaseBalance(amount: <span class="built_in">number</span>): <span class="built_in">void</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.balance += amount;</span><br><span class="line">    <span class="built_in">this</span>.balanceLastModifiedTime = <span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> decreaseBalance(amount: <span class="built_in">number</span>): <span class="built_in">void</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.balance -= amount;</span><br><span class="line">    <span class="built_in">this</span>.balanceLastModifiedTime = <span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对于封装这个特性，需要编程语言本身提供访问权限控制的语法机制来支持。</p>
+<p>之所以这样设计，是因为从业务的角度来说，id、createTime 在创建钱包的时候就确定好了，之后不应该再被改动，所有只提供 get 方法，这两个属性的初始化设置，对于调用者也是透明的，所以不提供用构造参数的方式进行外部赋值。</p>
+<p>对于钱包余额 balance 这个属性，从业务的角度来说，只能增或者减，不会被重新设置。所在 Wallet 类中，只暴露了 increaseBalance() 和 decreaseBalance() 方法，并没有暴露 set 方法。alanceLastModifiedTime 这个属性，它完全是跟 balance 这个属性的修改操作绑定在一起的。只有在 balance 修改的时候，这个属性才会被修改，所以其相关的操作，都封装在 increaseBalance() 和 decreaseBalance() 方法中了</p>
+<p><strong>封装可以解决这些问题</strong></p>
+<p>如果对类中的属性访问不做控制，类的属性可能在代码的各个角落被随意修改，影响代码的可读性和可维护性<br>类通过有效的方法暴露必要的操作，也可以提高类的易用性</p>
+<h4 id="抽象-Abstraction"><a href="#抽象-Abstraction" class="headerlink" title="抽象 Abstraction"></a>抽象 Abstraction</h4><p>隐藏方法的具体实现，让调用者只需要关心方法提供了哪些功能，并不需要知道这些功能是如何实现的</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> Picture &#123;</span><br><span class="line">  <span class="attr">id</span>: <span class="built_in">string</span>;</span><br><span class="line">  blob: Blob;</span><br><span class="line">  metaInfo: <span class="built_in">Object</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">interface</span> IPictureStorage &#123;</span><br><span class="line">  savePicture(pic: Picture): <span class="built_in">void</span>;</span><br><span class="line">  getPicture(id: <span class="built_in">string</span>): Picture;</span><br><span class="line">  deletePicture(id: <span class="built_in">string</span>): <span class="built_in">void</span>;</span><br><span class="line">  midifyMetaInfo(id: <span class="built_in">string</span>, <span class="attr">metaInfo</span>: <span class="built_in">Object</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PictureStorage</span> <span class="title">implements</span> <span class="title">IPictureStorage</span> </span>&#123;</span><br><span class="line">  savePicture(pic: Picture): <span class="built_in">void</span> &#123;&#125;</span><br><span class="line">  getPicture(id: <span class="built_in">string</span>): Picture &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      <span class="attr">id</span>: <span class="string">&quot;1&quot;</span>,</span><br><span class="line">      <span class="attr">blob</span>: <span class="keyword">new</span> Blob(),</span><br><span class="line">      <span class="attr">metaInfo</span>: &#123;&#125;,</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">  deletePicture(id: <span class="built_in">string</span>): <span class="built_in">void</span> &#123;&#125;</span><br><span class="line">  <span class="function"><span class="title">midifyMetaInfo</span>(<span class="params">id: <span class="built_in">string</span>, metaInfo: <span class="built_in">Object</span></span>)</span> &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>抽象这个特性非常用以实现，不需要编程语言提供特殊的语法机制来支持，只需要提供“函数”这一非常基础的语法机制，函数本身就是一种抽象。</p>
+<p>相较于课程中代码，为了简化代码，有所改动。调用者在使用图片存储功能时，只需要了解 IPictureStorage 暴露了哪些方法就可以了，不需要查看 PictureStorage 里面的具体实现。</p>
+<p><strong>抽象可以解决这些问题</strong></p>
+<p>只关注功能点，不关注实现，很多设计原则体现了抽象的设计思想，如基于接口而非实现编程，开闭原则，代码解耦。我们在定义方法的时候，也要有抽象思维，不要再方法定义中，暴露太多的细节。如 getAliyunPictureUrl() 就不好，如果某一天讲图片存储地址改变了，那么函数命名也要改变，相反，应该叫做 getPictureUrl()，即便内部存储方式修改了，我们也不需要修改命名</p>
+<h4 id="继承-Inheritance"><a href="#继承-Inheritance" class="headerlink" title="继承 Inheritance"></a>继承 Inheritance</h4><p>上升一个思维层面，去思考继承这一特性，可以这么理解：我们代码中有一个猫类，有一个哺乳动物类。猫属于哺乳动物，从人类认知的角度上来说，是一种 is-a 关系。我们通过继承来关联两个类，反应真实世界中的这种关系，非常符合人类的认知，而且，从设计的角度来说，也有一种结构美感。</p>
+<p>度使用继承，继承层次过深过复杂，就会导致代码可读性、可维护性变差。我们应当 “多用组合少用继承”</p>
+<h4 id="多态-Polymorphism"><a href="#多态-Polymorphism" class="headerlink" title="多态 Polymorphism"></a>多态 Polymorphism</h4><p>子类可以替换父类，在实际的代码运行过程中，调用子类的方法实现</p>
+<p>这里就没有改写课程中的代码，换了一个更浅显的例子</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Animal</span> </span>&#123;</span><br><span class="line">  bark(): <span class="built_in">void</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;animal bark&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog</span> <span class="keyword">extends</span> <span class="title">Animal</span> </span>&#123;</span><br><span class="line">  bark(): <span class="built_in">void</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;dog wang wang&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cat</span> <span class="keyword">extends</span> <span class="title">Animal</span> </span>&#123;</span><br><span class="line">  bark(): <span class="built_in">void</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;cat miao miao&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">PlayWith</span>(<span class="params">ani: Animal</span>): <span class="title">void</span> </span>&#123;</span><br><span class="line">  <span class="comment">// do something</span></span><br><span class="line">  ani.bark();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> dog = <span class="keyword">new</span> Dog();</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> cat = <span class="keyword">new</span> Cat();</span><br><span class="line"></span><br><span class="line">PlayWith(dog);</span><br><span class="line">PlayWith(cat);</span><br></pre></td></tr></table></figure>
+<p>多态需要编程语言拥有一下特殊语法机制</p>
+<ul>
+<li>编程语言要支持父类对象可以引用子类对象</li>
+<li>第二个语法机制是编程语言要支持继承</li>
+<li>第三个语法机制是编程语言要支持子类可以重写（override）父类中的方法</li>
+</ul>
+<p>多态除了利用 继承加方法重写的方式来实现外，还有两种比较常见的实现方式，一个是利用接口类语法，另一个是 duck-typing 语法。</p>
+<h5 id="接口类"><a href="#接口类" class="headerlink" title="接口类"></a>接口类</h5><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> CanBark &#123;</span><br><span class="line">  bark(): <span class="built_in">void</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Tiger</span> <span class="title">implements</span> <span class="title">CanBark</span> </span>&#123;</span><br><span class="line">  bark(): <span class="built_in">void</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;老虎吼&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Lion</span> <span class="title">implements</span> <span class="title">CanBark</span> </span>&#123;</span><br><span class="line">  bark(): <span class="built_in">void</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;狮子吼&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">LookAt</span>(<span class="params">ani: CanBark</span>) </span>&#123;</span><br><span class="line">  ani.bark();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> tiger = <span class="keyword">new</span> Tiger();</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> lion = <span class="keyword">new</span> Lion();</span><br><span class="line"></span><br><span class="line">LookAt(tiger);</span><br><span class="line"></span><br><span class="line">LookAt(lion);</span><br></pre></td></tr></table></figure>
+<h5 id="duck-typing"><a href="#duck-typing" class="headerlink" title="duck-typing"></a>duck-typing</h5><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> CanBark &#123;</span><br><span class="line">  bark(): <span class="built_in">void</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> tiger = &#123;</span><br><span class="line">  bark(): <span class="built_in">void</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;老虎吼&quot;</span>);</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> lion = &#123;</span><br><span class="line">  bark(): <span class="built_in">void</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;狮子吼&quot;</span>);</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">LookAt</span>(<span class="params">ani: CanBark</span>) </span>&#123;</span><br><span class="line">  ani.bark();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">LookAt(tiger);</span><br><span class="line"></span><br><span class="line">LookAt(lion);</span><br></pre></td></tr></table></figure>
+<p>多态能提高代码的可扩展性和复用性，也是很多设计模式、设计原则、编程技巧的代码实现基础，比如策略模式、基于接口而非实现编程、依赖倒置原则、里式替换原则、利用多态去掉冗长的 if-else 语句等等。</p>
+<h4 id="抽象类与接口"><a href="#抽象类与接口" class="headerlink" title="抽象类与接口"></a>抽象类与接口</h4><p>抽象类是对成员变量和方法的抽象，是一种 is-a 关系，是为了解决代码复用问题。接口仅仅是对方法的抽象，是一种 has-a 关系，表示具有某一组行为特性，是为了解决解耦问题，隔离接口和具体的实现，提高代码的扩展性。</p>
+<h4 id="基于接口而非基于实现编程"><a href="#基于接口而非基于实现编程" class="headerlink" title="基于接口而非基于实现编程"></a>基于接口而非基于实现编程</h4><p><strong>越抽象、越顶层、越脱离具体某一实现的设计，越能提高代码的灵活性，越能应对未来的需求变化。好的代码设计，不仅能应对当下的需求，而且在将来需求发生变化的时候，仍然能够在不破坏原有代码设计的情况下灵活应对。</strong></p>
+<p>假设我们的系统中有很多涉及图片处理和存储的业务逻辑。图片经过处理之后被上传到阿里云上。为了代码复用，我们封装了图片存储相关的代码逻辑，提供了一个统一的 AliyunImageStore 类，供整个系统来使用。</p>
+<p>整个上传流程包含三个步骤：创建 bucket（你可以简单理解为存储目录）、生成 access token 访问凭证、携带 access token 上传图片到指定的 bucket 中。代码实现非常简单，类中的几个方法定义得都很干净，用起来也很清晰，乍看起来没有太大问题，完全能满足我们将图片存储在阿里云的业务需求。</p>
+<p>而有一天，我们要将图片改为上传到私有云，首先，AliyunImageStore 类中有些函数命名暴露了实现细节，比如，uploadToAliyun() 和 downloadFromAliyun()。<br>其次，将图片存储到阿里云的流程，跟存储到私有云的流程，可能并不是完全一致的。比如，阿里云的图片上传和下载的过程中，需要生产 access token，而私有云不需要 access token。</p>
+<p>而要解决这些问题，编写代码的时候，要遵从 “基于接口而非实现编程”的原则</p>
+<ul>
+<li>函数的命名不能暴露任何实现细节。比如，前面提到的 uploadToAliyun() 就不符合要求，应该改为去掉 aliyun 这样的字眼，改为更加抽象的命名方式，比如：upload()。</li>
+<li>封装具体的实现细节。比如，跟阿里云相关的特殊上传（或下载）流程不应该暴露给调用者。我们对上传（或下载）流程进行封装，对外提供一个包裹所有上传（或下载）细节的方法，给调用者使用。</li>
+<li>为实现类定义抽象的接口。具体的实现类都依赖统一的接口定义，遵从一致的上传功能协议。使用者依赖接口，而不是具体的实现类来编程。</li>
+</ul>
+<p>在定义接口的时候，不要暴露任何实现细节。接口的定义只表明做什么，而不是怎么做。而且，在设计接口的时候，我们要多思考一下，这样的接口设计是否足够通用，是否能够做到在替换具体的接口实现的时候，不需要任何接口定义的改动。</p>
+<h5 id="课后习题"><a href="#课后习题" class="headerlink" title="课后习题"></a>课后习题</h5><p>在项目中很多地方，我们都是通过下面第 8 行的方式来使用接口的。这就会产生一个问题，那就是，如果我们要替换图片存储方式，还是需要修改很多类似第 8 行那样的代码。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ImageProcessingJob</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String BUCKET_NAME = <span class="string">&quot;ai_images_bucket&quot;</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">process</span><span class="params">()</span> </span>&#123; Image image = ...;</span><br><span class="line">    ImageStore imageStore = <span class="keyword">new</span> PrivateImageStore(<span class="comment">/*省略构造函数*/</span>);</span><br><span class="line">    imagestore.upload(image, BUCKET_NAME);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>看了评论区的答案，一种比较好的解决方式是使用工厂方法+配置文件</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ImageStore imageStore = ImageStoreFactory.newInstance(SOTRE_TYPE_CONFIG);</span><br></pre></td></tr></table></figure>
+<h4 id="多用组合-少用继承"><a href="#多用组合-少用继承" class="headerlink" title="多用组合 少用继承"></a>多用组合 少用继承</h4><p>继承最大的问题就在于：继承层次过深、继承关系过于复杂会影响到代码的可读性和可维护性。我们可以利用组合（composition）、接口、委托（delegation）三个技术手段，一块儿来解决继承存在的问题。</p>
+<p>接口只声明方法，不定义实现。也就是说，每个会下蛋的鸟都要实现一遍 layEgg() 方法，并且实现逻辑是一样的，这就会导致代码重复的问题。那这个问题又该如何解决呢？</p>
+<p>我们可以针对三个接口再定义三个实现类，它们分别是：实现了 fly() 方法的 FlyAbility 类、实现了 tweet() 方法的 TweetAbility 类、实现了 layEgg() 方法的 EggLayAbility 类。然后，通过组合和委托技术来消除代码重复。具体的代码实现如下所示：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> Flyable &#123;</span><br><span class="line">  fly(): <span class="built_in">void</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FlyAbility</span> <span class="title">implements</span> <span class="title">Flyable</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="title">fly</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;fly&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">interface</span> Tweetable &#123;</span><br><span class="line">  tweet(): <span class="built_in">void</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TweetAbility</span> <span class="title">implements</span> <span class="title">Tweetable</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="title">tweet</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;tweet&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">interface</span> Egglayable &#123;</span><br><span class="line">  egglay(): <span class="built_in">void</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">EgglayAbility</span> <span class="title">implements</span> <span class="title">Egglayable</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="title">egglay</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;egglay&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Ostrich</span> <span class="title">implements</span> <span class="title">TweetAbility</span>, <span class="title">EgglayAbility</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> tweetAbility = <span class="keyword">new</span> TweetAbility();</span><br><span class="line">  <span class="keyword">private</span> egglayAbility = <span class="keyword">new</span> EgglayAbility();</span><br><span class="line">  <span class="keyword">public</span> tweet(): <span class="built_in">void</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.tweetAbility.tweet();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> egglay(): <span class="built_in">void</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.egglayAbility.egglay();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag"># 设计模式</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/04/18/%E6%95%B0%E6%8D%AE%E5%BA%93/oracle%E5%A4%8D%E4%B9%A0%E8%80%83%E7%82%B9/" rel="prev" title="oracle复习考点">
+      <i class="fa fa-chevron-left"></i> oracle复习考点
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/06/27/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/jenkins%E8%87%AA%E5%8A%A8%E6%9E%84%E5%BB%BA%E9%83%A8%E7%BD%B2%E5%89%8D%E7%AB%AF%E9%95%9C%E5%83%8F/" rel="next" title="jenkins自动构建部署前端镜像">
+      jenkins自动构建部署前端镜像 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1"><span class="nav-number">1.</span> <span class="nav-text">面向对象</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%81%E8%A3%85%E3%80%81%E6%8A%BD%E8%B1%A1%E3%80%81%E7%BB%A7%E6%89%BF%E3%80%81%E5%A4%9A%E6%80%81"><span class="nav-number">1.1.</span> <span class="nav-text">封装、抽象、继承、多态</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B0%81%E8%A3%85-Encapsulation"><span class="nav-number">1.1.1.</span> <span class="nav-text">封装 Encapsulation</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8A%BD%E8%B1%A1-Abstraction"><span class="nav-number">1.1.2.</span> <span class="nav-text">抽象 Abstraction</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%A7%E6%89%BF-Inheritance"><span class="nav-number">1.1.3.</span> <span class="nav-text">继承 Inheritance</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%9A%E6%80%81-Polymorphism"><span class="nav-number">1.1.4.</span> <span class="nav-text">多态 Polymorphism</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3%E7%B1%BB"><span class="nav-number">1.1.4.1.</span> <span class="nav-text">接口类</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#duck-typing"><span class="nav-number">1.1.4.2.</span> <span class="nav-text">duck-typing</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8A%BD%E8%B1%A1%E7%B1%BB%E4%B8%8E%E6%8E%A5%E5%8F%A3"><span class="nav-number">1.1.5.</span> <span class="nav-text">抽象类与接口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E6%8E%A5%E5%8F%A3%E8%80%8C%E9%9D%9E%E5%9F%BA%E4%BA%8E%E5%AE%9E%E7%8E%B0%E7%BC%96%E7%A8%8B"><span class="nav-number">1.1.6.</span> <span class="nav-text">基于接口而非基于实现编程</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%AF%BE%E5%90%8E%E4%B9%A0%E9%A2%98"><span class="nav-number">1.1.6.1.</span> <span class="nav-text">课后习题</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%9A%E7%94%A8%E7%BB%84%E5%90%88-%E5%B0%91%E7%94%A8%E7%BB%A7%E6%89%BF"><span class="nav-number">1.1.7.</span> <span class="nav-text">多用组合 少用继承</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">jiezi19971225</p>
+  <div class="site-description" itemprop="description">记录编程学习路上的点滴</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jiezi19971225</span>
+</div>
+  <img src="https://static.dy208.cn/o_1dfilp8ruo521thr1hvf18ji17soa.png"/>
+  <a href="http://www.beian.miit.gov.cn/"  style="color:#f72b07" target="_blank">皖ICP备17001385号-1</a>
+  <br/>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

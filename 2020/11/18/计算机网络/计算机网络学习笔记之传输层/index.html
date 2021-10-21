@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+<meta name="baidu-site-verification" content="5IfwMCE5hH" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.jiezi19971225.cn","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="本篇笔记是 计算机网络-自顶而下分析 第六版 第三章的学习笔记。 基本概念运输层协议是运行在端系统而不是在路由器中实现的。在发送端，运输层将从发送应用程序进程接收到的报文转换成运输层分组，用因特网术语来讲该分组称为运输层报文段 segment。实现的方法(可能)是将应用报文划分为较小的块，并为每块加上一个运输层首部以生成运输层报文段 然后，在发送端系统中，运输层将这些报文段传递给网络层，网路层将其">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机网络学习笔记之传输层">
+<meta property="og:url" content="http://www.jiezi19971225.cn/2020/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E4%BC%A0%E8%BE%93%E5%B1%82/index.html">
+<meta property="og:site_name" content="Jiez19971225‘s Blog">
+<meta property="og:description" content="本篇笔记是 计算机网络-自顶而下分析 第六版 第三章的学习笔记。 基本概念运输层协议是运行在端系统而不是在路由器中实现的。在发送端，运输层将从发送应用程序进程接收到的报文转换成运输层分组，用因特网术语来讲该分组称为运输层报文段 segment。实现的方法(可能)是将应用报文划分为较小的块，并为每块加上一个运输层首部以生成运输层报文段 然后，在发送端系统中，运输层将这些报文段传递给网络层，网路层将其">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://www.jiezi19971225.cn/2020/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E4%BC%A0%E8%BE%93%E5%B1%82/rdt1.0.png">
+<meta property="og:image" content="http://www.jiezi19971225.cn/2020/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E4%BC%A0%E8%BE%93%E5%B1%82/rdt2.0.png">
+<meta property="og:image" content="http://www.jiezi19971225.cn/2020/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E4%BC%A0%E8%BE%93%E5%B1%82/GBN.png">
+<meta property="article:published_time" content="2020-11-18T13:37:14.000Z">
+<meta property="article:modified_time" content="2021-10-21T16:45:16.171Z">
+<meta property="article:author" content="jiezi19971225">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://www.jiezi19971225.cn/2020/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E4%BC%A0%E8%BE%93%E5%B1%82/rdt1.0.png">
+
+<link rel="canonical" href="http://www.jiezi19971225.cn/2020/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E4%BC%A0%E8%BE%93%E5%B1%82/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>计算机网络学习笔记之传输层 | Jiez19971225‘s Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Jiez19971225‘s Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">做自己爱做的事</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E4%BC%A0%E8%BE%93%E5%B1%82/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content="记录编程学习路上的点滴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          计算机网络学习笔记之传输层
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-11-18 13:37:14" itemprop="dateCreated datePublished" datetime="2020-11-18T13:37:14+00:00">2020-11-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-10-21 16:45:16" itemprop="dateModified" datetime="2021-10-21T16:45:16+00:00">2021-10-21</time>
+              </span>
+
+          
+
+          <span class="post-time">
+            &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-bar-chart"></i>
+            </span>
+            <span class="post-meta-item-text">字数统计:</span>
+            <span class="post-count">3.1k(字)</span>
+
+          </span>
+
+            <span class="post-time">
+          &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-clock-o"></i>
+            </span>
+            <span class="post-meta-item-text">阅读时长:</span>
+            <span class="post-count">10(分)</span>
+
+          </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本篇笔记是 计算机网络-自顶而下分析 第六版 第三章的学习笔记。</p>
+<h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p>运输层协议是运行在端系统而不是在路由器中实现的。在发送端，运输层将从发送应用程序进程接收到的报文转换成运输层分组，用因特网术语来讲该分组称为运输层报文段 segment。实现的方法(可能)是将应用报文划分为较小的块，并为每块<br>加上一个运输层首部以生成运输层报文段 然后，在发送端系统中，运输层将这些报文段传递给网络层，网路层将其封装成网络层分组(即数据报)并向目的地发送。:网络路由器仅作用于该数据报的网络层字段;即它们不检查封装在该数据报的运输层报文段的字段 在接收端，网络层从数据报中提取运输层报文段，并将该报文段向上交给运输层 运输层则处理接收到的报文段，使该报文段中的数据为接收应用进程使用。</p>
+<h4 id="与网络层的关系"><a href="#与网络层的关系" class="headerlink" title="与网络层的关系"></a>与网络层的关系</h4><p>网络层提供了主机之间的逻辑通信，而运输层为运行在不同主机上的进程之间提供了逻辑通信。然而，即使底层网络协议不能在网络层提供相应的服务，运输层协议也能提供某些服务。即使底层网络协议是不可靠的，也就是说网络层协议会使分组丢失、篡改和冗余，运输协议也能为应用程序提供可靠的数据传输服务。</p>
+<h4 id="概述运输层服务"><a href="#概述运输层服务" class="headerlink" title="概述运输层服务"></a>概述运输层服务</h4><p>因特网网络层协议有一个名字叫 IP ，即网际协议 IP 主机之间提供了逻辑通信 IP 的服务模型是尽力而为交付服务( besl- e[[ort delivery service)。这意味着 IP 尽它”最大的努力”在通信的主机之间交忖报文段，但它并不做任何确保<br>特别是，它不确保报文段的交付 不保证报文段的按序交付，不保证报文段数据的完整。由于这些原因， IP 被称为不可靠服务 (unreliable service) 在此还要指出的是，每台主机至少有一个网络层地址，即所谓的 IP 地址。</p>
+<p>UDP TCP 最基本的责任是，将两个端系统间 的交付服务扩展为运行在端系统上的两个进程之间的交付服务 将主机间交付扩展到进程间交付被称为运输层的多路复用( transport -layer multiplexing) 与多路分解( demultiplexing) 。</p>
+<p>与 IP 一样， UDP 也是一种不可靠的服务，即不能保证一个进程所发送的数据能够完整无缺地(或全部! )到达目的进程。<br>TCP 为应用程序提供了几种附加服务 首先，它提供可靠数据传输( reliable dala tTansfer) 通过使用流量控制、序号、确认和定时器(本章将详细介绍这些技术)， TCP 确保正确地、按序地将数据从发送进程交付给接收进程。<br>TCP 还提供拥塞控制( congestion conlrol) 。TCP 力求为每个通过一条拥塞网络链路的连接平等地共享网络链路带宽 这可以通过调节 TCP 连接的发送端发送进网络的流量速率来做到 在另一方面， UDP 流量是不可调节的 使用 UDP 传输的应用程序可以根据其需要以其愿意的任何速率发送数据。</p>
+<h3 id="多路复用和多路分解"><a href="#多路复用和多路分解" class="headerlink" title="多路复用和多路分解"></a>多路复用和多路分解</h3><h4 id="如何实现"><a href="#如何实现" class="headerlink" title="如何实现"></a>如何实现</h4><p><strong>多路复用的要求是</strong></p>
+<ul>
+<li>套接宇有唯一标识符</li>
+<li>每个报文段有特殊字段来指示该报文段所要交付到的套接字</li>
+</ul>
+<p>这些特殊字段是源端口号字段 (source port oumber field) 和目的端口号字段 (destination port nurnber field)。端口号’是一个 16 比特的数，其大小在 0-65535。<br>0-1023 范围的端口号称为周知端口号( well- known porl number) ，是受限制的，这是指它们保留给诸如 HTTP (它使用端口号 80) 和盯’p (它使用端口号 1)之类的周知应用层协议来使用。</p>
+<p>假设主机 A B 进行 UDP 通信，主机 能够运行多个进程，每个进程有自己的 UDP 套接字及相应的端口号。当从网络到达 UDP 报文段时，主机 通过检查该报文段中的目的端口号，将每个报文段定向(分解)到相应的套接字。</p>
+<p>一个 UDP 套接字是由一个二元组来全面标识的，该二元组包含一个目的 地址和一个目的端口号。</p>
+<p>服务器主机可以支持很多并行的 TCP 套接字，每个套接字与一个进程相联系，并由其四元组（源地址，源端口，目的地址，目的端口）来标识每个套接字。</p>
+<h3 id="无连接服务-UDP"><a href="#无连接服务-UDP" class="headerlink" title="无连接服务 UDP"></a>无连接服务 UDP</h3><h4 id="报文结构"><a href="#报文结构" class="headerlink" title="报文结构"></a>报文结构</h4><p>UDP 首部只有 4 个字段（源端口号，目的端口号，长度，检验和），每个字段由两个字节组成。长度字 32 比特段指示了在 UDP 报文段中的字节数(首部加数据) 。因为数据字段在一个 UDP 段中不同于另一个段中，需要一个明确的长度。接收方使用检验和来检查该报文段中是否出现了差错。</p>
+<h4 id="UDP-检验和"><a href="#UDP-检验和" class="headerlink" title="UDP 检验和"></a>UDP 检验和</h4><p>发送方的 UDP 对报文段中的所有 16 比特字的和进行反码运算，求和时遇到的任何溢出都被回卷。得到的结果被放在 UDP 报文段中的检验和字段。在接收方，如果没有差错，全部的数据段 16 比特字加上检验和的和将是 1111111111111111。</p>
+<p>为什么 UDP 提供了检验和。许多链路层协议，包括流行的以太计算机网协议，也提供了差错检测，其原因是不能保证源和目的之间的所有链路都提供插座检测。这就是说，也许这些链路中的一条可能使用没有差错检测的协议。此外，即使报文段经链路正确地传输，当报文段存储在某台路由器的内存中时，也可能引入比特差错。在既无法确保连链路的可靠性，又无法确保内存中的差错检测的情况下，如果端到端数据传输服务要提供差错检测， UDP 就必须在端到端基础上在运输层提供差错检测。这是 个在系统设计巾被称颂的端到端原则( end - end principle)。</p>
+<p>因为假定 IP 是可以运行在任何第二层协议之上的，运输层提供差错检测作为 种保险措施是非常有用的 虽然 UDP 提供差错检测，但它对差错恢复无能为力。 UDP 的某种实现只是丢弃受损的报文段; 其他实现是将受损的报文段交给应用程序并给出警告。</p>
+<h3 id="可靠数据传输原理"><a href="#可靠数据传输原理" class="headerlink" title="可靠数据传输原理"></a>可靠数据传输原理</h3><p>本节一步步研究一系列协议，逐步构建一个无错、可靠的数据传输协议。</p>
+<h4 id="经完全可靠信道的可靠传输-rdt-1-0"><a href="#经完全可靠信道的可靠传输-rdt-1-0" class="headerlink" title="经完全可靠信道的可靠传输 rdt 1.0"></a>经完全可靠信道的可靠传输 rdt 1.0</h4><p>首先考虑最简单的情况，即底层信道是完全可靠的。<br><img src="/2020/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E4%BC%A0%E8%BE%93%E5%B1%82/rdt1.0.png" alt="rdt1.0"></p>
+<p>在这个简单的协议中，一个单元数据与一个分组没差别。，所有计算机#### 经具有比特差错信道的可靠数据传输 rdt 2.0</p>
+<p>底层信道更为实际的模型是分组中的比特可能受损 在分组的传输、传播或缓存的过程中，这种比特差错通常会出现在网络的物理部件中 我们眼下还将继续假定所有发送的分组(虽然有些比特可能受损)将按其发送的顺序被接收。</p>
+<p>协议使用了<strong>肯定确认</strong>与<strong>否定确认</strong>，这种形式使得接收方可以让发送方知道那些内容被正确接收，哪些内容接收有误并因此需要重复。在计算机网络环境中，基于这种重传机制的可靠传输协议被称为 <strong>自动重传请求（Automatic Repeat reQuest，ARQ）协议</strong>。</p>
+<p>ARQ 协议还需要另外三种协议功能来处理存在比特差错的情况。</p>
+<ul>
+<li>差错检测 需要一种机制以使接收方检测到何时出现了比特差错</li>
+<li>接收方反馈 因为发送方和接收方通常在不同端系统上执行，可能相隔数千英里，发送方要了解接收方情况(此时为分组是再被正确接收)的唯一途径就是让接收方提供明确的反馈信息给发送方</li>
+<li>重传 接收方收到有差错的分组时，发送方将重传该分组文</li>
+</ul>
+<p><img src="/2020/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E4%BC%A0%E8%BE%93%E5%B1%82/rdt2.0.png" alt="rdt2.0"></p>
+<p>目前该协议有一个致命缺陷，没有考虑到 ACK 或者 NAK 分组受损的可能性。</p>
+<p>可以在发送方收到受损的 ACK 或 NAK 分组时，重传当前数据分组，但是这种方法引入了 <strong>冗余分组</strong>，其根本困难在于接收方不知道它上次所发送的 ACK 或者 NAK 是否被发送方正确地收到，因此它无法事先知道接收到的分组是新的还是一次重传。</p>
+<p>解决这个问题的一个简单方法，是在数据分组增加一个新字段，让发送方对其数据分组编号，即将发送数据的分组的序号放在该字段，接收方只需要检查序号即可确定收到的分组是否一次重传。对于停等协议，1 比特序号就足够了，因为它可以让接收方知道发送方是否正在重传前一个发送分组（接收到的分组序号与最近收到的分组序号相同），或是一个新分组（序号变化了）。</p>
+<h4 id="具有比特差错的丢包信道的可靠数据传输-rdt-3-0"><a href="#具有比特差错的丢包信道的可靠数据传输-rdt-3-0" class="headerlink" title="具有比特差错的丢包信道的可靠数据传输 rdt 3.0"></a>具有比特差错的丢包信道的可靠数据传输 rdt 3.0</h4><p>问题是怎么检测丢包以及发生丢包后该做什么。为了解决检测丢包的问题，还需要增加新的协议机制。</p>
+<p>假定发送方传输一个数据分组，该分组或者接收方对该分组的 ACK 发生了丢失，如果发送方愿意等待足够长的时间以便确定分组已丢失，则它只需要重传该数据分组即可。这个时间至少应当是发送方和接受方之间的一个往返时延，加上接收方处理一个分组所需要的时间。</p>
+<p>为了实现基于时间的重传机制，需要一个倒计数定时器。发送方需要做到：1. 每次发送一个分组时，启动一个定时器 2. 响应定时器中断 3. 终止定时器</p>
+<h4 id="流水线可靠数据传输协议"><a href="#流水线可靠数据传输协议" class="headerlink" title="流水线可靠数据传输协议"></a>流水线可靠数据传输协议</h4><p>上述 rdt 3.0 协议的问题在于它是一个停等协议，对于信道的利用率太低。如果每次可以发送多个分组，那么需要增加以下机制：</p>
+<ul>
+<li>必须增加序号范围，每个输送中的分组必须有一个唯一的序号，而且也许有多个输送中未确认的报文</li>
+<li>协议的发送方和接收方也许必须缓存多个分组</li>
+<li>所需序号范围和对缓冲的要求取决于数据传输协议如何处理丢失、损坏和延时过大的分组。解决流水线的差错恢复有两种基本方法：<strong>回退 N 步</strong>和<strong>选择重传</strong></li>
+</ul>
+<h4 id="回退-N-步"><a href="#回退-N-步" class="headerlink" title="回退 N 步"></a>回退 N 步</h4><p>那些已被发送但还未被确认的分组的许可序号范围可以被看成是一个在序号范围内长度为 的窗口 随着协议的运行，该窗口在序号空间向前滑动。因此 N 常被称为窗口长度 (window size) , GBN 协议也常被称为滑动窗口协议。<br>为什么要限制这些被发送的、未被确认的分组的数目为 N 呢？流量控制是对发送发施加限制的原因之一，拥塞控制则是另一个原因。</p>
+<p><img src="/2020/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E4%BC%A0%E8%BE%93%E5%B1%82/GBN.png" alt="GBN"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/10/31/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E7%BD%91%E7%BB%9C%E5%B1%82/" rel="prev" title="计算机网络学习笔记之网络层">
+      <i class="fa fa-chevron-left"></i> 计算机网络学习笔记之网络层
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/28/vue/%E5%A6%82%E4%BD%95%E4%BA%8C%E6%AC%A1%E5%B0%81%E8%A3%85vue%E7%BB%84%E4%BB%B6/" rel="next" title="如何二次封装vue组件">
+      如何二次封装vue组件 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%8E%E7%BD%91%E7%BB%9C%E5%B1%82%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">1.1.</span> <span class="nav-text">与网络层的关系</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0%E8%BF%90%E8%BE%93%E5%B1%82%E6%9C%8D%E5%8A%A1"><span class="nav-number">1.2.</span> <span class="nav-text">概述运输层服务</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E5%92%8C%E5%A4%9A%E8%B7%AF%E5%88%86%E8%A7%A3"><span class="nav-number">2.</span> <span class="nav-text">多路复用和多路分解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.1.</span> <span class="nav-text">如何实现</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%A0%E8%BF%9E%E6%8E%A5%E6%9C%8D%E5%8A%A1-UDP"><span class="nav-number">3.</span> <span class="nav-text">无连接服务 UDP</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8A%A5%E6%96%87%E7%BB%93%E6%9E%84"><span class="nav-number">3.1.</span> <span class="nav-text">报文结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#UDP-%E6%A3%80%E9%AA%8C%E5%92%8C"><span class="nav-number">3.2.</span> <span class="nav-text">UDP 检验和</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E9%9D%A0%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93%E5%8E%9F%E7%90%86"><span class="nav-number">4.</span> <span class="nav-text">可靠数据传输原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%8F%E5%AE%8C%E5%85%A8%E5%8F%AF%E9%9D%A0%E4%BF%A1%E9%81%93%E7%9A%84%E5%8F%AF%E9%9D%A0%E4%BC%A0%E8%BE%93-rdt-1-0"><span class="nav-number">4.1.</span> <span class="nav-text">经完全可靠信道的可靠传输 rdt 1.0</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B7%E6%9C%89%E6%AF%94%E7%89%B9%E5%B7%AE%E9%94%99%E7%9A%84%E4%B8%A2%E5%8C%85%E4%BF%A1%E9%81%93%E7%9A%84%E5%8F%AF%E9%9D%A0%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93-rdt-3-0"><span class="nav-number">4.2.</span> <span class="nav-text">具有比特差错的丢包信道的可靠数据传输 rdt 3.0</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B5%81%E6%B0%B4%E7%BA%BF%E5%8F%AF%E9%9D%A0%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93%E5%8D%8F%E8%AE%AE"><span class="nav-number">4.3.</span> <span class="nav-text">流水线可靠数据传输协议</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9B%9E%E9%80%80-N-%E6%AD%A5"><span class="nav-number">4.4.</span> <span class="nav-text">回退 N 步</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">jiezi19971225</p>
+  <div class="site-description" itemprop="description">记录编程学习路上的点滴</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jiezi19971225</span>
+</div>
+  <img src="https://static.dy208.cn/o_1dfilp8ruo521thr1hvf18ji17soa.png"/>
+  <a href="http://www.beian.miit.gov.cn/"  style="color:#f72b07" target="_blank">皖ICP备17001385号-1</a>
+  <br/>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

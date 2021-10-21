@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+<meta name="baidu-site-verification" content="5IfwMCE5hH" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.jiezi19971225.cn","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="打包文件资源问题filename 指列在 entry 中，打包后输出的文件的名称。chunkFilename 指未列在 entry 中，却又需要被打包出来的文件的名称。 项目缓存问题当项目上线新版本的时候，用户浏览器可能仍然使用的是之前 html 和 js 文件的缓存。通过以下几个方法可以解决这个问题。  文件命名使用哈希值，这样当发布新版本就会请求新版本的资源文件。vue-cli 中默认有这个功">
+<meta property="og:type" content="article">
+<meta property="og:title" content="webpack爬坑之路">
+<meta property="og:url" content="http://www.jiezi19971225.cn/2019/09/04/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/webpack%E7%88%AC%E5%9D%91%E4%B9%8B%E8%B7%AF/index.html">
+<meta property="og:site_name" content="Jiez19971225‘s Blog">
+<meta property="og:description" content="打包文件资源问题filename 指列在 entry 中，打包后输出的文件的名称。chunkFilename 指未列在 entry 中，却又需要被打包出来的文件的名称。 项目缓存问题当项目上线新版本的时候，用户浏览器可能仍然使用的是之前 html 和 js 文件的缓存。通过以下几个方法可以解决这个问题。  文件命名使用哈希值，这样当发布新版本就会请求新版本的资源文件。vue-cli 中默认有这个功">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://www.jiezi19971225.cn/2019/09/04/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/webpack%E7%88%AC%E5%9D%91%E4%B9%8B%E8%B7%AF/chunkname.png">
+<meta property="article:published_time" content="2019-09-04T00:52:50.000Z">
+<meta property="article:modified_time" content="2021-10-21T16:45:16.147Z">
+<meta property="article:author" content="jiezi19971225">
+<meta property="article:tag" content="webpack">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://www.jiezi19971225.cn/2019/09/04/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/webpack%E7%88%AC%E5%9D%91%E4%B9%8B%E8%B7%AF/chunkname.png">
+
+<link rel="canonical" href="http://www.jiezi19971225.cn/2019/09/04/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/webpack%E7%88%AC%E5%9D%91%E4%B9%8B%E8%B7%AF/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>webpack爬坑之路 | Jiez19971225‘s Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Jiez19971225‘s Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">做自己爱做的事</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2019/09/04/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/webpack%E7%88%AC%E5%9D%91%E4%B9%8B%E8%B7%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content="记录编程学习路上的点滴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          webpack爬坑之路
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-09-04 00:52:50" itemprop="dateCreated datePublished" datetime="2019-09-04T00:52:50+00:00">2019-09-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-10-21 16:45:16" itemprop="dateModified" datetime="2021-10-21T16:45:16+00:00">2021-10-21</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/" itemprop="url" rel="index"><span itemprop="name">开发工具</span></a>
+                </span>
+            </span>
+
+          
+
+          <span class="post-time">
+            &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-bar-chart"></i>
+            </span>
+            <span class="post-meta-item-text">字数统计:</span>
+            <span class="post-count">2k(字)</span>
+
+          </span>
+
+            <span class="post-time">
+          &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-clock-o"></i>
+            </span>
+            <span class="post-meta-item-text">阅读时长:</span>
+            <span class="post-count">8(分)</span>
+
+          </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="打包文件资源问题"><a href="#打包文件资源问题" class="headerlink" title="打包文件资源问题"></a>打包文件资源问题</h3><p>filename 指列在 entry 中，打包后输出的文件的名称。<br>chunkFilename 指未列在 entry 中，却又需要被打包出来的文件的名称。</p>
+<h3 id="项目缓存问题"><a href="#项目缓存问题" class="headerlink" title="项目缓存问题"></a>项目缓存问题</h3><p>当项目上线新版本的时候，用户浏览器可能仍然使用的是之前 html 和 js 文件的缓存。通过以下几个方法可以解决这个问题。</p>
+<ul>
+<li>文件命名使用哈希值，这样当发布新版本就会请求新版本的资源文件。vue-cli 中默认有这个功能，webpack 在每次构建的时候都会生成 hash，contenthash，chunkhash 三个哈希值<ul>
+<li>hash 这是工程级别的，即每次修改任何一个文件，所有文件名的 hash 至都将改变。所以一旦修改了任何一个文件，整个项目的文件缓存都将失效。</li>
+<li>chunkhash 根据不同的入口文件(Entry)进行依赖文件解析、构建对应的 chunk，生成对应的哈希值。在生产环境里把一些公共库和程序入口文件区分开，单独打包构建，接着我们采用 chunkhash 的方式生成哈希值，那么只要我们不改动公共库的代码，就可以保证其哈希值不会受影响。并且 webpack4 中支持了异步 import 功能，chunkhash 也作用于此。</li>
+<li>contenthash 一般来说，样式是作为模块 import 到 js 文件中，他们的 chunkhash 是一致的，这导致只要对应的 css 或者 js 改变，chunkhash 就会改变。而 contenthash 是针对文件内容级别的，只有自身模块的内容变了，hash 值才改变</li>
+</ul>
+</li>
+<li>html 加上</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">meta</span></span></span><br><span class="line"><span class="tag">  <span class="attr">http-equiv</span>=<span class="string">&quot;cache-control&quot;</span></span></span><br><span class="line"><span class="tag">  <span class="attr">content</span>=<span class="string">&quot;no-cache, no-store, must-revalidate&quot;</span></span></span><br><span class="line"><span class="tag">/&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>配置 nginx，禁止 html 入口文件的缓存</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">location = /index.html &#123;</span><br><span class="line">    add_header Cache-Control <span class="string">&quot;no-cache, no-store&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line">location = /admin_index.html &#123;</span><br><span class="line">    add_header Cache-Control <span class="string">&quot;no-cache, no-store&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>使用 HtmlWebpackPlugin 插件，一个典型的配置如下</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> HtmlWebpackPlugin(&#123;</span><br><span class="line">    <span class="attr">filename</span>: <span class="string">&#x27;admin_index.html&#x27;</span>,</span><br><span class="line">    <span class="attr">template</span>: <span class="string">&#x27;web-admin/admin_index.html&#x27;</span>,</span><br><span class="line">    <span class="attr">inject</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">hash</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="attr">chunks</span>: [<span class="string">&#x27;adminApp&#x27;</span>, <span class="string">&#x27;vendor~adminApp&#x27;</span>, <span class="string">&#x27;vendor~adminApp~userApp&#x27;</span>],  <span class="comment">// 这个数组是html要引入的打包生成的chunk文件，chunkname 在 webpack 打包输出信息中</span></span><br><span class="line">    <span class="attr">minify</span>: &#123;</span><br><span class="line">        <span class="attr">removeComments</span>: <span class="literal">true</span>,</span><br><span class="line">        <span class="attr">collapseWhitespace</span>: <span class="literal">true</span>,</span><br><span class="line">        <span class="attr">removeAttributeQuotes</span>: <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;),</span><br></pre></td></tr></table></figure>
+<p><img src="/2019/09/04/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/webpack%E7%88%AC%E5%9D%91%E4%B9%8B%E8%B7%AF/chunkname.png" alt="chunkname"><br>图中最右边一列就是资源的 chunkname</p>
+<h3 id="MiniCssExtractPlugin"><a href="#MiniCssExtractPlugin" class="headerlink" title="MiniCssExtractPlugin"></a>MiniCssExtractPlugin</h3><p>之前项目使用的是 ExtractTextPlugin 对 css 进行抽出并打包，然而 ExtractTextPlugin 在 4.0 版本后不再支持对 css 进行打包 (会在生成的 css 文件末尾附加 webpack 运行时的代码)，后学习得知现在应使用 MiniCssExtractPlugin 对 css 进行抽离</p>
+<h3 id="CleanWebpackPlugin"><a href="#CleanWebpackPlugin" class="headerlink" title="CleanWebpackPlugin"></a>CleanWebpackPlugin</h3><p>这个插件的作用是每次构建的时候，清理重复构建的文件，因为使用哈希方式构建的时候，文件名不同，更改的文件不会直接替换。个人感觉使用 rm -rf dist/* 清理也可以 当然这可以避免你神志不清时误把整个项目文件删了</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> CleanWebpackPlugin([<span class="string">&quot;dist&quot;</span>]);</span><br></pre></td></tr></table></figure>
+<h3 id="optimization-splitChunks"><a href="#optimization-splitChunks" class="headerlink" title="optimization.splitChunks"></a>optimization.splitChunks</h3><p>非常实用的功能，抽出代码中的公共组件到独立的文件，举个例子</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">cacheGroups: &#123;</span><br><span class="line">    <span class="attr">vendor</span>: &#123;</span><br><span class="line">        <span class="attr">test</span>: <span class="regexp">/node_modules/</span>,</span><br><span class="line">        chunks: <span class="string">&quot;initial&quot;</span>,</span><br><span class="line">        <span class="comment">// name:&quot;vendor&quot;,</span></span><br><span class="line">        <span class="attr">priority</span>: <span class="number">10</span>,</span><br><span class="line">        <span class="attr">enforce</span>: <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果没有 name 属性，a 入口文件引用了 vue 和 axios， b 入口文件引用了 react 和 axios，那么 webpack 就会把 axios 单独抽离出来为独立的 chunk，同时 vue 和 react 在各自的独立 chunk 中<br>而如果有 name 属性，那么所有依赖文件都会打包到命名的 chunk 文件中，这个原理同样适用于 CSS 的打包。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">optimization: &#123;</span><br><span class="line">  <span class="attr">splitChunks</span>: &#123;</span><br><span class="line">    <span class="attr">chunks</span>: <span class="string">&quot;all&quot;</span>,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以将 node_modules 中代码单独打包一个 chunk 最终输出</p>
+<p>通过 js 代码让文件打包成单独 chunk</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span>(<span class="comment">/*webpackChunkName:&#x27;test&#x27;,webpackPrefetc:true*/</span>,<span class="string">&quot;./test&quot;</span>)</span><br><span class="line">  .then(<span class="function"><span class="params">module</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 返回 es6 module</span></span><br><span class="line">  &#125;)</span><br><span class="line">  .catch(<span class="function">() =&gt;</span> &#123;&#125;);</span><br></pre></td></tr></table></figure>
+<p>懒加载 当文件需要时才加载<br>预加载 prefetch 会在使用之前，提前加载 js 文件，等其他资源加载完毕了，再偷偷加载<br>正常加载认为是并行加载</p>
+<h3 id="OptimizeCssAssetsPlugin"><a href="#OptimizeCssAssetsPlugin" class="headerlink" title="OptimizeCssAssetsPlugin"></a>OptimizeCssAssetsPlugin</h3><p>我在打包时发现 node_modules 中的 css 文件无法被压缩。css loader 中的 minimize 选项早已被废弃，尝试使用了这个插件后解决了问题。</p>
+<h3 id="devserver"><a href="#devserver" class="headerlink" title="devserver"></a>devserver</h3><ul>
+<li>proxy<br>代理的只能是本地 如果本身请求的目的地址已经指定不是本地，那么这个请求不会被 webpack 代理</li>
+<li>HMR<ul>
+<li>样式文件 可以使用 因为 style-loader 内部实现了 HMR</li>
+<li>js 文件 默认不能使用 HMR 功能</li>
+<li>html 文件不能热更新 将 html 文件 加入 entry 这样会重新加载页面 不需要作 HMR 功能</li>
+</ul>
+</li>
+</ul>
+<h3 id="sourcemap"><a href="#sourcemap" class="headerlink" title="sourcemap"></a>sourcemap</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>source-map</td>
+<td>外部 错误代码的准确信息访问到源代码的准确位置</td>
+</tr>
+<tr>
+<td>inline-source-map</td>
+<td>内联 只生成一个 sourcemap</td>
+</tr>
+<tr>
+<td>hidden-source-map</td>
+<td>外联 错误代码错误原因，但是没有错误位置，不能追踪源代码错误，只能提示到构建后代码的错误位置</td>
+</tr>
+<tr>
+<td>eval-source-map</td>
+<td>内联 每一个文件都生成对应的 source-map，都在 eval 错误代码准确信息，和源代码的错误位置</td>
+</tr>
+<tr>
+<td>nosources-source-map</td>
+<td>外部 错误代码准确信息，但是没有任何源代码信息</td>
+</tr>
+<tr>
+<td>cheap-source-map</td>
+<td>外部 错误代码准确信息和源代码的错误位置 只能精确到行</td>
+</tr>
+<tr>
+<td>cheap-module-source-map</td>
+<td>外部 错误代码准确信息 和 源代码错误位置</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>module 会将 loader 的 source map 加入</p>
+<p>开发环境:速度快，调试更友好<br>速度快(eval&gt;inline&gt;cheap)<br>eval-cheap-source-map<br>eval-source-map<br>调试更友好<br>source-map<br>cheap-moudule-source-map<br>cheap-source-map</p>
+<p>eval-cheap-source-map</p>
+<ul>
+<li>内联和外部的区别 1. 外部生成了文件，内联没有 2. 内联构建速度更快</li>
+</ul>
+<p>开发环境：速度快，调试更友好<br>eval&gt;inline&gt;cheap<br>source-map<br>cheap-module-source-map<br>cheap-source-map<br>eval-source-map / eval-cheap-moudule-source-map</p>
+<p>生产环境：源代码要不要隐藏？调试友好程度<br>内联会让代码变大，所以再生产环境不用内联<br>nosources-source-map 全部隐藏<br>hidden-source-map 只隐藏代码，会提示构建代码错误信息</p>
+<h3 id="babel-loader"><a href="#babel-loader" class="headerlink" title="babel-loader"></a>babel-loader</h3><p>babel 缓存 cacheDirectory: true</p>
+<h3 id="tree-shakin-去除无用代码"><a href="#tree-shakin-去除无用代码" class="headerlink" title="tree shakin 去除无用代码"></a>tree shakin 去除无用代码</h3><ul>
+<li><p>必须使用 ES6 模块化</p>
+</li>
+<li><p>开启 production 环境</p>
+</li>
+<li><p>在 package.json 中配置 “sideEffects”:false 所有的代码都没有副作用，都可以进行 tree shaking 可能会把 css/ @bable/polyfill 文件干掉</p>
+</li>
+<li>定义 nodejs 环境变量：决定使用 browserslist 的哪个环境 process.env.NODE_ENV = ‘production’</li>
+</ul>
+<h3 id="PWA"><a href="#PWA" class="headerlink" title="PWA"></a>PWA</h3><p>workbox-&gt;workbox-webpack-plugin</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> WorkboxWebpackPlugin.GenerateSW &#123;</span><br><span class="line">  <span class="comment">// 生成 serverworker.js</span></span><br><span class="line">  <span class="attr">clientClaim</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">skipWaiting</span>:<span class="literal">true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>eslint 不认识 window,navigator 全局变量，需要修改</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">env: &#123;</span><br><span class="line">  <span class="attr">browser</span>: <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="多进程打包-thread-loader"><a href="#多进程打包-thread-loader" class="headerlink" title="多进程打包 thread-loader"></a>多进程打包 thread-loader</h3><p>开启多进程打包，进程启动大概 600ms，进程通信也有开销<br>多用在 babel-loader</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">loader</span>:<span class="string">&#x27;thread-loader&#x27;</span>,</span><br><span class="line">  <span class="attr">options</span>:&#123;</span><br><span class="line">    <span class="attr">workers</span>:<span class="number">2</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="externals-忽略打包"><a href="#externals-忽略打包" class="headerlink" title="externals 忽略打包"></a>externals 忽略打包</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">externals: &#123;</span><br><span class="line">  <span class="comment">// 忽略库名 -- npm 包名</span></span><br><span class="line">  <span class="attr">jQuery</span>: <span class="string">&quot;jQuery&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="dll"><a href="#dll" class="headerlink" title="dll"></a>dll</h3><p>打包 dll</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; resolve &#125; = <span class="built_in">require</span>(<span class="string">&quot;path&quot;</span>);</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="attr">entry</span>: &#123;</span><br><span class="line">    <span class="attr">jquery</span>: [<span class="string">&quot;jquery&quot;</span>],</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">output</span>: &#123;</span><br><span class="line">    <span class="attr">filename</span>: <span class="string">&quot;[name].js&quot;</span>,</span><br><span class="line">    <span class="attr">path</span>: resolve(__dirname, <span class="string">&quot;dll&quot;</span>),</span><br><span class="line">    <span class="attr">library</span>: <span class="string">&quot;[name]_[hash]&quot;</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">plugins</span>: [</span><br><span class="line">    <span class="comment">// 打包生成一个 manifest.json --&gt; 提供和jquery映射</span></span><br><span class="line">    <span class="keyword">new</span> webpack.DLLPlugin(&#123;</span><br><span class="line">      <span class="attr">name</span>: <span class="string">&quot;[name]_[hash]&quot;</span>,</span><br><span class="line">      <span class="attr">path</span>: resolve(__dirname, <span class="string">&quot;dll/manifest.json&quot;</span>),</span><br><span class="line">    &#125;),</span><br><span class="line">  ],</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>定义 dll</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> webpack.DLLReferencePlugin(&#123;</span><br><span class="line">  <span class="attr">manifest</span>: resolve(__dirname, <span class="string">&quot;dll/manifest.json&quot;</span>),</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>引用 dll</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> AddAssetHtmlWebpackPlugin(&#123;</span><br><span class="line">  <span class="attr">filepath</span>: resolve(__dirname, <span class="string">&quot;dll/jquery.js&quot;</span>),</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="配置详解"><a href="#配置详解" class="headerlink" title="配置详解"></a>配置详解</h3><ul>
+<li><p>module</p>
+<ul>
+<li>enforce:’pre’, // 优先执行</li>
+<li>enforce:’post’, // 延后执行</li>
+</ul>
+</li>
+<li><p>resolve 解析模块的规则</p>
+<ul>
+<li>alias 配置解析模块的别名</li>
+<li>extensions:[‘.js’,’json’] 配置省略文件路径的后缀名</li>
+<li>modules:[resolve(__dirname,’../../node_modules’),’node_modules’] 解析模块去找哪个目录</li>
+</ul>
+</li>
+<li><p>optimization</p>
+</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">optimization: &#123;</span><br><span class="line">  <span class="comment">// 将当前模块记录的其他模块的hash单独打包为一个文件 runtime 一定要加上 保证未改动模块缓存不失效</span></span><br><span class="line">  <span class="attr">runtimeChunk</span>: &#123;</span><br><span class="line">    <span class="attr">name</span>: <span class="function"><span class="params">entrypoint</span> =&gt;</span> <span class="string">`runtime-<span class="subst">$&#123;entrypoint.name&#125;</span>`</span>;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">minimize</span>:&#123;</span><br><span class="line">    <span class="comment">// 配置生产环境的压缩方案: js和css</span></span><br><span class="line">    <span class="keyword">new</span> TerserWebpackPlugin(&#123;</span><br><span class="line">      <span class="comment">// 开启缓存</span></span><br><span class="line">      <span class="attr">cache</span>:<span class="literal">true</span>,</span><br><span class="line">      <span class="comment">// 开启多进程打包</span></span><br><span class="line">      <span class="attr">parallel</span>:<span class="literal">true</span>,</span><br><span class="line">      <span class="comment">// 启动source-map</span></span><br><span class="line">      <span class="attr">sourceMap</span>:<span class="literal">true</span></span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/webpack/" rel="tag"># webpack</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/09/02/%E7%AE%97%E6%B3%95/%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84/" rel="prev" title="树状数组">
+      <i class="fa fa-chevron-left"></i> 树状数组
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/09/10/CSS/dart-sass%E4%B8%8Enode-sass%E7%9A%84%E5%8C%BA%E5%88%AB/" rel="next" title="dart-sass 和 ruby-sass 的区别">
+      dart-sass 和 ruby-sass 的区别 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%93%E5%8C%85%E6%96%87%E4%BB%B6%E8%B5%84%E6%BA%90%E9%97%AE%E9%A2%98"><span class="nav-number">1.</span> <span class="nav-text">打包文件资源问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%E7%BC%93%E5%AD%98%E9%97%AE%E9%A2%98"><span class="nav-number">2.</span> <span class="nav-text">项目缓存问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MiniCssExtractPlugin"><span class="nav-number">3.</span> <span class="nav-text">MiniCssExtractPlugin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CleanWebpackPlugin"><span class="nav-number">4.</span> <span class="nav-text">CleanWebpackPlugin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#optimization-splitChunks"><span class="nav-number">5.</span> <span class="nav-text">optimization.splitChunks</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OptimizeCssAssetsPlugin"><span class="nav-number">6.</span> <span class="nav-text">OptimizeCssAssetsPlugin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#devserver"><span class="nav-number">7.</span> <span class="nav-text">devserver</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sourcemap"><span class="nav-number">8.</span> <span class="nav-text">sourcemap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#babel-loader"><span class="nav-number">9.</span> <span class="nav-text">babel-loader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tree-shakin-%E5%8E%BB%E9%99%A4%E6%97%A0%E7%94%A8%E4%BB%A3%E7%A0%81"><span class="nav-number">10.</span> <span class="nav-text">tree shakin 去除无用代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PWA"><span class="nav-number">11.</span> <span class="nav-text">PWA</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E8%BF%9B%E7%A8%8B%E6%89%93%E5%8C%85-thread-loader"><span class="nav-number">12.</span> <span class="nav-text">多进程打包 thread-loader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#externals-%E5%BF%BD%E7%95%A5%E6%89%93%E5%8C%85"><span class="nav-number">13.</span> <span class="nav-text">externals 忽略打包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dll"><span class="nav-number">14.</span> <span class="nav-text">dll</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E8%AF%A6%E8%A7%A3"><span class="nav-number">15.</span> <span class="nav-text">配置详解</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">jiezi19971225</p>
+  <div class="site-description" itemprop="description">记录编程学习路上的点滴</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jiezi19971225</span>
+</div>
+  <img src="https://static.dy208.cn/o_1dfilp8ruo521thr1hvf18ji17soa.png"/>
+  <a href="http://www.beian.miit.gov.cn/"  style="color:#f72b07" target="_blank">皖ICP备17001385号-1</a>
+  <br/>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

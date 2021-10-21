@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+<meta name="baidu-site-verification" content="5IfwMCE5hH" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.jiezi19971225.cn","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="记录一下学习 React 全家桶中的 react-router examples路由参数通过 hooks 获取 1let &amp;#123; id &amp;#125; &#x3D; useParams(); Routeroute props所有渲染方式会传递以下三种 props  match location history会在 props 接受这三个 props  component当你使用 component 时，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="reactRouter学习">
+<meta property="og:url" content="http://www.jiezi19971225.cn/2020/04/18/react/reactRouter%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:site_name" content="Jiez19971225‘s Blog">
+<meta property="og:description" content="记录一下学习 React 全家桶中的 react-router examples路由参数通过 hooks 获取 1let &amp;#123; id &amp;#125; &#x3D; useParams(); Routeroute props所有渲染方式会传递以下三种 props  match location history会在 props 接受这三个 props  component当你使用 component 时，">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-04-18T23:41:25.000Z">
+<meta property="article:modified_time" content="2021-10-21T16:45:16.139Z">
+<meta property="article:author" content="jiezi19971225">
+<meta property="article:tag" content="react">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://www.jiezi19971225.cn/2020/04/18/react/reactRouter%E5%AD%A6%E4%B9%A0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>reactRouter学习 | Jiez19971225‘s Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Jiez19971225‘s Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">做自己爱做的事</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/04/18/react/reactRouter%E5%AD%A6%E4%B9%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content="记录编程学习路上的点滴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          reactRouter学习
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-04-18 23:41:25" itemprop="dateCreated datePublished" datetime="2020-04-18T23:41:25+00:00">2020-04-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-10-21 16:45:16" itemprop="dateModified" datetime="2021-10-21T16:45:16+00:00">2021-10-21</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/react/" itemprop="url" rel="index"><span itemprop="name">react</span></a>
+                </span>
+            </span>
+
+          
+
+          <span class="post-time">
+            &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-bar-chart"></i>
+            </span>
+            <span class="post-meta-item-text">字数统计:</span>
+            <span class="post-count">636(字)</span>
+
+          </span>
+
+            <span class="post-time">
+          &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-clock-o"></i>
+            </span>
+            <span class="post-meta-item-text">阅读时长:</span>
+            <span class="post-count">2(分)</span>
+
+          </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>记录一下学习 React 全家桶中的 react-router</p>
+<h2 id="examples"><a href="#examples" class="headerlink" title="examples"></a>examples</h2><h3 id="路由参数"><a href="#路由参数" class="headerlink" title="路由参数"></a>路由参数</h3><p>通过 hooks 获取</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> &#123; id &#125; = useParams();</span><br></pre></td></tr></table></figure>
+<h3 id="Route"><a href="#Route" class="headerlink" title="Route"></a>Route</h3><h4 id="route-props"><a href="#route-props" class="headerlink" title="route props"></a>route props</h4><p>所有渲染方式会传递以下三种 props</p>
+<ul>
+<li>match</li>
+<li>location</li>
+<li>history<br>会在 props 接受这三个 props</li>
+</ul>
+<h5 id="component"><a href="#component" class="headerlink" title="component"></a>component</h5><p>当你使用 component 时，router 使用 React.CreateElement 根据传递的 component 创建一个新的 React element 。这意味着如果你提供了一个内联的函数给 component 属性，你会在每次 render 的时候都创建这个组件，这会导致旧组件的 unmount 和 新组建的 mount</p>
+<p>其背后的原理在于，react 在比较组件状态以便决定如何更新 dom 节点时，首先要比较组件的 type 和 key。在使用<code>&lt;Route component=&#123;() =&gt; (&lt;Bar idx=&#123;this.state.idx&#125;/&gt;)&#125;/&gt;</code>时，由于调用了 React.createElement，组件的 type 不是 Bar 这个类，而是一个匿名函数。App 组件每次 render 时都生成一个新的匿名函数，导致生成的组件的 type 总是不相同，所以会产生重复的 unmounting 和 mounting。</p>
+<h5 id="render"><a href="#render" class="headerlink" title="render"></a>render</h5><p>允许方便的内联渲染，避免不必要的重新挂载。当路由匹配的时候，这个函数会被调用。函数可以访问所有的 props。</p>
+<p><code>&lt;Route component&gt;</code> 优先级高于 <code>&lt;Route render&gt;</code></p>
+<h5 id="children"><a href="#children" class="headerlink" title="children"></a>children</h5><p>有时你需要渲染渲染子组件，不管路由是否匹配。这种情况下，可以使用 children 。</p>
+<h4 id="exact"><a href="#exact" class="headerlink" title="exact"></a>exact</h4><p>当为 true，进行精确匹配。</p>
+<h4 id="strict"><a href="#strict" class="headerlink" title="strict"></a>strict</h4><p>当为 true，路径中的 slash 也必须精确匹配。</p>
+<h4 id="sensitive"><a href="#sensitive" class="headerlink" title="sensitive"></a>sensitive</h4><p>当为 true，大小写敏感。</p>
+<h3 id="history-是可变对象"><a href="#history-是可变对象" class="headerlink" title="history 是可变对象"></a>history 是可变对象</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Comp</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="title">componentDidUpdate</span>(<span class="params">prevProps</span>)</span> &#123;</span><br><span class="line">    <span class="comment">// will be true</span></span><br><span class="line">    <span class="keyword">const</span> locationChanged = <span class="built_in">this</span>.props.location !== prevProps.location;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// INCORRECT, will *always* be false because history is mutable.</span></span><br><span class="line">    <span class="keyword">const</span> locationChanged =</span><br><span class="line">      <span class="built_in">this</span>.props.history.location !== prevProps.history.location;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&lt;Route component=&#123;Comp&#125; /&gt;;</span><br></pre></td></tr></table></figure>
+<h3 id="Link"><a href="#Link" class="headerlink" title="Link"></a>Link</h3><h4 id="to"><a href="#to" class="headerlink" title="to"></a>to</h4><p>可以是一个路径字符串，也可以是一个对象</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">pathname</span>:<span class="string">&#x27;xxx&#x27;</span>,</span><br><span class="line">    <span class="attr">search</span>:<span class="string">&#x27;xxx&#x27;</span>,</span><br><span class="line">    <span class="attr">hash</span>:<span class="string">&#x27;xxx&#x27;</span>,</span><br><span class="line">    <span class="attr">state</span>:<span class="string">&#x27;xxx&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>也可以是一个函数，传递当前的 location，返回一个字符串或者对象</p>
+<h4 id="replace"><a href="#replace" class="headerlink" title="replace"></a>replace</h4><p>当为 true，替换历史栈中的当前记录，而不是添加一条记录</p>
+<h3 id="NavLink"><a href="#NavLink" class="headerlink" title="NavLink"></a>NavLink</h3><h4 id="activeClassName"><a href="#activeClassName" class="headerlink" title="activeClassName"></a>activeClassName</h4><p>默认的类名是 active，这将会被连接到 className 属性后</p>
+<h4 id="link-exact"><a href="#link-exact" class="headerlink" title="link-exact"></a>link-exact</h4><p>当为 true，activeClassName 和 activeStyle 只会在精确匹配时生效</p>
+<h4 id="link-strict"><a href="#link-strict" class="headerlink" title="link-strict"></a>link-strict</h4><p>结合 Route 的 strict，会跳转到严格匹配的路由</p>
+<h4 id="isActive"><a href="#isActive" class="headerlink" title="isActive"></a>isActive</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;NavLink</span><br><span class="line">  to=<span class="string">&quot;/events/123&quot;</span></span><br><span class="line">  isActive=&#123;<span class="function">(<span class="params">match, location</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (!match) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// only consider an event active if its event id is an odd number</span></span><br><span class="line">    <span class="keyword">const</span> eventID = <span class="built_in">parseInt</span>(match.params.eventID);</span><br><span class="line">    <span class="keyword">return</span> !<span class="built_in">isNaN</span>(eventID) &amp;&amp; eventID % <span class="number">2</span> === <span class="number">1</span>;</span><br><span class="line">  &#125;&#125;</span><br><span class="line">&gt;</span><br><span class="line">  Event <span class="number">123</span></span><br><span class="line">&lt;/NavLink&gt;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/react/" rel="tag"># react</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/04/18/vue/%E8%AF%95%E7%94%A8vue3/" rel="prev" title="试用vue3">
+      <i class="fa fa-chevron-left"></i> 试用vue3
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/04/18/%E6%95%B0%E6%8D%AE%E5%BA%93/oracle%E5%A4%8D%E4%B9%A0%E8%80%83%E7%82%B9/" rel="next" title="oracle复习考点">
+      oracle复习考点 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#examples"><span class="nav-number">1.</span> <span class="nav-text">examples</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%AF%E7%94%B1%E5%8F%82%E6%95%B0"><span class="nav-number">1.1.</span> <span class="nav-text">路由参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Route"><span class="nav-number">1.2.</span> <span class="nav-text">Route</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#route-props"><span class="nav-number">1.2.1.</span> <span class="nav-text">route props</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#component"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">component</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#render"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">render</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#children"><span class="nav-number">1.2.1.3.</span> <span class="nav-text">children</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#exact"><span class="nav-number">1.2.2.</span> <span class="nav-text">exact</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#strict"><span class="nav-number">1.2.3.</span> <span class="nav-text">strict</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sensitive"><span class="nav-number">1.2.4.</span> <span class="nav-text">sensitive</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#history-%E6%98%AF%E5%8F%AF%E5%8F%98%E5%AF%B9%E8%B1%A1"><span class="nav-number">1.3.</span> <span class="nav-text">history 是可变对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Link"><span class="nav-number">1.4.</span> <span class="nav-text">Link</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#to"><span class="nav-number">1.4.1.</span> <span class="nav-text">to</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#replace"><span class="nav-number">1.4.2.</span> <span class="nav-text">replace</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NavLink"><span class="nav-number">1.5.</span> <span class="nav-text">NavLink</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#activeClassName"><span class="nav-number">1.5.1.</span> <span class="nav-text">activeClassName</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#link-exact"><span class="nav-number">1.5.2.</span> <span class="nav-text">link-exact</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#link-strict"><span class="nav-number">1.5.3.</span> <span class="nav-text">link-strict</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#isActive"><span class="nav-number">1.5.4.</span> <span class="nav-text">isActive</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">jiezi19971225</p>
+  <div class="site-description" itemprop="description">记录编程学习路上的点滴</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jiezi19971225</span>
+</div>
+  <img src="https://static.dy208.cn/o_1dfilp8ruo521thr1hvf18ji17soa.png"/>
+  <a href="http://www.beian.miit.gov.cn/"  style="color:#f72b07" target="_blank">皖ICP备17001385号-1</a>
+  <br/>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

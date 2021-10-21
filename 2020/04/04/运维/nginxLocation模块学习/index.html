@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+<meta name="baidu-site-verification" content="5IfwMCE5hH" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.jiezi19971225.cn","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="uri 匹配规则location 规则类型这部分内容来自详细解析 nginx uri 如何匹配 location 规则 &#x3D; exact uri完全匹配规则，要求 url 和规则完全相同 123location ~ &#x2F;api&#x2F;v1 &amp;#123;    ....&amp;#125; ~ case-sensitive regex区分大小写的正则表达式匹配规则 123location ~ &#x2F;api&#x2F;v1 &amp;#12">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nginxLocation模块学习">
+<meta property="og:url" content="http://www.jiezi19971225.cn/2020/04/04/%E8%BF%90%E7%BB%B4/nginxLocation%E6%A8%A1%E5%9D%97%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:site_name" content="Jiez19971225‘s Blog">
+<meta property="og:description" content="uri 匹配规则location 规则类型这部分内容来自详细解析 nginx uri 如何匹配 location 规则 &#x3D; exact uri完全匹配规则，要求 url 和规则完全相同 123location ~ &#x2F;api&#x2F;v1 &amp;#123;    ....&amp;#125; ~ case-sensitive regex区分大小写的正则表达式匹配规则 123location ~ &#x2F;api&#x2F;v1 &amp;#12">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-04-04T22:48:54.000Z">
+<meta property="article:modified_time" content="2021-10-21T16:45:16.179Z">
+<meta property="article:author" content="jiezi19971225">
+<meta property="article:tag" content="nginx">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://www.jiezi19971225.cn/2020/04/04/%E8%BF%90%E7%BB%B4/nginxLocation%E6%A8%A1%E5%9D%97%E5%AD%A6%E4%B9%A0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>nginxLocation模块学习 | Jiez19971225‘s Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Jiez19971225‘s Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">做自己爱做的事</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.jiezi19971225.cn/2020/04/04/%E8%BF%90%E7%BB%B4/nginxLocation%E6%A8%A1%E5%9D%97%E5%AD%A6%E4%B9%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="jiezi19971225">
+      <meta itemprop="description" content="记录编程学习路上的点滴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jiez19971225‘s Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          nginxLocation模块学习
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-04-04 22:48:54" itemprop="dateCreated datePublished" datetime="2020-04-04T22:48:54+00:00">2020-04-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-10-21 16:45:16" itemprop="dateModified" datetime="2021-10-21T16:45:16+00:00">2021-10-21</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%BF%90%E7%BB%B4/" itemprop="url" rel="index"><span itemprop="name">运维</span></a>
+                </span>
+            </span>
+
+          
+
+          <span class="post-time">
+            &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-bar-chart"></i>
+            </span>
+            <span class="post-meta-item-text">字数统计:</span>
+            <span class="post-count">497(字)</span>
+
+          </span>
+
+            <span class="post-time">
+          &nbsp; | &nbsp;
+            <span class="post-meta-item-icon">
+              <i class="fa fa-clock-o"></i>
+            </span>
+            <span class="post-meta-item-text">阅读时长:</span>
+            <span class="post-count">1(分)</span>
+
+          </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="uri-匹配规则"><a href="#uri-匹配规则" class="headerlink" title="uri 匹配规则"></a>uri 匹配规则</h3><h4 id="location-规则类型"><a href="#location-规则类型" class="headerlink" title="location 规则类型"></a>location 规则类型</h4><p>这部分内容来自<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dreamanddead/p/how-uri-match-location-rule-in-nginx.html">详细解析 nginx uri 如何匹配 location 规则</a></p>
+<h5 id="exact-uri"><a href="#exact-uri" class="headerlink" title="= exact uri"></a>= exact uri</h5><p>完全匹配规则，要求 url 和规则完全相同</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">location ~ /api/v1 &#123;</span><br><span class="line">    ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="case-sensitive-regex"><a href="#case-sensitive-regex" class="headerlink" title="~ case-sensitive regex"></a>~ case-sensitive regex</h5><p>区分大小写的正则表达式匹配规则</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">location ~ /api/v1 &#123;</span><br><span class="line">    ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="case-insensitive-regex"><a href="#case-insensitive-regex" class="headerlink" title="~* case-insensitive regex"></a>~* case-insensitive regex</h5><p>不区分大小写的正则表达式匹配规则</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">location ~ /api/v1 &#123;</span><br><span class="line">    ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="case-insensitive-regex-1"><a href="#case-insensitive-regex-1" class="headerlink" title="~* case-insensitive regex"></a>~* case-insensitive regex</h5><p>不大小写的正则表达式匹配规则</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">location ~ /api/v1 &#123;</span><br><span class="line">    ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="～-disable-regex-prefix"><a href="#～-disable-regex-prefix" class="headerlink" title="^～ disable regex prefix"></a>^～ disable regex prefix</h5><p>匹配流程与 prefix 规则相同，有一点区别在于，如果最长匹配是当前规则，则之后不进行 正则表达式 规则的搜索。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">location ~ /api/v1 &#123;</span><br><span class="line">    ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="uri-如何选择-location"><a href="#uri-如何选择-location" class="headerlink" title="uri 如何选择 location"></a>uri 如何选择 location</h4><ol>
+<li>如果存在 exact uri 规则与 uri 匹配，至步骤 6</li>
+<li><p>在所有 prefix 规则和 disable regex prefix 规则中进行匹配（与这些规则定义的顺序无关），<br>如果没有匹配到规则，至步骤 3；如果存在匹配的规则，选择出最长匹配 uri 的规则：</p>
+<ul>
+<li>如果规则是 disable regex prefix 类型，至步骤 6</li>
+<li>如果规则是 prefix 类型，记住当前匹配的 prefix 规则，选为待定，至步骤 3</li>
+</ul>
+</li>
+<li><p>逐个遍历 case-sensitive regex 规则和 case-insensitive regex 规则（按照这些规则定义的前后顺序）:</p>
+<ul>
+<li>如果规则匹配，则遍历终止，至步骤 6</li>
+<li>如果规则没有匹配，则继续</li>
+</ul>
+</li>
+<li><p>如果之前有 prefix 规则条目被选择为待定，至步骤 6</p>
+</li>
+<li>匹配失败，返回 404，结束</li>
+<li>选择当前规则，使用其配置，结束</li>
+</ol>
+<h4 id="try-files-解析"><a href="#try-files-解析" class="headerlink" title="try_files 解析"></a>try_files 解析</h4><p><code>$uri</code> 指代访问的 uri 资源，<code>$uri/</code>语法可以用来检测一个目录的存在，如果没有找到，一个内置的重定向将请求重定向到最后一个参数<br>最后一个参数可以指向一个命名的 location</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">location / &#123;</span><br><span class="line">    try_files $uri $uri/ index.html $uri.html =404;</span><br><span class="line">&#125;</span><br><span class="line">location / &#123;</span><br><span class="line">    try_files /system/maintenance.html</span><br><span class="line">              $uri $uri/index.html $uri.html</span><br><span class="line">              @mongrel;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">location @mongrel &#123;</span><br><span class="line">    proxy_pass http://mongrel;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/nginx/" rel="tag"># nginx</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/04/04/javascript/%E5%AE%9E%E7%8E%B0Promise/" rel="prev" title="Promise">
+      <i class="fa fa-chevron-left"></i> Promise
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/04/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA%E4%B8%8E%E5%A4%84%E7%90%86/" rel="next" title="计算机基础之数据的机器级表示与处理">
+      计算机基础之数据的机器级表示与处理 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#uri-%E5%8C%B9%E9%85%8D%E8%A7%84%E5%88%99"><span class="nav-number">1.</span> <span class="nav-text">uri 匹配规则</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#location-%E8%A7%84%E5%88%99%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.1.</span> <span class="nav-text">location 规则类型</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#exact-uri"><span class="nav-number">1.1.1.</span> <span class="nav-text">&#x3D; exact uri</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#case-sensitive-regex"><span class="nav-number">1.1.2.</span> <span class="nav-text">~ case-sensitive regex</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#case-insensitive-regex"><span class="nav-number">1.1.3.</span> <span class="nav-text">~* case-insensitive regex</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#case-insensitive-regex-1"><span class="nav-number">1.1.4.</span> <span class="nav-text">~* case-insensitive regex</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%EF%BD%9E-disable-regex-prefix"><span class="nav-number">1.1.5.</span> <span class="nav-text">^～ disable regex prefix</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#uri-%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9-location"><span class="nav-number">1.2.</span> <span class="nav-text">uri 如何选择 location</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#try-files-%E8%A7%A3%E6%9E%90"><span class="nav-number">1.3.</span> <span class="nav-text">try_files 解析</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">jiezi19971225</p>
+  <div class="site-description" itemprop="description">记录编程学习路上的点滴</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jiezi19971225</span>
+</div>
+  <img src="https://static.dy208.cn/o_1dfilp8ruo521thr1hvf18ji17soa.png"/>
+  <a href="http://www.beian.miit.gov.cn/"  style="color:#f72b07" target="_blank">皖ICP备17001385号-1</a>
+  <br/>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
